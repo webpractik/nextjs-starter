@@ -1,0 +1,84 @@
+{
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2020": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "project": "./tsconfig.json",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "extends": [
+    "airbnb",
+    "airbnb/hooks",
+    "prettier",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:react/recommended"
+  ],
+  "plugins": [
+    "@typescript-eslint",
+    "react",
+    "react-hooks",
+    "prettier",
+    "jsx-a11y",
+    "import",
+    "simple-import-sort",
+    "unused-imports"
+  ],
+  "rules": {
+    "yoda": "error",
+    "no-duplicate-imports": "warn",
+    "no-empty-pattern": "error",
+    "no-use-before-define": "off",
+    "max-len": [2, {
+      "code": 120,
+      "ignoreUrls": true
+    }],
+    "no-magic-numbers": ["warn", {
+      "ignoreArrayIndexes": true,
+      "ignore": [0, 1, 2]
+    }],
+    "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx"] }],
+    "react/jsx-props-no-spreading": ["error", { "custom": "ignore" }],
+    "react/no-unescaped-entities": "off",
+    "react/prop-types": "off",
+    "react/jsx-indent": "off",
+    "react/jsx-indent-props": "off",
+    "import/extensions": "off",
+    "import/prefer-default-export": "warn",
+    "jsx-a11y/anchor-is-valid": "off",
+    "prettier/prettier": "error",
+    "@typescript-eslint/no-use-before-define": "error",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "simple-import-sort/imports": "warn",
+    "simple-import-sort/exports": "warn",
+    "unused-imports/no-unused-imports": "error",
+    "unused-imports/no-unused-vars": [
+      "warn",
+      { "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_" }
+    ]
+  },
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      "typescript": {
+        "project": "./"
+      }
+    },
+    "react": {
+      "version": "detect"
+    }
+  },
+  "globals": {
+    "window": true
+  }
+}

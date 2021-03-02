@@ -1,0 +1,131 @@
+$max-width: 1248px
+$min-width: 280px
+
+// Экраны
+// ======
+$desktop-lg: 1399
+$desktop: 1199
+$tablet: 991
+$mobile: 767
+$mobile-sm: 575
+
+
+@mixin clearfix
+	&:after
+		content: ''
+		display: table
+		clear: both
+
+
+@mixin grad($color1,$color2)
+	background: $color2
+	background: linear-gradient(top, $color1, $color2)
+
+
+@mixin rotate($rotate)
+	transform: rotate($rotate+deg)
+
+
+@mixin max-width($width)
+	@media only screen and (max-width: #{$width}px)
+		@content
+
+@mixin min-width($width)
+	@media only screen and (min-width: #{$width}px)
+		@content
+
+@mixin min-max-width($minWidth, $maxWidth)
+	@media only screen and (min-width: #{$minWidth}px) and (max-width: #{$maxWidth}px)
+		@content
+
+@mixin max-height($height)
+	@media only screen and (max-height: #{$height}px)
+		@content
+
+@mixin min-height($height)
+	@media only screen and (min-height: #{$height}px)
+		@content
+
+
+// Основные медиазапросы
+// =====================
+// desktop >= 992px
+@mixin desktop()
+	+min-width($tablet)
+		@content
+
+// desktop-lg >= 1400px
+@mixin desktop-lg()
+	+min-width($desktop-lg)
+		@content
+
+// 1200px <= desktop-md <= 1399px
+@mixin desktop-md()
+	+min-max-width($desktop, $desktop-lg)
+		@content
+
+// 992px <= desktop-sm <= 1199px
+@mixin desktop-sm()
+	+min-max-width($tablet, $desktop)
+		@content
+
+// 768px <= tablet <= 991px
+@mixin tablet()
+	+min-max-width($mobile, $tablet)
+		@content
+
+// mobile <= 767px
+@mixin mobile()
+	+max-width($mobile)
+		@content
+
+// 576px <= mobile-lg <= 767px
+@mixin mobile-lg()
+	+min-max-width($mobile-sm, $mobile)
+		@content
+
+// mobile-sm <= 575px
+@mixin mobile-sm()
+	+max-width($mobile-sm)
+		@content
+
+// desktop-tablet >= 768px
+@mixin desktop-tablet()
+	+min-width($mobile)
+		@content
+
+// tablet-mobile <= 991px
+@mixin tablet-mobile()
+	+max-width($tablet)
+		@content
+
+
+
+
+@mixin full-wrapper()
+	margin: 0 auto
+	max-width: $max-width
+	min-width: $min-width
+	+desktop-lg
+		padding: 0 64px
+	+desktop()
+		padding: 0 32px
+	+tablet-mobile()
+		padding: 0 16px
+
+
+
+@mixin width($width)
+	max-width: $width
+	width: $width
+
+
+@mixin placeholder()
+	&::-webkit-input-placeholder
+		@content
+	&::-moz-placeholder
+		@content
+	&:-moz-placeholder
+		@content
+	&:-ms-input-placeholder
+		@content
