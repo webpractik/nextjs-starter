@@ -80,5 +80,6 @@
   },
   "globals": {
     "window": true
-  }
+  },
+  "ignorePatterns": ["next.config.js"]
 }

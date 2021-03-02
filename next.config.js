@@ -1,6 +1,10 @@
 const path = require('path');
 
-module.exports = {
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+    enabled: process.env.ANALYZE === 'true',
+});
+
+const nextConfig = {
     webpack(config) {
         return config;
     },
@@ -14,3 +18,5 @@ module.exports = {
         ENV_EXAMPLE: process.env.ENV_EXAMPLE,
     },
 };
+
+module.exports = withBundleAnalyzer(nextConfig);

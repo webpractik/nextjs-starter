@@ -8,7 +8,9 @@ const IndexPage = () => (
             <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        <h1>Next starter pack</h1>
+        <div style={{ textAlign: 'center' }}>
+            <h1>Next.js starter pack</h1>
+        </div>
     </div>
 );
 
