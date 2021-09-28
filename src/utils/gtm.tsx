@@ -1,3 +1,4 @@
+import Script from 'next/script';
 import React from 'react';
 
 type GTagEvent = {
@@ -7,27 +8,25 @@ type GTagEvent = {
     value?: number;
 };
 
-export const GA_TRACKING_ID = '[Tracking ID]';
+export const TRACKING_ID = '[Tracking ID]';
 
 export const GoogleAnalyticsScripts = () => (
     <>
-        <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`} />
-
-        <script
-            dangerouslySetInnerHTML={{
-                __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${GA_TRACKING_ID}');
-        `,
+        <Script
+            src={`https://www.googletagmanager.com/gtm.js?id=${TRACKING_ID}`}
+            onLoad={() => {
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({
+                    'gtm.start': new Date().getTime(),
+                    event: 'gtm.js',
+                });
             }}
         />
     </>
 );
 
 export const pageview = (url: URL): void => {
-    window.gtag('config', GA_TRACKING_ID, {
+    window.gtag('config', TRACKING_ID, {
         page_path: url,
     });
 };

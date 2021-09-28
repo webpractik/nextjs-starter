@@ -1,7 +1,7 @@
 import Document, { Head, Html, Main, NextScript } from 'next/document';
 import React from 'react';
 
-import { GoogleAnalyticsScripts } from '@/utils/gtag';
+import { GoogleAnalyticsScripts } from '@/utils/gtm';
 
 const isProduction = process.env.NODE_ENV === 'production';
 

@@ -14,6 +14,7 @@
     }
   },
   "extends": [
+    "next",
     "airbnb",
     "airbnb/hooks",
     "prettier",
@@ -36,23 +37,29 @@
     "no-duplicate-imports": "warn",
     "no-empty-pattern": "error",
     "no-use-before-define": "off",
+    "no-underscore-dangle": "off",
     "max-len": [2, {
       "code": 120,
       "ignoreUrls": true
     }],
     "no-magic-numbers": ["warn", {
       "ignoreArrayIndexes": true,
-      "ignore": [0, 1, 2]
+      "ignore": [0, 1, 2, 200, 403, 404]
     }],
+    "react/display-name": "off",
+    "react/no-array-index-key": "warn",
     "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx"] }],
-    "react/jsx-props-no-spreading": ["error", { "custom": "ignore" }],
+    "react/jsx-props-no-spreading": "warn",
+    "react/no-danger": "warn",
     "react/no-unescaped-entities": "off",
+    "react-hooks/exhaustive-deps": "off",
     "react/prop-types": "off",
     "react/jsx-indent": "off",
     "react/jsx-indent-props": "off",
     "import/extensions": "off",
-    "import/prefer-default-export": "warn",
+    "import/prefer-default-export": "off",
     "jsx-a11y/anchor-is-valid": "off",
+    "jsx-a11y/label-has-associated-control": "off",
     "prettier/prettier": "error",
     "@typescript-eslint/no-use-before-define": "error",
     "@typescript-eslint/explicit-module-boundary-types": "off",
@@ -62,7 +69,12 @@
     "unused-imports/no-unused-imports": "error",
     "unused-imports/no-unused-vars": [
       "warn",
-      { "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_" }
+      {
+        "vars": "all",
+        "varsIgnorePattern": "^_",
+        "args": "after-used",
+        "argsIgnorePattern": "^_"
+      }
     ]
   },
   "settings": {
@@ -81,5 +93,10 @@
   "globals": {
     "window": true
   },
-  "ignorePatterns": ["next.config.js"]
+  "ignorePatterns": [
+    "proxy-server.js",
+    "next.config.js",
+    "sentry.client.config.js",
+    "sentry.server.config.js"
+  ]
 }

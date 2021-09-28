@@ -5,8 +5,9 @@ declare module '*.module.sass' {
 
 declare module '*.svg';
 
-declare const window: CustomWindow;
-
-declare interface CustomWindow extends Window {
-    gtag: gtag;
+declare global {
+    interface Window {
+        dataLayer: any[];
+        ga: (...args: any[]) => void;
+    }
 }
