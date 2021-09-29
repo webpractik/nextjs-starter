@@ -3,28 +3,25 @@ import next from 'next';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import cors from 'cors';
 
-const dev = process.env.NODE_ENV === 'development';
-const apiUrl = process.env.API_URL;
-const port = dev ? 8080 : 3000;
-const app = next({ dev });
+const app = next({ dev: process.env.NODE_ENV === 'development' });
 const handle = app.getRequestHandler();
+const port = 8080;
 
 app.prepare()
     .then(() => {
         const server = express();
+        const { NODE_ENV, API_URL, HTTP_AUTH } = process.env;
 
-        console.log(`Server running in ${process.env.NODE_ENV} mode.`);
+        console.log(`Server running in ${NODE_ENV} mode.`);
 
         server.use(cors());
 
         server.use(
             '/api',
             createProxyMiddleware({
-                target: apiUrl,
-                pathRewrite: path => {
-                    return path.replace('/api', '');
-                },
-                auth: process.env.HTTP_AUTH,
+                target: API_URL,
+                auth: HTTP_AUTH,
+                pathRewrite: path => path.replace('/api', ''),
                 changeOrigin: true,
             })
         );
@@ -33,11 +30,8 @@ app.prepare()
 
         server.listen(port, err => {
             if (err) throw err;
-
-            if (dev) {
-                console.log(`> Proxy-server has been started on http://localhost:${port}`);
-                console.log(`> All requests proxying on ${apiUrl}`);
-            }
+            console.log(`> Proxy-server has been started on http://localhost:${port}`);
+            console.log(`> All requests proxying on ${API_URL}`);
         });
     })
     .catch(err => {

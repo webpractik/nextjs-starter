@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { enableStaticRendering } from 'mobx-react';
+import { enableStaticRendering } from 'mobx-react-lite';
 
 enableStaticRendering(typeof window === 'undefined');
 

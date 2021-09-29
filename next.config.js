@@ -20,5 +20,5 @@ const nextConfig = {
 };
 
 module.exports = isProduction
-    ? withSentryConfig(withBundleAnalyzer(nextConfig), { silent: true })
+    ? withSentryConfig(nextConfig, { silent: true })
     : withBundleAnalyzer(nextConfig);

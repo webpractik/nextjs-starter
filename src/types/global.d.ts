@@ -5,9 +5,7 @@ declare module '*.module.sass' {
 
 declare module '*.svg';
 
-declare global {
-    interface Window {
-        dataLayer: any[];
-        ga: (...args: any[]) => void;
-    }
+interface Window {
+    dataLayer: Record<string, any>[];
+    ga: (...args: any[]) => void;
 }
