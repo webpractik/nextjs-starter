@@ -12,6 +12,7 @@ npx create-next-app -e https://github.com/webpractik/nextjs-starter
 - [Общие сведения](docs/settings.md)
 - [Настройка Sentry](docs/sentry.md)
 - [Настройка Google Analytics](docs/gtag.md)
+- [Проксирование запросов](docs/proxy.md)
 
 ## Требования
 - node: >= 14.0.0
@@ -27,9 +28,13 @@ npx create-next-app -e https://github.com/webpractik/nextjs-starter
 - Lint-staged
 - Абсолютные импорты
 - SVG Components
+- Proxy server
+- Sentry
+- Storybook
+- Jest + React testing library
 
 ## Extra Features
-- Google analytics
+- Google tag manager
 - Bundle analyzer
 
 ## Packages

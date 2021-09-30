@@ -1,6 +1,7 @@
-## Подключение google analytics
+## Подключение google tag manager
 
-Подключение скрипта analytics находится в _document.tsx
+- В файле [gtm.tsx](../src/utils/gtm.tsx) прописать id в переменную TRACKING_ID
 
-Для подключения, в файле utils/gtag.tsx необходимо прописать id в переменную GA_TRACKING_ID
+- Дополнительно, для кастомной отправки события просмотра страниц, можно использовать функцию handleRouteChange 
 
+- Подключить компонент в _app
