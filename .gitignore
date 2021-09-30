@@ -3,7 +3,6 @@
 .eslintcache
 .idea/
 dist/
-.husky/
 
 # dependencies
 /node_modules
