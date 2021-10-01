@@ -56,6 +56,7 @@
     "react/prop-types": "off",
     "react/jsx-indent": "off",
     "react/jsx-indent-props": "off",
+    "react/require-default-props": "off",
     "import/extensions": "off",
     "import/prefer-default-export": "off",
     "jsx-a11y/anchor-is-valid": "off",

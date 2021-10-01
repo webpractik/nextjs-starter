@@ -20,7 +20,8 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@sassConfig": ["src/assets/styles/base/config.sass"],
     },
     "typeRoots": ["./src/types/"]
   },
