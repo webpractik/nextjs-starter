@@ -3,6 +3,8 @@ const { withSentryConfig } = require('@sentry/nextjs');
 
 const isProduction = process.env.NODE_ENV === 'production';
 
+const isSentryEnabled = isProduction && process.env.APP_ENV === 'PROD';
+
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
     enabled: process.env.ANALYZE === 'true',
 });
@@ -19,6 +21,6 @@ const nextConfig = {
     },
 };
 
-module.exports = isProduction
+module.exports = isSentryEnabled
     ? withSentryConfig(nextConfig, { silent: true })
     : withBundleAnalyzer(nextConfig);
