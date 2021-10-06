@@ -14,8 +14,11 @@ npx create-next-app -e https://github.com/webpractik/nextjs-starter
 - [Настройка Google Analytics](docs/gtag.md)
 - [Проксирование запросов](docs/proxy.md)
 
-## Требования
-- node: >= 14.0.0
+## CI / CD
+- nodejs: >= 14
+- Установка модулей:  ```npm ci --silent --ignore-scripts``` 
+- Запуск билда: ```npm run build```
+- Запуск прод сборки, порт 3000: ```npm run start``` 
 
 ## Features
 - Typescript

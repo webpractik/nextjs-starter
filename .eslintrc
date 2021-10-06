@@ -1,4 +1,5 @@
 {
+  "root": true,
   "env": {
     "browser": true,
     "node": true,
@@ -15,6 +16,7 @@
   },
   "extends": [
     "next",
+    "next/core-web-vitals",
     "airbnb",
     "airbnb/hooks",
     "prettier",
@@ -30,7 +32,8 @@
     "jsx-a11y",
     "import",
     "simple-import-sort",
-    "unused-imports"
+    "unused-imports",
+    "testing-library"
   ],
   "rules": {
     "yoda": "error",
@@ -78,6 +81,15 @@
       }
     ]
   },
+  "overrides": [
+    {
+      "files": [
+        "**/__tests__/**/*.[jt]s?(x)",
+        "**/?(*.)+(spec|test).[jt]s?(x)"
+      ],
+      "extends": ["plugin:testing-library/react"]
+    }
+  ],
   "settings": {
     "import/parsers": {
       "@typescript-eslint/parser": [".ts", ".tsx"]
