@@ -1,43 +1,38 @@
-# Install dependencies
-FROM node:alpine AS deps
-
+FROM node:16-alpine AS deps
 RUN apk add --no-cache libc6-compat
-
 WORKDIR /app
-
 COPY package.json package-lock.json ./
+RUN npm ci
 
-RUN npm ci --silent --ignore-scripts
-
-# Rebuild
-FROM node:alpine AS builder
-
+# Rebuild the source code only when needed
+FROM node:16-alpine AS builder
 WORKDIR /app
-
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-COPY --from=deps /app/node_modules ./node_modules
+ENV NEXT_TELEMETRY_DISABLED 1
+RUN npm run build
 
-RUN npm ci --silent --ignore-scripts && npm run build
-
-# Production image
-FROM node:alpine AS runner
-
+# Production image, copy all the files and run next
+FROM node:16-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV production
+ENV NEXT_TELEMETRY_DISABLED 1
 
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nextjs -u 1001
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
 COPY --from=builder /app/next.config.js ./
 COPY --from=builder /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
 
 EXPOSE 3000
 
-CMD ["npm", "run", "start"]
+ENV PORT 3000
+
+CMD ["node", "server.js"]

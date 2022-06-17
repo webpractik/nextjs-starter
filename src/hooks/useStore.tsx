@@ -5,7 +5,7 @@ import Store from '@/domain/core/Store';
 
 let store: Store;
 
-const initializeStore = (initialData = null) => {
+const initializeStore = (initialData: unknown) => {
     const actualStore = store ?? new Store();
 
     if (initialData) {
@@ -19,15 +19,21 @@ const initializeStore = (initialData = null) => {
     return actualStore;
 };
 
-export const StoreProvider = ({ children, initialState: initialData }) => {
-    const initializedStore = initializeStore(initialData);
+export function StoreProvider({
+    children,
+    initialState,
+}: {
+    children: React.ReactNode;
+    initialState: unknown;
+}) {
+    const initializedStore = initializeStore(initialState);
 
     return (
         <GlobalStoreContext.Provider value={initializedStore}>
             {children}
         </GlobalStoreContext.Provider>
     );
-};
+}
 
 export const useStore = () => {
     const context = useContext(GlobalStoreContext);

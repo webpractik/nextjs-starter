@@ -8,5 +8,5 @@ export default class Store {
         makeAutoObservable(this);
     }
 
-    public hydrate: (data) => void;
+    public hydrate!: (data: unknown) => void;
 }

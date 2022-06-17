@@ -1,26 +1,36 @@
 const path = require('path');
 const { withSentryConfig } = require('@sentry/nextjs');
-
-const isProduction = process.env.NODE_ENV === 'production';
-
-const isSentryEnabled = isProduction && process.env.APP_ENV === 'PROD';
+const { withPlugins, optional } = require('next-compose-plugins');
+const { PHASE_PRODUCTION_SERVER } = require('next/constants');
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
     enabled: process.env.ANALYZE === 'true',
 });
 
+/**
+ * @type {import('next').NextConfig}
+ */
 const nextConfig = {
-    distDir: 'dist',
     sassOptions: {
         indentType: 'tab',
         includePaths: [path.join(__dirname, 'src/assets/styles')],
     },
-    env: {
-        APP_ENV: process.env.APP_ENV,
-        SENTRY_DSN: process.env.SENTRY_DSN,
+    swcMinify: true,
+    reactStrictMode: true,
+    poweredByHeader: false,
+    experimental: {
+        modularizeImports: {
+            lodash: {
+                transform: 'lodash/{{member}}',
+            },
+        },
     },
 };
 
-module.exports = isSentryEnabled
-    ? withSentryConfig(nextConfig, { silent: true })
-    : withBundleAnalyzer(nextConfig);
+module.exports = withPlugins(
+    [
+        [withBundleAnalyzer],
+        [optional(() => withSentryConfig), { silent: true }, [PHASE_PRODUCTION_SERVER]],
+    ],
+    nextConfig
+);

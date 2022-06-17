@@ -15,10 +15,15 @@ npx create-next-app -e https://github.com/webpractik/nextjs-starter
 - [Проксирование запросов](docs/proxy.md)
 
 ## CI / CD
-- nodejs: >= 14
+- **NODEJS >= 16, NPM >= 8**
+- **Порт 3000**
+- **Healthcheck**: /api/healthcheck
 - Установка модулей:  ```npm ci --silent --ignore-scripts``` 
 - Запуск билда: ```npm run build```
-- Запуск прод сборки, порт 3000: ```npm run start``` 
+- Запуск dev сборки: ```npm run start:dev```
+- Запуск прод сборки: ```npm run start:prod``` 
+- Режим proxy (dev): ```npm run proxy:dev```
+- Режим proxy (prod): ```npm run proxy:prod```
 
 ## Features
 - Typescript
@@ -30,18 +35,20 @@ npx create-next-app -e https://github.com/webpractik/nextjs-starter
 - Commitizen
 - Lint-staged
 - Абсолютные импорты
-- SVG Components
 - Proxy server
-- Sentry
+- Jest
 - Storybook
-- Jest + React testing library
-
-## Extra Features
-- Google tag manager
+- Sentry
 - Bundle analyzer
+- Google tag manager
+- API Codegen
 
 ## Packages
 - axios
+- lodash
+- react-use
+- next-seo
+- react-error-boundary
 - normalize.css
 - nanoid
 - clsx

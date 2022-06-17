@@ -3,37 +3,51 @@ import next from 'next';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import cors from 'cors';
 
-const app = next({ dev: process.env.NODE_ENV === 'development' });
+const port = process.env.FRONT_INTERNAL_PORT || 3000;
+
+const app = next({
+    dev: process.env.NODE_ENV === 'development',
+    host: process.env.FRONT_INTERNAL_HOST,
+    port,
+});
+
 const handle = app.getRequestHandler();
-const port = 8080;
 
-app.prepare()
-    .then(() => {
-        const server = express();
-        const { NODE_ENV, API_URL, HTTP_AUTH } = process.env;
+app.prepare().then(() => {
+    const server = express();
 
-        console.log(`Server running in ${NODE_ENV} mode.`);
+    server.use(
+        cors({
+            origin: process.env.NODE_ENV === 'production' ? process.env.FRONT_PUBLIC_URL : '*',
+        })
+    );
 
-        server.use(cors());
+    server.use(
+        '/api',
+        createProxyMiddleware({
+            target: process.env.BACK_INTERNAL_URL,
+            // auth: `${process.env.HTTP_AUTH_LOGIN}:${process.env.HTTP_AUTH_PASS}`,
+            pathRewrite: path => path.replace('/api', ''),
+            changeOrigin: true,
+        })
+    );
 
-        server.use(
-            '/api',
-            createProxyMiddleware({
-                target: API_URL,
-                auth: HTTP_AUTH,
-                pathRewrite: path => path.replace('/api', ''),
-                changeOrigin: true,
-            })
-        );
+    // Проксирование socket.io
+    // const wsProxy = createProxyMiddleware('/socket.io', {
+    //     target: process.env.BACK_INTERNAL_URL,
+    //     changeOrigin: true,
+    //     ws: true,
+    //     logLevel: process.env.NODE_ENV === 'development' ? 'debug' : 'silent',
+    // });
+    // server.use(wsProxy);
+    // server.on('upgrade', wsProxy.upgrade);
 
-        server.all('*', (req, res) => handle(req, res));
+    server.all('*', (req, res) => handle(req, res));
 
-        server.listen(port, err => {
-            if (err) throw err;
-            console.log(`> Proxy-server has been started on http://localhost:${port}`);
-            console.log(`> All requests proxying on ${API_URL}`);
-        });
-    })
-    .catch(err => {
-        console.log('Error:::::', err);
+    server.listen(port, err => {
+        if (err) throw err;
+        console.log(`Server running in ${process.env.NODE_ENV} mode.`);
+        console.log(`Server has been started on http://${process.env.FRONT_HOST}:${port}`);
+        console.log(`All requests proxying on ${process.env.BACK_INTERNAL_URL}`);
     });
+});

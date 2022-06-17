@@ -32,8 +32,7 @@
     "jsx-a11y",
     "import",
     "simple-import-sort",
-    "unused-imports",
-    "testing-library"
+    "unused-imports"
   ],
   "rules": {
     "yoda": "error",
@@ -81,15 +80,6 @@
       }
     ]
   },
-  "overrides": [
-    {
-      "files": [
-        "**/__tests__/**/*.[jt]s?(x)",
-        "**/?(*.)+(spec|test).[jt]s?(x)"
-      ],
-      "extends": ["plugin:testing-library/react"]
-    }
-  ],
   "settings": {
     "import/parsers": {
       "@typescript-eslint/parser": [".ts", ".tsx"]
@@ -107,9 +97,10 @@
     "window": true
   },
   "ignorePatterns": [
-    "proxy-server.js",
+    "proxy-server.mjs",
     "next.config.js",
     "sentry.client.config.js",
-    "sentry.server.config.js"
+    "sentry.server.config.js",
+    "postcss.config.js"
   ]
 }

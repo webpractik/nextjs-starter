@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 
 export const TRACKING_ID = '[Tracking ID]';
 
-export const AnalyticsScripts = () => {
+export function AnalyticsScripts() {
     const { events } = useRouter();
 
     const handleRouteChange = (url: string): void => {
@@ -33,4 +33,4 @@ export const AnalyticsScripts = () => {
             onLoad={onLoadEvent}
         />
     );
-};
+}

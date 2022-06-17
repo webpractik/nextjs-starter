@@ -8,7 +8,7 @@
     ],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": false,
+    "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
@@ -17,13 +17,21 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "experimentalDecorators": true,
+    "removeComments": true,
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@sassConfig": ["src/assets/styles/base/config.sass"],
+      "@/*": [
+        "./src/*"
+      ],
+      "@sassConfig": [
+        "src/assets/styles/base/config.sass"
+      ]
     },
-    "typeRoots": ["./src/types/"]
+    "typeRoots": [
+      "./src/types/"
+    ],
+    "incremental": true
   },
   "include": [
     "next-env.d.ts",

@@ -50,13 +50,6 @@ ESLint должен подключиться автоматически, но в
 - Ставим галочку "On save"
 - Готово
 
-## Использование SVG components:
-```import React from 'react';
-import CloseSVG from './close.svg';
-
-const MyComponent = () => <CloseSVG />;
-```
-
 ## Добавление публичных env переменных, доступных в браузере:
 - в .env добавляем переменную по примеру ```ENV_EXAMPLE=example```
 - далее в next.config.js: ```env: { ENV_EXAMPLE: process.env.ENV_EXAMPLE }```

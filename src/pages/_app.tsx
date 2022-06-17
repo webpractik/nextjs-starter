@@ -1,19 +1,24 @@
 import 'normalize.css';
 
+import { AppProps } from 'next/app';
 import React from 'react';
 
 import { StoreProvider } from '@/hooks/useStore';
 
-const App = ({ Component, pageProps }) => (
-    <StoreProvider {...pageProps}>
-        <Component {...pageProps} />
-    </StoreProvider>
-);
+export default function MyApp({ Component, pageProps }: AppProps) {
+    return (
+        <StoreProvider {...pageProps}>
+            <Component {...pageProps} />
+        </StoreProvider>
+    );
+}
 
-export const reportWebVitals = (metrics: { label: string; name: string; value: number }) => {
-    if (metrics.label === 'web-vital') {
-        console.log({ name: metrics.name, value: Math.trunc(metrics.value) });
-    }
-};
+// Раскомментируйте этот метод только в том случае, если у вас есть необходимость
+// передавать данные для каждой страницы приложения.
+// Это отключает возможность выполнять автоматическую статическую оптимизацию,
+// в результате чего каждая страница в вашем приложении обрабатывается на стороне сервера.
 
-export default App;
+// MyApp.getInitialProps = async (appContext: AppContext) => {
+//     const appProps = await App.getInitialProps(appContext);
+//     return { ...appProps };
+// };
