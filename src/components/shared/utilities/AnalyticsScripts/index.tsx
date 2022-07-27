@@ -7,7 +7,7 @@ export const TRACKING_ID = '[Tracking ID]';
 export function AnalyticsScripts() {
     const { events } = useRouter();
 
-    const handleRouteChange = (url: string): void => {
+    const handleRouteChange = (_url: string): void => {
         /* */
     };
 

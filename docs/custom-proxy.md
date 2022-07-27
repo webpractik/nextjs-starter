@@ -1,7 +1,24 @@
+## Кастомный сервер
+
+сниппет, в случае если необходимо подключить кастомный proxy сервер
+
+
+package.json
+```json
+"scripts": {
+  ...
+  "proxy:dev": "kill-port 3000 && NODE_ENV=development node proxy-server.mjs",
+  "proxy:prod": "NODE_ENV=production node proxy-server.mjs",
+  ...
+},
+```
+
+./proxy-server.mjs
+```typescript
 import express from 'express';
 import next from 'next';
 import { createProxyMiddleware } from 'http-proxy-middleware';
-import cors from 'cors';
+// import cors from 'cors';
 
 const port = process.env.FRONT_INTERNAL_PORT || 3000;
 
@@ -16,23 +33,25 @@ const handle = app.getRequestHandler();
 app.prepare().then(() => {
     const server = express();
 
-    server.use(
-        cors({
-            origin: process.env.NODE_ENV === 'production' ? process.env.FRONT_PUBLIC_URL : '*',
-        })
-    );
+    // CORS:
+    // server.use(
+    //     cors({
+    //         origin: process.env.NODE_ENV === 'production' ? process.env.FRONT_PUBLIC_URL : '*',
+    //     })
+    // );
 
     server.use(
         '/api',
         createProxyMiddleware({
             target: process.env.BACK_INTERNAL_URL,
+            // HTTP auth:
             // auth: `${process.env.HTTP_AUTH_LOGIN}:${process.env.HTTP_AUTH_PASS}`,
             pathRewrite: path => path.replace('/api', ''),
             changeOrigin: true,
         })
     );
 
-    // Проксирование socket.io
+    // socket.io proxy:
     // const wsProxy = createProxyMiddleware('/socket.io', {
     //     target: process.env.BACK_INTERNAL_URL,
     //     changeOrigin: true,
@@ -51,3 +70,5 @@ app.prepare().then(() => {
         console.log(`All requests proxying on ${process.env.BACK_INTERNAL_URL}`);
     });
 });
+```
+

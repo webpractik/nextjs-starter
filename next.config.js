@@ -1,11 +1,13 @@
 const path = require('path');
 const { withSentryConfig } = require('@sentry/nextjs');
-const { withPlugins, optional } = require('next-compose-plugins');
-const { PHASE_PRODUCTION_SERVER } = require('next/constants');
+
+const isSentryEnabled = process.env.NODE_ENV === 'production' && process.env.APP_ENV === 'PROD';
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
     enabled: process.env.ANALYZE === 'true',
 });
+
+const cachePublicMaxAge = process.env.CACHE_PUBLIC_MAX_AGE || 3600;
 
 /**
  * @type {import('next').NextConfig}
@@ -25,12 +27,31 @@ const nextConfig = {
             },
         },
     },
+    images: {
+        disableStaticImages: true,
+        dangerouslyAllowSVG: true,
+        contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    },
+    rewrites: async () => [
+        {
+            source: '/api/:path*',
+            destination: process.env.BACK_INTERNAL_URL,
+        },
+    ],
+    headers: async () => [
+        {
+            source: '/:all*(svg|jpg|png|jpeg|woff|woff2|webp|ico)',
+            locale: false,
+            headers: [
+                {
+                    key: 'Cache-Control',
+                    value: `public, max-age=${cachePublicMaxAge}, stale-while-revalidate`,
+                },
+            ],
+        },
+    ],
 };
 
-module.exports = withPlugins(
-    [
-        [withBundleAnalyzer],
-        [optional(() => withSentryConfig), { silent: true }, [PHASE_PRODUCTION_SERVER]],
-    ],
-    nextConfig
-);
+module.exports = isSentryEnabled
+    ? withSentryConfig(nextConfig, { silent: true })
+    : withBundleAnalyzer(nextConfig);

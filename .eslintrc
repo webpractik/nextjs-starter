@@ -46,7 +46,7 @@
     }],
     "no-magic-numbers": ["warn", {
       "ignoreArrayIndexes": true,
-      "ignore": [0, 1, 2, 200, 403, 404]
+      "ignore": [0, 1, 2, 200, 400, 403, 404, 500]
     }],
     "react/display-name": "off",
     "react/no-array-index-key": "warn",
@@ -71,7 +71,7 @@
     "simple-import-sort/exports": "warn",
     "unused-imports/no-unused-imports": "error",
     "unused-imports/no-unused-vars": [
-      "warn",
+      "error",
       {
         "vars": "all",
         "varsIgnorePattern": "^_",
