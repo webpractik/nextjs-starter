@@ -8,11 +8,13 @@
 npx create-next-app -e https://github.com/webpractik/nextjs-starter
 ```
 
-## Настройка
-- [Общие сведения](docs/settings.md)
+## Документация
+- [Базовая настройка](docs/settings.md)
+- [Структура проекта](docs/project-structure.md)
+- [Работа с backend API](docs/api.md)
 - [Настройка Sentry](docs/sentry.md)
 - [Настройка Google Analytics](docs/gtag.md)
-- [Проксирование запросов](docs/proxy.md)
+- [Настройка кастомного прокси сервера](docs/custom-proxy.md)
 
 ## CI / CD
 - **NODEJS >= 16, NPM >= 8**

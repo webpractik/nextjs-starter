@@ -49,7 +49,3 @@ ESLint должен подключиться автоматически, но в
 - Выбираем путь к нужным node_modules в Prettier package
 - Ставим галочку "On save"
 - Готово
-
-## Добавление публичных env переменных, доступных в браузере:
-- в .env добавляем переменную по примеру ```ENV_EXAMPLE=example```
-- далее в next.config.js: ```env: { ENV_EXAMPLE: process.env.ENV_EXAMPLE }```
