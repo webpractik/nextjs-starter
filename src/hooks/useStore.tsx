@@ -5,7 +5,7 @@ import Store from '@/stores/core/Store';
 
 let store: Store;
 
-const initializeStore = (initialData: unknown) => {
+const initializeStore = (initialData?: unknown) => {
     const actualStore = store ?? new Store();
 
     if (initialData) {
@@ -24,7 +24,7 @@ export function StoreProvider({
     initialState,
 }: {
     children: React.ReactNode;
-    initialState: unknown;
+    initialState?: unknown;
 }) {
     const initializedStore = initializeStore(initialState);
 

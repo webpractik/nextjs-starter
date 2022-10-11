@@ -1,15 +1,25 @@
-import 'normalize.css';
+import '@/assets/styles/index.sass';
 
+import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AppProps } from 'next/app';
-import React from 'react';
+import React, { useState } from 'react';
 
 import { StoreProvider } from '@/hooks/useStore';
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+type PageProps = { dehydratedState: unknown };
+
+function MyApp({ Component, pageProps }: AppProps<PageProps>) {
+    const [queryClient] = useState(() => new QueryClient());
     return (
-        <StoreProvider {...pageProps}>
-            <Component {...pageProps} />
-        </StoreProvider>
+        <QueryClientProvider client={queryClient}>
+            <Hydrate state={pageProps.dehydratedState}>
+                <StoreProvider>
+                    <Component {...pageProps} />
+                </StoreProvider>
+                <ReactQueryDevtools initialIsOpen={false} />
+            </Hydrate>
+        </QueryClientProvider>
     );
 }
 
@@ -22,3 +32,5 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 //     const appProps = await App.getInitialProps(appContext);
 //     return { ...appProps };
 // };
+
+export default MyApp;

@@ -51,7 +51,9 @@
     "react/display-name": "off",
     "react/no-array-index-key": "warn",
     "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx"] }],
-    "react/jsx-props-no-spreading": "warn",
+    "react/jsx-props-no-spreading": ["warn", {
+      "exceptions": ["Component"]
+    }],
     "react/no-danger": "warn",
     "react/no-unescaped-entities": "off",
     "react-hooks/exhaustive-deps": "off",

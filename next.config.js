@@ -7,7 +7,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
     enabled: process.env.ANALYZE === 'true',
 });
 
-const cachePublicMaxAge = process.env.CACHE_PUBLIC_MAX_AGE || 3600;
+const cachePublicMaxAge = process.env.CACHE_PUBLIC_MAX_AGE ?? 3600;
 
 /**
  * @type {import('next').NextConfig}
@@ -15,7 +15,9 @@ const cachePublicMaxAge = process.env.CACHE_PUBLIC_MAX_AGE || 3600;
 const nextConfig = {
     sassOptions: {
         indentType: 'tab',
-        includePaths: [path.join(__dirname, 'src/assets/styles')],
+        style: 'compressed',
+        loadPaths: [path.join(__dirname, 'src/assets/styles')],
+        charset: false,
     },
     swcMinify: true,
     reactStrictMode: true,
@@ -35,7 +37,7 @@ const nextConfig = {
     rewrites: async () => [
         {
             source: '/api/:path*',
-            destination: process.env.BACK_INTERNAL_URL,
+            destination: process.env.BACK_INTERNAL_URL ?? '/api/:path*',
         },
     ],
     headers: async () => [

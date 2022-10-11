@@ -13,7 +13,6 @@ npx create-next-app -e https://github.com/webpractik/nextjs-starter
 - [Структура проекта](docs/project-structure.md)
 - [Работа с backend API](docs/api.md)
 - [Настройка Sentry](docs/sentry.md)
-- [Настройка Google Analytics](docs/gtag.md)
 - [Настройка кастомного прокси сервера](docs/custom-proxy.md)
 
 ## CI / CD
@@ -21,7 +20,7 @@ npx create-next-app -e https://github.com/webpractik/nextjs-starter
 - **Порт 3000**
 - **Healthcheck**: /api/healthcheck
 - Установка модулей:  ```npm ci --silent --ignore-scripts``` 
-- Запуск билда: ```npm run build
+- Запуск билда: ```npm run build```
 - Запуск dev сборки: ```npm run dev```
 - Запуск прод сборки: ```npm run prod``` 
 - Режим proxy (dev): ```npm run proxy:dev```
@@ -60,7 +59,7 @@ NEXT_PUBLIC_SENTRY_DSN - DSN для доступа к Sentry
 - Storybook
 - Sentry
 - Bundle analyzer
-- Google tag manager
+- React Query
 - API Codegen
 
 ## Packages
