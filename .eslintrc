@@ -52,7 +52,7 @@
     "react/no-array-index-key": "warn",
     "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx"] }],
     "react/jsx-props-no-spreading": ["warn", {
-      "exceptions": ["Component"]
+      "exceptions": ["Component", "NextSeo"]
     }],
     "react/no-danger": "warn",
     "react/no-unescaped-entities": "off",

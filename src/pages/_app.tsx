@@ -3,6 +3,8 @@ import '@/assets/styles/index.sass';
 import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AppProps } from 'next/app';
+import { NextSeo } from 'next-seo';
+import SEO from 'next-seo.config';
 import React, { useState } from 'react';
 
 import { StoreProvider } from '@/hooks/useStore';
@@ -15,6 +17,7 @@ function MyApp({ Component, pageProps }: AppProps<PageProps>) {
         <QueryClientProvider client={queryClient}>
             <Hydrate state={pageProps.dehydratedState}>
                 <StoreProvider>
+                    <NextSeo {...SEO} />
                     <Component {...pageProps} />
                 </StoreProvider>
                 <ReactQueryDevtools initialIsOpen={false} />

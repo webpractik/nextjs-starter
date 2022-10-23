@@ -5,6 +5,8 @@
 dist/
 tsconfig.tsbuildinfo
 
+storybook-static/
+
 # dependencies
 /node_modules
 /.pnp
