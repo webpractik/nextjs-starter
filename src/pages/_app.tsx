@@ -1,27 +1,34 @@
 import '@/assets/styles/index.sass';
 
-import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { DehydratedState, Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AppProps } from 'next/app';
 import { NextSeo } from 'next-seo';
 import SEO from 'next-seo.config';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
+import MockSwitcher from '@/components/shared/utilities/MockSwitcher';
 import { StoreProvider } from '@/hooks/useStore';
 
-type PageProps = { dehydratedState: unknown };
+if (!process.browser && typeof window !== 'undefined') {
+    React.useLayoutEffect = useEffect;
+}
 
-function MyApp({ Component, pageProps }: AppProps<PageProps>) {
+type DehydratedProps = { dehydratedState: DehydratedState };
+
+function MyApp({ Component, pageProps }: AppProps<DehydratedProps>) {
     const [queryClient] = useState(() => new QueryClient());
     return (
         <QueryClientProvider client={queryClient}>
             <Hydrate state={pageProps.dehydratedState}>
-                <StoreProvider>
+                <StoreProvider {...pageProps}>
                     <NextSeo {...SEO} />
-                    <Component {...pageProps} />
+                    <MockSwitcher>
+                        <Component {...pageProps} />
+                    </MockSwitcher>
                 </StoreProvider>
-                <ReactQueryDevtools initialIsOpen={false} />
             </Hydrate>
+            <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
         </QueryClientProvider>
     );
 }

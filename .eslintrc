@@ -3,7 +3,7 @@
   "env": {
     "browser": true,
     "node": true,
-    "es2020": true
+    "es2022": true
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -35,24 +35,34 @@
     "unused-imports"
   ],
   "rules": {
-    "yoda": "error",
-    "no-duplicate-imports": "warn",
+    "no-duplicate-imports": "error",
+    "no-unused-vars": "off",
     "no-empty-pattern": "error",
     "no-use-before-define": "off",
     "no-underscore-dangle": "off",
-    "max-len": [2, {
-      "code": 120,
-      "ignoreUrls": true
-    }],
+    "no-shadow": "off",
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
     "no-magic-numbers": ["warn", {
       "ignoreArrayIndexes": true,
       "ignore": [0, 1, 2, 200, 400, 403, 404, 500]
     }],
+    "yoda": "error",
+    "max-len": [2, {
+      "code": 120,
+      "ignoreUrls": true
+    }],
+    "consistent-return": ["error", {
+      "treatUndefinedAsUnspecified": true
+    }],
+    "class-methods-use-this": "warn",
     "react/display-name": "off",
     "react/no-array-index-key": "warn",
     "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx"] }],
     "react/jsx-props-no-spreading": ["warn", {
-      "exceptions": ["Component", "NextSeo"]
+      "html": "ignore",
+      "custom": "enforce",
+      "explicitSpread": "enforce",
+      "exceptions": ["Component", "NextSeo", "StoreProvider", "ErrorBoundary"]
     }],
     "react/no-danger": "warn",
     "react/no-unescaped-entities": "off",
@@ -61,14 +71,19 @@
     "react/jsx-indent": "off",
     "react/jsx-indent-props": "off",
     "react/require-default-props": "off",
+    "react/button-has-type": "off",
+    "react/jsx-no-useless-fragment": ["error", {
+      "allowExpressions": true
+    }],
     "import/extensions": "off",
     "import/prefer-default-export": "off",
     "jsx-a11y/anchor-is-valid": "off",
     "jsx-a11y/label-has-associated-control": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
     "prettier/prettier": "error",
     "@typescript-eslint/no-use-before-define": "error",
     "@typescript-eslint/explicit-module-boundary-types": "off",
-    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "error",
     "simple-import-sort/imports": "warn",
     "simple-import-sort/exports": "warn",
     "unused-imports/no-unused-imports": "error",
@@ -97,12 +112,5 @@
   },
   "globals": {
     "window": true
-  },
-  "ignorePatterns": [
-    "proxy-server.mjs",
-    "next.config.js",
-    "sentry.client.config.js",
-    "sentry.server.config.js",
-    "postcss.config.js"
-  ]
+  }
 }

@@ -1,6 +1,13 @@
 import '../src/assets/styles/index.sass';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { RouterContext } from 'next/dist/shared/lib/router-context';
+import { initialize, mswDecorator } from 'msw-storybook-addon';
+import { handlers } from '../src/mocks/handlers';
+
+initialize({
+    onUnhandledRequest: 'bypass',
+});
 
 const queryClient = new QueryClient();
 
@@ -12,9 +19,16 @@ export const parameters = {
             date: /Date$/,
         },
     },
+    nextRouter: {
+        Provider: RouterContext.Provider,
+    },
+    msw: {
+        handlers: handlers,
+    },
 };
 
 export const decorators = [
+    mswDecorator,
     story => (
         <QueryClientProvider client={queryClient}>
             {story()}

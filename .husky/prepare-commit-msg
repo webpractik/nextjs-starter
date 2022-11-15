@@ -1,4 +1,12 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
+COMMIT_MSG_FILE=$1
+COMMIT_SOURCE=$2
+SHA1=$3
+
+if [ "${COMMIT_SOURCE}" = merge ];then
+    exit 0
+fi
+
 exec < /dev/tty && npx --no-install cz --hook || true

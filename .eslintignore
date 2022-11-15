@@ -1,0 +1,9 @@
+node_modules
+server.mjs
+next.config.js
+sentry.client.config.js
+sentry.server.config.js
+commitlint.config.js
+lint-staged.config.js
+src/**/*.stories.tsx
+src/api/**/*.ts

@@ -6,6 +6,7 @@ module.exports = {
         '@storybook/addon-actions',
         '@storybook/addon-interactions',
         'storybook-addon-next',
+        'storybook-addon-next-router',
     ],
     typescript: {
         check: false,

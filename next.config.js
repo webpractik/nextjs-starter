@@ -16,13 +16,14 @@ const nextConfig = {
     sassOptions: {
         indentType: 'tab',
         style: 'compressed',
-        loadPaths: [path.join(__dirname, 'src/assets/styles')],
+        includePaths: [path.join(__dirname, 'src/assets/styles')],
         charset: false,
     },
     swcMinify: true,
     reactStrictMode: true,
     poweredByHeader: false,
     experimental: {
+        esmExternals: 'loose',
         modularizeImports: {
             lodash: {
                 transform: 'lodash/{{member}}',

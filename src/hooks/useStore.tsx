@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 
 import GlobalStoreContext from '@/context/GlobalStoreContext';
-import Store from '@/stores/core/Store';
+import Store from '@/domain/core/Store';
 
 let store: Store;
 
