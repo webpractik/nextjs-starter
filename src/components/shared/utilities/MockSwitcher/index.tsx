@@ -1,7 +1,5 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 
-import { initMocks } from '@/mocks';
-
 type MockSwitcherProps = {
     children: ReactNode;
 };
@@ -9,16 +7,19 @@ type MockSwitcherProps = {
 function MockSwitcher({ children }: MockSwitcherProps) {
     const [isInit, setInit] = useState<boolean>(false);
 
+    const init = async () => {
+        const { initMocks } = await import('@/mocks');
+        await initMocks();
+        setInit(true);
+    };
+
     useEffect(() => {
-        if (process.env.NEXT_PUBLIC_MOCKS_ENABLED !== 'true') {
-            setInit(true);
+        if (process.env.NEXT_PUBLIC_MOCKS_ENABLED === 'true') {
+            init().catch(console.error);
             return;
         }
-        initMocks()
-            .then(() => {
-                setInit(true);
-            })
-            .catch(console.error);
+
+        setInit(true);
     }, []);
 
     return <>{isInit ? children : null}</>;
