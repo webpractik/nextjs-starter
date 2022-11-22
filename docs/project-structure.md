@@ -13,7 +13,11 @@
 
 ## Core 
 
-UI компоненты, либо настроенные обертки над компонентами UI фреймворка. Мельчайшие строительные блоки. Пример: текстовый инпут, селект, карточка, заголовок.
+UI компоненты, либо настроенные обертки над компонентами UI фреймворка (MUI, Mantine UI).
+Мельчайшие строительные блоки, в идеале не импортирующие какие-либо другие компоненты проекта. Максимально используются в features/shared компонентах. 
+Все core компоненты должны быть вынесены в storybook для удобства команды разработки.
+
+Примеры: кнопка, инпуты, список, табы, тултип, модальное окно, карточка, заголовок и т.д
 
 ## Shared 
 
@@ -38,7 +42,7 @@ UI компоненты, либо настроенные обертки над �
 
 ## Features
 
-Компоненты, которые подключаются только на определенной странице, соответственно название директории должно соответствовать названию страницы. Смесь custom, shared и core компонентов, настроенных под конкретную фичу.
+Компоненты, которые подключаются только на определенной странице, название директории должно соответствовать названию страницы. Смесь custom, shared и core компонентов, настроенных под конкретную фичу.
 
 Пример исходной структуры:
 ```
@@ -47,18 +51,23 @@ src
 │   ├── core
 │   │   └── Card
 │   │       └── index.tsx
+│   │       └── index.stories.tsx
 │   │       └── style.module.sass
 │   │   └── Link
 │   │       └── index.tsx
+│   │       └── index.stories.tsx
 │   │       └── style.module.sass
 │   │   └── Title
 │   │       └── index.tsx
+│   │       └── index.stories.tsx
 │   │       └── style.module.sass
 │   │   └── Tooltip
 │   │       └── index.tsx
+│   │       └── index.stories.tsx
 │   │       └── style.module.sass
 │   │   └── Toggle
 │   │       └── index.tsx
+│   │       └── index.stories.tsx
 │   │       └── style.module.sass
 │   │   ...
 │   │
@@ -71,6 +80,8 @@ src
 │   │       └── CreateForm
 │   │           └── index.tsx
 │   │           └── style.module.sass
+│   │  
+│   │  
 │   └── shared
 │       ├── layouts
 │       │   └── MainLayout
@@ -78,7 +89,7 @@ src
 │       │       └── style.module.tsx
 │       │   ...
 │       │   
-│       ├── fields
+│       ├── fields                      
 │       │   └── TextField
 │       │       └── index.tsx
 │       │       └── style.module.tsx
@@ -97,7 +108,7 @@ src
 │       └── utilities
 │             ├── ErrorBoundary
 │             │   └── index.tsx
-│             └── Meta
+│             └── NoSSR
 │                 └── index.tsx
 └── pages
     ├── index.tsx
@@ -282,5 +293,3 @@ export default function MainLayout({ children }) {
   )
 }
 ```
-
-## Сторы

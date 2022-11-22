@@ -75,6 +75,8 @@ NEXT_PUBLIC_SENTRY_DSN - DSN для доступа к Sentry
 - React Query
 - API Codegen
 - Mock Service Worker
+- Figma tokens
+- Security headers
 
 ## Packages
 - [axios](https://axios-http.com/ru/docs/intro)

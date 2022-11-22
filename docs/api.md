@@ -6,7 +6,7 @@
 
 Пример
 ```typescript
-// ./src/api/config.ts
+// ./src/api/clients.ts
 export const apiClient = axios.create({
     baseURL: 'https://api-client.com/api',
     withCredentials: true,
@@ -24,7 +24,7 @@ export const wingsClient = axios.create({
 
 ```typescript
 // где-нибудь в приложении
-import { apiClient } from '@/api/config';
+import { apiClient } from '@/api/clients';
 
 ...
 const fetchData = async () => {
