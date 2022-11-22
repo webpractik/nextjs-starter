@@ -1,4 +1,4 @@
-import '@/assets/styles/index.sass';
+import '@/styles/index.sass';
 
 import { DehydratedState, Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';

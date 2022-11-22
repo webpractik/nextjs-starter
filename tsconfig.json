@@ -27,7 +27,7 @@
         "./src/*"
       ],
       "@sassConfig": [
-        "src/assets/styles/base/config.sass"
+        "src/styles/config.sass"
       ]
     },
     "typeRoots": [

@@ -1,4 +1,4 @@
-import '../src/assets/styles/index.sass';
+import '../src/styles/index.sass';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { RouterContext } from 'next/dist/shared/lib/router-context';
