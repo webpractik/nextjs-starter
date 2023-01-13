@@ -225,6 +225,10 @@ const sendRequest = async <T>(
         cancelToken: source.token,
     };
 
+    if (options.method === 'GET') {
+        requestConfig.params = body;
+    }
+
     onCancel(() => source.cancel('The user aborted a request.'));
 
     try {

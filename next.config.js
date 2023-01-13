@@ -11,28 +11,36 @@ const nextConfig = {
         includePaths: [path.join(__dirname, 'src/styles')],
         charset: false,
     },
+
     swcMinify: true,
+
     reactStrictMode: true,
+
     poweredByHeader: false,
-    experimental: {
-        esmExternals: 'loose',
-        modularizeImports: {
-            lodash: {
-                transform: 'lodash/{{member}}',
-            },
+
+    modularizeImports: {
+        lodash: {
+            transform: 'lodash/{{member}}',
         },
     },
+
+    experimental: {
+        esmExternals: 'loose',
+    },
+
     images: {
         disableStaticImages: true,
         dangerouslyAllowSVG: true,
         contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     },
+
     rewrites: async () => [
         {
             source: '/api/:path*',
             destination: process.env.BACK_INTERNAL_URL ?? '/api/:path*',
         },
     ],
+
     headers: async () => {
         if (process.env.NODE_ENV !== 'production') return [];
 

@@ -12,7 +12,7 @@
     "format": "pretty-quick --ignore-path .gitignore --pattern \"src/**/*.+(ts|js|tsx|json)\"",
     "analyze": "cross-env ANALYZE=true npm run build",
     "check-all": "run-p type-check lint format",
-    "api-codegen": "openapi --input ./swagger.json --output ./src/api --request ./src/api/request.ts",
+    "api-codegen": "openapi --input ./swagger.json --output ./src/api --request ./src/api/request.ts --useOptions",
     "storybook": "kill-port 6006 && start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
     "build-tokens": "style-dictionary build --config tokens.config.json"
