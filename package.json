@@ -90,7 +90,7 @@
     "rimraf": "4.0.4",
     "sass": "^1.57.1",
     "sass-loader": "13.2.0",
-    "storybook-addon-next": "1.7.1",
+    "storybook-addon-next": "1.7.3",
     "storybook-addon-next-router": "4.0.2",
     "style-dictionary": "3.7.2",
     "style-loader": "3.3.1",
