@@ -41,10 +41,10 @@
     "no-use-before-define": "off",
     "no-underscore-dangle": "off",
     "no-shadow": "off",
-    "no-console": ["warn", { "allow": ["warn", "error"] }],
+    "no-console": ["warn", { "allow": ["error", "time"] }],
     "no-magic-numbers": ["warn", {
       "ignoreArrayIndexes": true,
-      "ignore": [0, 1, 2, 200, 400, 403, 404, 500]
+      "ignore": [-1, 0, 1, 2, 200, 400, 403, 404, 500]
     }],
     "yoda": "error",
     "max-len": [2, {
@@ -77,6 +77,7 @@
     }],
     "import/extensions": "off",
     "import/prefer-default-export": "off",
+    "import/no-cycle": "off",
     "jsx-a11y/anchor-is-valid": "off",
     "jsx-a11y/label-has-associated-control": "off",
     "jsx-a11y/click-events-have-key-events": "off",
