@@ -98,12 +98,20 @@ const nextConfig = {
     },
 };
 
-const isSentryEnabled = process.env.NODE_ENV === 'production' && process.env.APP_ENV === 'PROD';
+const isProduction = process.env.NODE_ENV === 'production' || process.env.APP_ENV === 'PROD';
 
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-    enabled: process.env.ANALYZE === 'true',
-});
+const withBundleAnalyzer = !isProduction
+    ? require('@next/bundle-analyzer')({
+          enabled: process.env.ANALYZE === 'true',
+      })
+    : () => nextConfig;
 
-module.exports = isSentryEnabled
-    ? withSentryConfig(nextConfig, { silent: true })
-    : withBundleAnalyzer(nextConfig);
+const withSentry = () => {
+    if (process.env.NEXT_PUBLIC_SENTRY_DSN || process.env.SENTRY_DSN) {
+        return withSentryConfig(nextConfig, { silent: true });
+    }
+
+    return nextConfig;
+};
+
+module.exports = isProduction ? withSentry() : withBundleAnalyzer(nextConfig);

@@ -26,8 +26,14 @@
       "@/*": [
         "./src/*"
       ],
-      "@sassConfig": [
-        "src/styles/config.sass"
+      "core/*": [
+        "./src/components/core/*"
+      ],
+      "features/*": [
+        "./src/components/features/*"
+      ],
+      "shared/*": [
+        "./src/components/shared/*"
       ]
     },
     "typeRoots": [
