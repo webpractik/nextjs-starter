@@ -8,7 +8,14 @@
 npx create-next-app -e https://github.com/webpractik/nextjs-starter
 ```
 
+## CI / CD
+- **NODEJS:** ```>= 18```
+- **NPM:** ```>= 8```
+- **Port:** ```3000```
+- **Healthcheck:** ```/api/health```
+
 ## Документация
+- [ENV переменные](docs/env.md)
 - [Базовая настройка](docs/settings.md)
 - [Структура проекта](docs/project-structure.md)
 - [Работа с backend API](docs/api.md)
@@ -16,18 +23,11 @@ npx create-next-app -e https://github.com/webpractik/nextjs-starter
 - [Настройка кастомного прокси сервера](docs/custom-proxy.md)
 - [Дизайн токены](docs/design-tokens.md)
 
-## CI / CD
-- **NODEJS >= 18, NPM >= 8**
-- **Порт 3000**
-- **Healthcheck**: /api/healthcheck
-
 ## NPM Scripts
 - Установка модулей:  ```npm ci``` 
 - Запуск билда: ```npm run build```
 - Запуск dev сборки: ```npm run dev```
 - Запуск прод сборки: ```npm run prod``` 
-- Режим proxy (dev): ```npm run proxy:dev```
-- Режим proxy (prod): ```npm run proxy:prod```
 - Анализ билда: ```npm run analyze```
 - Запуск storybook: ```npm run storybook```
 - Билд storybook: ```npm run build-storybook```
@@ -37,26 +37,6 @@ npx create-next-app -e https://github.com/webpractik/nextjs-starter
 - Проверка eslint: ```npm run lint```
 - Проверка prettier: ```npm run format``` 
 - Проверка всего в параллельном режиме: ```npm run check-all```
-
-### ENV переменные
-Глобальные переменные:
-```
-FRONT_HOST - хост в локальной сети kubernetes 
-FRONT_PORT - порт
-BACK_INTERNAL_URL - полный путь для обращения к backend приложению (http://back:80)
-
-HTTP_AUTH_LOGIN=demo
-HTTP_AUTH_PASS=demo
-```
-Переменные, которые должны быть доступны на момент сборки:
-```
-NEXT_PUBLIC_MOCKS_ENABLED=false - режим моков
-
-NEXT_PUBLIC_APP_ENV - LOCAL | WORK | RC | PROD
-NEXT_PUBLIC_FRONT_URL - публичный урл front приложения
-NEXT_PUBLIC_BACK_URL - публичный урл back приложения (опционален)
-NEXT_PUBLIC_SENTRY_DSN - DSN для доступа к Sentry
-```
 
 ## Features
 - Typescript

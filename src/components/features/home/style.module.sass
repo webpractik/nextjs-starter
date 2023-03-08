@@ -1,0 +1,30 @@
+@import 'variables'
+
+.glow
+	height: 100%
+	font: 800 4rem / 100% $system-font
+	text-transform: uppercase
+	background: #000
+	color: #ff7002
+	animation: glow 2s ease-in-out infinite alternate
+	text-align: center
+
+	& > img
+		animation: spin 5000ms infinite linear
+		margin-bottom: 30px
+
+.result
+	margin-top: 60px
+	color: white
+
+@keyframes glow
+	from
+		text-shadow: 0 0 30px #ff7002, 0 0 10px #ff7002
+	to
+		text-shadow: 0 0 20px #ff080a
+
+@keyframes spin
+	from
+		transform: rotate(0deg)
+	to
+		transform: rotate(360deg)

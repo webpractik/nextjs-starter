@@ -1,3 +1,5 @@
+
+
 ## Структура компонентов
 
 Корневые домены: 
@@ -219,77 +221,6 @@ export const AlbumsCarousel = () => {
   return (
     //...
     //
-  )
-}
-```
-
-## Layouts
-
-В новых версиях NextJS добавили (на момент написания доки еще не добавили) поддержку Layouts. Суть - при переходе между страницами сохраняется состояние страницы (вводимые значения, положение прокрутки и т. д.) для работы в режиме SPA. Layout также обеспечит сохранение отрендеренного дерева компонентов. 
-
-```typescript jsx
-// pages/index.tsx
-
-import type { ReactElement } from 'react'
-import Layout from '@/components/shared/layouts/MainLayout'
-import CustomLayout from '@/components/shared/layouts/CustomLayout'
-import type { NextPageWithLayout } from './_app'
-
-const Page: NextPageWithLayout = () => {
-  return <p>hello world</p>
-}
-
-Page.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <MainLayout>
-      {/* дополнительная обертка для конкретной страницы */}
-      <NestedLayout>{page}</NestedLayout>
-    </MainLayout>
-  )
-}
-
-export default Page
-```
-```typescript jsx
-// pages/_app.tsx
-
-import type { ReactElement, ReactNode } from 'react'
-import type { NextPage } from 'next'
-import type { AppProps } from 'next/app'
-
-export type NextPageWithLayout = NextPage & {
-  getLayout?: (page: ReactElement) => ReactNode
-}
-
-type AppPropsWithLayout = AppProps & {
-  Component: NextPageWithLayout
-}
-
-export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
-  // Подключать layout страницы, если доступен
-  const getLayout = Component.getLayout ?? ((page) => page)
-
-  return getLayout(<Component {...pageProps} />)
-}
-```
-
-Внутри layout можно получать данные на стороне клиента, используя библиотеку react-query. Поскольку этот файл не является Page, нельзя использовать getStaticProps или getServerSideProps в настоящее время.
-
-```typescript jsx
-// components/shared/layouts/MainLayout
-
-export default function MainLayout({ children }) {
-  const { data, error } = useQuery(['/api/navigation'], api.fetchNavigation)
-
-  if (error) return <div>Failed to load</div>
-  if (!data) return <div>Loading...</div>
-
-  return (
-    <>
-      <Header links={data.links} />
-      <main>{children}</main>
-      <Footer />
-    </>
   )
 }
 ```

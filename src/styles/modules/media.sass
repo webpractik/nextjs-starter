@@ -1,30 +1,4 @@
-$max-width: 1248px
-$min-width: 280px
-
-// Экраны
-// ======
-$desktop-lg: 1399
-$desktop: 1199
-$tablet: 991
-$mobile: 767
-$mobile-sm: 575
-
-
-@mixin clearfix
-	&:after
-		content: ''
-		display: table
-		clear: both
-
-
-@mixin grad($color1,$color2)
-	background: $color2
-	background: linear-gradient(top, $color1, $color2)
-
-
-@mixin rotate($rotate)
-	transform: rotate($rotate+deg)
-
+@import 'variables'
 
 @mixin max-width($width)
 	@media only screen and (max-width: #{$width}px)
@@ -47,24 +21,29 @@ $mobile-sm: 575
 		@content
 
 
-// Основные медиазапросы
-// =====================
-// desktop >= 992px
-@mixin desktop()
-	+min-width($tablet)
+// Media queries
+
+// desktop-big >= 1600px
+@mixin desktop-big()
+	+min-width($big-desktop)
 		@content
 
-// desktop-lg >= 1400px
+// desktop-lg >= 1399px
 @mixin desktop-lg()
 	+min-width($desktop-lg)
 		@content
 
-// 1200px <= desktop-md <= 1399px
+// desktop >= 1024
+@mixin desktop()
+	+min-width($desktop)
+		@content
+
+// 1024px <= desktop-md <= 1399px
 @mixin desktop-md()
 	+min-max-width($desktop, $desktop-lg)
 		@content
 
-// 992px <= desktop-sm <= 1199px
+// 992px <= desktop-sm <= 1024px
 @mixin desktop-sm()
 	+min-max-width($tablet, $desktop)
 		@content
@@ -99,33 +78,3 @@ $mobile-sm: 575
 	+max-width($tablet)
 		@content
 
-
-
-
-@mixin full-wrapper()
-	margin: 0 auto
-	max-width: $max-width
-	min-width: $min-width
-	+desktop-lg
-		padding: 0 64px
-	+desktop()
-		padding: 0 32px
-	+tablet-mobile()
-		padding: 0 16px
-
-
-
-@mixin width($width)
-	max-width: $width
-	width: $width
-
-
-@mixin placeholder()
-	&::-webkit-input-placeholder
-		@content
-	&::-moz-placeholder
-		@content
-	&:-moz-placeholder
-		@content
-	&:-ms-input-placeholder
-		@content

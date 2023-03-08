@@ -1,0 +1,39 @@
+@import 'variables'
+
+@mixin max-content()
+	max-width: max-content
+	width: 100%
+
+
+@mixin full-wrapper()
+	margin: 0 auto
+	max-width: $full-width
+	min-width: $min-width
+	+desktop-lg
+		padding: 0 64px
+	+desktop()
+		padding: 0 32px
+	+tablet-mobile()
+		padding: 0 16px
+
+
+@mixin width($width)
+	max-width: $width
+	width: $width
+
+
+@mixin base-hover()
+	transition: opacity .3s ease
+	&:hover
+		opacity: .7
+
+
+@mixin gradient($color1,$color2)
+	background: $color2
+	background: linear-gradient(top, $color1, $color2)
+
+
+@mixin rotate($rotate)
+	transform: rotate($rotate+deg)
+
+

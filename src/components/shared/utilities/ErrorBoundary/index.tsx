@@ -19,7 +19,9 @@ function ErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
 
             <pre className={cn.errorText}>{error.message}</pre>
 
-            <button onClick={resetErrorBoundary}>Попробовать еще</button>
+            <button type="button" onClick={resetErrorBoundary}>
+                Попробовать еще
+            </button>
         </div>
     );
 }

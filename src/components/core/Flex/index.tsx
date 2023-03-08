@@ -1,9 +1,8 @@
+import clsx from 'clsx';
 import React, { ReactNode } from 'react';
 
 type ContainerProps = {
-    flex: string;
-    gap: string;
-    flexDirection: 'row' | 'column';
+    flexDirection: 'row' | 'row-reverse' | 'column' | 'column-reverse';
     flexWrap: 'wrap' | 'nowrap' | 'wrap-reverse';
     justifyContent:
         | 'flex-start'
@@ -22,10 +21,10 @@ type ContainerProps = {
         | 'initial'
         | 'inherit';
     /* Common Props */
-    padding: string;
+    flex: string;
+    gap: string;
     margin: string;
     width: string;
-    height: string;
 };
 
 type FlexProps = {
@@ -36,32 +35,41 @@ type FlexProps = {
 function Flex({
     children,
     className,
-    alignItems = 'stretch',
+    alignItems,
     flexWrap = 'nowrap',
     flexDirection = 'row',
     justifyContent = 'flex-start',
-    flex = '0 1 auto',
-    gap = '0px',
-    width = 'inherit',
-    height = 'inherit',
-    margin = '0px',
-    padding = '0px',
+    flex,
+    gap,
+    width,
+    margin,
 }: FlexProps) {
     return (
         <div
-            className={className}
+            className={clsx(className, 'flex', {
+                flexDirectionColumn: flexDirection === 'column',
+                flexDirectionColumnReverse: flexDirection === 'column-reverse',
+                flexDirectionRow: flexDirection === 'row',
+                flexDirectionRowReverse: flexDirection === 'row-reverse',
+                flexWrapNowrap: flexWrap === 'nowrap',
+                flexWrapWrap: flexWrap === 'wrap',
+                flexWrapWrapReverse: flexWrap === 'wrap-reverse',
+                alignItemsFlexStart: alignItems === 'flex-start',
+                alignItemsFlexEnd: alignItems === 'flex-end',
+                alignItemsCenter: alignItems === 'center',
+                alignItemsStretch: alignItems === 'stretch',
+                alignItemsBaseline: alignItems === 'baseline',
+                justifyContentFlexStart: justifyContent === 'flex-start',
+                justifyContentFlexEnd: justifyContent === 'flex-end',
+                justifyContentCenter: justifyContent === 'center',
+                justifyContentSpaceAround: justifyContent === 'space-around',
+                justifyContentSpaceBetween: justifyContent === 'space-between',
+            })}
             style={{
-                display: 'flex',
-                alignItems,
-                justifyContent,
-                flexWrap,
-                flexDirection,
                 flex,
                 gap,
                 width,
-                height,
                 margin,
-                padding,
             }}
         >
             {children}

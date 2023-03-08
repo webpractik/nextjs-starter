@@ -1,13 +1,15 @@
 {
-  "source": ["src/design-tokens/colors.json"],
-  "platforms": {
-    "scss": {
-      "transformGroup": "scss",
-      "buildPath": "src/styles/",
-      "files": [{
-        "destination": "colors.scss",
-        "format": "scss/variables"
-      }]
+    "source": ["src/figma-tokens/colors.json"],
+    "platforms": {
+        "scss": {
+            "transformGroup": "scss",
+            "buildPath": "src/styles/modules",
+            "files": [
+                {
+                    "destination": "colors.scss",
+                    "format": "scss/variables"
+                }
+            ]
+        }
     }
-  }
 }

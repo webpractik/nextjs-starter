@@ -1,53 +1,32 @@
 {
-  "compilerOptions": {
-    "target": "es6",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "experimentalDecorators": true,
-    "useDefineForClassFields": true,
-    "useUnknownInCatchVariables": false,
-    "removeComments": true,
-    "jsx": "preserve",
-    "baseUrl": ".",
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "core/*": [
-        "./src/components/core/*"
-      ],
-      "features/*": [
-        "./src/components/features/*"
-      ],
-      "shared/*": [
-        "./src/components/shared/*"
-      ]
+    "compilerOptions": {
+        "target": "es6",
+        "lib": ["dom", "dom.iterable", "esnext"],
+        "allowJs": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "noEmit": true,
+        "esModuleInterop": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "experimentalDecorators": true,
+        "useDefineForClassFields": true,
+        "useUnknownInCatchVariables": false,
+        "removeComments": true,
+        "jsx": "preserve",
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["./src/*"],
+            "core/*": ["./src/components/core/*"],
+            "features/*": ["./src/components/features/*"],
+            "shared/*": ["./src/components/shared/*"]
+        },
+        "typeRoots": ["./src/types/"],
+        "incremental": true
     },
-    "typeRoots": [
-      "./src/types/"
-    ],
-    "incremental": true
-  },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules",
-    "src/api/**/*.ts"
-  ],
+    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+    "exclude": ["node_modules", "src/api/**/*.ts"]
 }

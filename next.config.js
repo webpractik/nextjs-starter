@@ -8,7 +8,7 @@ const nextConfig = {
     sassOptions: {
         indentType: 'tab',
         style: 'compressed',
-        includePaths: [path.join(__dirname, 'src/styles')],
+        includePaths: [path.join(__dirname, 'src/styles/modules/')],
         charset: false,
     },
 
@@ -98,16 +98,15 @@ const nextConfig = {
     },
 };
 
-const isProduction = process.env.NODE_ENV === 'production' || process.env.APP_ENV === 'PROD';
+const isProduction =
+    process.env.NODE_ENV === 'production' && process.env.NEXT_PUBLIC_APP_ENV === 'PROD';
 
-const withBundleAnalyzer = !isProduction
-    ? require('@next/bundle-analyzer')({
-          enabled: process.env.ANALYZE === 'true',
-      })
-    : () => nextConfig;
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+    enabled: process.env.ANALYZE === 'true',
+});
 
 const withSentry = () => {
-    if (process.env.NEXT_PUBLIC_SENTRY_DSN || process.env.SENTRY_DSN) {
+    if (process.env.NEXT_PUBLIC_SENTRY_DSN?.length > 0) {
         return withSentryConfig(nextConfig, { silent: true });
     }
 

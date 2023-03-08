@@ -7,8 +7,8 @@ package.json
 ```json
 "scripts": {
   ...
-  "proxy:dev": "kill-port 3000 && NODE_ENV=development node proxy-server.mjs",
-  "proxy:prod": "NODE_ENV=production node proxy-server.mjs",
+  "dev": "npm run clean && kill-port 3000 && cross-env NODE_ENV=development node server.mjs",
+  "prod": "NODE_ENV=production node proxy-server.mjs",
   ...
 },
 ```

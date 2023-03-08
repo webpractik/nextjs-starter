@@ -7,6 +7,8 @@ module.exports = {
         '@storybook/addon-interactions',
         'storybook-addon-next',
         'storybook-addon-next-router',
+        'storybook-addon-swc',
+        'storybook-dark-mode',
     ],
     typescript: {
         check: false,
@@ -15,11 +17,18 @@ module.exports = {
         reactDocgenTypescriptOptions: {
             shouldRemoveUndefinedFromOptional: true,
             shouldExtractLiteralValuesFromEnum: true,
+            shouldExtractValuesFromUnion: true,
             propFilter: prop => (prop.parent ? !/node_modules/.test(prop.parent.fileName) : true),
         },
     },
     framework: '@storybook/react',
+    features: {
+        storyStoreV7: true,
+    },
     core: {
         builder: 'webpack5',
+        options: {
+            lazyCompilation: true,
+        },
     },
 };
