@@ -1,6 +1,5 @@
 import Flex from 'core/Flex';
 import Image from 'next/image';
-import React from 'react';
 import ErrorBoundary from 'shared/utilities/ErrorBoundary';
 
 import { useHello } from '@/queries/hello';

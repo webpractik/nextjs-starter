@@ -12,8 +12,6 @@ const nextConfig = {
         charset: false,
     },
 
-    swcMinify: true,
-
     reactStrictMode: true,
 
     poweredByHeader: false,
@@ -25,7 +23,8 @@ const nextConfig = {
     },
 
     experimental: {
-        esmExternals: 'loose',
+        turbo: true,
+        enableUndici: true,
     },
 
     images: {

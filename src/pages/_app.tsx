@@ -10,7 +10,7 @@ import React, { useEffect, useState } from 'react';
 import MockSwitcher from '@/components/shared/utilities/MockSwitcher';
 import { StoreProvider } from '@/hooks/useStore';
 
-if (!process.browser && typeof window !== 'undefined') {
+if (typeof window !== 'undefined') {
     React.useLayoutEffect = useEffect;
 }
 

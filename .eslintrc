@@ -66,6 +66,7 @@
         "class-methods-use-this": "warn",
         "react/no-array-index-key": "warn",
         "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx"] }],
+        "react/react-in-jsx-scope": "off",
         "react/jsx-props-no-spreading": [
             "warn",
             {

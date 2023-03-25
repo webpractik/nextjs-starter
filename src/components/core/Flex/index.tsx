@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 type ContainerProps = {
     flexDirection: 'row' | 'row-reverse' | 'column' | 'column-reverse';

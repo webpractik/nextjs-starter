@@ -1,24 +1,29 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 
 import Flex from '@/components/core/Flex';
+import HomeComponent from 'features/home';
 
-export default {
+const meta: Meta<typeof Flex> = {
     title: 'core/Flex',
     component: Flex,
-} as ComponentMeta<typeof Flex>;
+};
 
-const Template: ComponentStory<typeof Flex> = args => (
-    <Flex {...args}>
-        <div>DIV 1</div>
-        <div>DIV 2</div>
-        <div>DIV 3</div>
-    </Flex>
-);
+export default meta;
 
-export const Default = Template.bind({});
-Default.args = {
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: '15px',
+type Story = StoryObj<typeof Flex>;
+
+export const Primary: Story = {
+    render: args => (
+        <Flex {...args}>
+            <div>DIV 1</div>
+            <div>DIV 2</div>
+            <div>DIV 3</div>
+        </Flex>
+    ),
+    args: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '15px',
+    },
 };

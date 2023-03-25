@@ -1,14 +1,17 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 
 import HomeComponent from 'features/home/index';
 
-export default {
+const meta: Meta<typeof HomeComponent> = {
     title: 'features/Home',
     component: HomeComponent,
-} as ComponentMeta<typeof HomeComponent>;
+};
 
-const Template: ComponentStory<typeof HomeComponent> = args => <HomeComponent />;
+export default meta;
 
-export const Default = Template.bind({});
-Default.args = {};
+type Story = StoryObj<typeof HomeComponent>;
+
+export const Primary: Story = {
+    args: {},
+};
