@@ -3,7 +3,7 @@ import '@/styles/index.sass';
 import { DehydratedState, Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AppProps } from 'next/app';
-import { NextSeo } from 'next-seo';
+import { DefaultSeo } from 'next-seo';
 import SEO from 'next-seo.config';
 import React, { useEffect, useState } from 'react';
 
@@ -17,12 +17,22 @@ if (!process.browser && typeof window !== 'undefined') {
 type DehydratedProps = { dehydratedState: DehydratedState };
 
 function MyApp({ Component, pageProps }: AppProps<DehydratedProps>) {
-    const [queryClient] = useState(() => new QueryClient());
+    const [queryClient] = useState(
+        () =>
+            new QueryClient({
+                defaultOptions: {
+                    queries: {
+                        useErrorBoundary: true,
+                    },
+                },
+            })
+    );
+
     return (
         <QueryClientProvider client={queryClient}>
             <Hydrate state={pageProps.dehydratedState}>
                 <StoreProvider {...pageProps}>
-                    <NextSeo {...SEO} />
+                    <DefaultSeo {...SEO} />
                     <MockSwitcher>
                         <Component {...pageProps} />
                     </MockSwitcher>

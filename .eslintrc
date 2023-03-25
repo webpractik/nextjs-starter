@@ -72,7 +72,7 @@
                 "html": "ignore",
                 "custom": "enforce",
                 "explicitSpread": "enforce",
-                "exceptions": ["Component", "NextSeo", "StoreProvider", "ErrorBoundary"]
+                "exceptions": ["Component", "DefaultSeo", "StoreProvider", "ErrorBoundary"]
             }
         ],
         "react/no-danger": "warn",
@@ -87,6 +87,16 @@
             "error",
             {
                 "allowExpressions": true
+            }
+        ],
+        "react/jsx-sort-props": [
+            "warn",
+            {
+                "shorthandFirst": true,
+                "callbacksLast": true,
+                "multiline": "last",
+                "noSortAlphabetically": true,
+                "reservedFirst": true
             }
         ],
         "import/extensions": "off",

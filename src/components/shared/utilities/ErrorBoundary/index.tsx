@@ -1,39 +1,30 @@
-import React, { ReactNode } from 'react';
-import { ErrorBoundary, ErrorBoundaryPropsWithComponent } from 'react-error-boundary';
+import { ErrorBoundary, ErrorBoundaryProps } from '@sentry/nextjs';
+import React from 'react';
 
 import cn from './style.module.sass';
 
 type ErrorFallbackProps = {
     error: { message: string };
-    resetErrorBoundary: () => void;
+    resetError: () => void;
 };
 
-type BoundaryProps = Partial<ErrorBoundaryPropsWithComponent> & {
-    children: ReactNode;
-};
-
-function ErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
+function ErrorFallback({ error, resetError }: ErrorFallbackProps) {
     return (
-        <div role="alert">
+        <div className={cn.errorWrapper} role="alert">
             <div className={cn.errorLabel}>Что-то пошло не так:</div>
 
             <pre className={cn.errorText}>{error.message}</pre>
 
-            <button type="button" onClick={resetErrorBoundary}>
+            <button type="button" onClick={resetError}>
                 Попробовать еще
             </button>
         </div>
     );
 }
 
-function Boundary({ children, ...props }: BoundaryProps) {
-    const onError = (error: Error, info: { componentStack: string }) => {
-        console.error({ error, info });
-        props.onError?.(error, info);
-    };
-
+function Boundary({ children, fallback, onError, onReset }: ErrorBoundaryProps) {
     return (
-        <ErrorBoundary {...props} FallbackComponent={ErrorFallback} onError={onError}>
+        <ErrorBoundary fallback={fallback ?? ErrorFallback} onError={onError} onReset={onReset}>
             {children}
         </ErrorBoundary>
     );

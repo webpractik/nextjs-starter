@@ -9,4 +9,4 @@ if [ "${COMMIT_SOURCE}" = merge ];then
     exit 0
 fi
 
-exec < /dev/tty && npx --no-install cz --hook || true
+exec < /dev/tty && npx cz --hook || true
