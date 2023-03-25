@@ -18,10 +18,14 @@ npx create-next-app -e https://github.com/webpractik/nextjs-starter
 - [ENV переменные](docs/env.md)
 - [Базовая настройка](docs/settings.md)
 - [Структура проекта](docs/project-structure.md)
-- [Работа с backend API](docs/api.md)
+- [Работа с API](docs/api.md)
+- [Стандарт React & TS](docs/react-typescript.md)
+- [Error boundaries](docs/boundaries.md)
+- [Mocks](docs/mocks.md)
+- [React-query](docs/queries.md)
 - [Настройка Sentry](docs/sentry.md)
 - [Настройка кастомного прокси сервера](docs/custom-proxy.md)
-- [Дизайн токены](docs/design-tokens.md)
+- [Дизайн токены](docs/figma-tokens.md)
 
 ## NPM Scripts
 - Установка модулей:  ```npm ci``` 

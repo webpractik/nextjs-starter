@@ -1,30 +1,75 @@
 {
     "compilerOptions": {
-        "target": "es6",
-        "lib": ["dom", "dom.iterable", "esnext"],
-        "allowJs": true,
-        "skipLibCheck": true,
+        /*
+           alwaysStrict, strictNullChecks, strictBindCallApply,
+           strictFunctionTypes, strictPropertyInitialization
+           noImplicitAny, noImplicitThis, useUnknownInCatchVariables
+        */
         "strict": true,
-        "forceConsistentCasingInFileNames": true,
-        "noEmit": true,
-        "esModuleInterop": true,
-        "module": "esnext",
-        "moduleResolution": "node",
-        "resolveJsonModule": true,
-        "isolatedModules": true,
-        "experimentalDecorators": true,
-        "useDefineForClassFields": true,
-        "useUnknownInCatchVariables": false,
-        "removeComments": true,
-        "jsx": "preserve",
+
+        // Specify the base directory to resolve non-relative module names
         "baseUrl": ".",
+
+        // Set the JavaScript language version for emitted JavaScript and include compatible library declarations
+        "target": "es6",
+
+        // Specify a set of bundled library declaration files that describe the target runtime environment
+        "lib": ["dom", "dom.iterable", "esnext"],
+
+        // Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files
+        "allowJs": true,
+
+        // Skip type checking all .d.ts files.
+        "skipLibCheck": true,
+
+        // Ensure that casing is correct in imports
+        "forceConsistentCasingInFileNames": true,
+
+        // Disable emitting file from a compilation
+        "noEmit": true,
+
+        // Emit additional JavaScript to ease support for importing CommonJS modules
+        "esModuleInterop": true,
+
+        // Sets the module system for the program
+        "module": "esnext",
+
+        // Specify how TypeScript looks up a file from a given module specifier
+        "moduleResolution": "node",
+
+        // Enable importing .json files
+        "resolveJsonModule": true,
+
+        // Ensure that each file can be safely transpiled without relying on other imports
+        "isolatedModules": true,
+
+        // Enable experimental support for TC39 stage 2 draft decorators
+        "experimentalDecorators": true,
+
+        // Emit ECMAScript-standard-compliant class fields.
+        "useDefineForClassFields": true,
+
+        // Default catch clause variables as `unknown` instead of `any`.
+        "useUnknownInCatchVariables": false,
+
+        // Strips all comments from TypeScript files when converting into JavaScript.
+        "removeComments": true,
+
+        // Specify what JSX code is generated
+        "jsx": "preserve",
+
+        // Specify a set of entries that re-map imports to additional lookup locations
         "paths": {
             "@/*": ["./src/*"],
             "core/*": ["./src/components/core/*"],
             "features/*": ["./src/components/features/*"],
             "shared/*": ["./src/components/shared/*"]
         },
+
+        // Specify multiple folders that act like `./node_modules/@types`.
         "typeRoots": ["./src/types/"],
+
+        // Enable incremental compilation. Requires TypeScript version 3.4 or later
         "incremental": true
     },
     "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
