@@ -72,7 +72,7 @@ npx create-next-app -e https://github.com/webpractik/nextjs-starter
 - [lodash](https://lodash.com/docs)
 - [react-use](https://github.com/streamich/react-use#readme)
 - [next-seo](https://www.npmjs.com/package/next-seo)
-- [react-error-boundary](https://www.npmjs.com/package/react-error-boundary)
+- [dompurify](https://www.npmjs.com/package/dompurify)
 - [modern-normalize](https://www.npmjs.com/package/modern-normalize)
 - [nanoid](https://www.npmjs.com/package/nanoid)
 - [clsx](https://www.npmjs.com/package/clsx)
