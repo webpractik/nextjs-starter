@@ -7,7 +7,7 @@
     },
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "ecmaVersion": 2020,
+        "ecmaVersion": 2022,
         "sourceType": "module",
         "project": "./tsconfig.json",
         "ecmaFeatures": {
@@ -50,11 +50,12 @@
         "no-use-before-define": "off",
         "no-underscore-dangle": "off",
         "no-shadow": "off",
-        "no-console": ["warn", { "allow": ["error", "time"] }],
+        "no-console": ["warn", { "allow": ["error"] }],
         "no-magic-numbers": [
             "warn",
             {
                 "ignoreArrayIndexes": true,
+                "ignoreDefaultValues": true,
                 "ignore": [-1, 0, 1, 2, 200, 400, 403, 404, 500]
             }
         ],
@@ -67,12 +68,7 @@
             }
         ],
         "max-depth": ["error", 2],
-        "consistent-return": [
-            "error",
-            {
-                "treatUndefinedAsUnspecified": true
-            }
-        ],
+        "consistent-return": ["error"],
         "class-methods-use-this": "warn",
         "react/no-array-index-key": "warn",
         "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx"] }],
@@ -116,6 +112,7 @@
         "import/no-extraneous-dependencies": ["error", { "includeTypes": true }],
         "jsx-a11y/anchor-is-valid": "off",
         "jsx-a11y/click-events-have-key-events": "off",
+        "jsx-a11y/mouse-events-have-key-events": "off",
         "prettier/prettier": "error",
         "@typescript-eslint/no-use-before-define": "error",
         "@typescript-eslint/explicit-module-boundary-types": "off",
