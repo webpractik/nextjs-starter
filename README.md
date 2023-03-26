@@ -10,7 +10,7 @@ npx create-next-app -e https://github.com/webpractik/nextjs-starter
 
 ## CI / CD
 - **NODEJS:** ```>= 18```
-- **NPM:** ```>= 8```
+- **NPM:** ```>= 9```
 - **Port:** ```3000```
 - **Healthcheck:** ```/api/health```
 
@@ -52,7 +52,6 @@ npx create-next-app -e https://github.com/webpractik/nextjs-starter
 - Commitizen
 - Lint-staged
 - Absolute Imports
-- Proxy server
 - Storybook
 - Sentry
 - Bundle analyzer
