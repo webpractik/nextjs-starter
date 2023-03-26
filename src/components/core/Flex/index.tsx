@@ -38,7 +38,7 @@ function Flex({
     alignItems,
     flexWrap = 'nowrap',
     flexDirection = 'row',
-    justifyContent = 'flex-start',
+    justifyContent,
     flex,
     gap,
     width,

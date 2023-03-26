@@ -23,7 +23,6 @@ const nextConfig = {
     },
 
     experimental: {
-        turbo: true,
         enableUndici: true,
     },
 

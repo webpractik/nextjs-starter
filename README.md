@@ -14,6 +14,12 @@ npx create-next-app -e https://github.com/webpractik/nextjs-starter
 - **Port:** ```3000```
 - **Healthcheck:** ```/api/health```
 
+### Последовательность команд:
+- `npm pkg delete scripts.prepare`
+- `npm ci --slient`
+- `npm run build`
+- `npm run prod`
+
 ## Документация
 - [ENV переменные](docs/env.md)
 - [Базовая настройка](docs/settings.md)

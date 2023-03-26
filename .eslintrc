@@ -22,7 +22,11 @@
         "prettier",
         "plugin:@typescript-eslint/recommended",
         "plugin:@typescript-eslint/recommended-requiring-type-checking",
-        "plugin:react/recommended"
+        "plugin:react/recommended",
+        "plugin:no-use-extend-native/recommended",
+        "plugin:react-prefer-function-component/recommended",
+        "plugin:xss/recommended",
+        "plugin:sonarjs/recommended"
     ],
     "plugins": [
         "@typescript-eslint",
@@ -32,7 +36,12 @@
         "jsx-a11y",
         "import",
         "simple-import-sort",
-        "unused-imports"
+        "unused-imports",
+        "no-use-extend-native",
+        "react-prefer-function-component",
+        "xss",
+        "no-secrets",
+        "sonarjs"
     ],
     "rules": {
         "no-duplicate-imports": "error",
@@ -57,6 +66,7 @@
                 "ignoreUrls": true
             }
         ],
+        "max-depth": ["error", 2],
         "consistent-return": [
             "error",
             {
@@ -76,7 +86,7 @@
                 "exceptions": ["Component", "DefaultSeo", "StoreProvider", "ErrorBoundary"]
             }
         ],
-        "react/no-danger": "warn",
+        "react/no-danger": "off",
         "react/display-name": "off",
         "react/no-unescaped-entities": "off",
         "react-hooks/exhaustive-deps": "off",
@@ -121,7 +131,20 @@
                 "args": "after-used",
                 "argsIgnorePattern": "^_"
             }
-        ]
+        ],
+        "lodash/prefer-lodash-method": "off",
+        "lodash/import-scope": "off",
+        "xss/no-mixed-html": [
+            2,
+            {
+                "functions": {
+                    "sanitize": {
+                        "htmlOutput": true
+                    }
+                }
+            }
+        ],
+        "no-secrets/no-secrets": "error"
     },
     "settings": {
         "import/parsers": {
