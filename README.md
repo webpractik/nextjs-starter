@@ -17,15 +17,15 @@ npx create-next-app -e https://github.com/webpractik/nextjs-starter
 ## Документация
 - [ENV переменные](docs/env.md)
 - [Базовая настройка](docs/settings.md)
-- [Структура проекта](docs/project-structure.md)
-- [Работа с API](docs/api.md)
-- [Стандарт React & TS](docs/react-typescript.md)
-- [Error boundaries](docs/boundaries.md)
-- [Mocks](docs/mocks.md)
-- [React-query](docs/queries.md)
-- [Настройка Sentry](docs/sentry.md)
-- [Настройка кастомного прокси сервера](docs/custom-proxy.md)
-- [Дизайн токены](docs/figma-tokens.md)
+- [Структура проекта](https://docs.w6p.ru/frontend/nextjs-starter/project-structure)
+- [Работа с API](https://docs.w6p.ru/frontend/nextjs-starter/api)
+- [Стандарт React & TS](https://docs.w6p.ru/frontend/nextjs-starter/react-typescript)
+- [Error boundaries](https://docs.w6p.ru/frontend/nextjs-starter/boundaries)
+- [Mocks](https://docs.w6p.ru/frontend/nextjs-starter/mocks)
+- [React-query](https://docs.w6p.ru/frontend/nextjs-starter/queries)
+- [Настройка Sentry](https://docs.w6p.ru/frontend/nextjs-starter/sentry)
+- [Настройка кастомного прокси сервера](https://docs.w6p.ru/frontend/nextjs-starter/custom-proxy)
+- [Дизайн токены](https://docs.w6p.ru/frontend/nextjs-starter/figma-tokens)
 
 ## NPM Scripts
 - Установка модулей:  ```npm ci``` 
