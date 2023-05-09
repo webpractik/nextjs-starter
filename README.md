@@ -9,8 +9,8 @@ npx create-next-app -e https://github.com/webpractik/nextjs-starter
 ```
 
 ## CI / CD
-- **NODEJS:** ```>= 18```
-- **NPM:** ```>= 9```
+- **NODEJS:** ```^18```
+- **NPM:** ```^9```
 - **Port:** ```3000```
 - **Healthcheck:** ```/api/health```
 
@@ -27,7 +27,6 @@ npx create-next-app -e https://github.com/webpractik/nextjs-starter
 - [Работа с API](https://docs.w6p.ru/frontend/nextjs-starter/api)
 - [Стандарт React & TS](https://docs.w6p.ru/frontend/nextjs-starter/react-typescript)
 - [Error boundaries](https://docs.w6p.ru/frontend/nextjs-starter/boundaries)
-- [Mocks](https://docs.w6p.ru/frontend/nextjs-starter/mocks)
 - [React-query](https://docs.w6p.ru/frontend/nextjs-starter/queries)
 - [Настройка Sentry](https://docs.w6p.ru/frontend/nextjs-starter/sentry)
 - [Настройка кастомного прокси сервера](https://docs.w6p.ru/frontend/nextjs-starter/custom-proxy)
@@ -63,7 +62,6 @@ npx create-next-app -e https://github.com/webpractik/nextjs-starter
 - Bundle analyzer
 - React Query
 - API Codegen
-- Mock Service Worker
 - Figma tokens
 - Security headers
 

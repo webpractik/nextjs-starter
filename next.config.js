@@ -23,7 +23,9 @@ const nextConfig = {
     },
 
     experimental: {
-        enableUndici: true,
+        webpackBuildWorker: true,
+        typedRoutes: true,
+        serverActions: true,
     },
 
     images: {

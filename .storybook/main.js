@@ -8,7 +8,6 @@ module.exports = {
         '@storybook/addon-actions',
         '@storybook/addon-interactions',
         'storybook-dark-mode',
-        '@storybook/addon-mdx-gfm',
     ],
     typescript: {
         check: false,
