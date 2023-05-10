@@ -1,16 +1,11 @@
-*,
-*::before,
-*::after
-	box-sizing: border-box
-
 body,
 html,
+main,
 #__next
 	width: 100%
 	height: 100%
 
 html
-	box-sizing: border-box
 	min-height: 100%
 
 html:focus-within
@@ -19,7 +14,6 @@ html:focus-within
 body
 	min-height: 100vh
 	text-rendering: optimizeSpeed
-	line-height: 1.5
 
 body,
 h1,
@@ -52,10 +46,6 @@ button,
 textarea,
 select
 	font: inherit
-
-ul[role='list'],
-ol[role='list']
-	list-style: none
 
 @media (prefers-reduced-motion: reduce)
 	*,

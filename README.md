@@ -40,6 +40,9 @@ npx create-next-app -e https://github.com/webpractik/nextjs-starter
 - Анализ билда: ```npm run analyze```
 - Запуск storybook: ```npm run storybook```
 - Билд storybook: ```npm run build-storybook```
+- Запуск тестов ```npm run test```
+- Покрытие тестов ```npm run coverage```
+- Покрытие типов ```npm run type-coverage```
 - Билд токенов: ```npm run build-tokens```
 - Автогенерация API: ```npm run api-codegen```
 - Проверка TS: ```npm run type-check```
@@ -55,6 +58,7 @@ npx create-next-app -e https://github.com/webpractik/nextjs-starter
 - Prettier
 - Husky
 - Commitizen
+- Vitest
 - Lint-staged
 - Absolute Imports
 - Storybook

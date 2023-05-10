@@ -48,9 +48,9 @@ const nextConfig = {
 
         const ContentSecurityPolicy = `
             default-src 'self';
-            script-src 'self';
+            script-src 'self' 'unsafe-inline';
             child-src ${process.env.NEXT_PUBLIC_FRONT_URL};
-            style-src 'self' ${process.env.NEXT_PUBLIC_FRONT_URL};
+            style-src 'self' 'unsafe-inline' ${process.env.NEXT_PUBLIC_FRONT_URL};
             font-src 'self';  
         `;
 

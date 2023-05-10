@@ -2,8 +2,6 @@ import '../src/styles/index.sass';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
-const queryClient = new QueryClient();
-
 export const parameters = {
     actions: {
         argTypesRegex: '^on[A-Z].*',
@@ -17,10 +15,22 @@ export const parameters = {
 };
 
 export const decorators = [
-    story => (
-        <QueryClientProvider client={queryClient}>
-            {story()}
-            <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
-        </QueryClientProvider>
-    ),
+    story => {
+        const queryClient = new QueryClient({
+            defaultOptions: {
+                queries: {
+                    refetchOnWindowFocus: false,
+                    refetchIntervalInBackground: false,
+                    retry: false,
+                },
+            },
+        });
+
+        return (
+            <QueryClientProvider client={queryClient}>
+                {story()}
+                <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+            </QueryClientProvider>
+        );
+    },
 ];

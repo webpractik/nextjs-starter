@@ -16,7 +16,7 @@ function HomeComponent() {
         >
             <ErrorBoundary>
                 <Image src="/images/svg/logo.svg" width={100} height={100} alt="logo" />
-                <div className={cn.wrapper}>NextJS Starter</div>
+                <h1 className={cn.title}>NextJS Starter</h1>
             </ErrorBoundary>
         </Flex>
     );
