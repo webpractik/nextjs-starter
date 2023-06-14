@@ -1,7 +1,6 @@
 import '@/styles/index.sass';
 
-// eslint-disable-next-line camelcase
-import { Vina_Sans } from 'next/font/google';
+import { Roboto } from 'next/font/google';
 import React, { ReactNode } from 'react';
 
 import ReactQueryProvider from '@/providers/react-query';
@@ -12,8 +11,8 @@ export const metadata = {
     description: 'Default starter for projects',
 };
 
-const vinaSans = Vina_Sans({
-    weight: '400',
+const roboto = Roboto({
+    weight: ['400', '500', '700'],
     subsets: ['latin'],
     display: 'swap',
     style: 'normal',
@@ -28,12 +27,12 @@ const vinaSans = Vina_Sans({
         'Segoe UI Emoji',
         'Segoe UI Symbol',
     ],
-    variable: '--font-vina-sans',
+    variable: '--font-roboto',
 });
 
 export default function RootLayout({ children }: { children: ReactNode }) {
     return (
-        <html lang="ru" className={`${vinaSans.variable}`}>
+        <html lang="ru" className={`${roboto.variable}`}>
             <body>
                 <main>
                     <ReactQueryProvider>
