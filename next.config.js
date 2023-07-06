@@ -24,8 +24,7 @@ const nextConfig = {
 
     experimental: {
         webpackBuildWorker: true,
-        typedRoutes: true,
-        serverActions: true,
+        instrumentationHook: true
     },
 
     images: {
