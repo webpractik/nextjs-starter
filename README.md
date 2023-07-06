@@ -1,6 +1,6 @@
-## NextJS Starter
+# NextJS Starter
 
-Стартовый шаблон для быстрого создания проектов на Next.js
+Шаблон для быстрого создания проектов на Next.js 13.4+
 
 ## 🚀 Как развернуть проект
 
@@ -8,49 +8,7 @@
 npx create-next-app -e https://github.com/webpractik/nextjs-starter
 ```
 
-## CI / CD
-- **NODEJS:** ```^18```
-- **NPM:** ```^9```
-- **Port:** ```3000```
-- **Healthcheck:** ```/api/health```
-
-### Последовательность команд:
-- `npm pkg delete scripts.prepare`
-- `npm ci --slient`
-- `npm run build`
-- `npm run prod`
-
-## Документация
-- [ENV переменные](docs/env.md)
-- [Базовая настройка](docs/settings.md)
-- [Структура проекта](https://docs.w6p.ru/frontend/nextjs-starter/project-structure)
-- [Работа с API](https://docs.w6p.ru/frontend/nextjs-starter/api)
-- [Стандарт React & TS](https://docs.w6p.ru/frontend/nextjs-starter/react-typescript)
-- [Error boundaries](https://docs.w6p.ru/frontend/nextjs-starter/boundaries)
-- [React-query](https://docs.w6p.ru/frontend/nextjs-starter/queries)
-- [Настройка Sentry](https://docs.w6p.ru/frontend/nextjs-starter/sentry)
-- [Настройка кастомного прокси сервера](https://docs.w6p.ru/frontend/nextjs-starter/custom-proxy)
-- [Дизайн токены](https://docs.w6p.ru/frontend/nextjs-starter/figma-tokens)
-
-## NPM Scripts
-- Установка модулей:  ```npm ci``` 
-- Запуск билда: ```npm run build```
-- Запуск dev сборки: ```npm run dev```
-- Запуск прод сборки: ```npm run prod``` 
-- Анализ билда: ```npm run analyze```
-- Запуск storybook: ```npm run storybook```
-- Билд storybook: ```npm run build-storybook```
-- Запуск тестов ```npm run test```
-- Покрытие тестов ```npm run coverage```
-- Покрытие типов ```npm run type-coverage```
-- Билд токенов: ```npm run build-tokens```
-- Автогенерация API: ```npm run api-codegen```
-- Проверка TS: ```npm run type-check```
-- Проверка eslint: ```npm run lint```
-- Проверка prettier: ```npm run format``` 
-- Проверка всего в параллельном режиме: ```npm run check-all```
-
-## Features
+## 🪄 Features:
 - Typescript
 - Sass
 - Mobx
@@ -69,11 +27,52 @@ npx create-next-app -e https://github.com/webpractik/nextjs-starter
 - Figma tokens
 - Security headers
 
-## Packages
+## 🎯 Deploy
+- **NODEJS:** ```^18```
+- **NPM:** ```^9```
+- **Port:** ```3000```
+- **Healthcheck:** ```/api/health```
+
+## 🎈 CI / CD:
+- `npm pkg delete scripts.prepare`
+- `npm ci --slient`
+- `npm run build`
+- `npm run prod`
+
+## 📝 Docs:
+- [ENV переменные](docs/env.md)
+- [Базовая настройка](docs/settings.md)
+- [Структура проекта](https://kb.w6p.ru/doc/struktura-proekta-FmXknSyhJq)
+- [Работа с API](https://kb.w6p.ru/doc/rabota-s-backend-api-TL0jXnQM9S)
+- [Стандарт React & TS](https://kb.w6p.ru/doc/ts-react-DH9L2VPJ3T)
+- [Error boundaries](https://kb.w6p.ru/doc/error-boundaries-RvX6tYG5dM)
+- [React-query](https://kb.w6p.ru/doc/queries-xxCAi8Fex1)
+- [Настройка Sentry](https://kb.w6p.ru/doc/sentry-RLE1b9FXT7)
+- [Настройка прокси сервера](https://kb.w6p.ru/doc/kastomnyj-server-kOLtgu8DJG)
+- [Дизайн токены](https://kb.w6p.ru/doc/dizajn-tokeny-fFz0aZ6F76)
+
+## 📜 NPM Scripts:
+- Установка модулей:  ```npm ci``` 
+- Запуск билда: ```npm run build```
+- Запуск dev сборки: ```npm run dev```
+- Запуск прод сборки: ```npm run prod``` 
+- Анализ билда: ```npm run analyze```
+- Запуск storybook: ```npm run storybook```
+- Билд storybook: ```npm run build-storybook```
+- Запуск тестов ```npm run test```
+- Покрытие тестов ```npm run coverage```
+- Покрытие типов ```npm run type-coverage```
+- Билд токенов: ```npm run build-tokens```
+- Автогенерация API: ```npm run api-codegen```
+- Проверка TS: ```npm run type-check```
+- Проверка eslint: ```npm run lint```
+- Проверка prettier: ```npm run format``` 
+- Проверка всего в параллельном режиме: ```npm run check-all```
+
+## 📦 Packages:
 - [axios](https://axios-http.com/ru/docs/intro)
 - [lodash](https://lodash.com/docs)
 - [react-use](https://github.com/streamich/react-use#readme)
-- [next-seo](https://www.npmjs.com/package/next-seo)
 - [dompurify](https://www.npmjs.com/package/dompurify)
 - [modern-normalize](https://www.npmjs.com/package/modern-normalize)
 - [nanoid](https://www.npmjs.com/package/nanoid)
