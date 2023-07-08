@@ -21,7 +21,8 @@
         "test-run": "vitest run",
         "coverage": "vitest run --coverage",
         "type-coverage": "npx typescript-coverage-report",
-        "cruiser": "depcruise src --include-only \"^src/app\" --config ./config/.dependency-cruiser.js --output-type dot | dot -T svg -Grankdir=TD | tee dependency-graph.svg | depcruise-wrap-stream-in-html > ./docs.html"
+        "cruiser": "depcruise src --include-only \"^src/app\" --config ./config/.dependency-cruiser.js --output-type dot | dot -T svg -Grankdir=TD | tee dependency-graph.svg | depcruise-wrap-stream-in-html > ./docs.html",
+        "gen": "generate-react component"
     },
     "dependencies": {
         "@sentry/nextjs": "7.57.0",
@@ -72,6 +73,7 @@
         "eslint-config-next": "13.4.8",
         "eslint-config-webpractik": "github:webpractik/eslint-config-webpractik",
         "eslint-formatter-pretty": "5.0.0",
+        "generate-react-cli": "8.3.0",
         "husky": "8.0.3",
         "jsdom": "22.1.0",
         "kill-port": "2.0.1",
@@ -96,11 +98,18 @@
         "node": "^18",
         "npm": "^9"
     },
-    "browserslist": [
-        "last 2 version",
-        "> 1%",
-        "not dead"
-    ],
+    "browserslist": {
+        "development": [
+            "last 2 chrome versions",
+            "last 2 firefox versions"
+        ],
+        "production": [
+            ">1%",
+            "last 4 versions",
+            "Firefox ESR",
+            "not ie < 11"
+        ]
+    },
     "config": {
         "commitizen": {
             "path": "cz-conventional-changelog"
