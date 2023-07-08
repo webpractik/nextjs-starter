@@ -26,6 +26,8 @@ npx create-next-app -e https://github.com/webpractik/nextjs-starter
 - API Codegen
 - Figma tokens
 - Security headers
+- Generate components
+- Coupling & cohesion graph
 
 ## 🎯 Deploy
 - **NODEJS:** ```^18```
@@ -68,6 +70,8 @@ npx create-next-app -e https://github.com/webpractik/nextjs-starter
 - Проверка eslint: ```npm run lint```
 - Проверка prettier: ```npm run format``` 
 - Проверка всего в параллельном режиме: ```npm run check-all```
+- Создать компонент ```npm run gen -- <название комопнента>```
+- Построить граф зависимостей ```npm run cruiser```
 
 ## 📦 Packages:
 - [axios](https://axios-http.com/ru/docs/intro)
