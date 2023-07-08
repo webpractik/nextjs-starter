@@ -9,6 +9,8 @@ dist/
 storybook-static
 coverage-ts
 swagger.json
+docs.html
+dependency-graph.svg
 
 # dependencies
 /node_modules

@@ -20,7 +20,8 @@
         "test": "vitest",
         "test-run": "vitest run",
         "coverage": "vitest run --coverage",
-        "type-coverage": "npx typescript-coverage-report"
+        "type-coverage": "npx typescript-coverage-report",
+        "cruiser": "depcruise src --include-only \"^src/app\" --config ./config/.dependency-cruiser.js --output-type dot | dot -T svg -Grankdir=TD | tee dependency-graph.svg | depcruise-wrap-stream-in-html > ./docs.html"
     },
     "dependencies": {
         "@sentry/nextjs": "7.57.0",
@@ -66,6 +67,7 @@
         "cross-env": "7.0.3",
         "css-loader": "6.8.1",
         "cz-conventional-changelog": "3.3.0",
+        "dependency-cruiser": "13.0.5",
         "eslint": "8.44.0",
         "eslint-config-next": "13.4.8",
         "eslint-config-webpractik": "github:webpractik/eslint-config-webpractik",
