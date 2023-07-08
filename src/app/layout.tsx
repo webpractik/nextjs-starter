@@ -1,6 +1,7 @@
 import '@/styles/index.sass';
+import 'modern-normalize/modern-normalize.css';
 
-import { Roboto } from 'next/font/google';
+import { Montserrat } from 'next/font/google';
 import React, { ReactNode } from 'react';
 
 import ReactQueryProvider from '@/providers/react-query';
@@ -11,7 +12,7 @@ export const metadata = {
     description: 'Default starter for projects',
 };
 
-const roboto = Roboto({
+const montserrat = Montserrat({
     weight: ['400', '500', '700'],
     subsets: ['latin'],
     display: 'swap',
@@ -27,12 +28,12 @@ const roboto = Roboto({
         'Segoe UI Emoji',
         'Segoe UI Symbol',
     ],
-    variable: '--font-roboto',
+    variable: '--font-montserrat',
 });
 
 export default function RootLayout({ children }: { children: ReactNode }) {
     return (
-        <html lang="ru" className={`${roboto.variable}`}>
+        <html lang="ru" className={`${montserrat.variable}`}>
             <body>
                 <main>
                     <ReactQueryProvider>

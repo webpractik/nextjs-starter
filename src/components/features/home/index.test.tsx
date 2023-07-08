@@ -6,6 +6,6 @@ import HomeComponent from './index';
 it('render home', () => {
     render(<HomeComponent />);
 
-    expect(screen.getByRole('heading', { level: 1, name: /nextjs starter/i })).toBeDefined();
+    expect(screen.getByText(/next starter/i)).toBeDefined();
     expect(screen.getByRole('img', { name: /logo/i })).toBeDefined();
 });

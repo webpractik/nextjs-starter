@@ -15,8 +15,31 @@ function HomeComponent() {
             flexDirection="column"
         >
             <ErrorBoundary>
-                <Image src="/images/svg/logo.svg" width={100} height={100} alt="logo" />
-                <h1 className={cn.title}>NextJS Starter</h1>
+                <div className={cn.logoWrap}>
+                    <Image
+                        src="/images/svg/logo.svg"
+                        width={160}
+                        height={160}
+                        className={cn.logo}
+                        alt="logo"
+                    />
+                </div>
+
+                <svg viewBox="0 0 1920 300" className={cn.title}>
+                    <symbol id="symbol" className={cn.symbol}>
+                        <text textAnchor="middle" x="50%" y="80%">
+                            NEXT STARTER
+                        </text>
+                    </symbol>
+
+                    <g className="g-ants">
+                        <use xlinkHref="#symbol" className={cn.textCopy} />
+                        <use xlinkHref="#symbol" className={cn.textCopy} />
+                        <use xlinkHref="#symbol" className={cn.textCopy} />
+                        <use xlinkHref="#symbol" className={cn.textCopy} />
+                        <use xlinkHref="#symbol" className={cn.textCopy} />
+                    </g>
+                </svg>
             </ErrorBoundary>
         </Flex>
     );
