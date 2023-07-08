@@ -16,7 +16,7 @@
         "api-codegen": "openapi --input ./swagger.json --output ./src/api --request ./src/api/request.ts --useOptions",
         "storybook": "kill-port 6006 && storybook dev -p 6006 --quiet",
         "build-storybook": "storybook build",
-        "build-tokens": "style-dictionary build --config tokens.config.json",
+        "build-tokens": "style-dictionary build --config ./config/tokens.config.json",
         "test": "vitest",
         "test-run": "vitest run",
         "coverage": "vitest run --coverage",

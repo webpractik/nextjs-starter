@@ -1,12 +1,12 @@
 {
-    "source": ["src/figma-tokens/colors.json"],
+    "source": ["./config/tokens/**/*.json"],
     "platforms": {
         "scss": {
             "transformGroup": "scss",
-            "buildPath": "src/styles/modules",
+            "buildPath": "./src/styles/modules/",
             "files": [
                 {
-                    "destination": "colors.scss",
+                    "destination": "tokens.scss",
                     "format": "scss/variables"
                 }
             ]
