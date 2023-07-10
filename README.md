@@ -13,6 +13,7 @@ npx create-next-app -e https://github.com/webpractik/nextjs-starter
 - Sass
 - Mobx
 - ESLint
+- Stylelint
 - Prettier
 - Husky
 - Commitizen
@@ -37,7 +38,7 @@ npx create-next-app -e https://github.com/webpractik/nextjs-starter
 
 ## 🎈 CI / CD:
 - `npm pkg delete scripts.prepare`
-- `npm ci --slient`
+- `npm ci --silent`
 - `npm run build`
 - `npm run prod`
 
@@ -68,6 +69,7 @@ npx create-next-app -e https://github.com/webpractik/nextjs-starter
 - Автогенерация API: ```npm run api-codegen```
 - Проверка TS: ```npm run type-check```
 - Проверка eslint: ```npm run lint```
+- Проверка стилей: ```npm run stylelint```
 - Проверка prettier: ```npm run format``` 
 - Проверка всего в параллельном режиме: ```npm run check-all```
 - Создать компонент ```npm run gen -- <название комопнента>```
