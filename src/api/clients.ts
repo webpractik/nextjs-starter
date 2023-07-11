@@ -1,11 +1,12 @@
 import axios from 'axios';
+import { env } from '~/env.mjs';
 
 export const backInnerClient = axios.create({
-    baseURL: process.env.BACK_INTERNAL_URL,
+    baseURL: env.BACK_INTERNAL_URL,
 });
 
 export const backPublicClient = axios.create({
-    baseURL: process.env.BACK_PUBLIC_URL,
+    baseURL: env.BACK_PUBLIC_URL,
 });
 
 export const apiClient = axios.create({

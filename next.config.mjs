@@ -1,10 +1,16 @@
-const path = require('path');
-const headers = require('./config/headers.js');
-const { withSentryConfig } = require('@sentry/nextjs');
+import path from 'path';
+import { headers } from './config/headers.mjs';
+import { withSentryConfig } from '@sentry/nextjs';
+import { fileURLToPath } from 'url';
+import withBundleAnalyzer from '@next/bundle-analyzer';
+import './env.mjs';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /**
  * @type {import('next').NextConfig}
  */
+
 const nextConfig = {
     sassOptions: {
         indentType: 'tab',
@@ -48,7 +54,7 @@ const nextConfig = {
 const isProduction =
     process.env.NODE_ENV === 'production' && process.env.NEXT_PUBLIC_APP_ENV === 'PROD';
 
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
+const bundleAnalyzer = withBundleAnalyzer({
     enabled: process.env.ANALYZE === 'true',
 });
 
@@ -56,8 +62,7 @@ const withSentry = () => {
     if (process.env.NEXT_PUBLIC_SENTRY_DSN?.length > 0) {
         return withSentryConfig(nextConfig, { silent: true });
     }
-
     return nextConfig;
 };
 
-module.exports = isProduction ? withSentry() : withBundleAnalyzer(nextConfig);
+export default isProduction ? withSentry() : bundleAnalyzer(nextConfig);

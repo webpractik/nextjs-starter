@@ -1,5 +1,5 @@
 node_modules
-next.config.js
+next.config.mjs
 sentry.client.config.js
 sentry.server.config.js
 sentry.edge.config.js
