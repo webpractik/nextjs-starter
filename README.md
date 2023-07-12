@@ -9,6 +9,7 @@ npx create-next-app -e https://github.com/webpractik/nextjs-starter
 ```
 
 ## 🪄 Features:
+
 - Typescript
 - Sass
 - Mobx
@@ -29,20 +30,24 @@ npx create-next-app -e https://github.com/webpractik/nextjs-starter
 - Security headers
 - Generate components
 - Coupling & cohesion graph
+- Env variables validation
 
 ## 🎯 Deploy
+
 - **NODEJS:** ```^18```
 - **NPM:** ```^9```
 - **Port:** ```3000```
 - **Healthcheck:** ```/api/health```
 
 ## 🎈 CI / CD:
+
 - `npm pkg delete scripts.prepare`
 - `npm ci --silent`
 - `npm run build`
 - `npm run prod`
 
 ## 📝 Docs:
+
 - [ENV переменные](docs/env.md)
 - [Базовая настройка](docs/settings.md)
 - [Структура проекта](https://kb.w6p.ru/doc/struktura-proekta-FmXknSyhJq)
@@ -55,28 +60,36 @@ npx create-next-app -e https://github.com/webpractik/nextjs-starter
 - [Дизайн токены](https://kb.w6p.ru/doc/dizajn-tokeny-fFz0aZ6F76)
 
 ## 📜 NPM Scripts:
-- Установка модулей:  ```npm ci``` 
-- Запуск билда: ```npm run build```
-- Запуск dev сборки: ```npm run dev```
-- Запуск прод сборки: ```npm run prod``` 
-- Анализ билда: ```npm run analyze```
-- Запуск storybook: ```npm run storybook```
-- Билд storybook: ```npm run build-storybook```
-- Запуск тестов ```npm run test```
-- Покрытие тестов ```npm run coverage```
-- Покрытие типов ```npm run type-coverage```
-- Билд токенов: ```npm run build-tokens```
-- Автогенерация API: ```npm run api-codegen```
-- Проверка TS: ```npm run type-check```
-- Проверка eslint: ```npm run lint```
-- Проверка стилей: ```npm run stylelint```
-- Проверка prettier: ```npm run format``` 
-- Проверка всего в параллельном режиме: ```npm run check-all```
-- Создать компонент ```npm run gen -- <название комопнента>```
-- Построить граф зависимостей ```npm run cruiser```
+
+| 	    Script                      | Description 	                        |
+|----------------------------------|--------------------------------------|
+| ```npm ci```                     | Установка модулей	                   |
+| ```npm run build```              | Запуск билда	                        |
+| 	```npm run dev```               | Запуск dev сборки 	                  |
+| 	```npm run prod```              | Запуск прод сборки	                  |
+| 	```npm run analyze```           | Анализ билда                         |
+| 	```npm run storybook```         | Запуск storybook                     |
+| 	```npm run build-storybook```   | Билд storybook                       |
+| 	```npm run test```              | Запуск тестов                        |
+| 	```npm run coverage```          | Покрытие тестов                      |
+| 	```npm run type-coverage```     | Покрытие типизацией                  |
+| 	```npm run build-tokens```      | Билд фигма токенов                   |
+| 	```npm run api-codegen```       | Автогенерация API                    |
+| 	```npm run type-check```        | Проверка TS                          |
+| 	```npm run lint```              | Проверка eslint                      |
+| 	```npm run stylelint```         | Проверка стилей                      |
+| 	```npm run format```            | Форматирование prettier              |
+| 	```npm run check-all```         | Проверка всего в параллельном режиме |
+| 	```npm run gen -- <название>``` | Создание реакт компонента            |
+| 	```npm run cruiser```           | Построить граф зависимостей          |
+| 	```npm run clean```             | Очистка сборки                       |
 
 ## 📦 Packages:
+
+- [zod](https://zod.dev/)
 - [axios](https://axios-http.com/ru/docs/intro)
+- [react-query-kit](https://github.com/liaoliao666/react-query-kit#examples)
+- [@t3-oss/env-nextjs](https://env.t3.gg/docs/nextjs)
 - [lodash](https://lodash.com/docs)
 - [react-use](https://github.com/streamich/react-use#readme)
 - [dompurify](https://www.npmjs.com/package/dompurify)
