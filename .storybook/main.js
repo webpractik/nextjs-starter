@@ -23,7 +23,7 @@ module.exports = {
     framework: {
         name: '@storybook/nextjs',
         options: {
-            nextConfigPath: path.resolve(__dirname, '../next.config.js'),
+            nextConfigPath: path.resolve(__dirname, '../next.config.mjs'),
         },
     },
     staticDirs: ['../public'],

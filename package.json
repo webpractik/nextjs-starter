@@ -27,6 +27,7 @@
     },
     "dependencies": {
         "@sentry/nextjs": "7.57.0",
+        "@t3-oss/env-nextjs": "0.6.0",
         "@tanstack/react-query": "4.29.19",
         "@tanstack/react-query-devtools": "4.29.19",
         "axios": "1.4.0",
@@ -43,7 +44,8 @@
         "react-dom": "18.2.0",
         "react-query-kit": "1.4.5",
         "react-use": "17.4.0",
-        "sharp": "0.32.1"
+        "sharp": "0.32.1",
+        "zod": "3.21.4"
     },
     "devDependencies": {
         "@next/bundle-analyzer": "13.4.8",
