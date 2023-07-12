@@ -23,7 +23,7 @@ export const env = createEnv({
             z
                 .string()
                 .min(4)
-                .transform(s => s !== 'false' && s !== '0')
+                .transform(s => s === 'true' && s !== '0')
         ),
         NEXT_PUBLIC_APP_ENV: EnvEnum,
         NEXT_PUBLIC_FRONT_URL: z.string().url(),
@@ -43,7 +43,7 @@ export const env = createEnv({
             z
                 .string()
                 .min(4)
-                .transform(s => s !== 'false' && s !== '0')
+                .transform(s => s === 'true' && s !== '0')
         ),
         NEXT_PUBLIC_APP_ENV: EnvEnum,
         NEXT_PUBLIC_FRONT_URL: z.string().url(),

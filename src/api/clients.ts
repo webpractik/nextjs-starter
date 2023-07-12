@@ -11,5 +11,5 @@ export const backPublicClient = axios.create({
 
 export const apiClient = axios.create({
     withCredentials: true,
-    baseURL: '/api',
+    baseURL: env.NEXT_PUBLIC_FRONT_PROXY,
 });
