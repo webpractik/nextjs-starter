@@ -1,62 +1,6 @@
-.glow
-	width: 100vw
-	height: 100vh
-	background: #0a0a0a
-	text-align: center
-	overflow: hidden
-
-
-.logoWrap
-	margin-bottom: 30px
-
-
-.logo
-	animation: spin 10s infinite linear
-
-
-.result
-	margin-top: 60px
-	color: white
-
-
-.title
-	font: normal 8rem / 120% $font
-	letter-spacing: 3px
-	width: 100%
-	height: 200px
-	margin: 0 auto
-
-.symbol
-	animation: glow 5s ease-in infinite alternate
-
-.textCopy
-	fill: none
-	stroke: white
-	stroke-dasharray: 6% 29%
-	stroke-width: 5px
-	stroke-dashoffset: 0
-	animation: stroke-offset 7s infinite linear
-
-	@for $i from 1 through 5
-		&:nth-child(#{$i})
-			stroke: #FF710#{$i}
-			animation-delay: -#{$i}s
-
-
-@keyframes stroke-offset
-	100%
-		stroke-dashoffset: -35%
-
-
-@keyframes glow
-	from
-		text-shadow: 0 0 60px #ff7002, 0 0 20px #ff7002
-	to
-		text-shadow: 0 0 40px #ff080a
-
-
-@keyframes spin
-	from
-		transform: rotate(0deg)
-	to
-		transform: rotate(360deg)
+.container
+		width: 100vw
+		height: 100vh
+		background: #0a0a0a
+		text-align: center
+		overflow: hidden
