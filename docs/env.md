@@ -16,6 +16,7 @@ NEXT_PUBLIC_APP_ENV - LOCAL | WORK | RC | PROD
 NEXT_PUBLIC_FRONT_URL - публичный урл front приложения
 NEXT_PUBLIC_BACK_URL - публичный урл back приложения (опционален)
 NEXT_PUBLIC_SENTRY_DSN - DSN для доступа к Sentry
+NEXT_PUBLIC_FRONT_PROXY - точка входа в BFF слой для проксирования запросов
 ```
 Для валидации ENV переменных добавлены плагины [t3-env](https://env.t3.gg/docs/nextjs) и [zod](https://zod.dev/)
 
