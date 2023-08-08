@@ -29,8 +29,10 @@
         "experimentalDecorators": true,
         // Emit ECMAScript-standard-compliant class fields.
         "useDefineForClassFields": true,
-        // Default catch clause variables as `unknown` instead of `any`.
-        "useUnknownInCatchVariables": false,
+        // Enforces using indexed accessors for keys declared using an indexed type
+        "noPropertyAccessFromIndexSignature": true,
+        // Add `undefined` to a type when accessed using an index
+        "noUncheckedIndexedAccess": true,
         // Strips all comments from TypeScript files when converting into JavaScript.
         "removeComments": true,
         // Specify what JSX code is generated

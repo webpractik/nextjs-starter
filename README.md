@@ -8,6 +8,11 @@
 npx create-next-app -e https://github.com/webpractik/nextjs-starter
 ```
 
+### Копирование стандартных env переменных (зависят от проекта)
+```
+cp .env_example .env
+```
+
 ## 🪄 Features:
 
 - Typescript
