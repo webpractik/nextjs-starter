@@ -30,6 +30,13 @@ const nextConfig = {
         },
     },
 
+    webpack: config => {
+        // fix for dom-sanitizer on server-side
+        config.externals = [...config.externals, 'jsdom'];
+
+        return config;
+    },
+
     experimental: {
         webpackBuildWorker: true,
         instrumentationHook: true,

@@ -97,7 +97,7 @@ cp .env_example .env
 - [@t3-oss/env-nextjs](https://env.t3.gg/docs/nextjs)
 - [lodash](https://lodash.com/docs)
 - [react-use](https://github.com/streamich/react-use#readme)
-- [dompurify](https://www.npmjs.com/package/dompurify)
+- [isomorphic-dompurify](https://www.npmjs.com/package/isomorphic-dompurify)
 - [modern-normalize](https://www.npmjs.com/package/modern-normalize)
 - [nanoid](https://www.npmjs.com/package/nanoid)
 - [clsx](https://www.npmjs.com/package/clsx)
