@@ -44,7 +44,8 @@ const nextConfig = {
     rewrites: async () => [
         {
             source: `${process.env.NEXT_PUBLIC_FRONT_PROXY}/:path*`,
-            destination: process.env.BACK_INTERNAL_URL ?? `${process.env.NEXT_PUBLIC_FRONT_PROXY}/:path*`,
+            destination:
+                process.env.BACK_INTERNAL_URL ?? `${process.env.NEXT_PUBLIC_FRONT_PROXY}/:path*`,
         },
     ],
 

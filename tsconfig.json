@@ -29,8 +29,6 @@
         "experimentalDecorators": true,
         // Emit ECMAScript-standard-compliant class fields.
         "useDefineForClassFields": true,
-        // Enforces using indexed accessors for keys declared using an indexed type
-        "noPropertyAccessFromIndexSignature": true,
         // Add `undefined` to a type when accessed using an index
         "noUncheckedIndexedAccess": true,
         // Strips all comments from TypeScript files when converting into JavaScript.
@@ -45,11 +43,7 @@
             "features/*": ["./src/components/features/*"],
             "shared/*": ["./src/components/shared/*"]
         },
-        "plugins": [
-            {
-                "name": "next"
-            }
-        ],
+        "plugins": [{ "name": "next" }],
         // Specify multiple folders that act like `./node_modules/@types`.
         "typeRoots": ["./src/types/"],
         // Enable incremental compilation. Requires TypeScript version 3.4 or later

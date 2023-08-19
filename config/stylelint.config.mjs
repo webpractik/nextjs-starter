@@ -2,7 +2,7 @@ export default {
     extends: [
         'stylelint-config-standard-scss',
         'stylelint-config-css-modules',
-        'stylelint-config-idiomatic-order',
+        'stylelint-config-clean-order',
         'stylelint-config-sass-guidelines',
     ],
     customSyntax: 'postcss-sass',
