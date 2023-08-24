@@ -1,4 +1,4 @@
-import {Meta, StoryObj} from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 
 import HomeComponent from 'features/home/index';

@@ -5,8 +5,9 @@ module.exports = {
         project: true,
         tsconfigRootDir: __dirname,
     },
-    extends: ["webpractik", "next", "next/core-web-vitals"],
+    extends: ['webpractik', 'next'],
     rules: {
-        "lodash/import-scope": "off"
-    }
-}
+        'lodash/import-scope': 'off',
+        'mobx/missing-observer': 'off',
+    },
+};
