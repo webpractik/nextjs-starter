@@ -71,7 +71,7 @@
         "cross-env": "7.0.3",
         "css-loader": "6.8.1",
         "cz-conventional-changelog": "3.3.0",
-        "dependency-cruiser": "13.1.4",
+        "dependency-cruiser": "13.1.5",
         "eslint": "8.47.0",
         "eslint-config-next": "13.4.19",
         "eslint-config-webpractik": "github:webpractik/eslint-config-webpractik",
