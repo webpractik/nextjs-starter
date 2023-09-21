@@ -5,7 +5,7 @@
 ## 🚀 Как развернуть проект
 
 ```
-npx create-next-app -e https://github.com/webpractik/nextjs-starter
+npx create-next-app -e https://github.com/webpractik/nextjs-starter --use-npm
 ```
 
 ### Копирование стандартных env переменных (зависят от проекта)
