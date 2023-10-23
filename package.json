@@ -48,7 +48,7 @@
         "zod": "3.22.2"
     },
     "devDependencies": {
-        "@next/bundle-analyzer": "13.5.2",
+        "@next/bundle-analyzer": "13.5.6",
         "@storybook/addon-essentials": "7.3.2",
         "@storybook/addon-interactions": "7.3.2",
         "@storybook/addon-links": "7.3.2",
