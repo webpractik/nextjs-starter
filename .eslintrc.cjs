@@ -8,6 +8,5 @@ module.exports = {
     extends: ['webpractik', 'next'],
     rules: {
         'lodash/import-scope': 'off',
-        'mobx/missing-observer': 'off',
     },
 };

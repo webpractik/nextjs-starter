@@ -4,6 +4,7 @@ import { withSentryConfig } from '@sentry/nextjs';
 import { fileURLToPath } from 'url';
 import withBundleAnalyzer from '@next/bundle-analyzer';
 import './env.mjs';
+import { nanoid } from 'nanoid';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -30,6 +31,8 @@ const nextConfig = {
         },
     },
 
+    cleanDistDir: true,
+
     webpack: config => {
         // fix for dom-sanitizer on server-side
         config.externals = [...config.externals, 'jsdom'];
@@ -37,9 +40,22 @@ const nextConfig = {
         return config;
     },
 
+    swcMinify: true,
+
     experimental: {
         webpackBuildWorker: true,
-        instrumentationHook: true,
+        serverSourceMaps: true,
+    },
+
+    compiler: {
+        reactRemoveProperties: true,
+    },
+
+    generateBuildId: () => `${nanoid()}-${new Date().toISOString()}`,
+
+    devIndicators: {
+        buildActivity: true,
+        buildActivityPosition: 'top-right',
     },
 
     images: {

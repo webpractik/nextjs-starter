@@ -1,6 +1,6 @@
 # NextJS Starter
 
-Шаблон для быстрого создания проектов на Next.js 13.4+
+Шаблон для быстрого создания проектов на Next.js 14+
 
 ## 🚀 Как развернуть проект
 
@@ -40,8 +40,8 @@ cp .env_example .env
 
 ## 🎯 Deploy
 
--   **NODEJS:** `^18`
--   **NPM:** `^9`
+-   **NODEJS:** `^20`
+-   **NPM:** `^10`
 -   **Port:** `3000`
 -   **Healthcheck:** `/api/health`
 
@@ -94,7 +94,6 @@ cp .env_example .env
 
 -   [zod](https://zod.dev/)
 -   [axios](https://axios-http.com/ru/docs/intro)
--   [react-query-kit](https://github.com/liaoliao666/react-query-kit#examples)
 -   [@t3-oss/env-nextjs](https://env.t3.gg/docs/nextjs)
 -   [lodash](https://lodash.com/docs)
 -   [react-use](https://github.com/streamich/react-use#readme)
