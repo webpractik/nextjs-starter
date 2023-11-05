@@ -1,7 +1,7 @@
 'use client';
 
 import Flex from 'core/Flex';
-import Logo from 'features/home/Logo';
+import Logo from 'core/Logo';
 import SvgTitle from 'features/home/SvgTitle';
 import ErrorBoundary from 'shared/utilities/ErrorBoundary';
 

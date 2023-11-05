@@ -5,4 +5,5 @@ sentry.server.config.js
 sentry.edge.config.js
 lint-staged.config.js
 src/api/**/*.ts
+lib
 !.storybook

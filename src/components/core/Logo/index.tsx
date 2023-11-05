@@ -7,6 +7,7 @@ function Logo() {
     return (
         <div className={cn.container}>
             <Image
+                priority
                 src="/images/svg/logo.svg"
                 width={160}
                 height={160}

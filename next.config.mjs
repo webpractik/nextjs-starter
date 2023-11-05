@@ -1,9 +1,9 @@
 import path from 'path';
-import { headers } from './config/headers.mjs';
+import { headers } from './lib/headers.mjs';
 import { withSentryConfig } from '@sentry/nextjs';
 import { fileURLToPath } from 'url';
 import withBundleAnalyzer from '@next/bundle-analyzer';
-import './env.mjs';
+import './lib/env.mjs';
 import { nanoid } from 'nanoid';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -64,15 +64,13 @@ const nextConfig = {
         contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     },
 
-    rewrites: async () => [
-        {
-            source: `${process.env.NEXT_PUBLIC_FRONT_PROXY}/:path*`,
-            destination:
-                process.env.BACK_INTERNAL_URL ?? `${process.env.NEXT_PUBLIC_FRONT_PROXY}/:path*`,
-        },
-    ],
-
     headers,
+
+    logging: {
+        fetches: {
+            fullUrl: true,
+        },
+    },
 };
 
 const isProduction =
