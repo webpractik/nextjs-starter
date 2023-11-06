@@ -9,12 +9,12 @@
         "prod": "next start",
         "type-check": "tsc --project tsconfig.json --noEmit --pretty",
         "lint": "next lint --format=pretty",
-        "stylelint": "stylelint '**/*.module.sass' --fix --config ./config/stylelint.config.mjs",
+        "stylelint": "stylelint 'app/**/*.module.sass' --fix --config ./config/stylelint.config.mjs",
         "format": "prettier . --write --cache --log-level=silent",
         "analyze": "cross-env ANALYZE=true npm run build",
         "check-all": "run-p type-check lint format test-run",
         "clean": "rimraf .next node_modules",
-        "api-codegen": "kubb generate --config config/kubb.config.mjs",
+        "api-codegen": "kubb generate --config ./config/kubb.config.mjs",
         "storybook": "kill-port 6006 && storybook dev -p 6006 --quiet",
         "build-storybook": "storybook build",
         "build-tokens": "style-dictionary build --config ./config/tokens.config.json",
@@ -22,7 +22,7 @@
         "test-run": "vitest run",
         "coverage": "vitest run --coverage",
         "type-coverage": "npx typescript-coverage-report",
-        "cruiser": "depcruise src --include-only \"^src/app\" --config ./config/.dependency-cruiser.js --output-type dot | dot -T svg -Grankdir=TD | tee dependency-graph.svg | depcruise-wrap-stream-in-html > ./docs.html",
+        "cruiser": "depcruise app --include-only \"^app\" --config ./config/.dependency-cruiser.js --output-type dot | dot -T svg -Grankdir=TD | tee dependency-graph.svg | depcruise-wrap-stream-in-html > ./docs.html",
         "gen": "generate-react component"
     },
     "dependencies": {
@@ -32,10 +32,9 @@
         "@tanstack/react-query-devtools": "5.7.1",
         "axios": "1.6.0",
         "clsx": "2.0.0",
+        "immer": "10.0.3",
         "isomorphic-dompurify": "1.9.0",
         "lodash": "4.17.21",
-        "mobx": "6.10.2",
-        "mobx-react-lite": "4.0.5",
         "modern-normalize": "2.0.0",
         "nanoid": "5.0.2",
         "next": "14.0.1",
@@ -43,7 +42,8 @@
         "react-dom": "18.2.0",
         "react-use": "17.4.0",
         "sharp": "0.32.6",
-        "zod": "3.22.4"
+        "zod": "3.22.4",
+        "zustand": "4.4.6"
     },
     "devDependencies": {
         "@kubb/cli": "1.14.6",

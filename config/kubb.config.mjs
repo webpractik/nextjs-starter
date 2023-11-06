@@ -9,14 +9,15 @@ export default defineConfig(async () => {
     return {
         root: '..',
         input: {
+            // openapi.yaml
             path: 'swagger.json',
         },
         output: {
-            path: './src/api',
+            path: './app/lib/gen',
             clean: true,
         },
         hooks: {
-            done: ['prettier ./src/api/ --write'],
+            done: ['prettier ./app/lib/gen/ --write'],
         },
         plugins: [
             createSwagger({
@@ -31,18 +32,18 @@ export default defineConfig(async () => {
             }),
             createSwaggerClient({
                 output: 'axios',
-                clientImportPath: '~/lib/axios-client',
+                clientImportPath: '@/lib/axios-client',
                 groupBy: { type: 'tag' },
             }),
             createSwaggerTanstackQuery({
                 output: 'hooks',
                 framework: 'react',
-                clientImportPath: '~/lib/axios-client',
+                clientImportPath: '@/lib/axios-client',
                 groupBy: { type: 'tag' },
             }),
             createSwaggerZod({
                 output: 'zod',
-                clientImportPath: '~/lib/axios-client',
+                clientImportPath: '@/lib/axios-client',
                 groupBy: { type: 'tag' },
             }),
         ],

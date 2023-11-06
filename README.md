@@ -18,7 +18,7 @@ cp .env_example .env
 
 -   Typescript
 -   Sass
--   Mobx
+-   Zustand
 -   ESLint
 -   Stylelint
 -   Prettier
@@ -56,13 +56,10 @@ cp .env_example .env
 
 -   [ENV переменные](docs/env.md)
 -   [Базовая настройка](docs/settings.md)
--   [Структура проекта](https://kb.w6p.ru/s/086418d0-7737-473d-9e01-8b75675b2fbd)
 -   [Работа с API](https://kb.w6p.ru/s/d777074e-dc22-4c8f-836f-683e6b6559c6)
 -   [Стандарт React & TS](https://kb.w6p.ru/s/wp-ts-react-standart)
 -   [Error boundaries](https://kb.w6p.ru/s/805fa567-7fbb-468f-95e5-c223783e96f2)
--   [React-query](https://kb.w6p.ru/doc/queries-xxCAi8Fex1)
 -   [Настройка Sentry](https://kb.w6p.ru/doc/sentry-RLE1b9FXT7)
--   [Настройка прокси сервера](https://kb.w6p.ru/s/4426c5ad-9fd2-45e5-93a0-539baabbb5cd)
 -   [Дизайн токены](https://kb.w6p.ru/s/55e92ed7-4336-4c0e-a48e-a91b4a3d30ef)
 
 ## 📜 NPM Scripts:

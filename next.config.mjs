@@ -1,9 +1,9 @@
 import path from 'path';
-import { headers } from './lib/headers.mjs';
+import { headers } from './config/headers.mjs';
 import { withSentryConfig } from '@sentry/nextjs';
 import { fileURLToPath } from 'url';
 import withBundleAnalyzer from '@next/bundle-analyzer';
-import './lib/env.mjs';
+import './config/env.mjs';
 import { nanoid } from 'nanoid';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,7 +17,7 @@ const nextConfig = {
         indentType: 'tab',
         style: 'compressed',
         additionalData: '@import "../config"',
-        includePaths: [path.join(__dirname, 'src/styles/modules/')],
+        includePaths: [path.join(__dirname, 'app/styles/modules/')],
         charset: false,
     },
 

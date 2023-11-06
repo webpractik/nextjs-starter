@@ -1,7 +1,6 @@
-import '../src/styles/index.sass';
-import StoreProvider from '../src/providers/store';
-import ReactQueryProvider from '../src/providers/react-query';
-import { montserrat } from '../lib/fonts/Montserrat';
+import '../app/styles/index.sass';
+import ReactQueryProvider from '../app/components/shared/providers/react-query';
+import { montserrat } from '../app/lib/fonts/Montserrat';
 
 export const parameters = {
     actions: {
@@ -20,9 +19,7 @@ export const decorators = [
         return (
             <div className={`${montserrat.variable}`}>
                 <ReactQueryProvider>
-                    <StoreProvider>
-                        <Story />
-                    </StoreProvider>
+                    <Story />
                 </ReactQueryProvider>
             </div>
         );
