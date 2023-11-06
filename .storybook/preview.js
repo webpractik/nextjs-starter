@@ -1,6 +1,7 @@
 import '../src/styles/index.sass';
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import StoreProvider from '../src/providers/store';
+import ReactQueryProvider from '../src/providers/react-query';
+import { montserrat } from '../lib/fonts/Montserrat';
 
 export const parameters = {
     actions: {
@@ -15,22 +16,15 @@ export const parameters = {
 };
 
 export const decorators = [
-    story => {
-        const queryClient = new QueryClient({
-            defaultOptions: {
-                queries: {
-                    refetchOnWindowFocus: false,
-                    refetchIntervalInBackground: false,
-                    retry: false,
-                },
-            },
-        });
-
+    Story => {
         return (
-            <QueryClientProvider client={queryClient}>
-                {story()}
-                <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
-            </QueryClientProvider>
+            <div className={`${montserrat.variable}`}>
+                <ReactQueryProvider>
+                    <StoreProvider>
+                        <Story />
+                    </StoreProvider>
+                </ReactQueryProvider>
+            </div>
         );
     },
 ];

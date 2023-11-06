@@ -25,12 +25,6 @@ const nextConfig = {
 
     poweredByHeader: false,
 
-    modularizeImports: {
-        lodash: {
-            transform: 'lodash/{{member}}',
-        },
-    },
-
     cleanDistDir: true,
 
     webpack: config => {
@@ -42,9 +36,16 @@ const nextConfig = {
 
     swcMinify: true,
 
+    modularizeImports: {
+        lodash: {
+            transform: 'lodash/{{member}}',
+        },
+    },
+
     experimental: {
         webpackBuildWorker: true,
         serverSourceMaps: true,
+        optimizePackageImports: ['react-use'],
     },
 
     compiler: {

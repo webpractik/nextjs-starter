@@ -2,7 +2,7 @@
 module.exports = {
     root: true,
     parserOptions: {
-        project: true,
+        project: './tsconfig.json',
         tsconfigRootDir: __dirname,
     },
     extends: ['webpractik', 'next'],

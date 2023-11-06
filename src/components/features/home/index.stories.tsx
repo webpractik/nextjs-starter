@@ -4,6 +4,11 @@ import HomeComponent from 'features/home/index';
 const meta: Meta<typeof HomeComponent> = {
     title: 'features/Home',
     component: HomeComponent,
+    parameters: {
+        nextjs: {
+            appDirectory: true,
+        },
+    },
 };
 
 export default meta;
