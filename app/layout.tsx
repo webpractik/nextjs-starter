@@ -1,10 +1,10 @@
-import '~/app/styles/index.sass';
+import '~/styles/index.sass';
 import 'modern-normalize/modern-normalize.css';
 
 import React, { ReactNode } from 'react';
 import ReactQueryProvider from 'shared/providers/react-query';
 
-import { montserrat } from '~/app/lib/fonts/Montserrat';
+import { montserrat } from '~/lib/fonts/Montserrat';
 
 export const metadata = {
     title: 'Nextjs Starter',

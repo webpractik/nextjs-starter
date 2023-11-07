@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
-import { CounterStore, createCounterSlice } from '@/lib/stores/Counter';
+import { CounterStore, createCounterSlice } from '~/lib/stores/Counter';
 
 import { createSelectors } from './createSelectors';
 

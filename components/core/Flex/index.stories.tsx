@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 
-import Flex from '@/components/core/Flex/index';
+import Flex from '~/components/core/Flex/index';
 
 const meta: Meta<typeof Flex> = {
     title: 'core/Flex',

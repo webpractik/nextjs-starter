@@ -39,15 +39,15 @@
         "paths": {
             "~/*": ["./*"],
             "@/*": ["./app/*"],
-            "core/*": ["./app/components/core/*"],
-            "shared/*": ["./app/components/shared/*"]
+            "core/*": ["./components/core/*"],
+            "shared/*": ["./components/shared/*"]
         },
         "plugins": [{ "name": "next" }],
         // Specify multiple folders that act like `./node_modules/@types`.
-        "typeRoots": ["./app/lib/types/"],
+        "typeRoots": ["./lib/types/"],
         // Enable incremental compilation. Requires TypeScript version 3.4 or later
         "incremental": true
     },
     "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-    "exclude": ["node_modules", "app/lib/gen/**/*.ts"]
+    "exclude": ["node_modules", "lib/gen/**/*.ts"]
 }

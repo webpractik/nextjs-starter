@@ -17,7 +17,7 @@ const nextConfig = {
         indentType: 'tab',
         style: 'compressed',
         additionalData: '@import "../config"',
-        includePaths: [path.join(__dirname, 'app/styles/modules/')],
+        includePaths: [path.join(__dirname, 'styles/modules/')],
         charset: false,
     },
 

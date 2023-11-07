@@ -1,7 +1,7 @@
+import Flex from 'core/Flex';
 import React, { ReactNode } from 'react';
 
 import cn from '@/(home)/_components/style.module.sass';
-import Flex from '@/components/core/Flex';
 
 function HomeLayout({ children }: { children: ReactNode }) {
     return (

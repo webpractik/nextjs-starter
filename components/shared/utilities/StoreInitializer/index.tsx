@@ -1,8 +1,8 @@
 'use client';
 import { useRef } from 'react';
 
-import { CounterStore } from '@/lib/stores/Counter';
-import { useGlobalStore } from '@/lib/stores/Global';
+import { CounterStore } from '~/lib/stores/Counter';
+import { useGlobalStore } from '~/lib/stores/Global';
 
 function StoreInitializer({ initialState }: { initialState: Partial<CounterStore> }) {
     const initialized = useRef(false);

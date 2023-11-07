@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 
-import Logo from '@/components/core/Logo/index';
+import Logo from '~/components/core/Logo/index';
 
 const meta: Meta<typeof Logo> = {
     title: 'core/Logo',
