@@ -32,18 +32,18 @@ export default defineConfig(async () => {
             }),
             createSwaggerClient({
                 output: 'axios',
-                clientImportPath: '@/lib/axios-client',
+                clientImportPath: '~/lib/axios-client',
                 groupBy: { type: 'tag' },
             }),
             createSwaggerTanstackQuery({
                 output: 'hooks',
                 framework: 'react',
-                clientImportPath: '@/lib/axios-client',
+                clientImportPath: '~/lib/axios-client',
                 groupBy: { type: 'tag' },
             }),
             createSwaggerZod({
                 output: 'zod',
-                clientImportPath: '@/lib/axios-client',
+                clientImportPath: '~/lib/axios-client',
                 groupBy: { type: 'tag' },
             }),
         ],
