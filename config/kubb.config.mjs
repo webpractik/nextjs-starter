@@ -13,11 +13,11 @@ export default defineConfig(async () => {
             path: 'swagger.json',
         },
         output: {
-            path: './app/lib/gen',
+            path: './lib/gen',
             clean: true,
         },
         hooks: {
-            done: ['prettier ./app/lib/gen/ --write'],
+            done: ['prettier ./lib/gen/ --write'],
         },
         plugins: [
             createSwagger({
