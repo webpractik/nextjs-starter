@@ -25,26 +25,36 @@ export default defineConfig(async () => {
                 validate: true,
             }),
             createSwaggerTS({
-                output: 'models',
+                output: {
+                    path: 'models',
+                },
                 enumType: 'enum',
                 dateType: 'date',
-                groupBy: { type: 'tag' },
+                group: { type: 'tag' },
             }),
             createSwaggerClient({
-                output: 'axios',
+                output: {
+                    path: 'axios',
+                },
                 clientImportPath: '~/lib/axios-client',
-                groupBy: { type: 'tag' },
+                group: { type: 'tag' },
             }),
             createSwaggerTanstackQuery({
-                output: 'hooks',
+                output: {
+                    path: 'hooks',
+                },
                 framework: 'react',
                 clientImportPath: '~/lib/axios-client',
-                groupBy: { type: 'tag' },
+                dataReturnType: 'data',
+                group: { type: 'tag' },
+                parser: 'zod',
             }),
             createSwaggerZod({
-                output: 'zod',
+                output: {
+                    path: 'zod',
+                },
                 clientImportPath: '~/lib/axios-client',
-                groupBy: { type: 'tag' },
+                group: { type: 'tag' },
             }),
         ],
     };

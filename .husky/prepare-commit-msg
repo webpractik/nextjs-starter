@@ -9,4 +9,4 @@ if [ "${COMMIT_SOURCE}" = merge ];then
     exit 0
 fi
 
-exec < /dev/tty && npx git-cz --hook || true
+exec < /dev/tty && node_modules/.bin/git-cz --hook || true

@@ -2,6 +2,7 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { ReactQueryStreamedHydration } from '@tanstack/react-query-next-experimental';
 import React, { ReactNode, useState } from 'react';
 
 export default function ReactQueryProvider({ children }: { children: ReactNode }) {
@@ -10,6 +11,7 @@ export default function ReactQueryProvider({ children }: { children: ReactNode }
             new QueryClient({
                 defaultOptions: {
                     queries: {
+                        staleTime: 60 * 1000,
                         throwOnError: true,
                     },
                 },
@@ -18,7 +20,8 @@ export default function ReactQueryProvider({ children }: { children: ReactNode }
 
     return (
         <QueryClientProvider client={queryClient}>
-            {children}
+            <ReactQueryStreamedHydration>{children}</ReactQueryStreamedHydration>
+
             <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
     );
