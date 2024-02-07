@@ -1,7 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
-import React from 'react';
-
-import Logo from '~/components/core/Logo/index';
+import { Logo } from 'core/Logo';
 
 const meta: Meta<typeof Logo> = {
     title: 'core/Logo',
@@ -13,6 +11,5 @@ export default meta;
 type Story = StoryObj<typeof Logo>;
 
 export const Primary: Story = {
-    render: () => <Logo />,
     args: {},
 };

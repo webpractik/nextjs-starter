@@ -8,5 +8,14 @@ module.exports = {
     extends: ['webpractik', 'next'],
     rules: {
         'lodash/import-scope': 'off',
+        'react/jsx-props-no-spreading': [
+            'warn',
+            {
+                html: 'ignore',
+                custom: 'enforce',
+                explicitSpread: 'enforce',
+                exceptions: ['Component', 'Image', 'Link', 'ErrorBoundary'],
+            },
+        ],
     },
 };

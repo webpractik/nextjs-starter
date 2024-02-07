@@ -1,7 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
+import { Flex } from 'core/Flex';
 import React from 'react';
-
-import Flex from '~/components/core/Flex/index';
 
 const meta: Meta<typeof Flex> = {
     title: 'core/Flex',
@@ -35,14 +34,14 @@ export const Primary: Story = {
             width={width}
             margin={margin}
         >
-            <div>DIV 1</div>
-            <div>DIV 2</div>
-            <div>DIV 3</div>
+            <div>FLEX CHILD 1</div>
+            <div>FLEX CHILD 2</div>
+            <div>FLEX CHILD 3</div>
         </Flex>
     ),
     args: {
         flexDirection: 'column',
         alignItems: 'center',
-        gap: '15px',
+        gap: '2rem',
     },
 };

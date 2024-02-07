@@ -1,6 +1,6 @@
 import '../styles/index.sass';
 import ReactQueryProvider from '../components/shared/providers/react-query';
-import { montserrat } from '../lib/fonts/Montserrat';
+import { inter } from '../lib/fonts/Inter';
 
 export const parameters = {
     actions: {
@@ -17,7 +17,7 @@ export const parameters = {
 export const decorators = [
     Story => {
         return (
-            <div className={`${montserrat.variable}`}>
+            <div className={`${inter.variable}`}>
                 <ReactQueryProvider>
                     <Story />
                 </ReactQueryProvider>

@@ -1,12 +1,10 @@
-import Flex from 'core/Flex';
+import { Flex } from 'core/Flex/Flex';
 import React, { ReactNode } from 'react';
 
-import cn from '@/(home)/_components/style.module.sass';
-
-function HomeLayout({ children }: { children: ReactNode }) {
+function HomeLayout({ children }: Readonly<{ children: ReactNode }>) {
     return (
         <Flex
-            className={cn.container}
+            style={{ height: '100dvh' }}
             alignItems="center"
             justifyContent="center"
             flexDirection="column"

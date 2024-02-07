@@ -1,6 +1,6 @@
-import { Montserrat } from 'next/font/google';
+import { Inter } from 'next/font/google';
 
-export const montserrat = Montserrat({
+export const inter = Inter({
     weight: ['400', '500', '700'],
     subsets: ['latin'],
     display: 'swap',
@@ -16,5 +16,5 @@ export const montserrat = Montserrat({
         'Segoe UI Emoji',
         'Segoe UI Symbol',
     ],
-    variable: '--font-montserrat',
+    variable: '--font-inter',
 });
