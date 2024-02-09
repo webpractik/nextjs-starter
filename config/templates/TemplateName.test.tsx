@@ -5,11 +5,11 @@ import { describe, expect, it } from 'vitest';
 import { TemplateName } from './TemplateName';
 
 describe('<TemplateName />', () => {
-    it('it should mount', () => {
+    it('it renders correctly', () => {
         render(<TemplateName />);
 
         const templateName = screen.getByTestId('TemplateName');
 
-        expect(templateName).toBeDefined();
+        expect(templateName).toBeInTheDocument();
     });
 });

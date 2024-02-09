@@ -8,7 +8,7 @@ import ReactQueryProvider from 'shared/providers/react-query';
 import { inter } from '~/lib/fonts/Inter';
 
 export const metadata = {
-    title: 'Nextjs Starter',
+    title: 'NEXT STARTER',
     description: 'Default starter for projects',
 };
 

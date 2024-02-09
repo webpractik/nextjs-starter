@@ -1,0 +1,58 @@
+.tableContainer
+	position: relative
+	width: 100%
+	overflow: auto
+
+.table
+	width: 100%
+	text-align: left
+	font-size: 0.875rem
+	caption-side: bottom
+
+.tableHeader
+	& tr
+		border-bottom: 1px solid
+
+.tableBody
+	& tr:last-child
+		border-bottom: 0
+
+.tableFooter
+	border-top: 1px solid
+	background-color: rgba($muted, 0.5)
+	font-weight: 500
+
+	& > tr:last-child
+		border-bottom: 0
+
+.tableRow
+	border-bottom: 1px solid
+	transition: background-color 0.2s
+	&:hover
+		background-color: rgba($muted, 0.5)
+
+	&[data-state='selected']
+		background-color: $muted
+
+.tableHead
+	height: 3rem
+	padding: 0 1rem
+	text-align: left
+	vertical-align: middle
+	font-weight: 500
+	color: $muted-foreground
+
+	&:has([role='checkbox'])
+		padding-right: 0
+
+.tableCell
+	padding: 1rem
+	vertical-align: middle
+
+	&:has([role='checkbox'])
+		padding-right: 0
+
+.tableCaption
+	margin-top: 1rem
+	font-size: 0.875rem
+	color: $muted-foreground

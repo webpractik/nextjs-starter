@@ -1,5 +1,5 @@
 import { cva } from 'class-variance-authority';
-import React, { forwardRef, ReactNode } from 'react';
+import React, { ComponentProps, forwardRef, ReactNode } from 'react';
 
 import cn from './Typography.module.sass';
 
@@ -28,21 +28,25 @@ export const typographyVariants = cva(cn.base, {
     },
 });
 
-export type TypographyProps = {
+interface TypographyProps extends ComponentProps<'p'> {
     variant?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span';
     color?: 'primary' | 'secondary';
     className?: string;
     center?: boolean;
     children: ReactNode;
-};
+}
 
 export const Typography = forwardRef<HTMLParagraphElement, TypographyProps>(
-    ({ variant = 'p', color, center, className = '', children }: TypographyProps, ref) => {
+    (
+        { variant = 'p', color, center, className = '', children, ...props }: TypographyProps,
+        ref
+    ) => {
         const Component: keyof JSX.IntrinsicElements = variant;
 
         return (
             <Component
                 ref={ref}
+                {...props}
                 className={typographyVariants({ variant, color, className, center })}
             >
                 {children}

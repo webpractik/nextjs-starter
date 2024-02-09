@@ -1,0 +1,31 @@
+.checkbox
+	height: 1rem
+	width: 1rem
+	flex-shrink: 0
+	border-radius: 0.125rem
+	border: 1px solid $primary
+	background-color: $background
+	color: currentColor
+
+	&:focus-visible
+		outline: none
+		box-shadow: 0 0 0 2px $ring, 0 0 0 4px 0 0 #0000
+
+	&:disabled, &:disabled ~ label
+		cursor: not-allowed
+		opacity: 0.5
+
+
+	&[data-state='checked']
+		background-color: $primary
+		color: $primary-foreground
+
+.indicator
+	display: flex
+	align-items: center
+	justify-content: center
+	color: currentColor
+
+.checkIcon
+	height: 0.75rem
+	width: 0.75rem

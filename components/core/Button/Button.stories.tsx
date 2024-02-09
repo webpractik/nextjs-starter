@@ -5,6 +5,9 @@ import { Button } from './Button';
 const meta: Meta<typeof Button> = {
     title: 'core/Button',
     component: Button,
+    args: {
+        children: 'Button',
+    },
 };
 
 export default meta;
@@ -12,57 +15,51 @@ export default meta;
 type Story = StoryObj<typeof Button>;
 
 export const Primary: Story = {
-    render: () => (
-        <Button variant="primary" size="primary">
-            Primary
-        </Button>
-    ),
+    args: {
+        variant: 'primary',
+        size: 'primary',
+    },
 };
 
 export const Outline: Story = {
-    render: () => (
-        <Button variant="outline" size="primary">
-            Outline
-        </Button>
-    ),
+    args: {
+        variant: 'outline',
+        size: 'primary',
+    },
 };
 
 export const LinkButton: Story = {
-    render: () => (
-        <Button variant="link" size="primary">
-            Link
-        </Button>
-    ),
+    args: {
+        variant: 'link',
+        size: 'primary',
+    },
 };
 
 export const Small: Story = {
-    render: () => (
-        <Button variant="primary" size="sm">
-            Small
-        </Button>
-    ),
+    args: {
+        variant: 'primary',
+        size: 'sm',
+    },
 };
 
 export const Large: Story = {
-    render: () => (
-        <Button variant="primary" size="lg">
-            Large
-        </Button>
-    ),
+    args: {
+        variant: 'primary',
+        size: 'lg',
+    },
 };
 
 export const IconButton = {
-    render: () => (
-        <Button variant="primary" size="icon">
-            <span>👋</span>
-        </Button>
-    ),
+    args: {
+        variant: 'primary',
+        size: 'icon',
+        children: <span>👋</span>,
+    },
 };
 
 export const AsChild = {
-    render: () => (
-        <Button asChild size="sm">
-            <a href="#">Link Button</a>
-        </Button>
-    ),
+    args: {
+        asChild: true,
+        children: <a href="#">Link Button</a>,
+    },
 };

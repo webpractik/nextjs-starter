@@ -46,7 +46,6 @@ const nextConfig = {
         webpackBuildWorker: true,
         serverSourceMaps: true,
         optimizePackageImports: ['react-use'],
-        webVitalsAttribution: ['CLS', 'LCP'],
     },
 
     generateBuildId: () => `${nanoid()}-${new Date().toISOString()}`,

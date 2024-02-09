@@ -1,4 +1,5 @@
 const path = require('path');
+/** @type { import('@storybook/react') } */
 
 module.exports = {
     stories: ['../components/**/*.stories.@(ts|tsx)', '../app/**/*.stories.@(ts|tsx)'],
@@ -7,6 +8,9 @@ module.exports = {
         '@storybook/addon-essentials',
         '@storybook/addon-actions',
         '@storybook/addon-interactions',
+        '@storybook/addon-designs',
+        '@storybook/addon-storysource',
+        'storybook-addon-pseudo-states',
         'storybook-dark-mode',
     ],
     typescript: {

@@ -9,7 +9,7 @@ type BasicLinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
 
 export function BasicLink({ className, children, ...props }: BasicLinkProps) {
     return (
-        <Link {...props} className={clsx(className)}>
+        <Link {...props} prefetch={false} className={clsx(className)}>
             {children}
         </Link>
     );

@@ -6,6 +6,3 @@ sentry.edge.config.js
 lint-staged.config.js
 lib/gen/**/*.ts
 !.storybook
-
-
-components/ui

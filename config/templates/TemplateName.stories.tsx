@@ -2,15 +2,15 @@ import { Meta, StoryObj } from '@storybook/react';
 
 import { TemplateName } from './TemplateName';
 
-const meta: Meta<typeof TemplateName> = {
-    title: 'component/TemplateName',
+const meta = {
+    title: 'TemplateName',
     component: TemplateName,
-};
+} satisfies Meta<typeof TemplateName>;
 
 export default meta;
 
 type Story = StoryObj<typeof TemplateName>;
 
-export const Primary: Story = {
+export const Primary = {
     args: {},
-};
+} satisfies Story;

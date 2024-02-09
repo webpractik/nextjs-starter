@@ -1,11 +1,25 @@
-'use client';
-
+import { Box } from 'core/Box';
 import React from 'react';
+import StoreInitializer from 'shared/utilities/StoreInitializer';
 
+import CounterButtons from '@/(home)/_components/Counter/buttons';
+import CounterClient from '@/(home)/_components/Counter/client';
+import CounterRSC from '@/(home)/_components/Counter/rsc';
 import { useGlobalStore } from '~/lib/stores/Global';
 
-function Counter() {
-    return <h1>Counter client: {useGlobalStore.use.count()}</h1>;
-}
+const DEFAULT_STATE = { count: 10 };
 
-export default Counter;
+export function Counter() {
+    // server-side store initialization
+    useGlobalStore.setState(DEFAULT_STATE);
+
+    return (
+        <Box direction="column" gap="1rem" alignItems="center">
+            {/* client-side store initialization */}
+            <CounterClient />
+            <CounterRSC />
+            <CounterButtons />
+            <StoreInitializer initialState={DEFAULT_STATE} />
+        </Box>
+    );
+}

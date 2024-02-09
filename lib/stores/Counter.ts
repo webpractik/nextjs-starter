@@ -12,5 +12,5 @@ export type CounterStore = CounterStoreProps & {
 export const createCounterSlice: StateCreator<CounterStore> = set => ({
     count: 0,
     increment: () => set(state => ({ count: ++state.count })),
-    decrement: () => set(state => ({ count: --state.count })),
+    decrement: () => set(state => ({ count: state.count - 1 < 0 ? 0 : --state.count })),
 });
