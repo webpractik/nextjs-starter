@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { useGlobalStore } from '~/lib/stores/Global';
+import { useGlobalStore } from '~/lib/stores/global';
 
 function Counter() {
     return <h1 style={{ color: 'white' }}>Counter client: {useGlobalStore.use.count()}</h1>;

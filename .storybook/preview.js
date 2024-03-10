@@ -1,6 +1,6 @@
 import '../styles/index.sass';
 import ReactQueryProvider from '../components/shared/providers/react-query';
-import { montserrat } from '../lib/fonts/Montserrat';
+import { montserrat } from '../lib/fonts/montserrat';
 
 export const parameters = {
     actions: {

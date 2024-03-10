@@ -1,9 +1,9 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
-import { CounterStore, createCounterSlice } from '~/lib/stores/Counter';
+import { CounterStore, createCounterSlice } from '~/lib/stores/counter';
 
-import { createSelectors } from './createSelectors';
+import { createSelectors } from './create-selectors';
 
 export type GlobalStore = CounterStore;
 

@@ -2,7 +2,7 @@
 import Flex from 'core/Flex';
 import React from 'react';
 
-import { useGlobalStore } from '~/lib/stores/Global';
+import { useGlobalStore } from '~/lib/stores/global';
 
 function CounterButtons() {
     const increment = useGlobalStore.use.increment();

@@ -6,7 +6,4 @@ module.exports = {
         tsconfigRootDir: __dirname,
     },
     extends: ['webpractik', 'next'],
-    rules: {
-        'lodash/import-scope': 'off',
-    },
 };

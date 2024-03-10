@@ -4,7 +4,7 @@ import 'modern-normalize/modern-normalize.css';
 import React, { ReactNode } from 'react';
 import ReactQueryProvider from 'shared/providers/react-query';
 
-import { montserrat } from '~/lib/fonts/Montserrat';
+import { montserrat } from '~/lib/fonts/montserrat';
 
 export const metadata = {
     title: 'Nextjs Starter',
