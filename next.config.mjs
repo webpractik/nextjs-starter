@@ -1,26 +1,13 @@
-import path from 'path';
 import { headers } from './config/headers.mjs';
 import { withSentryConfig } from '@sentry/nextjs';
-import { fileURLToPath } from 'url';
 import withBundleAnalyzer from '@next/bundle-analyzer';
 import './config/env.mjs';
 import { nanoid } from 'nanoid';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 /**
  * @type {import('next').NextConfig}
  */
-
 const nextConfig = {
-    sassOptions: {
-        indentType: 'tab',
-        style: 'compressed',
-        additionalData: '@import "../config"',
-        includePaths: [path.join(__dirname, 'styles/modules/')],
-        charset: false,
-    },
-
     reactStrictMode: true,
 
     poweredByHeader: false,

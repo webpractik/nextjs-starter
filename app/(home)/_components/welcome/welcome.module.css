@@ -1,0 +1,38 @@
+@keyframes colorChange {
+	0%, 100% {
+		text-shadow: -10px 10px 0 #7927E0;
+		color: #7927E0;
+	}
+	50% {
+		text-shadow: -10px 10px 0 hsl(222.2, 47.4%, 11.2%);
+		color: hsl(222.2, 47.4%, 11.2%);
+	}
+}
+
+.title {
+	font-size: 9rem;
+	text-transform: uppercase;
+	user-select: none;
+	color: transparent;
+	-webkit-text-stroke: 1px hsl(222.2, 47.4%, 11.2%);
+	-webkit-text-fill-color: transparent;
+	text-shadow: -10px 10px 0 hsl(222.2, 47.4%, 11.2%);
+	transition: all .5s ease-in-out;
+
+	.letter {
+		animation: colorChange 2s ease-in-out infinite alternate;
+		display: inline-block;
+		margin: 0 -0.05rem;
+		animation-fill-mode: forwards;
+	}
+
+	.letter:nth-child(odd) {
+		animation-delay: 0.2s;
+	}
+
+	.letter:nth-child(even) {
+		animation-delay: 0.4s;
+	}
+}
+
+

@@ -21,7 +21,7 @@ export type ResponseConfig<TData = unknown> = {
 
 export const axiosInstance = axios.create({
     withCredentials: true,
-    baseURL: typeof window !== 'undefined' ? env.NEXT_PUBLIC_FRONT_PROXY : env.BACK_INTERNAL_URL,
+    baseURL: typeof window === 'undefined' ? env.BACK_INTERNAL_URL : env.NEXT_PUBLIC_FRONT_PROXY,
 });
 
 export const axiosClient = async <TData, TError = unknown, TVariables = unknown>(
@@ -30,8 +30,8 @@ export const axiosClient = async <TData, TError = unknown, TVariables = unknown>
     return axiosInstance
         .request<TData>({ ...config })
         .then(response => response)
-        .catch((e: AxiosError<TError>) => {
-            throw e;
+        .catch((error: AxiosError<TError>) => {
+            throw error;
         });
 };
 

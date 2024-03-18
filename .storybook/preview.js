@@ -1,7 +1,6 @@
-import 'modern-normalize/modern-normalize.css';
-import '../styles/index.sass';
+import '../styles/tw.css';
 import ReactQueryProvider from '../components/shared/providers/react-query';
-import { inter } from '../lib/fonts/Inter';
+import { inter } from '../lib/fonts/inter';
 
 /** @type { import('@storybook/react').Preview } */
 export const parameters = {

@@ -1,1 +1,1 @@
-export { TemplateName } from './TemplateName';
+export { TemplateName } from './template-name';

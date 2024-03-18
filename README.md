@@ -5,7 +5,7 @@
 ## 🚀 Как развернуть проект
 
 ```
-npx create-next-app -e https://github.com/webpractik/nextjs-starter --use-npm
+bunx create-next-app -e https://github.com/webpractik/nextjs-starter --use-npm
 ```
 
 ### Копирование стандартных env переменных (зависят от проекта)
@@ -17,10 +17,9 @@ cp .env_example .env
 ## 🪄 Features:
 
 -   Typescript
--   Sass
+-   Tailwind
 -   Zustand
 -   ESLint
--   Stylelint
 -   Prettier
 -   Husky
 -   Commitizen
@@ -31,12 +30,9 @@ cp .env_example .env
 -   Sentry
 -   Bundle analyzer
 -   React Query
--   API Codegen
+-   Kubb API Codegen 
 -   Figma tokens
--   Security headers
--   Generate components
--   Coupling & cohesion graph
--   Env variables validation
+-   Env validation
 
 ## 🎯 Deploy
 
@@ -65,27 +61,27 @@ cp .env_example .env
 ## 📜 NPM Scripts:
 
 | Script                      | Description                          |
-| --------------------------- | ------------------------------------ |
-| `npm ci`                    | Установка модулей                    |
-| `npm run build`             | Запуск билда                         |
-| `npm run dev`               | Запуск dev сборки                    |
-| `npm run prod`              | Запуск прод сборки                   |
-| `npm run analyze`           | Анализ билда                         |
-| `npm run storybook`         | Запуск storybook                     |
-| `npm run build-storybook`   | Билд storybook                       |
-| `npm run test`              | Запуск тестов                        |
-| `npm run coverage`          | Покрытие тестов                      |
-| `npm run type-coverage`     | Покрытие типизацией                  |
-| `npm run build-tokens`      | Билд фигма токенов                   |
-| `npm run api-codegen`       | Автогенерация API                    |
-| `npm run type-check`        | Проверка TS                          |
-| `npm run lint`              | Проверка eslint                      |
-| `npm run stylelint`         | Проверка стилей                      |
-| `npm run format`            | Форматирование prettier              |
-| `npm run check-all`         | Проверка всего в параллельном режиме |
-| `npm run gen -- <название>` | Создание реакт компонента            |
-| `npm run cruiser`           | Построить граф зависимостей          |
-| `npm run clean`             | Очистка сборки                       |
+|-----------------------------|--------------------------------------|
+| `bun install / npm ci`      | Установка модулей                    |
+| `bun run build`             | Запуск билда                         |
+| `bun run dev`               | Запуск dev сборки                    |
+| `bun run prod`              | Запуск прод сборки                   |
+| `bun run analyze`           | Анализ билда                         |
+| `bun run storybook`         | Запуск storybook                     |
+| `bun run build-storybook`   | Билд storybook                       |
+| `bun run test`              | Запуск тестов                        |
+| `bun run test-run`          | Запуск тестов                        |
+| `bun run coverage`          | Покрытие тестов                      |
+| `bun run type-coverage`     | Покрытие типизацией                  |
+| `bun run build-tokens`      | Билд фигма токенов                   |
+| `bun run api-codegen`       | Автогенерация API                    |
+| `bun run check:ts`          | Проверка TS                          |
+| `bun run check:lint`        | Проверка eslint                      |
+| `bun run check:format`      | Форматирование prettier              |
+| `bun run check:all`         | Проверка всего в параллельном режиме |
+| `bun run gen -- <название>` | Создание реакт компонента            |
+| `bun run cruiser`           | Построить граф зависимостей          |
+| `bun run clean`             | Очистка сборки                       |
 
 ## 📦 Packages:
 
@@ -95,6 +91,5 @@ cp .env_example .env
 -   [lodash](https://lodash.com/docs)
 -   [react-use](https://github.com/streamich/react-use#readme)
 -   [isomorphic-dompurify](https://www.npmjs.com/package/isomorphic-dompurify)
--   [modern-normalize](https://www.npmjs.com/package/modern-normalize)
 -   [nanoid](https://www.npmjs.com/package/nanoid)
 -   [clsx](https://www.npmjs.com/package/clsx)

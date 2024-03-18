@@ -1,6 +1,6 @@
 'use client';
 
-import { ErrorFallback } from 'shared/utilities/ErrorBoundary';
+import { ErrorFallback } from 'components/shared/utilities/error-boundary';
 
 type ErrorProps = {
     error: Error & { digest?: string };

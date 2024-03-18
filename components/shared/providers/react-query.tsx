@@ -5,19 +5,21 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ReactQueryStreamedHydration } from '@tanstack/react-query-next-experimental';
 import React, { ReactNode, useState } from 'react';
 
-export default function ReactQueryProvider({
-    children,
-    showDevtools = true,
-}: {
+// 30 sec
+export const DEFAULT_STALE_TIME = 30 * 1000;
+
+type ReactQueryProviderProps = Readonly<{
     children: ReactNode;
     showDevtools?: boolean;
-}) {
+}>;
+
+export function ReactQueryProvider({ children, showDevtools = true }: ReactQueryProviderProps) {
     const [queryClient] = useState(
         () =>
             new QueryClient({
                 defaultOptions: {
                     queries: {
-                        staleTime: 60 * 1000,
+                        staleTime: DEFAULT_STALE_TIME,
                         throwOnError: true,
                     },
                 },
@@ -28,7 +30,7 @@ export default function ReactQueryProvider({
         <QueryClientProvider client={queryClient}>
             <ReactQueryStreamedHydration>{children}</ReactQueryStreamedHydration>
 
-            {showDevtools && <ReactQueryDevtools initialIsOpen={false} />}
+            {showDevtools ? <ReactQueryDevtools initialIsOpen={false} /> : null}
         </QueryClientProvider>
     );
 }

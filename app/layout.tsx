@@ -1,21 +1,24 @@
 import '~/styles/tw.css';
-import '~/styles/index.sass';
-import 'modern-normalize/modern-normalize.css';
 
 import React, { ReactNode } from 'react';
-import ReactQueryProvider from 'shared/providers/react-query';
+import { ReactQueryProvider } from 'shared/providers/react-query';
 
-import { inter } from '~/lib/fonts/Inter';
+import { inter } from '~/lib/fonts/inter';
+import { cn } from '~/lib/utils';
 
 export const metadata = {
     title: 'NEXT STARTER',
     description: 'Default starter for projects',
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export type RootLayoutProps = Readonly<{ children: ReactNode }>;
+
+export default function RootLayout({ children }: RootLayoutProps) {
     return (
-        <html lang="ru" className={`${inter.variable}`}>
-            <body>
+        <html suppressHydrationWarning lang="ru">
+            <body
+                className={cn('min-h-screen bg-background font-sans antialiased', inter.variable)}
+            >
                 <main>
                     <ReactQueryProvider>{children}</ReactQueryProvider>
                 </main>

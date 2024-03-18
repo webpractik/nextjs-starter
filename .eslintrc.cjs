@@ -5,17 +5,8 @@ module.exports = {
         project: './tsconfig.json',
         tsconfigRootDir: __dirname,
     },
-    extends: ['webpractik', 'next'],
+    extends: ['webpractik', 'next', 'plugin:tailwindcss/recommended'],
     rules: {
-        'lodash/import-scope': 'off',
-        'react/jsx-props-no-spreading': [
-            'warn',
-            {
-                html: 'ignore',
-                custom: 'enforce',
-                explicitSpread: 'enforce',
-                exceptions: ['Component', 'Image', 'Link', 'ErrorBoundary'],
-            },
-        ],
+        'max-len': 'off',
     },
 };

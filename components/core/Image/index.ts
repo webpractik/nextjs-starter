@@ -1,1 +1,0 @@
-export { BasicImage } from './Image';

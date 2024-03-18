@@ -9,6 +9,8 @@ dist/
 storybook-static
 coverage-ts
 swagger.json
+swagger.yaml
+openapi.json
 openapi.yaml
 docs.html
 dependency-graph.svg
