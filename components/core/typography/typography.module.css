@@ -1,0 +1,45 @@
+.base {
+	text-wrap: balance;
+}
+
+.h1 {
+	font: 700 2.5rem / 120% var(--font-inter);
+}
+
+.h2 {
+	font: 700 1.875rem / 120% var(--font-inter);
+}
+
+.h3 {
+	font: 600 1.5rem / 120% var(--font-inter);
+}
+
+.h4 {
+	font: 500 1.25rem / 120% var(--font-inter);
+}
+
+.h5 {
+	font: 500 1.125rem / 120% var(--font-inter);
+}
+
+.h6 {
+	font: 500 1rem / 120% var(--font-inter);
+}
+
+.text {
+	font: normal 1rem / 120% var(--font-inter);
+}
+
+.primary {
+	color: black;
+}
+
+.secondary {
+	color: grey;
+}
+
+.center {
+	text-align: center;
+}
+
+

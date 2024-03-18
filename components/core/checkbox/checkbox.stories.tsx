@@ -1,5 +1,4 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { Box } from 'core/Box';
 import React from 'react';
 
 import { Checkbox } from './checkbox';
@@ -22,11 +21,11 @@ export const Primary: Story = {
 export const AllStates: Story = {
     render: () => {
         return (
-            <Box center gap="1rem" direction="column">
+            <div className="flex flex-col items-center justify-center gap-2">
                 <Checkbox id="check-1" />
                 <Checkbox checked id="check-2" />
                 <Checkbox disabled id="check-3" />
-            </Box>
+            </div>
         );
     },
 };

@@ -1,26 +1,26 @@
 import { cva } from 'class-variance-authority';
 import React, { ComponentProps, forwardRef, ReactNode } from 'react';
 
-import cn from './typography.module.sass';
+import styles from './typography.module.css';
 
-export const typographyVariants = cva(cn.base, {
+export const typographyVariants = cva(styles.base, {
     variants: {
         variant: {
-            h1: cn.h1,
-            h2: cn.h2,
-            h3: cn.h3,
-            h4: cn.h4,
-            h5: cn.h5,
-            h6: cn.h6,
-            p: cn.text,
+            h1: styles.h1,
+            h2: styles.h2,
+            h3: styles.h3,
+            h4: styles.h4,
+            h5: styles.h5,
+            h6: styles.h6,
+            p: styles.text,
             span: '',
         },
         color: {
-            primary: cn.primary,
-            secondary: cn.secondary,
+            primary: styles.primary,
+            secondary: styles.secondary,
         },
         center: {
-            true: cn.center,
+            true: styles.center,
         },
     },
     defaultVariants: {

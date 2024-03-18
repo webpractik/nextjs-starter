@@ -9,8 +9,7 @@ export default defineConfig(async () => {
     return {
         root: '..',
         input: {
-            // openapi.yaml
-            path: 'swagger.json',
+            path: 'openapi.yaml',
         },
         output: {
             path: './lib/gen',

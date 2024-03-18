@@ -16,42 +16,42 @@ type Story = StoryObj<typeof Button>;
 
 export const Primary: Story = {
     args: {
-        variant: 'primary',
-        size: 'primary',
+        variant: 'default',
+        size: 'default',
     },
 };
 
 export const Outline: Story = {
     args: {
         variant: 'outline',
-        size: 'primary',
+        size: 'default',
     },
 };
 
 export const LinkButton: Story = {
     args: {
         variant: 'link',
-        size: 'primary',
+        size: 'default',
     },
 };
 
 export const Small: Story = {
     args: {
-        variant: 'primary',
+        variant: 'default',
         size: 'sm',
     },
 };
 
 export const Large: Story = {
     args: {
-        variant: 'primary',
+        variant: 'default',
         size: 'lg',
     },
 };
 
 export const IconButton = {
     args: {
-        variant: 'primary',
+        variant: 'default',
         size: 'icon',
         children: <span>👋</span>,
     },
@@ -60,6 +60,6 @@ export const IconButton = {
 export const AsChild = {
     args: {
         asChild: true,
-        children: <a href="#">Link Button</a>,
+        children: <a>Link Button</a>,
     },
 };
