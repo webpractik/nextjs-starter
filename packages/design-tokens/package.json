@@ -1,0 +1,14 @@
+{
+    "name": "@repo/design-tokens",
+    "version": "1.0.0",
+    "description": "",
+    "files": [
+        "variables.css"
+    ],
+    "scripts": {
+        "build-tokens": "npx style-dictionary build --config ./tokens.config.json"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}

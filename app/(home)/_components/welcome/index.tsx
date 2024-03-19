@@ -1,4 +1,4 @@
-import { Logo } from 'components/core/logo';
+import { Logo } from '@repo/core/logo';
 import { Typography } from 'components/core/typography';
 import React from 'react';
 

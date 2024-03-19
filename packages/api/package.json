@@ -1,0 +1,25 @@
+{
+    "name": "@repo/api",
+    "version": "1.0.0",
+    "description": "",
+    "exports": {
+        "./lib": "./lib",
+        "./axios-client": "./axios-client"
+    },
+    "scripts": {
+        "generate": "kubb generate --config ./kubb.config.mjs"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@kubb/cli": "2.9.1",
+        "@kubb/core": "2.9.1",
+        "@kubb/swagger": "2.9.1",
+        "@kubb/swagger-client": "2.9.1",
+        "@kubb/swagger-faker": "2.9.1",
+        "@kubb/swagger-tanstack-query": "2.9.1",
+        "@kubb/swagger-ts": "2.9.1",
+        "@kubb/swagger-zod": "2.9.1",
+        "axios": "1.6.8"
+    }
+}

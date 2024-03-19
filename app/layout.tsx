@@ -1,10 +1,10 @@
-import '~/styles/tw.css';
+import '~/lib/styles/base.css';
 
 import React, { ReactNode } from 'react';
-import { ReactQueryProvider } from 'shared/providers/react-query';
 
+import { ReactQueryProvider } from '@/_components/providers/react-query';
 import { inter } from '~/lib/fonts/inter';
-import { cn } from '~/lib/utils';
+import { cn } from '~/lib/utils/cn';
 
 export const metadata = {
     title: 'NEXT STARTER',

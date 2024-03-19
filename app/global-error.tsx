@@ -1,6 +1,8 @@
 'use client';
+import * as Sentry from '@sentry/nextjs';
+import { useEffect } from 'react';
 
-import { ErrorFallback } from 'components/shared/utilities/error-boundary';
+import { ErrorFallback } from '@/_components/utilities/error-boundary';
 
 type GlobalErrorProps = {
     error: Error & { digest?: string };
@@ -8,6 +10,10 @@ type GlobalErrorProps = {
 };
 
 export default function GlobalError({ error, reset }: GlobalErrorProps) {
+    useEffect(() => {
+        Sentry.captureException(error);
+    }, [error]);
+
     return (
         <html lang="ru">
             <body>

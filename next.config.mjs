@@ -1,7 +1,7 @@
-import { headers } from './config/headers.mjs';
+import { headers } from './headers.mjs';
 import { withSentryConfig } from '@sentry/nextjs';
 import withBundleAnalyzer from '@next/bundle-analyzer';
-import './config/env.mjs';
+import './env.mjs';
 import { nanoid } from 'nanoid';
 
 /**
@@ -23,16 +23,12 @@ const nextConfig = {
 
     swcMinify: true,
 
-    modularizeImports: {
-        lodash: {
-            transform: 'lodash/{{member}}',
-        },
-    },
-
     experimental: {
+        taint: true,
         webpackBuildWorker: true,
+        parallelServerCompiles: true,
         serverSourceMaps: true,
-        optimizePackageImports: ['react-use'],
+        optimizePackageImports: ['react-use', 'lodash-es', 'lucide-react'],
     },
 
     generateBuildId: () => `${nanoid()}-${new Date().toISOString()}`,
@@ -54,6 +50,10 @@ const nextConfig = {
         fetches: {
             fullUrl: true,
         },
+    },
+
+    sentry: {
+        hideSourceMaps: true,
     },
 };
 

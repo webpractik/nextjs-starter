@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { env } from '~/config/env.mjs';
+import { env } from '~/env.mjs';
 
 export function middleware(request: NextRequest) {
     const requestHeaders = new Headers(request.headers);
@@ -27,7 +27,7 @@ export function middleware(request: NextRequest) {
 
         requestHeaders.set('x-nonce', nonce);
 
-        requestHeaders.set('Content-Security-Policy', cspHeader.replace(/\s{2,}/g, ' ').trim());
+        requestHeaders.set('Content-Security-Policy', cspHeader.replaceAll(/\s{2,}/g, ' ').trim());
     }
 
     if (request.url.startsWith(`${env.NEXT_PUBLIC_FRONT_URL}${env.NEXT_PUBLIC_FRONT_PROXY}`)) {

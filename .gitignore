@@ -1,9 +1,10 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # custom
-.idea/
-.vscode/
-dist/
+.idea
+.vscode
+.turbo
+dist
 .env
 .eslintcache
 storybook-static

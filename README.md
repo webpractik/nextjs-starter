@@ -48,16 +48,6 @@ cp .env_example .env
 -   `npm run build`
 -   `npm run prod`
 
-## 📝 Docs:
-
--   [ENV переменные](docs/env.md)
--   [Базовая настройка](docs/settings.md)
--   [Работа с API](https://kb.w6p.ru/s/d777074e-dc22-4c8f-836f-683e6b6559c6)
--   [Стандарт React & TS](https://kb.w6p.ru/s/wp-ts-react-standart)
--   [Error boundaries](https://kb.w6p.ru/s/805fa567-7fbb-468f-95e5-c223783e96f2)
--   [Настройка Sentry](https://kb.w6p.ru/doc/sentry-RLE1b9FXT7)
--   [Дизайн токены](https://kb.w6p.ru/s/55e92ed7-4336-4c0e-a48e-a91b4a3d30ef)
-
 ## 📜 NPM Scripts:
 
 | Script                      | Description                          |
@@ -88,8 +78,34 @@ cp .env_example .env
 -   [zod](https://zod.dev/)
 -   [axios](https://axios-http.com/ru/docs/intro)
 -   [@t3-oss/env-nextjs](https://env.t3.gg/docs/nextjs)
--   [lodash](https://lodash.com/docs)
+-   [lodash-es](https://lodash.com/docs)
 -   [react-use](https://github.com/streamich/react-use#readme)
 -   [isomorphic-dompurify](https://www.npmjs.com/package/isomorphic-dompurify)
 -   [nanoid](https://www.npmjs.com/package/nanoid)
 -   [clsx](https://www.npmjs.com/package/clsx)
+
+
+## ENV переменные
+
+Глобальные переменные:
+
+```
+FRONT_HOST - хост в локальной сети kubernetes
+FRONT_PORT - порт
+BACK_INTERNAL_URL - полный путь для обращения к backend приложению (http://back:80)
+
+HTTP_AUTH_LOGIN=demo
+HTTP_AUTH_PASS=demo
+```
+
+Переменные, которые должны быть доступны на момент сборки:
+
+```
+NEXT_PUBLIC_MOCKS_ENABLED=false - режим моков
+NEXT_PUBLIC_APP_ENV - LOCAL | WORK | RC | PROD
+NEXT_PUBLIC_FRONT_URL - публичный урл front приложения
+NEXT_PUBLIC_BACK_URL - публичный урл back приложения (опционален)
+NEXT_PUBLIC_SENTRY_DSN - DSN для доступа к Sentry
+NEXT_PUBLIC_FRONT_PROXY - точка входа в BFF слой для проксирования запросов
+```
+

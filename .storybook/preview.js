@@ -1,5 +1,5 @@
-import '../styles/tw.css';
-import { ReactQueryProvider } from '../components/shared/providers/react-query';
+import '../lib/styles/base.css';
+import { ReactQueryProvider } from '../app/_components/providers/react-query';
 import { inter } from '../lib/fonts/inter';
 
 /** @type { import('@storybook/react').Preview } */
