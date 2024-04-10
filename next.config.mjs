@@ -1,8 +1,14 @@
 import { headers } from './headers.mjs';
 import { withSentryConfig } from '@sentry/nextjs';
 import withBundleAnalyzer from '@next/bundle-analyzer';
-import './env.mjs';
 import { nanoid } from 'nanoid';
+import { fileURLToPath } from 'node:url';
+import createJiti from 'jiti';
+
+const jiti = createJiti(fileURLToPath(import.meta.url));
+
+jiti('./env/client');
+jiti('./env/server');
 
 /**
  * @type {import('next').NextConfig}

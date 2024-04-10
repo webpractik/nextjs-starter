@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { env } from '~/env.mjs';
+import { env as clientEnv } from '~/env/client';
+import { env as serverEnv } from '~/env/server';
 
 export function middleware(request: NextRequest) {
     const requestHeaders = new Headers(request.headers);
@@ -12,10 +13,10 @@ export function middleware(request: NextRequest) {
 
         const cspHeader = `
             default-src 'self';
-            script-src 'self' 'unsafe-inline' ${process.env.NEXT_PUBLIC_FRONT_URL};
-            style-src 'self' 'unsafe-inline' ${process.env.NEXT_PUBLIC_FRONT_URL};
+            script-src 'self' 'unsafe-inline' ${clientEnv.NEXT_PUBLIC_FRONT_URL};
+            style-src 'self' 'unsafe-inline' ${clientEnv.NEXT_PUBLIC_FRONT_URL};
             img-src 'self' blob: data:;
-            child-src ${process.env.NEXT_PUBLIC_FRONT_URL};
+            child-src ${clientEnv.NEXT_PUBLIC_FRONT_URL};
             font-src 'self';
             object-src 'none';
             base-uri 'self';
@@ -30,9 +31,13 @@ export function middleware(request: NextRequest) {
         requestHeaders.set('Content-Security-Policy', cspHeader.replaceAll(/\s{2,}/g, ' ').trim());
     }
 
-    if (request.url.startsWith(`${env.NEXT_PUBLIC_FRONT_URL}${env.NEXT_PUBLIC_FRONT_PROXY}`)) {
+    if (
+        request.url.startsWith(
+            `${clientEnv.NEXT_PUBLIC_FRONT_URL}${clientEnv.NEXT_PUBLIC_BFF_PATH}`
+        )
+    ) {
         return NextResponse.rewrite(
-            `${env.BACK_INTERNAL_URL}${url.pathname.replace(env.NEXT_PUBLIC_FRONT_PROXY, '')}${
+            `${serverEnv.BACK_INTERNAL_URL}${url.pathname.replace(clientEnv.NEXT_PUBLIC_BFF_PATH, '')}${
                 url.search
             }`
         );

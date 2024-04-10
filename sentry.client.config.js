@@ -1,9 +1,9 @@
 import * as Sentry from '@sentry/nextjs';
-import { env } from './env.mjs';
+import { env } from './env/client';
 
 Sentry.init({
-    dsn: env.SENTRY_DSN || env.NEXT_PUBLIC_SENTRY_DSN,
+    dsn: env.NEXT_PUBLIC_SENTRY_DSN,
     tracesSampleRate: 0.5,
     autoSessionTracking: false,
-    environment: `${env.APP_ENV}-client`,
+    environment: `${env.NEXT_PUBLIC_APP_ENV}-client`,
 });

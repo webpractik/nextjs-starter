@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
-import { env as environment } from '../../env.mjs';
+import { env } from '~/env/client';
 
 export type RequestConfig<TVariables = unknown> = {
     method: 'get' | 'put' | 'patch' | 'post' | 'delete';
@@ -21,10 +21,7 @@ export type ResponseConfig<TData = unknown> = {
 
 export const axiosInstance = axios.create({
     withCredentials: true,
-    baseURL:
-        typeof window === 'undefined'
-            ? environment.BACK_INTERNAL_URL
-            : environment.NEXT_PUBLIC_FRONT_PROXY,
+    baseURL: env.NEXT_PUBLIC_BFF_PATH,
 });
 
 export const axiosClient = async <TData, TError = unknown, TVariables = unknown>(
