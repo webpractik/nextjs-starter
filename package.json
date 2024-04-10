@@ -17,7 +17,9 @@
         "analyze": "ANALYZE=true npm run build",
         "clean": "rimraf .next",
         "type-coverage": "npx typescript-coverage-report",
-        "cruiser": "depcruise app --config .dependency-cruiser.js --output-type dot | dot -T svg -Grankdir=TD | tee dependency-graph.svg | depcruise-wrap-stream-in-html > ./docs.html"
+        "cruiser": "depcruise app --config .dependency-cruiser.js --output-type dot | dot -T svg -Grankdir=TD | tee dependency-graph.svg | depcruise-wrap-stream-in-html > ./docs.html",
+        "dr:build": "npx declarative-routing build",
+        "dr:build:watch": "npx declarative-routing build --watch"
     },
     "dependencies": {
         "@hookform/resolvers": "3.3.4",
@@ -41,6 +43,7 @@
         "lucide-react": "0.366.0",
         "nanoid": "5.0.7",
         "next": "14.1.4",
+        "query-string": "9.0.0",
         "react": "18.2.0",
         "react-dom": "18.2.0",
         "react-hook-form": "7.51.2",
