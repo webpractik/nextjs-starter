@@ -1,5 +1,5 @@
-import { Button } from 'components/core/button';
-import { Checkbox } from 'components/core/checkbox';
+import { Button } from '@repo/core/button';
+import { Checkbox } from '@repo/core/checkbox';
 import {
     Dialog,
     DialogClose,
@@ -9,24 +9,23 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from 'components/core/dialog';
-import { Input } from 'components/core/input';
-import { Label } from 'components/core/label';
-import { RadioGroup, RadioGroupItem } from 'components/core/radio-group';
+} from '@repo/core/dialog';
+import { Input } from '@repo/core/input';
+import { Label } from '@repo/core/label';
+import { RadioGroup, RadioGroupItem } from '@repo/core/radio-group';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@repo/core/select';
+import { Skeleton } from '@repo/core/skeleton';
+import { Switch } from '@repo/core/switch';
+import { Tabs } from '@repo/core/tabs';
+import { TabsContent, TabsList, TabsTrigger } from '@repo/core/tabs/tabs';
+import { Textarea } from '@repo/core/textarea';
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from 'components/core/select';
-import { Skeleton } from 'components/core/skeleton';
-import { Switch } from 'components/core/switch';
-import { Tabs } from 'components/core/tabs';
-import { Textarea } from 'components/core/textarea';
-import { Typography } from 'components/core/typography';
-import { TabsContent, TabsList, TabsTrigger } from 'core/tabs/tabs';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from 'core/tooltip/tooltip';
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from '@repo/core/tooltip/tooltip';
+import { Typography } from '@repo/core/typography';
 import { CircleHelp } from 'lucide-react';
 
 const gridItemClassName =

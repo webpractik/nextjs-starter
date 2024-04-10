@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { noop } from 'lodash';
+import { noop } from 'lodash-es';
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 

@@ -15,6 +15,7 @@ openapi.json
 openapi.yaml
 docs.html
 dependency-graph.svg
+packages/*/node_modules
 
 # dependencies
 /node_modules

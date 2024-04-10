@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import { Form } from '@/_components/form/index';
+import { Form } from '~/packages/core/form/index';
 
 const meta: Meta<typeof Form> = {
     title: 'Form',

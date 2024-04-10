@@ -1,5 +1,5 @@
 import { Logo } from '@repo/core/logo';
-import { Typography } from 'components/core/typography';
+import { Typography } from '@repo/core/typography';
 import React from 'react';
 
 import styles from './welcome.module.css';

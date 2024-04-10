@@ -1,6 +1,5 @@
 import * as LabelPrimitive from '@radix-ui/react-label';
 import { Slot } from '@radix-ui/react-slot';
-import { Label } from 'core/label';
 import {
     ComponentPropsWithoutRef,
     createContext,
@@ -19,7 +18,9 @@ import {
     useFormContext,
 } from 'react-hook-form';
 
-import { cn } from '~/lib/utils/cn';
+import { Label } from '~/packages/core/label';
+
+import { cn } from '../cn';
 
 type FormFieldContextValue<
     TFieldValues extends FieldValues = FieldValues,

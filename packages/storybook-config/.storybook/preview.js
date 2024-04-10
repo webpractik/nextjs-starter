@@ -1,6 +1,6 @@
-import '../lib/styles/base.css';
-import { ReactQueryProvider } from '../app/_components/providers/react-query';
-import { inter } from '../lib/fonts/inter';
+import '../../../lib/styles/base.css';
+import { ReactQueryProvider } from '../../../app/_components/providers/react-query';
+import { inter } from '../../../lib/fonts/inter';
 
 /** @type { import('@storybook/react').Preview } */
 export const parameters = {

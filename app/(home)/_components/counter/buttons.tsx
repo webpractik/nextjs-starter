@@ -1,5 +1,5 @@
 'use client';
-import { Button } from 'components/core/button';
+import { Button } from '@repo/core/button';
 import React from 'react';
 
 import { useGlobalStore } from '~/lib/stores/global';

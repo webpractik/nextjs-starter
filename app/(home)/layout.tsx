@@ -1,5 +1,6 @@
-import { Welcome } from 'app/(home)/_components/welcome';
 import React, { ReactNode } from 'react';
+
+import { Welcome } from '@/(home)/_components/welcome';
 
 function HomeLayout({ children }: Readonly<{ children: ReactNode }>) {
     return (

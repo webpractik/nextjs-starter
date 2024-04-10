@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { noop } from 'lodash';
+import { noop } from 'lodash-es';
 
 import { ErrorBoundary, ErrorFallback } from './error-boundary';
 

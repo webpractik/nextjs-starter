@@ -3,7 +3,7 @@ import { env } from './env.mjs';
 
 Sentry.init({
     dsn: env.SENTRY_DSN || env.NEXT_PUBLIC_SENTRY_DSN,
-    tracesSampleRate: 1.0,
+    tracesSampleRate: 0.5,
     autoSessionTracking: false,
     environment: `${env.APP_ENV}-client`,
 });
