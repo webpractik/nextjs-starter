@@ -1,0 +1,14 @@
+{
+    "name": "eslint-config-custom",
+    "version": "0.0.0",
+    "publishConfig": {
+        "access": "public"
+    },
+    "dependencies": {
+        "@typescript-eslint/eslint-plugin": "7.7.1",
+        "@typescript-eslint/parser": "7.7.1",
+        "eslint-config-next": "14.2.2",
+        "eslint-config-webpractik": "github:webpractik/eslint-config-webpractik",
+        "eslint-plugin-tailwindcss": "3.15.1"
+    }
+}
