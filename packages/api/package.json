@@ -7,19 +7,19 @@
         "./axios-client": "./axios-client"
     },
     "scripts": {
-        "generate": "kubb generate --config ./kubb.config.mjs"
+        "generate": "kubb generate --config kubb.config.ts"
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@kubb/cli": "2.9.1",
-        "@kubb/core": "2.9.1",
-        "@kubb/swagger": "2.9.1",
-        "@kubb/swagger-client": "2.9.1",
-        "@kubb/swagger-faker": "2.9.1",
-        "@kubb/swagger-tanstack-query": "2.9.1",
-        "@kubb/swagger-ts": "2.9.1",
-        "@kubb/swagger-zod": "2.9.1",
+        "@kubb/cli": "2.13.1",
+        "@kubb/core": "2.13.1",
+        "@kubb/swagger": "2.13.1",
+        "@kubb/swagger-client": "2.13.1",
+        "@kubb/swagger-faker": "2.13.1",
+        "@kubb/swagger-tanstack-query": "2.13.1",
+        "@kubb/swagger-ts": "2.13.1",
+        "@kubb/swagger-zod": "2.13.1",
         "axios": "1.6.8"
     }
 }

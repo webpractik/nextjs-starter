@@ -1,13 +1,15 @@
 import { defineConfig } from '@kubb/core';
-import createSwagger from '@kubb/swagger';
-import createSwaggerClient from '@kubb/swagger-client';
-import createSwaggerTanstackQuery from '@kubb/swagger-tanstack-query';
-import createSwaggerTS from '@kubb/swagger-ts';
-import createSwaggerZod from '@kubb/swagger-zod';
+import { definePlugin as createSwagger } from '@kubb/swagger';
+import { definePlugin as createSwaggerClient } from '@kubb/swagger-client';
+import { definePlugin as createSwaggerTanstackQuery } from '@kubb/swagger-tanstack-query';
+import { definePlugin as createSwaggerTS } from '@kubb/swagger-ts';
+import { definePlugin as createSwaggerZod } from '@kubb/swagger-zod';
 
-export default defineConfig(async () => {
+const clientPath = './axiosClient';
+
+export default defineConfig(() => {
     return {
-        root: '..',
+        root: '.',
         input: {
             path: 'openapi.yaml',
         },
@@ -24,35 +26,26 @@ export default defineConfig(async () => {
                 validate: true,
             }),
             createSwaggerTS({
-                output: {
-                    path: 'models',
-                },
+                output: { path: 'models' },
                 enumType: 'enum',
                 dateType: 'date',
                 group: { type: 'tag' },
             }),
             createSwaggerClient({
-                output: {
-                    path: 'axios',
-                },
-                clientImportPath: './axios-client',
+                output: { path: 'axios' },
+                client: { importPath: clientPath },
                 group: { type: 'tag' },
             }),
             createSwaggerTanstackQuery({
-                output: {
-                    path: 'hooks',
-                },
+                output: { path: 'hooks' },
                 framework: 'react',
-                clientImportPath: './axios-client',
+                client: { importPath: clientPath },
                 dataReturnType: 'data',
                 group: { type: 'tag' },
                 parser: 'zod',
             }),
             createSwaggerZod({
-                output: {
-                    path: 'zod',
-                },
-                clientImportPath: './axios-client',
+                output: { path: 'zod' },
                 group: { type: 'tag' },
             }),
         ],
