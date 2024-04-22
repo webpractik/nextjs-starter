@@ -2,12 +2,12 @@ import '~/lib/styles/base.css';
 
 import React, { ReactNode } from 'react';
 
-import { ReactQueryProvider } from '@/_components/providers/react-query';
+import { ReactQueryProvider } from '@/_components/utilities/providers/react-query';
 import { inter } from '~/lib/fonts/inter';
 import { cn } from '~/lib/utils/cn';
 
 export const metadata = {
-    title: 'NEXT STARTER',
+    title: 'Next Starter',
     description: 'Default starter for projects',
 };
 

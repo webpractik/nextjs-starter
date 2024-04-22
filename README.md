@@ -30,7 +30,7 @@ cp .env_example .env
 -   Sentry
 -   Bundle analyzer
 -   React Query
--   Kubb API Codegen 
+-   Kubb API Codegen
 -   Figma tokens
 -   Env validation
 
@@ -43,35 +43,31 @@ cp .env_example .env
 
 ## 🎈 CI / CD:
 
--   `npm pkg delete scripts.prepare`
--   `npm ci --silent`
+-   `npm ci`
 -   `npm run build`
 -   `npm run prod`
 
 ## 📜 NPM Scripts:
 
-| Script                      | Description                          |
-|-----------------------------|--------------------------------------|
-| `bun install / npm ci`      | Установка модулей                    |
-| `bun run build`             | Запуск билда                         |
-| `bun run dev`               | Запуск dev сборки                    |
-| `bun run prod`              | Запуск прод сборки                   |
-| `bun run analyze`           | Анализ билда                         |
-| `bun run storybook`         | Запуск storybook                     |
-| `bun run build-storybook`   | Билд storybook                       |
-| `bun run test`              | Запуск тестов                        |
-| `bun run test-run`          | Запуск тестов                        |
-| `bun run coverage`          | Покрытие тестов                      |
-| `bun run type-coverage`     | Покрытие типизацией                  |
-| `bun run build-tokens`      | Билд фигма токенов                   |
-| `bun run api-codegen`       | Автогенерация API                    |
-| `bun run check:ts`          | Проверка TS                          |
-| `bun run check:lint`        | Проверка eslint                      |
-| `bun run check:format`      | Форматирование prettier              |
-| `bun run check:all`         | Проверка всего в параллельном режиме |
-| `bun run gen -- <название>` | Создание реакт компонента            |
-| `bun run cruiser`           | Построить граф зависимостей          |
-| `bun run clean`             | Очистка сборки                       |
+| Script                   | Description                          |
+| ------------------------ | ------------------------------------ |
+| `bun install / npm ci`   | Установка модулей                    |
+| `bun run build`          | Запуск билда                         |
+| `bun run dev`            | Запуск dev сборки                    |
+| `bun run prod`           | Запуск прод сборки                   |
+| `bun run analyze`        | Анализ билда                         |
+| `bun run test:watch`     | Запуск тестов (watch)                |
+| `bun run test:coverage`  | Покрытие тестов                      |
+| `bun run type-coverage`  | Покрытие типизацией                  |
+| `bun run check:ts`       | Проверка TS                          |
+| `bun run check:lint`     | Проверка eslint                      |
+| `bun run check:test`     | Запуск тестов                        |
+| `bun run check:format`   | Форматирование prettier              |
+| `bun run check:all`      | Проверка всего в параллельном режиме |
+| `bun run cruiser`        | Построить граф зависимостей          |
+| `bun run clean`          | Очистка сборки                       |
+| `bun run dr:build:watch` | Declarative routing (watch)          |
+| `bun run dr:build`       | Declarative routing                  |
 
 ## 📦 Packages:
 
@@ -83,29 +79,3 @@ cp .env_example .env
 -   [isomorphic-dompurify](https://www.npmjs.com/package/isomorphic-dompurify)
 -   [nanoid](https://www.npmjs.com/package/nanoid)
 -   [clsx](https://www.npmjs.com/package/clsx)
-
-
-## ENV переменные
-
-Глобальные переменные:
-
-```
-FRONT_HOST - хост в локальной сети kubernetes
-FRONT_PORT - порт
-BACK_INTERNAL_URL - полный путь для обращения к backend приложению (http://back:80)
-
-HTTP_AUTH_LOGIN=demo
-HTTP_AUTH_PASS=demo
-```
-
-Переменные, которые должны быть доступны на момент сборки:
-
-```
-NEXT_PUBLIC_MOCKS_ENABLED=false - режим моков
-NEXT_PUBLIC_APP_ENV - LOCAL | WORK | RC | PROD
-NEXT_PUBLIC_FRONT_URL - публичный урл front приложения
-NEXT_PUBLIC_BACK_URL - публичный урл back приложения (опционален)
-NEXT_PUBLIC_SENTRY_DSN - DSN для доступа к Sentry
-NEXT_PUBLIC_FRONT_PROXY - точка входа в BFF слой для проксирования запросов
-```
-

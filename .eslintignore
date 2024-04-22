@@ -5,3 +5,4 @@ sentry.server.config.js
 sentry.edge.config.js
 lint-staged.config.js
 packages/api/lib/**/*.ts
+lib/routes

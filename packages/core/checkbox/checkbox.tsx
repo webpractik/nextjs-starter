@@ -22,7 +22,7 @@ export const Checkbox = forwardRef<
         <CheckboxPrimitive.Indicator
             className={cn('flex items-center justify-center text-current')}
         >
-            <Check className="size-4" />
+            <Check className="size-4" data-testid="check-icon" />
         </CheckboxPrimitive.Indicator>
     </CheckboxPrimitive.Root>
 ));

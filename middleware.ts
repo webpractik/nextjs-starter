@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { env as clientEnv } from '~/env/client';
-import { env as serverEnv } from '~/env/server';
+import { env as clientEnvironment } from '~/env/client';
+import { env as serverEnvironment } from '~/env/server';
 
 export function middleware(request: NextRequest) {
     const requestHeaders = new Headers(request.headers);
@@ -13,10 +13,10 @@ export function middleware(request: NextRequest) {
 
         const cspHeader = `
             default-src 'self';
-            script-src 'self' 'unsafe-inline' ${clientEnv.NEXT_PUBLIC_FRONT_URL};
-            style-src 'self' 'unsafe-inline' ${clientEnv.NEXT_PUBLIC_FRONT_URL};
+            script-src 'self' 'unsafe-inline' ${clientEnvironment.NEXT_PUBLIC_FRONT_URL};
+            style-src 'self' 'unsafe-inline' ${clientEnvironment.NEXT_PUBLIC_FRONT_URL};
             img-src 'self' blob: data:;
-            child-src ${clientEnv.NEXT_PUBLIC_FRONT_URL};
+            child-src ${clientEnvironment.NEXT_PUBLIC_FRONT_URL};
             font-src 'self';
             object-src 'none';
             base-uri 'self';
@@ -33,11 +33,11 @@ export function middleware(request: NextRequest) {
 
     if (
         request.url.startsWith(
-            `${clientEnv.NEXT_PUBLIC_FRONT_URL}${clientEnv.NEXT_PUBLIC_BFF_PATH}`
+            `${clientEnvironment.NEXT_PUBLIC_FRONT_URL}${clientEnvironment.NEXT_PUBLIC_BFF_PATH}`
         )
     ) {
         return NextResponse.rewrite(
-            `${serverEnv.BACK_INTERNAL_URL}${url.pathname.replace(clientEnv.NEXT_PUBLIC_BFF_PATH, '')}${
+            `${serverEnvironment.BACK_INTERNAL_URL}${url.pathname.replace(clientEnvironment.NEXT_PUBLIC_BFF_PATH, '')}${
                 url.search
             }`
         );

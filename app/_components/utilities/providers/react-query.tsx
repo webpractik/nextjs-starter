@@ -6,7 +6,7 @@ import { ReactQueryStreamedHydration } from '@tanstack/react-query-next-experime
 import React, { ReactNode, useState } from 'react';
 
 // 30 sec
-export const DEFAULT_STALE_TIME = 30 * 1000;
+export const DEFAULT_STALE_TIME = 30_000;
 
 type ReactQueryProviderProps = Readonly<{
     children: ReactNode;
@@ -14,7 +14,8 @@ type ReactQueryProviderProps = Readonly<{
 }>;
 
 export function ReactQueryProvider({ children, showDevtools = true }: ReactQueryProviderProps) {
-    const [queryClient] = useState(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [queryClient, setQueryClient] = useState(
         () =>
             new QueryClient({
                 defaultOptions: {

@@ -1,5 +1,6 @@
 {
-  "mode": "nextjs",
-  "src": "./app",
-  "routes": "./lib/routes"
+    "mode": "nextjs",
+    "src": "./app",
+    "routes": "./lib/routes",
+    "importPathPrefix": "@"
 }
