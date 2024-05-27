@@ -1,5 +1,3 @@
 {
-    "extends": "@repo/ts-config/base.json",
-    "include": ["**/*.ts", "**/*.tsx"],
-    "exclude": ["node_modules"]
+    "extends": "@repo/ts-config/base.json"
 }

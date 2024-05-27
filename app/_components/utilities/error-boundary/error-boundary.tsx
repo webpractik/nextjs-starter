@@ -1,6 +1,6 @@
 import { Button } from '@repo/core/button';
 import { Typography } from '@repo/core/typography';
-import { ErrorBoundary as SentryBoundary, ErrorBoundaryProps } from '@sentry/nextjs';
+import { ErrorBoundary as SentryBoundary, type ErrorBoundaryProps } from '@sentry/nextjs';
 import React from 'react';
 
 import { cn } from '~/lib/utils/cn';

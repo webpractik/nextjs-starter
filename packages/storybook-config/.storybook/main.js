@@ -2,7 +2,7 @@ const path = require('path');
 /** @type { import('@storybook/react') } */
 
 module.exports = {
-    stories: ['../components/**/*.stories.@(ts|tsx)', '../app/**/*.stories.@(ts|tsx)'],
+    stories: ['../../../components/**/*.stories.@(ts|tsx)', '../../../app/**/*.stories.@(ts|tsx)'],
     addons: [
         '@storybook/addon-links',
         '@storybook/addon-essentials',
@@ -27,10 +27,10 @@ module.exports = {
     framework: {
         name: '@storybook/nextjs',
         options: {
-            nextConfigPath: path.resolve(__dirname, '../next.config.mjs'),
+            nextConfigPath: path.resolve(__dirname, '../../../next.config.mjs'),
         },
     },
-    staticDirs: ['../public'],
+    staticDirs: ['../../../public'],
     features: {
         storyStoreV7: true,
     },
