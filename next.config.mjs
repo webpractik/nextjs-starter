@@ -20,9 +20,13 @@ const nextConfig = {
 
     cleanDistDir: true,
 
-    webpack: config => {
+    webpack: (config, { isServer }) => {
         // fix for dom-sanitizer on server-side
         config.externals = [...config.externals, 'jsdom'];
+
+        if (isServer) {
+            config.ignoreWarnings = [{ module: /opentelemetry/ }];
+        }
 
         return config;
     },
@@ -35,6 +39,7 @@ const nextConfig = {
         parallelServerCompiles: true,
         serverSourceMaps: true,
         optimizePackageImports: ['react-use', 'lodash-es', 'lucide-react'],
+        instrumentationHook: true,
     },
 
     generateBuildId: () => `${nanoid()}-${new Date().toISOString()}`,
