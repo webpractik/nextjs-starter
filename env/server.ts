@@ -12,6 +12,7 @@ export const environment = createEnv({
         CACHE_PUBLIC_MAX_AGE: z.string().transform(Number).pipe(z.number()).optional(),
         SENTRY_DSN: z.string().url(),
         SENTRY_AUTH_TOKEN: z.string(),
+        CI: z.enum(['true', 'false']).transform(value => value === 'true'),
     },
     runtimeEnv: {
         APP_ENV: process.env.APP_ENV,
@@ -23,6 +24,7 @@ export const environment = createEnv({
         CACHE_PUBLIC_MAX_AGE: process.env.CACHE_PUBLIC_MAX_AGE,
         SENTRY_DSN: process.env.SENTRY_DSN,
         SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,
+        CI: process.env.CI,
     },
     emptyStringAsUndefined: true,
 });
