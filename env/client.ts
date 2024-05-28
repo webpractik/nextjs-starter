@@ -1,7 +1,7 @@
 import { createEnv } from '@t3-oss/env-nextjs';
 import { z } from 'zod';
 
-export const env = createEnv({
+export const environment = createEnv({
     client: {
         NEXT_PUBLIC_APP_ENV: z.enum(['LOCAL', 'WORK', 'RC', 'PROD']),
         NEXT_PUBLIC_FRONT_URL: z.string().url(),

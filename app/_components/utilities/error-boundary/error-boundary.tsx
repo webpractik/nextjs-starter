@@ -8,7 +8,7 @@ import { cn } from '~/lib/utils/cn';
 type ErrorFallbackProps = {
     title?: string;
     description?: string;
-    error: { message: string };
+    error: unknown;
     resetError: () => void;
 };
 
@@ -22,9 +22,9 @@ export function ErrorFallback({ title, description, error, resetError }: ErrorFa
     return (
         <div
             data-testid="error-boundary"
-            className={cn(
-                'max-w-screen-sm max-h-80 p-4 flex flex-col gap-4 rounded-2xl border border-solid  '
-            )}
+            className={
+                'flex max-h-80 max-w-screen-sm flex-col gap-4 rounded-2xl border border-solid p-4'
+            }
         >
             <Typography variant="h3" className={cn('')}>
                 {title ?? DEFAULT_ERROR_TITLE}
@@ -34,7 +34,7 @@ export function ErrorFallback({ title, description, error, resetError }: ErrorFa
                 {description ?? DEFAULT_ERROR_TEXT}
             </Typography>
 
-            <pre className={cn('')}>{error.message}</pre>
+            <pre className={cn('')}>{error instanceof Error ? error.message : String(error)}</pre>
 
             <Button type="button" variant="outline" onClick={resetError}>
                 Попробовать еще

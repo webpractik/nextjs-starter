@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { env as clientEnvironment } from '~/env/client';
-import { env as serverEnvironment } from '~/env/server';
+import { environment as clientEnvironment } from '~/env/client';
+import { environment as serverEnvironment } from '~/env/server';
 
 export function middleware(request: NextRequest) {
     const requestHeaders = new Headers(request.headers);

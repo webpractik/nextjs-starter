@@ -57,10 +57,6 @@ const nextConfig = {
             fullUrl: true,
         },
     },
-
-    sentry: {
-        hideSourceMaps: true,
-    },
 };
 
 const isProduction =
@@ -72,8 +68,16 @@ const bundleAnalyzer = withBundleAnalyzer({
 
 const withSentry = () => {
     if (process.env.NEXT_PUBLIC_SENTRY_DSN?.length > 0) {
-        return withSentryConfig(nextConfig, { silent: true });
+        return withSentryConfig(nextConfig, {
+            org: 'webpractik',
+            project: '',
+            authToken: process.env.SENTRY_AUTH_TOKEN,
+            url: 'https://sentry.w6p.ru',
+            silent: true,
+            hideSourceMaps: true,
+        });
     }
+
     return nextConfig;
 };
 

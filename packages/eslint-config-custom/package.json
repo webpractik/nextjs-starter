@@ -5,10 +5,10 @@
         "access": "public"
     },
     "dependencies": {
-        "@typescript-eslint/eslint-plugin": "7.7.1",
-        "@typescript-eslint/parser": "7.7.1",
-        "eslint-config-next": "14.2.2",
+        "@typescript-eslint/eslint-plugin": "7.11.0",
+        "@typescript-eslint/parser": "7.11.0",
+        "eslint-config-next": "14.2.3",
         "eslint-config-webpractik": "github:webpractik/eslint-config-webpractik",
-        "eslint-plugin-tailwindcss": "3.15.1"
+        "eslint-plugin-tailwindcss": "3.17.0"
     }
 }

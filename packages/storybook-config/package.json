@@ -11,16 +11,16 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@storybook/addon-designs": "8.0.0",
-        "@storybook/addon-essentials": "8.0.6",
-        "@storybook/addon-interactions": "8.0.6",
-        "@storybook/addon-links": "8.0.6",
-        "@storybook/addon-storysource": "8.0.6",
-        "@storybook/nextjs": "8.0.6",
-        "@storybook/react": "8.0.6",
+        "@storybook/addon-designs": "8.0.2",
+        "@storybook/addon-essentials": "8.1.4",
+        "@storybook/addon-interactions": "8.1.4",
+        "@storybook/addon-links": "8.1.4",
+        "@storybook/addon-storysource": "8.1.4",
+        "@storybook/nextjs": "8.1.4",
+        "@storybook/react": "8.1.4",
         "react-docgen-typescript": "2.2.2",
-        "storybook": "8.0.6",
-        "storybook-addon-pseudo-states": "3.0.1",
+        "storybook": "8.1.4",
+        "storybook-addon-pseudo-states": "3.1.1",
         "storybook-dark-mode": "4.0.1"
     }
 }
