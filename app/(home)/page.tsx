@@ -26,14 +26,19 @@ import {
     TooltipTrigger,
 } from '@repo/core/tooltip/tooltip';
 import { Typography } from '@repo/core/typography';
+import { flag } from '@unleash/nextjs';
 import { CircleHelp } from 'lucide-react';
 
 const gridItemClassName =
     'flex place-content-center items-center col-span-1 border border-dashed border-slate-200 py-8 px-4 rounded-2xl';
 
-export default function HomePage() {
+export default async function HomePage() {
+    const isEnabled = await flag('epgu');
     return (
         <div className="flex flex-col items-center justify-center gap-6">
+            <div>
+                Feature epgu toggle is: <strong>{isEnabled ? 'ENABLED' : 'DISABLED'}</strong>
+            </div>
             <div className={'grid grid-cols-3 gap-8'}>
                 <div className={gridItemClassName}>
                     <div className="flex flex-col gap-5">
