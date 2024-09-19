@@ -7,7 +7,7 @@ import { ErrorFallback } from './error-boundary';
 
 describe('<ErrorBoundary />', () => {
     const errorMessage = 'Example error message';
-    const error = { message: 'Example error message' };
+    const error = new Error(errorMessage);
 
     it('it renders correctly', () => {
         render(<ErrorFallback error={error} resetError={noop} />);

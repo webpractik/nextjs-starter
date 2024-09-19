@@ -7,8 +7,8 @@
     "dependencies": {
         "@typescript-eslint/eslint-plugin": "7.11.0",
         "@typescript-eslint/parser": "7.11.0",
-        "eslint-config-next": "14.2.3",
+        "eslint-config-next": "14.2.12",
         "eslint-config-webpractik": "github:webpractik/eslint-config-webpractik",
-        "eslint-plugin-tailwindcss": "3.17.0"
+        "eslint-plugin-tailwindcss": "3.17.4"
     }
 }
