@@ -20,6 +20,6 @@
         "@kubb/swagger-tanstack-query": "2.19.1",
         "@kubb/swagger-ts": "2.19.1",
         "@kubb/swagger-zod": "2.19.1",
-        "axios": "1.7.2"
+        "axios": "1.7.4"
     }
 }
