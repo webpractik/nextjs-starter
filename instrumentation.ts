@@ -8,7 +8,7 @@ export function register() {
             dsn: environment.SENTRY_DSN,
             tracesSampleRate: 1,
             autoSessionTracking: false,
-            environment: `${environment.APP_ENV}-server`,
+            environment: `${environment.SENTRY_PROJECT}-server`,
         });
     }
 
@@ -17,7 +17,7 @@ export function register() {
             dsn: environment.SENTRY_DSN,
             tracesSampleRate: 0,
             autoSessionTracking: false,
-            environment: `${environment.APP_ENV}-edge`,
+            environment: `${environment.SENTRY_PROJECT}-edge`,
         });
     }
 }

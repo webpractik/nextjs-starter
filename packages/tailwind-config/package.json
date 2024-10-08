@@ -7,7 +7,7 @@
     },
     "license": "ISC",
     "devDependencies": {
-        "tailwindcss": "3.4.12",
+        "tailwindcss": "3.4.13",
         "tailwindcss-animate": "1.0.7"
     }
 }

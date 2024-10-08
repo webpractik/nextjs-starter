@@ -34,9 +34,6 @@ const nextConfig = {
     swcMinify: true,
 
     experimental: {
-        taint: true,
-        webpackBuildWorker: true,
-        parallelServerCompiles: true,
         serverSourceMaps: true,
         optimizePackageImports: ['react-use', 'lodash-es', 'lucide-react'],
         instrumentationHook: true,
@@ -74,10 +71,10 @@ const bundleAnalyzer = withBundleAnalyzer({
 const withSentry = () => {
     if (process.env.NEXT_PUBLIC_SENTRY_DSN?.length > 0) {
         return withSentryConfig(nextConfig, {
-            org: 'webpractik',
-            project: '',
+            org: process.env.SENTRY_ORG,
+            project: process.env.SENTRY_PROJECT,
             authToken: process.env.SENTRY_AUTH_TOKEN,
-            url: 'https://sentry.w6p.ru',
+            url: process.env.SENTRY_URL,
             silent: true,
             hideSourceMaps: true,
         });
