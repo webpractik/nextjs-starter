@@ -1,9 +1,10 @@
 import { headers } from './headers.mjs';
 import { withSentryConfig } from '@sentry/nextjs';
-import withBundleAnalyzer from '@next/bundle-analyzer';
 import { nanoid } from 'nanoid';
 import { fileURLToPath } from 'node:url';
 import createJiti from 'jiti';
+import MillionCompiler from '@million/lint';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 
 const jiti = createJiti(fileURLToPath(import.meta.url));
 
@@ -20,12 +21,21 @@ const nextConfig = {
 
     cleanDistDir: true,
 
-    webpack: (config, { isServer }) => {
+    webpack: (config, { isServer, nextRuntime }) => {
         // fix for dom-sanitizer on server-side
         config.externals = [...config.externals, 'jsdom'];
 
         if (isServer) {
             config.ignoreWarnings = [{ module: /opentelemetry/ }];
+        }
+
+        if (process.env.ANALYZE === 'true' && !nextRuntime) {
+            config.plugins.push(
+                new BundleAnalyzerPlugin({
+                    generateStatsFile: true,
+                    analyzerMode: 'disabled',
+                })
+            );
         }
 
         return config;
@@ -64,10 +74,6 @@ const nextConfig = {
 const isProduction =
     process.env.NODE_ENV === 'production' && process.env.NEXT_PUBLIC_APP_ENV === 'PROD';
 
-const bundleAnalyzer = withBundleAnalyzer({
-    enabled: process.env.ANALYZE === 'true',
-});
-
 const withSentry = () => {
     if (process.env.NEXT_PUBLIC_SENTRY_DSN?.length > 0) {
         return withSentryConfig(nextConfig, {
@@ -83,4 +89,6 @@ const withSentry = () => {
     return nextConfig;
 };
 
-export default isProduction ? withSentry() : bundleAnalyzer(nextConfig);
+export default isProduction
+    ? withSentry()
+    : MillionCompiler.next({ enabled: process.env.MILLION === 'true', rsc: true })(nextConfig);

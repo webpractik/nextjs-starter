@@ -16,6 +16,7 @@
         "test:watch": "vitest --config ./tests/vitest.config.mts",
         "test:coverage": "vitest --config ./tests/vitest.config.mts run --coverage",
         "analyze": "ANALYZE=true npm run build",
+        "million": "MILLION=true npm run dev",
         "clean": "rimraf .next",
         "dr:build": "npx declarative-routing build",
         "dr:build:watch": "npx declarative-routing build --watch"
@@ -52,7 +53,7 @@
         "zustand": "4.5.5"
     },
     "devDependencies": {
-        "@next/bundle-analyzer": "14.2.14",
+        "@million/lint": "1.0.9",
         "@playwright/test": "1.48.0",
         "@repo/tailwind-config": "*",
         "@repo/ts-config": "*",
@@ -88,7 +89,8 @@
         "typescript": "5.6.2",
         "vite-tsconfig-paths": "5.0.1",
         "vitest": "2.1.2",
-        "vitest-fail-on-console": "0.7.1"
+        "vitest-fail-on-console": "0.7.1",
+        "webpack-bundle-analyzer": "4.10.2"
     },
     "engines": {
         "node": "^20",
