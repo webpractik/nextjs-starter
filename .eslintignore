@@ -1,8 +1,10 @@
 node_modules
-next.config.mjs
+next.config.ts
 sentry.client.config.js
-sentry.server.config.js
-sentry.edge.config.js
 lint-staged.config.js
-packages/api/lib/**/*.ts
 lib/routes
+packages/api/lib/**/*.ts
+packages/eslint-config-custom/*
+packages/tailwind-config/*
+
+

@@ -1,6 +1,11 @@
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
-    extends: ['webpractik', 'plugin:tailwindcss/recommended', 'plugin:@next/next/recommended'],
+    extends: [
+        'webpractik',
+        'plugin:tailwindcss/recommended',
+        'plugin:@next/next/recommended',
+        'plugin:storybook/recommended',
+    ],
     rules: {
         'max-len': 'off',
         'tailwindcss/no-custom-classname': 'off',

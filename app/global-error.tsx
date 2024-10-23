@@ -2,7 +2,7 @@
 import * as Sentry from '@sentry/nextjs';
 import { useEffect } from 'react';
 
-import { ErrorFallback } from '@/_components/utilities/error-boundary';
+import { ErrorFallback } from '@/_shared/utilities/error-boundary';
 
 type GlobalErrorProps = {
     error: Error & { digest?: string };

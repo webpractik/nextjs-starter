@@ -5,9 +5,13 @@
     "exports": {
         ".": "./tailwind.config.ts"
     },
+    "scripts": {
+        "view-config": "tailwind-config-viewer -c ./tailwind.config.ts -o -p 6969"
+    },
     "license": "ISC",
     "devDependencies": {
-        "tailwindcss": "3.4.13",
+        "tailwind-config-viewer": "2.0.4",
+        "tailwindcss": "3.4.14",
         "tailwindcss-animate": "1.0.7"
     }
 }

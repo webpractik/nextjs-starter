@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 export const environment = createEnv({
     server: {
+        APP_NAME: z.string(),
         APP_ENV: z.enum(['LOCAL', 'WORK', 'RC', 'PROD']),
         FRONT_HOST: z.string(),
         FRONT_PORT: z.string().transform(Number).pipe(z.number()),
@@ -12,12 +13,12 @@ export const environment = createEnv({
         CACHE_PUBLIC_MAX_AGE: z.string().transform(Number).pipe(z.number()).optional(),
         SENTRY_DSN: z.string().url(),
         SENTRY_AUTH_TOKEN: z.string(),
-        SENTRY_PROJECT: z.string(),
         SENTRY_URL: z.string().url(),
         SENTRY_ORG: z.string(),
         CI: z.enum(['true', 'false']).transform(value => value === 'true'),
     },
     runtimeEnv: {
+        APP_NAME: process.env.APP_NAME,
         APP_ENV: process.env.APP_ENV,
         FRONT_HOST: process.env.FRONT_HOST,
         FRONT_PORT: process.env.FRONT_PORT,
@@ -27,7 +28,6 @@ export const environment = createEnv({
         CACHE_PUBLIC_MAX_AGE: process.env.CACHE_PUBLIC_MAX_AGE,
         SENTRY_DSN: process.env.SENTRY_DSN,
         SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,
-        SENTRY_PROJECT: process.env.SENTRY_PROJECT,
         SENTRY_URL: process.env.SENTRY_URL,
         SENTRY_ORG: process.env.SENTRY_ORG,
         CI: process.env.CI,

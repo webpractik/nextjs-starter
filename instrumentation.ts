@@ -1,14 +1,18 @@
 import * as Sentry from '@sentry/nextjs';
+import { registerOTel } from '@vercel/otel';
 
 import { environment } from './env/server';
 
+export const onRequestError = Sentry.captureRequestError;
+
 export function register() {
+    registerOTel({ serviceName: environment.APP_NAME });
+
     if (process.env.NEXT_RUNTIME === 'nodejs') {
         Sentry.init({
             dsn: environment.SENTRY_DSN,
             tracesSampleRate: 1,
-            autoSessionTracking: false,
-            environment: `${environment.SENTRY_PROJECT}-server`,
+            environment: `${environment.APP_ENV}-server`,
         });
     }
 
@@ -16,8 +20,8 @@ export function register() {
         Sentry.init({
             dsn: environment.SENTRY_DSN,
             tracesSampleRate: 0,
-            autoSessionTracking: false,
-            environment: `${environment.SENTRY_PROJECT}-edge`,
+            sampleRate: 0,
+            environment: `${environment.APP_ENV}-edge`,
         });
     }
 }

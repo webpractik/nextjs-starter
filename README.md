@@ -1,6 +1,6 @@
 # NextJS Starter
 
-Шаблон для быстрого создания проектов на Next.js 14+
+Шаблон для быстрого создания проектов на Next.js 15+
 
 ## 🚀 Как развернуть проект
 
@@ -11,14 +11,14 @@ bunx create-next-app -e https://github.com/webpractik/nextjs-starter --use-npm
 ### Копирование стандартных env переменных (зависят от проекта)
 
 ```
-cp .env_example .env
+cp .env.example .env
 ```
 
 ## 🪄 Features:
 
 -   Typescript
 -   Tailwind
--   Zustand
+-   Million/lint
 -   ESLint
 -   Prettier
 -   Husky
@@ -64,7 +64,6 @@ cp .env_example .env
 | `bun run check:test`     | Запуск тестов                        |
 | `bun run check:format`   | Форматирование prettier              |
 | `bun run check:all`      | Проверка всего в параллельном режиме |
-| `bun run cruiser`        | Построить граф зависимостей          |
 | `bun run clean`          | Очистка сборки                       |
 | `bun run dr:build:watch` | Declarative routing (watch)          |
 | `bun run dr:build`       | Declarative routing                  |
@@ -79,3 +78,4 @@ cp .env_example .env
 -   [isomorphic-dompurify](https://www.npmjs.com/package/isomorphic-dompurify)
 -   [nanoid](https://www.npmjs.com/package/nanoid)
 -   [clsx](https://www.npmjs.com/package/clsx)
+-   [type-fest](https://www.npmjs.com/package/type-fest)

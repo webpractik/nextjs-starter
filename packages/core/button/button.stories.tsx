@@ -60,6 +60,6 @@ export const IconButton = {
 export const AsChild = {
     args: {
         asChild: true,
-        children: <a>Link Button</a>,
+        children: <a href="/">Link Button</a>,
     },
 };

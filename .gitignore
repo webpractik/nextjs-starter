@@ -17,6 +17,7 @@ openapi.yaml
 docs.html
 dependency-graph.svg
 packages/*/node_modules
+storybook.log
 
 # dependencies
 /node_modules
@@ -55,3 +56,5 @@ next-env.d.ts
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+*storybook.log
