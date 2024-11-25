@@ -1,12 +1,12 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { type AxiosError, type AxiosRequestConfig, type AxiosResponse } from 'axios';
 
 import { environment } from '../../env/client';
 
-export type RequestConfig<TVariables = unknown> = {
-    method: 'get' | 'put' | 'patch' | 'post' | 'delete';
-    url: string;
+export type RequestConfig<TData = unknown> = {
+    url?: string;
+    method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE';
     params?: unknown;
-    data?: TVariables;
+    data?: TData;
     responseType?: 'arraybuffer' | 'blob' | 'document' | 'json' | 'text' | 'stream';
     signal?: AbortSignal;
     headers?: AxiosRequestConfig['headers'];
@@ -28,8 +28,7 @@ const client = async <TData, TError = unknown, TVariables = unknown>(
     config: RequestConfig<TVariables>
 ): Promise<ResponseConfig<TData>> => {
     return axiosInstance
-        .request<TData>({ ...config })
-        .then(response => response)
+        .request<TVariables, ResponseConfig<TData>>({ ...config })
         .catch((error: AxiosError<TError>) => {
             throw error;
         });
