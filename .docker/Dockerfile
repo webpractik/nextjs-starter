@@ -1,4 +1,4 @@
-FROM node:20.18 AS deps-front
+FROM node:22.11 AS deps-front
 
 ENV LOCALTIME Europe/Moscow
 RUN ln -snf /usr/share/zoneinfo/$LOCALTIME /etc/localtime && echo $LOCALTIME > /etc/timezone
@@ -16,7 +16,7 @@ COPY --chown=node:node app/. /app/
 
 RUN npm ci
 
-FROM node:20.18 AS build-front
+FROM node:22.11 AS build-front
 
 ENV LOCALTIME Europe/Moscow
 RUN ln -snf /usr/share/zoneinfo/$LOCALTIME /etc/localtime && echo $LOCALTIME > /etc/timezone
