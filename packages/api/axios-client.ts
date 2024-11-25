@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
-import { environment } from '~/env/client';
+import { environment } from '../../env/client';
 
 export type RequestConfig<TVariables = unknown> = {
     method: 'get' | 'put' | 'patch' | 'post' | 'delete';
@@ -24,7 +24,7 @@ export const axiosInstance = axios.create({
     baseURL: environment.NEXT_PUBLIC_BFF_PATH,
 });
 
-export const axiosClient = async <TData, TError = unknown, TVariables = unknown>(
+const client = async <TData, TError = unknown, TVariables = unknown>(
     config: RequestConfig<TVariables>
 ): Promise<ResponseConfig<TData>> => {
     return axiosInstance
@@ -35,4 +35,4 @@ export const axiosClient = async <TData, TError = unknown, TVariables = unknown>
         });
 };
 
-export default axiosClient;
+export default client;

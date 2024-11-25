@@ -21,6 +21,7 @@
         "noUncheckedIndexedAccess": true,
         "removeComments": true,
         "jsx": "preserve",
-        "incremental": true
+        "incremental": true,
+        "allowImportingTsExtensions": true
     }
 }
