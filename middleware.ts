@@ -3,33 +3,37 @@ import { NextRequest, NextResponse } from 'next/server';
 import { environment as clientEnvironment } from '~/env/client';
 import { environment as serverEnvironment } from '~/env/server';
 
+function setCSPHeaders(headers: Headers) {
+    const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
+
+    const cspHeader = `
+            default-src 'self';
+            script-src 'self' 'unsafe-eval' 'unsafe-inline';
+            style-src 'self' 'unsafe-inline';
+            img-src 'self' blob: data:;
+            font-src 'self';
+            object-src 'none';
+            base-uri 'self';
+            form-action 'self';
+            frame-ancestors 'none';
+            upgrade-insecure-requests;
+        `;
+
+    headers.set('x-nonce', nonce);
+
+    headers.set('Content-Security-Policy', cspHeader.replaceAll(/\s{2,}/g, ' ').trim());
+}
+
 export function middleware(request: NextRequest) {
     const requestHeaders = new Headers(request.headers);
 
     const url = request.nextUrl.clone();
 
     if (process.env.NODE_ENV === 'production') {
-        const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
-
-        const cspHeader = `
-            default-src 'self';
-            script-src 'self' 'unsafe-inline' ${clientEnvironment.NEXT_PUBLIC_FRONT_URL};
-            style-src 'self' 'unsafe-inline' ${clientEnvironment.NEXT_PUBLIC_FRONT_URL};
-            img-src 'self' blob: data:;
-            child-src ${clientEnvironment.NEXT_PUBLIC_FRONT_URL};
-            font-src 'self';
-            object-src 'none';
-            base-uri 'self';
-            form-action 'self';
-            frame-ancestors 'none';
-            block-all-mixed-content;
-            upgrade-insecure-requests;
-        `;
-
-        requestHeaders.set('x-nonce', nonce);
-
-        requestHeaders.set('Content-Security-Policy', cspHeader.replaceAll(/\s{2,}/g, ' ').trim());
+        setCSPHeaders(requestHeaders);
     }
+
+    requestHeaders.set('x-url', request.url);
 
     const notFeatureApi = !request.url.includes('feature-flag');
     const isBffPath = request.url.startsWith(
@@ -55,7 +59,7 @@ export function middleware(request: NextRequest) {
 export const config = {
     matcher: [
         {
-            source: '/((?!api/health|_next/static|_next/image|favicon.ico).*)',
+            source: '/((?!api|_next/static|_next/image|favicon.ico).*)',
             missing: [
                 { type: 'header', key: 'next-router-prefetch' },
                 { type: 'header', key: 'purpose', value: 'prefetch' },

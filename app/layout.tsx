@@ -2,9 +2,12 @@ import '~/lib/styles/base.css';
 
 import React, { ReactNode } from 'react';
 
-import { ReactQueryProvider } from '@/_components/utilities/providers/react-query';
-import { inter } from '~/lib/fonts/inter';
+import { ReactQueryProvider } from '@/_shared/utilities/providers/react-query';
+import { GeistSans } from '~/lib/fonts/geist';
 import { cn } from '~/lib/utils/cn';
+
+export const dynamic = 'error';
+export const fetchCache = 'default-cache';
 
 export const metadata = {
     title: 'Next Starter',
@@ -17,7 +20,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
     return (
         <html suppressHydrationWarning lang="ru">
             <body
-                className={cn('min-h-screen bg-background font-sans antialiased', inter.variable)}
+                className={cn(
+                    'min-h-screen bg-background font-sans antialiased',
+                    GeistSans.variable
+                )}
             >
                 <main>
                     <ReactQueryProvider>{children}</ReactQueryProvider>

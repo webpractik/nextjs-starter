@@ -1,11 +1,11 @@
 import { defineConfig } from '@kubb/core';
-import { definePlugin as createSwagger } from '@kubb/swagger';
-import { definePlugin as createSwaggerClient } from '@kubb/swagger-client';
-import { definePlugin as createSwaggerTanstackQuery } from '@kubb/swagger-tanstack-query';
-import { definePlugin as createSwaggerTS } from '@kubb/swagger-ts';
-import { definePlugin as createSwaggerZod } from '@kubb/swagger-zod';
+import { pluginClient } from '@kubb/plugin-client';
+import { pluginOas } from '@kubb/plugin-oas';
+import { pluginReactQuery } from '@kubb/plugin-react-query';
+import { pluginTs } from '@kubb/plugin-ts';
+import { pluginZod } from '@kubb/plugin-zod';
 
-const clientPath = './axiosClient';
+const importPath = '../../../axios-client.ts';
 
 export default defineConfig(() => {
     return {
@@ -21,32 +21,39 @@ export default defineConfig(() => {
             done: ['prettier ./lib --write'],
         },
         plugins: [
-            createSwagger({
-                output: false,
-                validate: true,
-            }),
-            createSwaggerTS({
+            pluginOas({ output: { path: 'swagger' }, validate: true }),
+
+            pluginTs({
                 output: { path: 'models' },
                 enumType: 'enum',
                 dateType: 'date',
+                unknownType: 'unknown',
+                optionalType: 'questionToken',
                 group: { type: 'tag' },
             }),
-            createSwaggerClient({
+
+            pluginClient({
                 output: { path: 'axios' },
-                client: { importPath: clientPath },
+                importPath,
                 group: { type: 'tag' },
             }),
-            createSwaggerTanstackQuery({
-                output: { path: 'hooks' },
-                framework: 'react',
-                client: { importPath: clientPath },
-                dataReturnType: 'data',
-                group: { type: 'tag' },
+
+            pluginReactQuery({
+                client: { importPath, dataReturnType: 'data' },
+                paramsType: 'object',
+                output: {
+                    path: './hooks',
+                },
                 parser: 'zod',
+                group: { type: 'tag' },
             }),
-            createSwaggerZod({
+
+            pluginZod({
                 output: { path: 'zod' },
                 group: { type: 'tag' },
+                dateType: 'date',
+                unknownType: 'unknown',
+                inferred: true,
             }),
         ],
     };

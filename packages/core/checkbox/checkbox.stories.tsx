@@ -1,3 +1,4 @@
+import { CheckboxProps } from '@radix-ui/react-checkbox';
 import { Meta, StoryObj } from '@storybook/react';
 
 import { Checkbox } from './checkbox';
@@ -12,8 +13,8 @@ export default meta;
 type Story = StoryObj<typeof Checkbox>;
 
 export const Primary: Story = {
-    render: arguments_ => {
-        return <Checkbox {...arguments_} />;
+    render: (props: CheckboxProps) => {
+        return <Checkbox {...props} />;
     },
 };
 

@@ -33,6 +33,6 @@ describe('<Switch />', () => {
         render(<Switch ref={ref} />);
         expect(ref).toHaveBeenCalled();
         // eslint-disable-next-line xss/no-mixed-html,@typescript-eslint/no-unsafe-member-access
-        expect(ref.mock.calls[0][0]).toBeInstanceOf(HTMLElement);
+        expect(ref.mock.calls[0]?.[0]).toBeInstanceOf(HTMLElement);
     });
 });

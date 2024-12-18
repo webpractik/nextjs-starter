@@ -12,14 +12,13 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@kubb/cli": "2.19.1",
-        "@kubb/core": "2.19.1",
-        "@kubb/swagger": "2.19.1",
-        "@kubb/swagger-client": "2.19.1",
-        "@kubb/swagger-faker": "2.19.1",
-        "@kubb/swagger-tanstack-query": "2.19.1",
-        "@kubb/swagger-ts": "2.19.1",
-        "@kubb/swagger-zod": "2.19.1",
-        "axios": "1.7.2"
+        "@kubb/cli": "3.0.12",
+        "@kubb/core": "3.0.12",
+        "@kubb/plugin-client": "3.0.12",
+        "@kubb/plugin-oas": "3.0.12",
+        "@kubb/plugin-react-query": "3.0.12",
+        "@kubb/plugin-ts": "3.0.12",
+        "@kubb/plugin-zod": "3.0.12",
+        "axios": "1.7.7"
     }
 }

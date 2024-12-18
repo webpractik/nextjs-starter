@@ -1,3 +1,4 @@
+import { TooltipProps } from '@radix-ui/react-tooltip';
 import { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 
@@ -16,9 +17,9 @@ export const Primary: Story = {
     args: {
         delayDuration: 0,
     },
-    render: (...arguments_) => (
+    render: (props: TooltipProps) => (
         <TooltipProvider>
-            <Tooltip {...arguments_}>
+            <Tooltip {...props}>
                 <TooltipTrigger>Hover me</TooltipTrigger>
                 <TooltipContent>
                     <p>Tooltip content</p>

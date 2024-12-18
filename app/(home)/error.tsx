@@ -3,14 +3,14 @@
 import * as Sentry from '@sentry/nextjs';
 import { useEffect } from 'react';
 
-import { ErrorFallback } from '@/_components/utilities/error-boundary';
+import { ErrorFallback } from '@/_shared/utilities/error-boundary';
 
 type ErrorProps = {
     error: Error & { digest?: string };
     reset: () => void;
 };
 
-export default function Error({ error, reset }: ErrorProps) {
+export default function ErrorPage({ error, reset }: Readonly<ErrorProps>) {
     useEffect(() => {
         Sentry.captureException(error);
     }, [error]);
