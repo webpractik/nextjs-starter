@@ -35,11 +35,12 @@ export function middleware(request: NextRequest) {
 
     requestHeaders.set('x-url', request.url);
 
-    if (
-        request.url.startsWith(
-            `${clientEnvironment.NEXT_PUBLIC_FRONT_URL}${clientEnvironment.NEXT_PUBLIC_BFF_PATH}`
-        )
-    ) {
+    const notFeatureApi = !request.url.includes('feature-flag');
+    const isBffPath = request.url.startsWith(
+        `${clientEnvironment.NEXT_PUBLIC_FRONT_URL}${clientEnvironment.NEXT_PUBLIC_BFF_PATH}`
+    );
+    const needRewrite = isBffPath && notFeatureApi;
+    if (needRewrite) {
         return NextResponse.rewrite(
             `${serverEnvironment.BACK_INTERNAL_URL}${url.pathname.replace(clientEnvironment.NEXT_PUBLIC_BFF_PATH, '')}${
                 url.search

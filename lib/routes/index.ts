@@ -7,7 +7,9 @@ const defaultInfo = {
 };
 
 import * as HomeRoute from '@/(home)/page.info';
+import * as HomeFeatureRoute from '@/(home)/feature/page.info';
 import * as HomeUiDemoRoute from '@/(home)/ui-demo/page.info';
+import * as ApiFeatureFlagRoute from '@/api/feature-flag/route.info';
 import * as ApiHealthRoute from '@/api/health/route.info';
 import * as ApiMetricsRoute from '@/api/metrics/route.info';
 import * as ApiReadyRoute from '@/api/ready/route.info';
@@ -16,11 +18,23 @@ export const Home = makeRoute('/(home)', {
     ...defaultInfo,
     ...HomeRoute.Route,
 });
+export const HomeFeature = makeRoute('/(home)/feature', {
+    ...defaultInfo,
+    ...HomeFeatureRoute.Route,
+});
 export const HomeUiDemo = makeRoute('/(home)/ui-demo', {
     ...defaultInfo,
     ...HomeUiDemoRoute.Route,
 });
 
+export const getApiFeatureFlag = makeGetRoute(
+    '/api/feature-flag',
+    {
+        ...defaultInfo,
+        ...ApiFeatureFlagRoute.Route,
+    },
+    ApiFeatureFlagRoute.GET
+);
 export const getApiHealth = makeGetRoute(
     '/api/health',
     {

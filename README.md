@@ -33,6 +33,7 @@ cp .env.example .env
 -   Kubb API Codegen
 -   Figma tokens
 -   Env validation
+-   [Feature Flags](https://kb.w6p.ru/doc/gitlab-feature-flags-1cyQfgOpDN/edit)
 
 ## 🎯 Deploy
 
@@ -79,3 +80,4 @@ cp .env.example .env
 -   [nanoid](https://www.npmjs.com/package/nanoid)
 -   [clsx](https://www.npmjs.com/package/clsx)
 -   [type-fest](https://www.npmjs.com/package/type-fest)
+-   [unleash](https://docs.getunleash.io/reference/sdks/next-js)
