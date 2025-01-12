@@ -1,9 +1,9 @@
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { LoaderCircle } from 'lucide-react';
-import { ButtonHTMLAttributes, forwardRef } from 'react';
+import type { ButtonHTMLAttributes, Ref } from 'react';
 
-import { cn } from '../cn';
+import { cn } from '../cn.ts';
 
 const buttonVariants = cva(
     'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
@@ -32,35 +32,45 @@ const buttonVariants = cva(
     }
 );
 
-export interface ButtonProps
-    extends ButtonHTMLAttributes<HTMLButtonElement>,
-        VariantProps<typeof buttonVariants> {
-    asChild?: boolean;
-    loading?: boolean;
-}
+export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
+    VariantProps<typeof buttonVariants> & {
+        asChild?: boolean;
+        loading?: boolean;
+        ref?: Ref<HTMLButtonElement>;
+    };
 
-const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-    ({ className, variant, size, asChild = false, loading, children, ...props }, ref) => {
-        const Component = asChild ? Slot : 'button';
-        return (
-            <Component
-                ref={ref}
-                disabled={loading ?? props.disabled}
-                className={cn(buttonVariants({ variant, size, className }))}
-                {...props}
-            >
-                <>
-                    {loading ? (
-                        <span className="mr-1	animate-spin">
-                            <LoaderCircle size={15} />
-                        </span>
-                    ) : null}
-                    {children}
-                </>
-            </Component>
-        );
+const Button = ({
+    className,
+    variant,
+    size,
+    asChild = false,
+    loading,
+    children,
+    ref,
+    type,
+    ...props
+}: Readonly<ButtonProps>) => {
+    if (asChild) {
+        return <Slot {...props}>{children}</Slot>;
     }
-);
+
+    return (
+        <button
+            ref={ref}
+            type={type ?? 'button'}
+            disabled={loading ?? props.disabled}
+            className={cn(buttonVariants({ variant, size, className }))}
+            {...props}
+        >
+            {loading ? (
+                <span className="mr-1	animate-spin">
+                    <LoaderCircle size={15} />
+                </span>
+            ) : null}
+            {children}
+        </button>
+    );
+};
 
 Button.displayName = 'Button';
 

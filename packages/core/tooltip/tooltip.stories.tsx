@@ -1,5 +1,5 @@
-import { TooltipProps } from '@radix-ui/react-tooltip';
-import { Meta, StoryObj } from '@storybook/react';
+import type { TooltipProps } from '@radix-ui/react-tooltip';
+import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './tooltip';

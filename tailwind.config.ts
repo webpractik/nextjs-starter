@@ -1,6 +1,6 @@
 import sharedConfig from '@repo/tailwind-config';
 import type { Config } from 'tailwindcss';
-import { PluginAPI, RecursiveKeyValuePair } from 'tailwindcss/types/config';
+import type { PluginAPI, RecursiveKeyValuePair } from 'tailwindcss/types/config';
 
 // eslint-disable-next-line @typescript-eslint/unbound-method
 function addVariablesForColors({ addBase, theme }: PluginAPI) {

@@ -1,26 +1,24 @@
 import { cva } from 'class-variance-authority';
-import React, { ComponentProps, forwardRef, ReactNode } from 'react';
+import type { ComponentProps, JSX, ReactNode, Ref } from 'react';
 
-import styles from './typography.module.css';
-
-export const typographyVariants = cva(styles.base, {
+export const typographyVariants = cva('text-balance', {
     variants: {
         variant: {
-            h1: styles.h1,
-            h2: styles.h2,
-            h3: styles.h3,
-            h4: styles.h4,
-            h5: styles.h5,
-            h6: styles.h6,
-            p: styles.text,
+            h1: 'text-4xl font-bold',
+            h2: 'text-3xl font-bold',
+            h3: 'text-2xl font-semibold',
+            h4: 'text-xl font-medium',
+            h5: 'text-lg font-medium',
+            h6: 'text-base font-medium',
+            p: 'text-base font-normal',
             span: '',
         },
         color: {
-            primary: styles.primary,
-            secondary: styles.secondary,
+            primary: 'text-black',
+            secondary: 'text-slate-',
         },
         center: {
-            true: styles.center,
+            true: 'text-center',
         },
     },
     defaultVariants: {
@@ -34,25 +32,29 @@ interface TypographyProps extends ComponentProps<'p'> {
     className?: string;
     center?: boolean;
     children: ReactNode;
+    ref?: Ref<HTMLParagraphElement>;
 }
 
-export const Typography = forwardRef<HTMLParagraphElement, TypographyProps>(
-    (
-        { variant = 'p', color, center, className = '', children, ...props }: TypographyProps,
-        ref
-    ) => {
-        const Component: keyof JSX.IntrinsicElements = variant;
+export const Typography = ({
+    variant = 'p',
+    color,
+    center,
+    className = '',
+    children,
+    ref,
+    ...props
+}: TypographyProps) => {
+    const Component: keyof JSX.IntrinsicElements = variant;
 
-        return (
-            <Component
-                ref={ref}
-                {...props}
-                className={typographyVariants({ variant, color, center, className })}
-            >
-                {children}
-            </Component>
-        );
-    }
-);
+    return (
+        <Component
+            ref={ref}
+            {...props}
+            className={typographyVariants({ variant, color, center, className })}
+        >
+            {children}
+        </Component>
+    );
+};
 
 Typography.displayName = 'Typography';

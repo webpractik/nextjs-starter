@@ -5,11 +5,11 @@
         "access": "public"
     },
     "dependencies": {
-        "@next/eslint-plugin-next": "15.0.3",
+        "@next/eslint-plugin-next": "15.1.4",
         "@typescript-eslint/eslint-plugin": "7.18.0",
         "@typescript-eslint/parser": "7.18.0",
         "eslint-config-webpractik": "webpractik/eslint-config-webpractik#2fe4796",
-        "eslint-plugin-storybook": "0.11.1",
+        "eslint-plugin-storybook": "0.11.2",
         "eslint-plugin-tailwindcss": "3.17.5"
     }
 }

@@ -1,17 +1,17 @@
 'use client';
 
 import * as TabsPrimitive from '@radix-ui/react-tabs';
-import * as React from 'react';
-import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react';
+import type { ComponentProps, Ref } from 'react';
 
-import { cn } from '~/lib/utils/cn';
+import { cn } from '../cn';
 
 export const Tabs = TabsPrimitive.Root;
 
-export const TabsList = forwardRef<
-    ElementRef<typeof TabsPrimitive.List>,
-    ComponentPropsWithoutRef<typeof TabsPrimitive.List>
->(({ className, ...props }, ref) => (
+type TabsListProps = ComponentProps<typeof TabsPrimitive.List> & {
+    ref?: Ref<typeof TabsPrimitive.List>;
+};
+
+export const TabsList = ({ className, ref, ...props }: TabsListProps) => (
     <TabsPrimitive.List
         ref={ref}
         className={cn(
@@ -20,14 +20,15 @@ export const TabsList = forwardRef<
         )}
         {...props}
     />
-));
+);
 
 TabsList.displayName = TabsPrimitive.List.displayName;
 
-export const TabsTrigger = forwardRef<
-    ElementRef<typeof TabsPrimitive.Trigger>,
-    ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
->(({ className, ...props }, ref) => (
+type TabsTriggerProps = ComponentProps<typeof TabsPrimitive.Trigger> & {
+    ref?: Ref<typeof TabsPrimitive.Trigger>;
+};
+
+export const TabsTrigger = ({ className, ref, ...props }: TabsTriggerProps) => (
     <TabsPrimitive.Trigger
         ref={ref}
         className={cn(
@@ -36,14 +37,15 @@ export const TabsTrigger = forwardRef<
         )}
         {...props}
     />
-));
+);
 
 TabsTrigger.displayName = TabsPrimitive.Trigger.displayName;
 
-export const TabsContent = forwardRef<
-    ElementRef<typeof TabsPrimitive.Content>,
-    ComponentPropsWithoutRef<typeof TabsPrimitive.Content>
->(({ className, ...props }, ref) => (
+type TabsContentProps = ComponentProps<typeof TabsPrimitive.Content> & {
+    ref?: Ref<typeof TabsPrimitive.Content>;
+};
+
+export const TabsContent = ({ className, ref, ...props }: TabsContentProps) => (
     <TabsPrimitive.Content
         ref={ref}
         className={cn(
@@ -52,6 +54,6 @@ export const TabsContent = forwardRef<
         )}
         {...props}
     />
-));
+);
 
 TabsContent.displayName = TabsPrimitive.Content.displayName;

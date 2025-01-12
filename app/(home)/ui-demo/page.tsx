@@ -29,11 +29,11 @@ import { Typography } from '@repo/core/typography';
 import { CircleHelp } from 'lucide-react';
 
 const gridItemClassName =
-    'flex place-content-center items-center col-span-1 border border-dashed border-slate-200 py-8 px-4 rounded-2xl';
+    'flex place-content-center items-center col-span-1 border border-dashed border-slate-200 p-4 rounded-2xl';
 
 export default function UIPage() {
     return (
-        <div className="flex size-full flex-col items-center justify-center gap-6 bg-white">
+        <div className="flex size-full flex-col items-center justify-center gap-2 bg-white">
             <div className={'grid grid-cols-3 gap-8'}>
                 <div className={gridItemClassName}>
                     <div className="flex flex-col gap-5">
@@ -153,7 +153,7 @@ export default function UIPage() {
                             </DialogHeader>
 
                             <DialogFooter>
-                                <DialogClose>
+                                <DialogClose asChild>
                                     <div className="flex gap-2">
                                         <Button>Точно</Button>
                                         <Button variant="outline">Отменить</Button>

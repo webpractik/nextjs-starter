@@ -11,7 +11,7 @@
     "license": "ISC",
     "devDependencies": {
         "tailwind-config-viewer": "2.0.4",
-        "tailwindcss": "3.4.14",
+        "tailwindcss": "3.4.17",
         "tailwindcss-animate": "1.0.7"
     }
 }

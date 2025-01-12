@@ -34,17 +34,19 @@ export function middleware(request: NextRequest) {
     }
 
     requestHeaders.set('x-url', request.url);
+    requestHeaders.set('x-middleware-next', '1');
 
-    if (
-        request.url.startsWith(
-            `${clientEnvironment.NEXT_PUBLIC_FRONT_URL}${clientEnvironment.NEXT_PUBLIC_BFF_PATH}`
-        )
-    ) {
-        return NextResponse.rewrite(
-            `${serverEnvironment.BACK_INTERNAL_URL}${url.pathname.replace(clientEnvironment.NEXT_PUBLIC_BFF_PATH, '')}${
-                url.search
-            }`
+    const { NEXT_PUBLIC_BFF_PATH } = clientEnvironment;
+
+    if (request.url.startsWith(NEXT_PUBLIC_BFF_PATH)) {
+        const newUrl = new URL(
+            url.pathname.replace(NEXT_PUBLIC_BFF_PATH, '') + url.search,
+            serverEnvironment.BACK_INTERNAL_URL
         );
+
+        console.log('Request proxied to --->', newUrl);
+
+        return NextResponse.rewrite(newUrl);
     }
 
     return NextResponse.next({

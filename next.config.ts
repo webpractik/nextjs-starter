@@ -42,12 +42,12 @@ const nextConfig: NextConfig = {
     },
 
     experimental: {
+        // ppr: 'incremental',
+        webpackBuildWorker: true,
+        parallelServerCompiles: true,
+        parallelServerBuildTraces: true,
         serverSourceMaps: true,
-        after: true,
-        staleTimes: {
-            dynamic: 30,
-            static: 180,
-        },
+        webpackMemoryOptimizations: true,
         optimizePackageImports: ['react-use', 'lodash-es', 'lucide-react'],
     },
 

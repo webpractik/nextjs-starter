@@ -11,6 +11,17 @@ module.exports = {
         'tailwindcss/no-custom-classname': 'off',
         'sonarjs/function-return-type': 'off',
         'sonarjs/no-misused-promises': 'off',
+        'unicorn/prevent-abbreviations': [
+            'error',
+            {
+                replacements: {
+                    'next-env': false,
+                    props: false,
+                    ref: false,
+                    params: false,
+                },
+            },
+        ],
         '@typescript-eslint/no-misused-promises': 'off',
     },
     ignorePatterns: ['.*.js', 'node_modules/'],

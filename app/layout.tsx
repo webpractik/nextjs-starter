@@ -1,6 +1,6 @@
 import '~/lib/styles/base.css';
 
-import React, { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 import { ReactQueryProvider } from '@/_shared/utilities/providers/react-query';
 import { GeistSans } from '~/lib/fonts/geist';
@@ -8,6 +8,7 @@ import { cn } from '~/lib/utils/cn';
 
 export const dynamic = 'error';
 export const fetchCache = 'default-cache';
+export const experimental_ppr = true;
 
 export const metadata = {
     title: 'Next Starter',
