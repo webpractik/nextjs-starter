@@ -6,5 +6,5 @@ lib/routes
 packages/api/lib/**/*.ts
 packages/eslint-config-custom/*
 packages/tailwind-config/*
-
-
+next-env.d.ts
+statoscope.config.js

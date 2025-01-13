@@ -1,0 +1,15 @@
+{
+    "threshold": 2,
+    "reporters": ["html"],
+    "ignore": [
+        "**/node_modules/**",
+        "**/.next/**",
+        "**/.git/**",
+        "**/.github/**",
+        "**/.gitlab/**",
+        "**/.docker/**",
+        "**/.idea/**",
+        "**/report/**",
+        "**/*.svg"
+    ]
+}

@@ -18,6 +18,7 @@ docs.html
 dependency-graph.svg
 packages/*/node_modules
 storybook.log
+report
 
 # dependencies
 /node_modules
