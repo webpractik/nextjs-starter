@@ -4,15 +4,15 @@
     "rsc": true,
     "tsx": true,
     "tailwind": {
-        "config": "packages/tailwind-config/tailwind.config.ts",
+        "config": "@repo/tailwind-config/tailwind.config.ts",
         "css": "lib/styles/base.css",
         "baseColor": "slate",
         "cssVariables": true,
         "prefix": ""
     },
     "aliases": {
-        "components": "/packages/core",
-        "utils": "/packages/core/utils/cn.ts",
-        "ui": "/packages/core/"
+        "components": "@repo/core",
+        "utils": "@repo/core/utils/cn.ts",
+        "ui": "@repo/core"
     }
 }
