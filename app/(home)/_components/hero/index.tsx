@@ -20,10 +20,10 @@ export function Hero() {
                 transition={transition}
                 whileInView={whileInView}
             >
-                <h1 className="bg-opacity/50 bg-gradient-to-b from-neutral-50 to-neutral-400 bg-clip-text text-center text-4xl font-bold text-transparent md:text-7xl">
+                <h1 className="bg-opacity/50 bg-linear-to-b from-neutral-50 to-neutral-400 bg-clip-text text-center text-4xl font-bold text-transparent md:text-7xl">
                     Next Starter
                 </h1>
-                <div className="max-w-3xl bg-gradient-to-b from-neutral-50 to-neutral-400 bg-clip-text py-4 text-center font-extralight text-transparent md:text-2xl">
+                <div className="max-w-3xl bg-linear-to-b from-neutral-50 to-neutral-400 bg-clip-text py-4 text-center font-extralight text-transparent md:text-2xl">
                     Этот стартовый комплект нацелен на предоставление разработчикам надежной основы
                     для создания приложений на Next.js, обеспечивая соблюдение лучших практик по
                     качеству кода, стилю и эффективности рабочих процессов.

@@ -21,7 +21,7 @@ export function ErrorFallback({ description, error, resetError, title }: ErrorFa
     return (
         <div
             className={
-                'flex max-h-80 max-w-screen-sm flex-col gap-4 rounded-2xl border border-solid p-4'
+                'flex max-h-80 max-w-(--breakpoint-sm) flex-col gap-4 rounded-2xl border border-solid p-4'
             }
             data-testid="error-boundary"
         >
