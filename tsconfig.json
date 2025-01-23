@@ -6,7 +6,7 @@
             "@/*": ["./app/*"]
         },
         "plugins": [{ "name": "next" }],
-        "typeRoots": ["./lib/types/"]
+        "types": ["@vitest/browser/providers/playwright", "./lib/types/global.d.ts"]
     },
     "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
     "exclude": ["node_modules", ".next", "build", "dist"]

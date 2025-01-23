@@ -2,9 +2,9 @@ import client from 'prom-client';
 
 import { environment } from '~/env/server';
 
-const collectDefaultMetrics = client.collectDefaultMetrics;
+const { collectDefaultMetrics } = client;
 
-const Registry = client.Registry;
+const { Registry } = client;
 
 export const register = new Registry();
 

@@ -3,8 +3,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Skeleton } from './skeleton';
 
 const meta: Meta<typeof Skeleton> = {
-    title: 'core/Skeleton',
     component: Skeleton,
+    title: 'core/Skeleton',
 };
 
 export default meta;

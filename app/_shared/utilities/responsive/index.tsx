@@ -5,7 +5,7 @@ import {
     useLaptopMediaQuery,
     useMobileMediaQuery,
     useTabletMediaQuery,
-} from '~/lib/hooks/use-responsive';
+} from '@/_hooks/use-responsive';
 
 export function Desktop({ children }: { children: ReactNode }): ReactNode {
     const isDesktop = useDesktopMediaQuery();
@@ -19,14 +19,14 @@ export function Laptop({ children }: { children: ReactNode }): ReactNode {
     return isLaptop ? children : null;
 }
 
-export function Tablet({ children }: { children: ReactNode }): ReactNode {
-    const isTablet = useTabletMediaQuery();
-
-    return isTablet ? children : null;
-}
-
 export function Mobile({ children }: { children: ReactNode }): ReactNode {
     const isMobile = useMobileMediaQuery();
 
     return isMobile ? children : null;
+}
+
+export function Tablet({ children }: { children: ReactNode }): ReactNode {
+    const isTablet = useTabletMediaQuery();
+
+    return isTablet ? children : null;
 }

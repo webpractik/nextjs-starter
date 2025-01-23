@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { Textarea } from './textarea';
@@ -9,18 +8,22 @@ describe('<Textarea />', () => {
     it('renders correctly', () => {
         render(<Textarea data-testid="Textarea" />);
         const textarea = screen.getByTestId('Textarea');
+
         expect(textarea).toBeInTheDocument();
     });
 
     it('passes props to the textarea element', () => {
         const placeholderText = 'Placeholder...';
+
         render(<Textarea placeholder={placeholderText} />);
         const textarea = screen.getByPlaceholderText(placeholderText);
+
         expect(textarea).toBeInTheDocument();
     });
 
     it('handles user input correctly', async () => {
         const user = userEvent.setup();
+
         render(<Textarea data-testid="Textarea" />);
         const textarea = screen.getByTestId('Textarea');
 
@@ -30,7 +33,8 @@ describe('<Textarea />', () => {
 
     it('can be disabled', async () => {
         const user = userEvent.setup();
-        render(<Textarea disabled data-testid="Textarea" />);
+
+        render(<Textarea data-testid="Textarea" disabled />);
         const textarea = screen.getByTestId('Textarea');
 
         expect(textarea).toBeDisabled();
@@ -41,6 +45,7 @@ describe('<Textarea />', () => {
     it('calls custom onChange handler', async () => {
         const user = userEvent.setup();
         const onChangeMock = vi.fn();
+
         render(<Textarea data-testid="Textarea" onChange={onChangeMock} />);
         const textarea = screen.getByTestId('Textarea');
 

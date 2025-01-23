@@ -1,19 +1,19 @@
 import { useMedia } from 'react-use';
 
-export function useMobileMediaQuery() {
-    return useMedia('(min-width: 320px)', true);
-}
-
-export function useTabletMediaQuery() {
-    return useMedia('(min-width: 768px)', false);
+export function useDesktopMediaQuery() {
+    return useMedia('(min-width: 1280px)', false);
 }
 
 export function useLaptopMediaQuery() {
     return useMedia('(min-width: 1024px)', false);
 }
 
-export function useDesktopMediaQuery() {
-    return useMedia('(min-width: 1280px)', false);
+export function useMobileMediaQuery() {
+    return useMedia('(min-width: 320px)', true);
+}
+
+export function useTabletMediaQuery() {
+    return useMedia('(min-width: 768px)', false);
 }
 
 export function useBreakpoints() {
@@ -23,9 +23,9 @@ export function useBreakpoints() {
     const gtDesktop = useDesktopMediaQuery();
 
     return {
+        gtDesktop,
+        gtLaptop,
         gtMobile,
         gtTablet,
-        gtLaptop,
-        gtDesktop,
     };
 }

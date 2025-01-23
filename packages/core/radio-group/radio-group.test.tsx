@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { describe, expect, it } from 'vitest';
 
 import { RadioGroup, RadioGroupItem } from './radio-group';
@@ -11,8 +11,8 @@ describe('<RadioGroup />', () => {
     it('renders RadioGroup with RadioGroupItems', () => {
         render(
             <RadioGroup>
-                <RadioGroupItem value="option1" data-testid="option1" />
-                <RadioGroupItem value="option2" data-testid="option2" />
+                <RadioGroupItem data-testid="option1" value="option1" />
+                <RadioGroupItem data-testid="option2" value="option2" />
             </RadioGroup>
         );
 
@@ -22,10 +22,11 @@ describe('<RadioGroup />', () => {
 
     it('allows selecting different RadioGroupItems', async () => {
         const user = userEvent.setup();
+
         render(
             <RadioGroup>
-                <RadioGroupItem value="option1" data-testid="option1" />
-                <RadioGroupItem value="option2" data-testid="option2" />
+                <RadioGroupItem data-testid="option1" value="option1" />
+                <RadioGroupItem data-testid="option2" value="option2" />
             </RadioGroup>
         );
 
@@ -43,12 +44,13 @@ describe('<RadioGroup />', () => {
 
     it('does not allow selecting a disabled RadioGroupItem', async () => {
         const user = userEvent.setup();
+
         render(
             <RadioGroup>
-                <RadioGroupItem value="option1" data-testid="option1">
+                <RadioGroupItem data-testid="option1" value="option1">
                     Option 1
                 </RadioGroupItem>
-                <RadioGroupItem disabled value="option2" data-testid="option2">
+                <RadioGroupItem data-testid="option2" disabled value="option2">
                     Option 2
                 </RadioGroupItem>
             </RadioGroup>
@@ -64,20 +66,20 @@ describe('<RadioGroup />', () => {
     it('selects the RadioGroupItem based on controlled value', async () => {
         const user = userEvent.setup();
 
-        const ControlledRadioGroup = () => {
+        function ControlledRadioGroup() {
             const [value, setValue] = useState('option1');
 
             return (
-                <RadioGroup value={value} onValueChange={setValue}>
-                    <RadioGroupItem value="option1" data-testid="option1">
+                <RadioGroup onValueChange={setValue} value={value}>
+                    <RadioGroupItem data-testid="option1" value="option1">
                         Option 1
                     </RadioGroupItem>
-                    <RadioGroupItem value="option2" data-testid="option2">
+                    <RadioGroupItem data-testid="option2" value="option2">
                         Option 2
                     </RadioGroupItem>
                 </RadioGroup>
             );
-        };
+        }
 
         render(<ControlledRadioGroup />);
 

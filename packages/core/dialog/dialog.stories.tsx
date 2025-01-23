@@ -3,8 +3,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Dialog } from './dialog';
 
 const meta: Meta<typeof Dialog> = {
-    title: 'Dialog',
     component: Dialog,
+    title: 'Dialog',
 };
 
 export default meta;

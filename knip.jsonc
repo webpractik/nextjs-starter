@@ -1,4 +1,4 @@
 {
     "$schema": "https://unpkg.com/knip@3/schema-jsonc.json",
-    "project": ["**/*.{js,jsx,ts,tsx}"]
+    "project": ["**/*.{js,jsx,ts,tsx}"],
 }

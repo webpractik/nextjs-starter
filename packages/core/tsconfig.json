@@ -1,3 +1,6 @@
 {
-    "extends": "@repo/ts-config/base.json"
+    "extends": "@repo/ts-config/base.json",
+    "compilerOptions": {
+        "types": ["@vitest/browser/providers/playwright"]
+    }
 }

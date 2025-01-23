@@ -1,18 +1,21 @@
 import type { Meta, StoryObj } from '@storybook/react';
+
 import { noop } from 'lodash-es';
 
 import { ErrorBoundary, ErrorFallback } from './error-boundary';
 
 const meta: Meta<typeof ErrorBoundary> = {
-    title: 'shared/utilities/ErrorBoundary',
     component: ErrorBoundary,
+    title: 'shared/utilities/ErrorBoundary',
 };
 
 export default meta;
 
 type Story = StoryObj<typeof ErrorBoundary>;
 
+const message = { message: 'Example error message' };
+
 export const Primary: Story = {
     args: {},
-    render: () => <ErrorFallback error={{ message: 'Example error message' }} resetError={noop} />,
+    render: () => <ErrorFallback error={message} resetError={noop} />,
 };

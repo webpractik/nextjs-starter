@@ -1,12 +1,11 @@
 import type { TooltipProps } from '@radix-ui/react-tooltip';
 import type { Meta, StoryObj } from '@storybook/react';
-import React from 'react';
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './tooltip';
 
 const meta: Meta<typeof Tooltip> = {
-    title: 'core/Tooltip',
     component: Tooltip,
+    title: 'core/Tooltip',
 };
 
 export default meta;

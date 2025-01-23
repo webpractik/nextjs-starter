@@ -8,21 +8,23 @@ describe('<Button />', () => {
         const { getByRole } = render(<Button>Button</Button>);
 
         expect(getByRole('button')).toHaveClass(
-            buttonVariants({ variant: 'default', size: 'default' })
+            buttonVariants({ size: 'default', variant: 'default' })
         );
     });
 
     it('renders the button with the outline variant and small size', () => {
         const { getByRole } = render(
-            <Button variant="outline" size="sm">
+            <Button size="sm" variant="outline">
                 Button
             </Button>
         );
-        expect(getByRole('button')).toHaveClass(buttonVariants({ variant: 'outline', size: 'sm' }));
+
+        expect(getByRole('button')).toHaveClass(buttonVariants({ size: 'sm', variant: 'outline' }));
     });
 
     it('renders the button with the link variant', () => {
         const { getByRole } = render(<Button variant="link">Button</Button>);
+
         expect(getByRole('button')).toHaveClass(buttonVariants({ variant: 'link' }));
     });
 
@@ -43,6 +45,7 @@ describe('<Button />', () => {
         );
 
         const linkElement = getByRole('link');
+
         expect(linkElement).toBeInTheDocument();
         expect(linkElement).toHaveAttribute('href', 'https://example.com');
         expect(linkElement.tagName).toBe('A');

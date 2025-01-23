@@ -1,13 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
+import Link from 'next/link';
+
 import { Button } from './button';
 
 const meta: Meta<typeof Button> = {
-    title: 'core/Button',
-    component: Button,
     args: {
         children: 'Button',
     },
+    component: Button,
+    title: 'core/Button',
 };
 
 export default meta;
@@ -16,50 +18,50 @@ type Story = StoryObj<typeof Button>;
 
 export const Primary: Story = {
     args: {
-        variant: 'default',
         size: 'default',
+        variant: 'default',
     },
 };
 
 export const Outline: Story = {
     args: {
-        variant: 'outline',
         size: 'default',
+        variant: 'outline',
     },
 };
 
 export const LinkButton: Story = {
     args: {
-        variant: 'link',
         size: 'default',
+        variant: 'link',
     },
 };
 
 export const Small: Story = {
     args: {
-        variant: 'default',
         size: 'sm',
+        variant: 'default',
     },
 };
 
 export const Large: Story = {
     args: {
-        variant: 'default',
         size: 'lg',
+        variant: 'default',
     },
 };
 
 export const IconButton = {
     args: {
-        variant: 'default',
-        size: 'icon',
         children: <span>👋</span>,
+        size: 'icon',
+        variant: 'default',
     },
 };
 
 export const AsChild = {
     args: {
         asChild: true,
-        children: <a href="/">Link Button</a>,
+        children: <Link href="/">Link Button</Link>,
     },
 };

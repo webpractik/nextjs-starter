@@ -31,14 +31,14 @@ import { CircleHelp } from 'lucide-react';
 const gridItemClassName =
     'flex place-content-center items-center col-span-1 border border-dashed border-slate-200 p-4 rounded-2xl';
 
-export default function UIPage() {
+export default function UiPage() {
     return (
         <div className="flex size-full flex-col items-center justify-center gap-2 bg-white">
             <div className={'grid grid-cols-3 gap-8'}>
                 <div className={gridItemClassName}>
                     <div className="flex flex-col gap-5">
                         <Typography variant="h1">Заголовок</Typography>
-                        <Typography variant="p" color="secondary">
+                        <Typography color="secondary" variant="p">
                             Простой текст
                         </Typography>
                     </div>
@@ -47,7 +47,7 @@ export default function UIPage() {
                 <div className={gridItemClassName}>
                     <div className="flex flex-col gap-4">
                         <Button>Кнопка</Button>
-                        <Button variant="outline" size="sm">
+                        <Button size="sm" variant="outline">
                             Кнопка
                         </Button>
                         <Button loading>Загрузка...</Button>
@@ -88,17 +88,17 @@ export default function UIPage() {
 
                 <div className={gridItemClassName}>
                     <div className="flex flex-col place-content-center">
-                        <RadioGroup defaultValue="radio-1" className="gap-4">
+                        <RadioGroup className="gap-4" defaultValue="radio-1">
                             <div className="flex items-center gap-2">
-                                <RadioGroupItem value="radio-1" id="radio-1" />
+                                <RadioGroupItem id="radio-1" value="radio-1" />
                                 <Label htmlFor="radio-1">Вариант 1</Label>
                             </div>
                             <div className="flex items-center gap-2">
-                                <RadioGroupItem value="radio-2" id="radio-2" />
+                                <RadioGroupItem id="radio-2" value="radio-2" />
                                 <Label htmlFor="radio-2">Вариант 2</Label>
                             </div>
                             <div className="flex items-center gap-2">
-                                <RadioGroupItem disabled value="radio-3" id="radio-3" />
+                                <RadioGroupItem disabled id="radio-3" value="radio-3" />
                                 <Label htmlFor="radio-3">Вариант 3</Label>
                             </div>
                         </RadioGroup>

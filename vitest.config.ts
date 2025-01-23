@@ -4,12 +4,19 @@ import { defineConfig } from 'vitest/config';
 
 // https://vitest.dev/config/
 export default defineConfig({
+    define: {
+        'process.env': JSON.stringify({}),
+    },
     plugins: [react(), tsconfigPaths()],
     test: {
-        globals: true,
-        environment: 'jsdom',
-        include: ['**/?(*.)test.ts?(x)'],
-        setupFiles: ['tests/setup.ts'],
+        browser: {
+            enabled: true,
+            headless: true,
+            instances: [{ browser: 'chromium' }],
+            provider: 'playwright',
+        },
         css: false,
+        globals: true,
+        include: ['**/?(*.)test.ts?(x)'],
     },
 });
