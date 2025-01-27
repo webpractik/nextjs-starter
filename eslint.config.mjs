@@ -1,5 +1,4 @@
 import wpConfigNext from '@webpractik/eslint-config-next';
-// import tailwind from 'eslint-plugin-tailwindcss';
 
 export const ignores = [
     '.next',
@@ -20,11 +19,5 @@ export default [
             '@typescript-eslint/consistent-type-definitions': [2, 'type'],
         },
     },
-    // ...tailwind.configs['flat/recommended'],
-    // {
-    //     rules: {
-    //         'tailwindcss/no-custom-classname': 0,
-    //     },
-    // },
     { ignores },
 ];

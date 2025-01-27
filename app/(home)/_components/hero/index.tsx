@@ -13,7 +13,7 @@ const whileInView = { filter: 'blur(0px)', opacity: 1, y: 0 };
 
 export function Hero() {
     return (
-        <div className="size-full relative flex flex-col h-[100vh] items-center justify-center bg-zinc-50 dark:bg-zinc-900  text-slate-950 transition-bg">
+        <div className="transition-bg relative flex size-full h-[100vh] flex-col items-center justify-center bg-zinc-50 text-slate-950">
             <motion.div
                 className="pointer-events-none relative flex flex-col items-center justify-center gap-4 px-4"
                 initial={initialState}

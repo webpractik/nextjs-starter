@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 
 import { environment as clientEnvironment } from '~/env/client';
 import { environment as serverEnvironment } from '~/env/server';
@@ -22,7 +22,7 @@ export function middleware(request: NextRequest) {
             serverEnvironment.BACK_INTERNAL_URL
         );
 
-        console.log('Request proxied to --->', newUrl);
+        console.info('Request proxied to --->', newUrl);
 
         return NextResponse.rewrite(newUrl);
     }
