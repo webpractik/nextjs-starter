@@ -29,6 +29,7 @@
         "verbatimModuleSyntax": true,
         "noFallthroughCasesInSwitch": true,
         "exactOptionalPropertyTypes": false,
-        "tsBuildInfoFile": "${configDir}/node_modules/.cache/tsbuildinfo.json"
+        "tsBuildInfoFile": "${configDir}/node_modules/.cache/tsbuildinfo.json",
+        "erasableSyntaxOnly": true
     }
 }
