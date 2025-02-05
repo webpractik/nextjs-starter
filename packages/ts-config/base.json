@@ -24,12 +24,11 @@
         "checkJs": false,
         "removeComments": true,
         "incremental": true,
-        "allowImportingTsExtensions": true,
+        "allowImportingTsExtensions": false,
         "allowSyntheticDefaultImports": true,
         "verbatimModuleSyntax": true,
         "noFallthroughCasesInSwitch": true,
         "exactOptionalPropertyTypes": false,
-        "tsBuildInfoFile": "${configDir}/node_modules/.cache/tsbuildinfo.json",
-        "erasableSyntaxOnly": true
+        "tsBuildInfoFile": "${configDir}/node_modules/.cache/tsbuildinfo.json"
     }
 }

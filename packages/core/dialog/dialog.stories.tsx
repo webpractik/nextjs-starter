@@ -4,7 +4,7 @@ import { Dialog } from './dialog';
 
 const meta: Meta<typeof Dialog> = {
     component: Dialog,
-    title: 'Dialog',
+    title: 'core/Dialog',
 };
 
 export default meta;

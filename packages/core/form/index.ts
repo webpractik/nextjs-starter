@@ -7,4 +7,4 @@ export {
     FormLabel,
     FormMessage,
     useFormField,
-} from './form.tsx';
+} from './form';

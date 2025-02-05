@@ -4,7 +4,7 @@ import { Tabs } from './tabs';
 
 const meta: Meta<typeof Tabs> = {
     component: Tabs,
-    title: 'Tabs',
+    title: 'core/Tabs',
 };
 
 export default meta;

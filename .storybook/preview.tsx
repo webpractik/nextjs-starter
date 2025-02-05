@@ -1,7 +1,8 @@
-import '../lib/styles/base.css';
+import '../app/globals.css';
 import type { Preview } from '@storybook/react';
-import { GeistSans } from '../lib/fonts/geist';
 import { ReactQueryProvider } from '../app/_shared/utilities/providers/react-query';
+
+import { geistSans } from '../app/fonts/font';
 
 const preview: Preview = {
     parameters: {
@@ -21,7 +22,7 @@ const preview: Preview = {
     },
     decorators: [
         Story => (
-            <div className={`${GeistSans.variable}`}>
+            <div className={`${geistSans.variable}`}>
                 <ReactQueryProvider showDevtools={false}>
                     <Story />
                 </ReactQueryProvider>

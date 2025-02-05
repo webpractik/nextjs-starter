@@ -3,18 +3,13 @@ import './globals.css';
 import type { ReactNode } from 'react';
 
 import { ReactQueryProvider } from '@/_shared/utilities/providers/react-query';
-import localFont from 'next/font/local';
 
 import { cn } from '~/lib/utils/cn';
 
+import { geistSans } from './fonts/font';
+
 export const dynamic = 'error';
 export const fetchCache = 'default-cache';
-
-const geistSans = localFont({
-    src: './fonts/geist.woff2',
-    variable: '--font-geist-sans',
-    weight: '100 900',
-});
 
 export const metadata = {
     description: 'Default starter for projects',
