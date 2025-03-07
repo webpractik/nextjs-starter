@@ -1,6 +1,6 @@
 import MillionCompiler from '@million/lint';
 import { withSentryConfig } from '@sentry/nextjs';
-import createJiti from 'jiti';
+import { createJiti } from 'jiti';
 import { nanoid } from 'nanoid';
 import type { NextConfig } from 'next';
 import StatoscopeWebpackPlugin from '@statoscope/webpack-plugin';
@@ -53,8 +53,7 @@ const nextConfig: NextConfig = {
     generateBuildId: () => `${nanoid()}-${new Date().toISOString()}`,
 
     devIndicators: {
-        buildActivity: true,
-        buildActivityPosition: 'top-right',
+        position: 'top-right',
     },
 
     images: {
@@ -160,7 +159,6 @@ const withSentry = () => {
             authToken: process.env.SENTRY_AUTH_TOKEN,
             sentryUrl: process.env.SENTRY_URL,
             silent: true,
-            hideSourceMaps: true,
             widenClientFileUpload: true,
             sourcemaps: { deleteSourcemapsAfterUpload: true },
             reactComponentAnnotation: { enabled: true },

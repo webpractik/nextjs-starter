@@ -3,9 +3,9 @@
     "display": "Default",
     "compilerOptions": {
         "strict": true,
-        "module": "Preserve",
+        "module": "ESNext",
         "moduleResolution": "bundler",
-        "target": "es6",
+        "target": "ESNext",
         "lib": ["dom", "dom.iterable", "esnext"],
         "jsx": "preserve",
         "skipLibCheck": true,
@@ -29,6 +29,7 @@
         "verbatimModuleSyntax": true,
         "noFallthroughCasesInSwitch": true,
         "exactOptionalPropertyTypes": false,
-        "tsBuildInfoFile": "${configDir}/node_modules/.cache/tsbuildinfo.json"
+        "tsBuildInfoFile": "${configDir}/node_modules/.cache/tsbuildinfo.json",
+        "erasableSyntaxOnly": true
     }
 }
