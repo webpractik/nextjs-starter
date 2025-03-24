@@ -1,9 +1,8 @@
-import MillionCompiler from '@million/lint';
 import { withSentryConfig } from '@sentry/nextjs';
 import { createJiti } from 'jiti';
 import { nanoid } from 'nanoid';
 import type { NextConfig } from 'next';
-import StatoscopeWebpackPlugin from '@statoscope/webpack-plugin';
+import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
 
 const jiti = createJiti(import.meta.url);
 
@@ -29,12 +28,23 @@ const nextConfig: NextConfig = {
             config.ignoreWarnings = [{ module: /opentelemetry/ }];
         }
 
-        if (process.env.ANALYZE === 'true' && !nextRuntime) {
-            config.plugins.push(
-                new StatoscopeWebpackPlugin({
-                    saveStatsTo: '.next/stats.json',
-                })
-            );
+        if (process.env.ANALYZE === 'true') {
+            if (config.name === 'client') {
+                config.plugins.push(
+                    new RsdoctorWebpackPlugin({
+                        disableClientServer: true,
+                    })
+                );
+            } else if (config.name === 'server') {
+                config.plugins.push(
+                    new RsdoctorWebpackPlugin({
+                        disableClientServer: true,
+                        output: {
+                            reportDir: './.next/server',
+                        },
+                    })
+                );
+            }
         }
 
         return config;
@@ -175,6 +185,4 @@ const withSentry = () => {
     return nextConfig;
 };
 
-export default isProduction
-    ? withSentry()
-    : MillionCompiler.next({ enabled: process.env.MILLION === 'true', rsc: true })(nextConfig);
+export default isProduction ? withSentry() : nextConfig;

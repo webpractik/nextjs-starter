@@ -8,7 +8,6 @@ A robust boilerplate for quickly building web applications with Next.js.
 - React 19
 - Typescript
 - Tailwind
-- Million/lint
 - ESLint
 - Prettier
 - Husky
@@ -49,7 +48,6 @@ A robust boilerplate for quickly building web applications with Next.js.
 
 - [nanoid](https://www.npmjs.com/package/nanoid) - Generate unique IDs
 - [lodash-es](https://lodash.com/docs) - Utility library
-- [type-fest](https://www.npmjs.com/package/type-fest) - Utility types
 - [react-use](https://github.com/streamich/react-use#readme) - Collection of hooks for React
 - [isomorphic-dompurify](https://www.npmjs.com/package/isomorphic-dompurify) - DOM sanitization library
 - [clsx](https://www.npmjs.com/package/clsx) - Utility for constructing CSS class names
