@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { register } from '~/lib/metrics/custom';
+import { register } from '~/lib/infrastructure/metrics/custom';
 
 export async function GET() {
     const metrics = await register.metrics();
