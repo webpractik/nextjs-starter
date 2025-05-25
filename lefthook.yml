@@ -1,0 +1,14 @@
+#   Refer for explanation to following link:
+#   https://lefthook.dev/configuration/
+#
+pre-commit:
+    jobs:
+        - run: npx lint-staged
+
+prepare-commit-msg:
+    commands:
+        commitizen:
+            interactive: true
+            run: npx cz --hook
+            env:
+                LEFTHOOK: 0
