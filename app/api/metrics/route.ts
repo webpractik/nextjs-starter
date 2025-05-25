@@ -1,4 +1,4 @@
-import { register } from '#/infrastructure/metrics/custom';
+import { register } from '@repo/metrics';
 import { NextResponse } from 'next/server';
 
 export async function GET() {

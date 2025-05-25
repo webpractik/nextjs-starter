@@ -1,5 +1,5 @@
 {
-    "name": "@repo/dr",
+    "name": "@repo/routes",
     "version": "1.0.0",
     "description": "This application supports typesafe routing for NextJS using the `declarative-routing` system.",
     "main": "index.js",

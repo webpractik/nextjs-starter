@@ -25,7 +25,7 @@ To use the routes, you can import them from `@/routes` and use them in your code
 For pages, use the `Link` component (built on top of `next/link`) to link to other pages. For example:
 
 ```tsx
-import { ProductDetail } from '@/routes';
+import { ProductDetail } from '@repo/routes"
 
 return <ProductDetail.Link productId={'abc123'}>Product abc123</ProductDetail.Link>;
 ```
@@ -36,7 +36,7 @@ For APIs, use the exported `fetch` wrapping functions. For example:
 
 ```tsx
 import { useEffect } from 'react';
-import { getProductInfo } from '@/routes';
+import { getProductInfo } from '@repo/routes';
 
 useEffect(() => {
     // Parameters are typed to the input of the API
@@ -61,7 +61,7 @@ For each hook you give the route to get the appropriate data back.
 
 ```ts
 import { Search } from "@/routes";
-import { useSearchParams } from "@/routes/hooks";
+import { useSearchParams } from "@repo/routes/hooks";
 
 export default MyClientComponent() {
   const searchParams = useSearchParams(Search);
@@ -113,14 +113,10 @@ Post setup there are some additional tasks that you need to complete to complete
 - [ ] Convert `GET` fetch calls to `/api/ready` to `getApiReady(...)` calls
       Once you've got that done you can remove this section.
 
-# Why is `makeRoute` copied into the `@/routes` module?
+# Why is `makeRoute` copied into the `@repo/routes` module?
 
-You **own** this routing system once you install it. And we anticipate as part of that ownership you'll want to customize the routing system. That's why we create a `makeRoute.tsx` file in the `@/routes` module. This file is a copy of the `makeRoute.tsx` file from the `declarative-routing` package. You can modify this file to change the behavior of the routing system.
+You **own** this routing system once you install it. And we anticipate as part of that ownership you'll want to customize the routing system. That's why we create a `makeRoute.tsx` file in the `@repo/routes` module. This file is a copy of the `makeRoute.tsx` file from the `declarative-routing` package. You can modify this file to change the behavior of the routing system.
 
 For example, you might want to change the way `GET`, `POST`, `PUT`, and `DELETE` are handled. Or you might want to change the way the `Link` component works. You can do all of that by modifying the `makeRoute.tsx` file.
 
 We do **NOT** recommend changing the parameters of `makeRoute`, `makeGetRoute`, `makePostRoute`, `makePutRoute`, or `makeDeleteRoute` functions because that would cause incompatibility with the `build` command of `declarative-routing`.
-
-# Credit where credit is due
-
-This system is based on the work in [Fix Next.JS Routing To Have Full Type-Safety](https://www.flightcontrol.dev/blog/fix-nextjs-routing-to-have-full-type-safety). However the original article had a significantly different interface and didn't cover API routes at all.

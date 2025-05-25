@@ -1,0 +1,16 @@
+{
+    "name": "@repo/logger",
+    "version": "1.0.0",
+    "main": "index.ts",
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "type": "module",
+    "exports": {
+        ".": "./index.ts"
+    },
+    "dependencies": {
+        "adze": "2.2.3"
+    }
+}

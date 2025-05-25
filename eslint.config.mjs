@@ -5,11 +5,10 @@ export const ignores = [
     'next.config.ts',
     'next-env.d.ts',
     '*.config.js',
-    'lib/routes',
     'report',
-    'packages/api/lib/**/*.ts',
-    'packages/declarative-routing/**/*.ts',
-    'packages/declarative-routing/**/*.tsx',
+    'packages/api/**/*.ts',
+    'packages/routes/**/*.ts',
+    'packages/routes/**/*.tsx',
     '.storybook/preview.tsx',
 ];
 
@@ -40,8 +39,12 @@ export default [
                             message: 'Please use import from @repo/api instead',
                         },
                         {
-                            group: ['~/packages/declarative-routing/*'],
-                            message: 'Please use import from @repo/dr instead',
+                            group: ['~/packages/routes/*'],
+                            message: 'Please use import from @repo/routes instead',
+                        },
+                        {
+                            group: ['~/packages/logger/*'],
+                            message: 'Please use import from @repo/logger instead',
                         },
                     ],
                 },

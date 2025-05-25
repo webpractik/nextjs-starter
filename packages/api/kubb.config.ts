@@ -4,15 +4,15 @@ import { pluginOas } from '@kubb/plugin-oas';
 import { pluginTs } from '@kubb/plugin-ts';
 import { pluginZod } from '@kubb/plugin-zod';
 
-const importPath = '../../../axios-client.ts';
+const importPath = '../../../ky-client.ts';
 
 export default defineConfig(() => {
     return {
         hooks: {
-            done: ['prettier ./lib --write'],
+            done: ['prettier ./codegen --write'],
         },
         input: {
-            path: 'openapi.yaml',
+            path: 'swagger.json',
         },
         output: {
             clean: true,
@@ -33,7 +33,7 @@ export default defineConfig(() => {
             pluginClient({
                 group: { type: 'tag' },
                 importPath,
-                output: { path: 'axios' },
+                output: { path: 'ky' },
             }),
 
             // pluginReactQuery({

@@ -1,7 +1,5 @@
 import axios, { type AxiosError, type AxiosRequestConfig, type AxiosResponse } from 'axios';
 
-import { environment } from '../../src/env/client';
-
 export type RequestConfig<TData = unknown> = {
     data?: TData;
     headers?: AxiosRequestConfig['headers'];
@@ -20,16 +18,16 @@ export type ResponseConfig<TData = unknown> = {
 };
 
 export const axiosInstance = axios.create({
-    baseURL: environment.NEXT_PUBLIC_BFF_PATH,
+    baseURL: process.env.BACK_INTERNAL_URL,
     withCredentials: true,
 });
 
-const client = async <TData, TVariables = unknown>(
+const client = async <TData, TError = unknown, TVariables = unknown>(
     config: RequestConfig<TVariables>
 ): Promise<ResponseConfig<TData>> => {
     return axiosInstance
         .request<TVariables, ResponseConfig<TData>>({ ...config })
-        .catch((error: AxiosError) => {
+        .catch((error: AxiosError<TError>) => {
             throw error;
         });
 };

@@ -1,0 +1,16 @@
+{
+    "name": "@repo/metrics",
+    "version": "1.0.0",
+    "main": "index.ts",
+    "type": "module",
+    "exports": {
+        ".": "./index.ts"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "dependencies": {
+        "prom-client": "15.1.3"
+    }
+}
