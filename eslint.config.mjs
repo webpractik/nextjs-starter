@@ -8,6 +8,9 @@ export const ignores = [
     'lib/routes',
     'report',
     'packages/api/lib/**/*.ts',
+    'packages/declarative-routing/**/*.ts',
+    'packages/declarative-routing/**/*.tsx',
+    '.storybook/preview.tsx',
 ];
 
 export default [
@@ -31,6 +34,14 @@ export default [
                         {
                             group: ['~/packages/core/*'],
                             message: 'Please use import from @repo/core instead',
+                        },
+                        {
+                            group: ['~/packages/api/*'],
+                            message: 'Please use import from @repo/api instead',
+                        },
+                        {
+                            group: ['~/packages/declarative-routing/*'],
+                            message: 'Please use import from @repo/dr instead',
                         },
                     ],
                 },

@@ -1,6 +1,9 @@
-import Link from 'next/link';
-import queryString from 'query-string';
+/*
+Derived from: https://www.flightcontrol.dev/blog/fix-nextjs-routing-to-have-full-type-safety
+*/
 import { z } from 'zod';
+import queryString from 'query-string';
+import Link from 'next/link';
 
 type LinkProps = Parameters<typeof Link>[0];
 
@@ -92,8 +95,11 @@ type GetRouteBuilder<
     resultSchema: Result;
 };
 
-type DeleteRouteBuilder<Params extends z.ZodSchema> = CoreRouteElements<Params, z.ZodSchema> & {
-    (p?: z.input<Params>, options?: FetchOptions): Promise<void>;
+type DeleteRouteBuilder<Params extends z.ZodSchema, Search extends z.ZodSchema> = CoreRouteElements<
+    Params,
+    z.ZodSchema
+> & {
+    (p?: z.input<Params>, search?: z.input<Search>, options?: FetchOptions): Promise<void>;
 };
 
 export type RouteBuilder<
@@ -121,35 +127,42 @@ export type RouteBuilder<
 function createPathBuilder<T extends Record<string, string | string[]>>(
     route: string
 ): (params: T) => string {
-    const pathArray = route.split('/');
+    const pathArr = route.split('/');
 
     let catchAllSegment: ((params: T) => string) | null = null;
-    if (pathArray.at(-1)?.startsWith('[[...')) {
-        const catchKey = pathArray.pop()!.replace('[[...', '').replace(']]', '');
+    if (pathArr.at(-1)?.startsWith('[[...')) {
+        const catchKey = pathArr.pop()!.replace('[[...', '').replace(']]', '');
         catchAllSegment = (params: T) => {
             const catchAll = params[catchKey] as unknown as string[];
             return catchAll ? `/${catchAll.join('/')}` : '';
         };
     }
 
-    const elements: ((params: T) => string)[] = [];
-    for (const element of pathArray) {
-        const catchAll = element.match(/\[\.{3}(.*)]/);
-        const parameter = element.match(/\[(.*)]/);
+    const elems: ((params: T) => string)[] = [];
+    for (const elem of pathArr) {
+        const catchAll = elem.match(/\[\.\.\.(.*)\]/);
+        const param = elem.match(/\[(.*)\]/);
         if (catchAll?.[1]) {
             const key = catchAll[1];
-            elements.push((params: T) => (params[key as unknown as string] as string[]).join('/'));
-        } else if (parameter?.[1]) {
-            const key = parameter[1];
-            elements.push((params: T) => params[key as unknown as string] as string);
-        } else if (!(element.startsWith('(') && element.endsWith(')'))) {
-            elements.push(() => element);
+            elems.push((params: T) => (params[key as unknown as string] as string[]).join('/'));
+        } else if (param?.[1]) {
+            const key = param[1];
+            elems.push((params: T) => params[key as unknown as string] as string);
+        } else if (!(elem.startsWith('(') && elem.endsWith(')'))) {
+            elems.push(() => elem);
         }
     }
 
     return (params: T): string => {
-        const p = elements.map(e => e(params)).join('/');
-        return catchAllSegment ? p + catchAllSegment(params) : p;
+        const p = elems
+            .map(e => e(params))
+            .filter(Boolean)
+            .join('/');
+        if (catchAllSegment) {
+            return p + catchAllSegment(params);
+        } else {
+            return p.length ? p : '/';
+        }
     };
 }
 
@@ -157,18 +170,18 @@ function createRouteBuilder<Params extends z.ZodSchema, Search extends z.ZodSche
     route: string,
     info: RouteInfo<Params, Search>
 ) {
-    const function_ = createPathBuilder<z.output<Params>>(route);
+    const fn = createPathBuilder<z.output<Params>>(route);
 
     return (params?: z.input<Params>, search?: z.input<Search>) => {
         let checkedParams = params || {};
         if (info.params) {
             const safeParams = info.params.safeParse(checkedParams);
-            if (safeParams?.success) {
-                checkedParams = safeParams.data;
-            } else {
+            if (!safeParams?.success) {
                 throw new Error(
                     `Invalid params for route ${info.name}: ${safeParams.error.message}`
                 );
+            } else {
+                checkedParams = safeParams.data;
             }
         }
         const safeSearch = info.search ? info.search?.safeParse(search || {}) : null;
@@ -178,7 +191,7 @@ function createRouteBuilder<Params extends z.ZodSchema, Search extends z.ZodSche
             );
         }
 
-        const baseUrl = function_(checkedParams);
+        const baseUrl = fn(checkedParams);
         const searchString = search && queryString.stringify(search);
         return [baseUrl, searchString ? `?${searchString}` : ''].join('');
     };
@@ -214,15 +227,15 @@ export function makePostRoute<
             method: 'POST',
             body: JSON.stringify(safeBody.data),
             headers: {
-                ...options?.headers,
+                ...(options?.headers || {}),
                 'Content-Type': 'application/json',
             },
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch ${info.name}: ${response.statusText}`);
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`Failed to fetch ${info.name}: ${res.statusText}`);
                 }
-                return response.json() as Promise<z.output<Result>>;
+                return res.json() as Promise<z.output<Result>>;
             })
             .then(data => {
                 const result = postInfo.result.safeParse(data);
@@ -275,7 +288,7 @@ export function makePutRoute<
             method: 'PUT',
             body: JSON.stringify(safeBody.data),
             headers: {
-                ...options?.headers,
+                ...(options?.headers || {}),
                 'Content-Type': 'application/json',
             },
         })
@@ -355,15 +368,22 @@ export function makeGetRoute<
 export function makeDeleteRoute<Params extends z.ZodSchema, Search extends z.ZodSchema>(
     route: string,
     info: RouteInfo<Params, Search>
-): DeleteRouteBuilder<Params> {
+): DeleteRouteBuilder<Params, Search> {
     const urlBuilder = createRouteBuilder(route, info);
 
-    const routeBuilder: DeleteRouteBuilder<Params> = (
+    const routeBuilder: DeleteRouteBuilder<Params, Search> = (
         p?: z.input<Params>,
         search?: z.input<Search>,
         options?: FetchOptions
     ): Promise<void> => {
-        return fetch(urlBuilder(p, search), options).then(res => {
+        return fetch(urlBuilder(p, search), {
+            ...options,
+            method: 'DELETE',
+            headers: {
+                ...(options?.headers || {}),
+                'Content-Type': 'application/json',
+            },
+        }).then(res => {
             if (!res.ok) {
                 throw new Error(`Failed to fetch ${info.name}: ${res.statusText}`);
             }

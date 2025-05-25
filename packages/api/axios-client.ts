@@ -1,6 +1,6 @@
 import axios, { type AxiosError, type AxiosRequestConfig, type AxiosResponse } from 'axios';
 
-import { environment } from '../../env/client';
+import { environment } from '../../src/env/client';
 
 export type RequestConfig<TData = unknown> = {
     data?: TData;

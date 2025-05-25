@@ -1,7 +1,6 @@
 import { defineConfig } from '@kubb/core';
 import { pluginClient } from '@kubb/plugin-client';
 import { pluginOas } from '@kubb/plugin-oas';
-import { pluginReactQuery } from '@kubb/plugin-react-query';
 import { pluginTs } from '@kubb/plugin-ts';
 import { pluginZod } from '@kubb/plugin-zod';
 
@@ -9,52 +8,52 @@ const importPath = '../../../axios-client.ts';
 
 export default defineConfig(() => {
     return {
-        root: '.',
+        hooks: {
+            done: ['prettier ./lib --write'],
+        },
         input: {
             path: 'openapi.yaml',
         },
         output: {
-            path: './lib',
             clean: true,
-        },
-        hooks: {
-            done: ['prettier ./lib --write'],
+            path: './codegen',
         },
         plugins: [
             pluginOas({ output: { path: 'swagger' }, validate: true }),
 
             pluginTs({
-                output: { path: 'models' },
-                enumType: 'enum',
                 dateType: 'date',
-                unknownType: 'unknown',
-                optionalType: 'questionToken',
+                enumType: 'enum',
                 group: { type: 'tag' },
+                optionalType: 'questionToken',
+                output: { path: 'models' },
+                unknownType: 'unknown',
             }),
 
             pluginClient({
-                output: { path: 'axios' },
-                importPath,
                 group: { type: 'tag' },
+                importPath,
+                output: { path: 'axios' },
             }),
 
-            pluginReactQuery({
-                client: { importPath, dataReturnType: 'data' },
-                paramsType: 'object',
-                output: {
-                    path: './hooks',
-                },
-                parser: 'zod',
-                group: { type: 'tag' },
-            }),
+            // pluginReactQuery({
+            //     client: { dataReturnType: 'data', importPath },
+            //     group: { type: 'tag' },
+            //     output: {
+            //         path: './hooks',
+            //     },
+            //     paramsType: 'object',
+            //     parser: 'zod',
+            // }),
 
             pluginZod({
-                output: { path: 'zod' },
-                group: { type: 'tag' },
                 dateType: 'date',
-                unknownType: 'unknown',
+                group: { type: 'tag' },
                 inferred: true,
+                output: { path: 'zod' },
+                unknownType: 'unknown',
             }),
         ],
+        root: '.',
     };
 });

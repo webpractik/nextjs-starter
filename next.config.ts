@@ -3,13 +3,15 @@ import { createJiti } from 'jiti';
 import { nanoid } from 'nanoid';
 import type { NextConfig } from 'next';
 import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
+import { environment as clientEnv } from '#/env/client';
+import { environment as serverEnv } from '#/env/server';
 
 const jiti = createJiti(import.meta.url);
 
 (async () => {
     try {
-        await jiti.import('./env/client', {});
-        await jiti.import('./env/server', {});
+        await jiti.import('./src/env/client', {});
+        await jiti.import('./src/env/server', {});
     } catch {}
 })();
 
@@ -21,9 +23,6 @@ const nextConfig: NextConfig = {
     cleanDistDir: true,
 
     webpack: (config, { isServer, nextRuntime }) => {
-        // fix for dom-sanitizer on server-side
-        config.externals = [...config.externals, 'jsdom'];
-
         if (isServer) {
             config.ignoreWarnings = [{ module: /opentelemetry/ }];
         }
@@ -70,6 +69,21 @@ const nextConfig: NextConfig = {
         disableStaticImages: true,
         dangerouslyAllowSVG: true,
         contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    },
+
+    async rewrites() {
+        if (!clientEnv.NEXT_PUBLIC_BFF_PATH || !serverEnv.BACK_INTERNAL_URL) {
+            throw new Error('Missing bff envs');
+        }
+
+        return {
+            beforeFiles: [
+                {
+                    source: `${clientEnv.NEXT_PUBLIC_BFF_PATH}/:path*`,
+                    destination: `${serverEnv.BACK_INTERNAL_URL}/:path*`,
+                },
+            ],
+        };
     },
 
     headers: async () => {

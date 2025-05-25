@@ -1,4 +1,4 @@
-FROM node:22.14 AS deps-front
+FROM node:22.16 AS deps-front
 
 ENV LOCALTIME Europe/Moscow
 RUN ln -snf /usr/share/zoneinfo/$LOCALTIME /etc/localtime && echo $LOCALTIME > /etc/timezone

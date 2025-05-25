@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next';
 
-import { environment } from '~/env/client';
+import { environment } from '#/env/client';
 
 export default function sitemap(): MetadataRoute.Sitemap {
     return [

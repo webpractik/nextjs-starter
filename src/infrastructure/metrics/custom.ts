@@ -1,6 +1,5 @@
+import { environment } from '#/env/server';
 import client from 'prom-client';
-
-import { environment } from '~/env/server';
 
 const { collectDefaultMetrics } = client;
 

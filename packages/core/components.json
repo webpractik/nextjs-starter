@@ -12,7 +12,7 @@
     },
     "aliases": {
         "components": "@repo/core",
-        "utils": "@repo/core/utils/cn.ts",
+        "utils": "@repo/core/utils/cn",
         "ui": "@repo/core"
     }
 }

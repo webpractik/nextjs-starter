@@ -1,3 +1,4 @@
+'use client';
 import { Button } from '@repo/core/button';
 import { Checkbox } from '@repo/core/checkbox';
 import {
@@ -15,6 +16,7 @@ import { Label } from '@repo/core/label';
 import { RadioGroup, RadioGroupItem } from '@repo/core/radio-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@repo/core/select';
 import { Skeleton } from '@repo/core/skeleton';
+import { toast } from '@repo/core/sonner';
 import { Switch } from '@repo/core/switch';
 import { Tabs } from '@repo/core/tabs';
 import { TabsContent, TabsList, TabsTrigger } from '@repo/core/tabs/tabs';
@@ -33,7 +35,7 @@ const gridItemClassName =
 
 export default function UiPage() {
     return (
-        <div className="flex size-full flex-col items-center justify-center gap-2 bg-white">
+        <div className="flex size-full flex-col items-center justify-center gap-2 bg-white p-8">
             <div className={'grid grid-cols-3 gap-8'}>
                 <div className={gridItemClassName}>
                     <div className="flex flex-col gap-5">
@@ -188,6 +190,16 @@ export default function UiPage() {
                         <TabsContent value="tab-1">Контент первого таба.</TabsContent>
                         <TabsContent value="tab-2">Контент второго таба.</TabsContent>
                     </Tabs>
+                </div>
+
+                <div className={gridItemClassName}>
+                    <Button
+                        onClick={() => {
+                            toast('Вызов уведомления');
+                        }}
+                    >
+                        Тост
+                    </Button>
                 </div>
             </div>
         </div>

@@ -1,17 +1,27 @@
 import './globals.css';
 
+import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
-import { ReactQueryProvider } from '@/_shared/utilities/providers/react-query';
+import { Toaster } from '@repo/core/sonner';
+import { geistSans } from '#/fonts/geist';
+import { cn } from '#/utils/cn';
 
-import { cn } from '~/lib/utils/cn';
+export const dynamic = 'auto';
+// 'auto' | 'force-dynamic' | 'error' | 'force-static'
 
-import { geistSans } from './fonts/font';
+export const revalidate = false;
+// false | 0 | number
 
-export const dynamic = 'error';
-export const fetchCache = 'default-cache';
+export const fetchCache = 'auto';
+// 'auto' | 'default-cache' | 'only-cache' | 'force-cache' | 'force-no-store' | 'default-no-store' | 'only-no-store'
 
-export const metadata = {
+export const experimental_ppr = false;
+// true | false
+
+export const runtime = 'nodejs';
+
+export const metadata: Metadata = {
     description: 'Default starter for projects',
     title: 'Next Starter',
 };
@@ -21,14 +31,10 @@ export type RootLayoutProps = Readonly<{ children: ReactNode }>;
 export default function RootLayout({ children }: RootLayoutProps) {
     return (
         <html lang="ru" suppressHydrationWarning>
-            <body
-                className={cn(
-                    'min-h-screen bg-background font-sans antialiased',
-                    geistSans.variable
-                )}
-            >
-                <main>
-                    <ReactQueryProvider>{children}</ReactQueryProvider>
+            <body className={cn('font-sans antialiased', geistSans.variable)}>
+                <main className="relative flex size-full flex-col items-center justify-center overflow-hidden bg-background antialiased">
+                    {children}
+                    <Toaster />
                 </main>
             </body>
         </html>

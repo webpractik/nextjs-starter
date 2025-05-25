@@ -1,0 +1,28 @@
+{
+    "name": "@repo/dr",
+    "version": "1.0.0",
+    "description": "This application supports typesafe routing for NextJS using the `declarative-routing` system.",
+    "main": "index.js",
+    "scripts": {
+        "build": "npx declarative-routing build",
+        "watch": "npx declarative-routing build --watch"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "peerDependencies": {
+        "next": "^15",
+        "react": "^19",
+        "react-dom": "^19",
+        "zod": "^4"
+    },
+    "exports": {
+        ".": "./src/index.ts"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "dependencies": {
+        "query-string": "9.2.0"
+    }
+}

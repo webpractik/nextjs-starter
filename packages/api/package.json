@@ -12,13 +12,13 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@kubb/cli": "3.9.2",
-        "@kubb/core": "3.9.2",
-        "@kubb/plugin-client": "3.9.2",
-        "@kubb/plugin-oas": "3.9.2",
-        "@kubb/plugin-react-query": "3.9.2",
-        "@kubb/plugin-ts": "3.9.2",
-        "@kubb/plugin-zod": "3.9.2",
-        "axios": "1.8.4"
+        "@kubb/cli": "3.10.12",
+        "@kubb/core": "3.10.12",
+        "@kubb/plugin-client": "3.10.12",
+        "@kubb/plugin-oas": "3.10.12",
+        "@kubb/plugin-react-query": "3.10.12",
+        "@kubb/plugin-ts": "3.10.12",
+        "@kubb/plugin-zod": "3.10.12",
+        "axios": "1.9.0"
     }
 }

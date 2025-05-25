@@ -6,8 +6,8 @@ export const ignores = [
     'next.config.ts',
     'next-env.d.ts',
     '*.config.js',
-    'lib/routes',
     'report',
+    'packages/declarative-routing/**/*.ts',
     'packages/api/lib/**/*.ts',
     '.storybook',
 ];

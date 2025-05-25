@@ -5,7 +5,7 @@ import {
     useLaptopMediaQuery,
     useMobileMediaQuery,
     useTabletMediaQuery,
-} from '@/_hooks/use-responsive';
+} from '#/hooks/use-responsive';
 
 export function Desktop({ children }: { children: ReactNode }): ReactNode {
     const isDesktop = useDesktopMediaQuery();

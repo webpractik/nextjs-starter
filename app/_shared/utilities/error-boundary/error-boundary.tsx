@@ -2,7 +2,7 @@ import { Button } from '@repo/core/button';
 import { Typography } from '@repo/core/typography';
 import { type ErrorBoundaryProps, ErrorBoundary as SentryBoundary } from '@sentry/nextjs';
 
-import { cn } from '~/lib/utils/cn';
+import { cn } from '~/src/utils/cn';
 
 type ErrorFallbackProps = {
     description?: string;
