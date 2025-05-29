@@ -10,6 +10,7 @@ export const ignores = [
     'packages/routes/**/*.ts',
     'packages/routes/**/*.tsx',
     '.storybook/preview.tsx',
+    'server.ts',
 ];
 
 export default [
