@@ -6,6 +6,7 @@ import type { ReactNode } from 'react';
 import { Toaster } from '@repo/core/sonner';
 import { geistSans } from '#/fonts/geist';
 import { cn } from '#/utils/cn';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
 export const dynamic = 'auto';
 // 'auto' | 'force-dynamic' | 'error' | 'force-static'
@@ -32,10 +33,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
     return (
         <html lang="ru" suppressHydrationWarning>
             <body className={cn('font-sans antialiased', geistSans.variable)}>
-                <main className="relative flex size-full flex-col items-center justify-center overflow-hidden bg-background antialiased">
-                    {children}
-                    <Toaster />
-                </main>
+                <NuqsAdapter>
+                    <main className="relative flex size-full flex-col items-center justify-center overflow-hidden bg-background antialiased">
+                        {children}
+                        <Toaster />
+                    </main>
+                </NuqsAdapter>
             </body>
         </html>
     );

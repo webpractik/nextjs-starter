@@ -10,17 +10,17 @@ A robust boilerplate for quickly building web applications with Next.js.
 - Tailwind
 - ESLint
 - Prettier
-- Husky
-- Commitizen (git-cz)
+- Lefthook
+- Commitizen
 - Vitest
 - Playwright
 - Lint-staged
 - Storybook
 - Sentry
-- Bundle analyzer
-- React Query
+- Rsdoctor
+- Nuqs
 - Kubb API Codegen
-- Figma tokens
+- Design tokens (style-dictionary)
 - Env validation
 
 ## 🚀 Get started
