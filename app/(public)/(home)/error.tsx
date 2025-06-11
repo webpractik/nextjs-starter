@@ -1,8 +1,9 @@
 'use client';
 
-import { ErrorFallback } from '@/_shared/utilities/error-boundary';
 import * as Sentry from '@sentry/nextjs';
 import { useEffect } from 'react';
+
+import { ErrorFallback } from '@/_shared/utilities/error-boundary';
 
 type ErrorProps = {
     error: { digest?: string } & Error;

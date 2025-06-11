@@ -11,6 +11,6 @@
         ".": "./index.ts"
     },
     "dependencies": {
-        "adze": "2.2.3"
+        "adze": "2.2.4"
     }
 }

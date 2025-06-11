@@ -9,7 +9,8 @@ export const ignores = [
     'report',
     'packages/routes/**/*.ts',
     'packages/api/**/*.ts',
-    '.storybook',
+    '.storybook/preview.tsx',
+    '.storybook/main.ts',
 ];
 
 function lintCommand(filenames) {

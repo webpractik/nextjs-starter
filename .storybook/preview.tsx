@@ -1,5 +1,5 @@
 import '../app/globals.css';
-import type { Preview } from '@storybook/react';
+import type { Preview } from '@storybook/nextjs';
 
 import { geistSans } from '../src/fonts/geist';
 
@@ -16,7 +16,10 @@ const preview: Preview = {
             },
         },
         tags: ['autodocs'],
-        docs: { toc: true },
+        docs: {
+            toc: true,
+            codePanel: true,
+        },
         layout: 'centered',
     },
     decorators: [
