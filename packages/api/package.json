@@ -2,9 +2,8 @@
     "name": "@repo/api",
     "version": "1.0.0",
     "description": "",
-    "exports": {
-        ".": "./codegen/index.ts",
-        "./api-client": "./ky-client.ts"
+    "publishConfig": {
+        "access": "public"
     },
     "scripts": {
         "generate": "kubb generate --config kubb.config.ts"
@@ -12,15 +11,13 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@repo/logger": "*",
-        "@kubb/cli": "3.10.15",
-        "@kubb/core": "3.10.15",
-        "@kubb/plugin-client": "3.10.15",
-        "@kubb/plugin-oas": "3.10.15",
-        "@kubb/plugin-react-query": "3.10.15",
-        "@kubb/plugin-ts": "3.10.15",
-        "@kubb/plugin-zod": "3.10.15",
-        "axios": "1.9.0",
-        "ky": "1.8.1"
+        "@kubb/cli": "3.11.1",
+        "@kubb/core": "3.11.1",
+        "@kubb/plugin-client": "3.11.1",
+        "@kubb/plugin-oas": "3.11.1",
+        "@kubb/plugin-react-query": "3.11.1",
+        "@kubb/plugin-ts": "3.11.1",
+        "@kubb/plugin-zod": "3.11.1",
+        "@repo/logger": "*"
     }
 }

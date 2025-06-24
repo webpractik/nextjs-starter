@@ -8,7 +8,7 @@ const transition = {
     delay: 0.7,
     duration: 1,
     ease: 'easeInOut',
-};
+} as const;
 
 const whileInView = { filter: 'blur(0px)', opacity: 1, y: 0 };
 
