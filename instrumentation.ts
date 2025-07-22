@@ -14,13 +14,4 @@ export function register() {
             tracesSampleRate: 1,
         });
     }
-
-    if (process.env.NEXT_RUNTIME === 'edge') {
-        Sentry.init({
-            dsn: environment.SENTRY_DSN,
-            environment: `${environment.APP_ENV}-edge`,
-            sampleRate: 0,
-            tracesSampleRate: 0,
-        });
-    }
 }
