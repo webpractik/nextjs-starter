@@ -17,9 +17,6 @@ export const revalidate = false;
 export const fetchCache = 'auto';
 // 'auto' | 'default-cache' | 'only-cache' | 'force-cache' | 'force-no-store' | 'default-no-store' | 'only-no-store'
 
-export const experimental_ppr = false;
-// true | false
-
 export const runtime = 'nodejs';
 
 export const metadata: Metadata = {

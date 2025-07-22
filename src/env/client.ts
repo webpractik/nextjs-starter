@@ -5,8 +5,8 @@ export const environment = createEnv({
     client: {
         NEXT_PUBLIC_APP_ENV: z.enum(['LOCAL', 'WORK', 'RC', 'PROD']),
         NEXT_PUBLIC_BFF_PATH: z.string(),
-        NEXT_PUBLIC_FRONT_URL: z.string().url(),
-        NEXT_PUBLIC_SENTRY_DSN: z.string().url(),
+        NEXT_PUBLIC_FRONT_URL: z.url(),
+        NEXT_PUBLIC_SENTRY_DSN: z.url(),
     },
     emptyStringAsUndefined: true,
     runtimeEnv: {

@@ -6,18 +6,20 @@
         "access": "public"
     },
     "scripts": {
-        "generate": "kubb generate --config kubb.config.ts"
+        "generate": "npm run bundle && kubb generate --config kubb.config.ts",
+        "bundle": "npx redocly bundle openapi.yaml -o bundled.yaml"
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@kubb/cli": "3.11.1",
-        "@kubb/core": "3.11.1",
-        "@kubb/plugin-client": "3.11.1",
-        "@kubb/plugin-oas": "3.11.1",
-        "@kubb/plugin-react-query": "3.11.1",
-        "@kubb/plugin-ts": "3.11.1",
-        "@kubb/plugin-zod": "3.11.1",
-        "@repo/logger": "*"
+        "@kubb/cli": "3.16.0",
+        "@kubb/core": "3.16.0",
+        "@kubb/plugin-client": "3.16.0",
+        "@kubb/plugin-oas": "3.16.0",
+        "@kubb/plugin-react-query": "3.16.0",
+        "@kubb/plugin-ts": "3.16.0",
+        "@kubb/plugin-zod": "3.16.0",
+        "@repo/logger": "*",
+        "axios": "1.10.0"
     }
 }

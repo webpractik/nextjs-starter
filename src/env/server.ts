@@ -7,7 +7,7 @@ export const environment = createEnv({
     server: {
         APP_ENV: z.enum(['LOCAL', 'WORK', 'RC', 'PROD']),
         APP_NAME: z.string(),
-        BACK_INTERNAL_URL: z.string().url(),
+        BACK_INTERNAL_URL: z.url(),
         CACHE_PUBLIC_MAX_AGE: z.string().transform(Number).pipe(z.number()).optional(),
         CI: z.enum(['true', 'false']).transform(value => value === 'true'),
         FRONT_HOST: z.string(),
@@ -15,8 +15,8 @@ export const environment = createEnv({
         HTTP_AUTH_LOGIN: z.string().optional(),
         HTTP_AUTH_PASS: z.string().optional(),
         SENTRY_AUTH_TOKEN: z.string(),
-        SENTRY_DSN: z.string().url(),
+        SENTRY_DSN: z.url(),
         SENTRY_ORG: z.string(),
-        SENTRY_URL: z.string().url(),
+        SENTRY_URL: z.url(),
     },
 });

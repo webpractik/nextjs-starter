@@ -20,10 +20,11 @@ export const baseConfig = {
         }),
 
         pluginClient({
-            client: 'fetch',
-            importPath: '../../../fetch.client',
+            client: 'axios',
+            importPath: '../../../axios.client',
             group: { type: 'tag' },
-            output: { path: 'fetch' },
+            output: { path: 'axios' },
+            parser: 'zod',
         }),
 
         // pluginReactQuery({
