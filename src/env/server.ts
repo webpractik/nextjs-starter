@@ -8,7 +8,6 @@ export const environment = createEnv({
         APP_ENV: z.enum(['LOCAL', 'WORK', 'RC', 'PROD']),
         APP_NAME: z.string(),
         BACK_INTERNAL_URL: z.url(),
-        CACHE_PUBLIC_MAX_AGE: z.string().transform(Number).pipe(z.number()).optional(),
         CI: z.enum(['true', 'false']).transform(value => value === 'true'),
         FRONT_HOST: z.string(),
         FRONT_PORT: z.string().transform(Number).pipe(z.number()),

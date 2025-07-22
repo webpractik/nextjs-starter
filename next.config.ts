@@ -5,6 +5,7 @@ import type { NextConfig } from 'next';
 import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
 import { environment as clientEnv } from '#/env/client';
 import { environment as serverEnv } from '#/env/server';
+import { headers } from '~/headers';
 
 const jiti = createJiti(import.meta.url);
 
@@ -22,7 +23,7 @@ const nextConfig: NextConfig = {
 
     cleanDistDir: true,
 
-    webpack: (config, { isServer, nextRuntime }) => {
+    webpack: (config, { isServer }) => {
         if (isServer) {
             config.ignoreWarnings = [{ module: /opentelemetry/ }];
         }
@@ -49,8 +50,9 @@ const nextConfig: NextConfig = {
         return config;
     },
 
+    allowedDevOrigins: ['localhost', process.env.NEXT_PUBLIC_FRONT_URL as string],
+
     experimental: {
-        // ppr: 'incremental',
         webpackBuildWorker: true,
         parallelServerCompiles: true,
         parallelServerBuildTraces: true,
@@ -68,7 +70,6 @@ const nextConfig: NextConfig = {
     images: {
         disableStaticImages: true,
         dangerouslyAllowSVG: true,
-        contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     },
 
     async rewrites() {
@@ -86,84 +87,7 @@ const nextConfig: NextConfig = {
         };
     },
 
-    headers: async () => {
-        if (process.env.NODE_ENV !== 'production') {
-            return [];
-        }
-
-        return [
-            {
-                source: '/:all*(svg|jpg|png|jpeg|woff|woff2|webp|ico)',
-                locale: false,
-                headers: [
-                    {
-                        key: 'Cache-Control',
-                        value: `public, max-age=${process.env.CACHE_PUBLIC_MAX_AGE ?? 3600}, stale-while-revalidate`,
-                    },
-                ],
-            },
-            {
-                source: '/:path*',
-                headers: [
-                    {
-                        key: 'X-DNS-Prefetch-Control',
-                        value: 'on',
-                    },
-                    {
-                        key: 'X-XSS-Protection',
-                        value: '0',
-                    },
-                    {
-                        key: 'X-Content-Type-Options',
-                        value: 'nosniff',
-                    },
-                    {
-                        key: 'X-Permitted-Cross-Domain-Policies',
-                        value: 'none',
-                    },
-                    {
-                        key: 'Content-Security-Policy',
-                        value: `
-                            default-src 'self';
-                            script-src 'self' 'unsafe-eval' 'unsafe-inline';
-                            style-src 'self' 'unsafe-inline';
-                            img-src 'self' blob: data:;
-                            font-src 'self';
-                            object-src 'none';
-                            base-uri 'self';
-                            form-action 'self';
-                            frame-ancestors 'none';
-                            upgrade-insecure-requests;
-                        `.replace(/\n/g, ''),
-                    },
-                    {
-                        key: 'Cross-Origin-Embedder-Policy',
-                        value: 'require-corp',
-                    },
-                    {
-                        key: 'Cross-Origin-Opener-Policy',
-                        value: 'same-origin',
-                    },
-                    {
-                        key: 'Cross-Origin-Resource-Policy',
-                        value: 'same-origin',
-                    },
-                    {
-                        key: 'Referrer-Policy',
-                        value: 'no-referrer',
-                    },
-                    {
-                        key: 'Strict-Transport-Security',
-                        value: 'max-age=31536000; includeSubDomains',
-                    },
-                    {
-                        key: 'Permissions-Policy',
-                        value: 'accelerometer=(), autoplay=(), camera=(), cross-origin-isolated=(), display-capture=(), encrypted-media=(), fullscreen=(), geolocation=(), gyroscope=(), keyboard-map=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(self), usb=(), web-share=(), xr-spatial-tracking=(), clipboard-read=(), clipboard-write=(), gamepad=(), hid=(), idle-detection=(), interest-cohort=(), serial=(), unload=()',
-                    },
-                ],
-            },
-        ];
-    },
+    headers,
 
     logging: {
         fetches: {
