@@ -1,4 +1,4 @@
-import '../app/globals.css';
+import '../src/styles/globals.css';
 import type { Preview } from '@storybook/nextjs';
 
 import { geistSans } from '../src/fonts/geist';

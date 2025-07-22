@@ -1,4 +1,4 @@
-import './globals.css';
+import '#/styles/globals.css';
 
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
@@ -31,7 +31,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <html lang="ru" suppressHydrationWarning>
             <body className={cn('font-sans antialiased', geistSans.variable)}>
                 <NuqsAdapter>
-                    <main className="relative flex size-full flex-col items-center justify-center overflow-hidden bg-background antialiased">
+                    <main className="bg-background relative flex size-full flex-col items-center justify-center overflow-hidden antialiased">
                         {children}
                         <Toaster />
                     </main>
