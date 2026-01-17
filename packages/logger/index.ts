@@ -1,16 +1,16 @@
-import adze, { setup } from 'adze';
+import adze, { setup } from 'adze'
 
-const appName = process.env.APP_NAME as string;
+const appName = process.env.APP_NAME as string
 
 const store = setup({
-    activeLevel: 'info',
-    format: 'pretty',
-});
+	activeLevel: 'info',
+	format: 'pretty',
+})
 
 store.addListener('alert', (log: adze) => {
-    console.info(log);
-});
+	console.warn(log)
+})
 
-const logger = adze.withEmoji.timestamp.ns(appName).seal();
+const logger = adze.withEmoji.timestamp.ns(appName).seal()
 
-export default logger;
+export default logger

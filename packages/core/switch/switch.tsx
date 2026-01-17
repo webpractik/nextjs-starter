@@ -1,32 +1,56 @@
-'use client';
+'use client'
 
-import type { ComponentProps, Ref } from 'react';
+import { Switch as SwitchPrimitive } from '@base-ui/react/switch'
+import { cn } from '../cn'
 
-import * as SwitchPrimitives from '@radix-ui/react-switch';
-
-import { cn } from '../cn';
-
-type SwitchProps = {
-    ref?: Ref<typeof SwitchPrimitives.Root>;
-} & ComponentProps<typeof SwitchPrimitives.Root>;
-
-export function Switch({ className, ref, ...props }: SwitchProps) {
-    return (
-        <SwitchPrimitives.Root
-            className={cn(
-                'peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input',
-                className
-            )}
-            {...props}
-            ref={ref}
-        >
-            <SwitchPrimitives.Thumb
-                className={cn(
-                    'pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0'
-                )}
-            />
-        </SwitchPrimitives.Root>
-    );
+export function Switch({
+	className,
+	size = 'default',
+	...props
+}: {
+	size?: 'default' | 'sm'
+} & SwitchPrimitive.Root.Props) {
+	return (
+		<SwitchPrimitive.Root
+			className={cn(
+				`
+      peer group/switch relative inline-flex shrink-0 items-center rounded-full
+      border border-transparent shadow-xs transition-all outline-none
+      after:absolute after:-inset-x-3 after:-inset-y-2
+      focus-visible:border-ring focus-visible:ring-[3px]
+      focus-visible:ring-ring/50
+      aria-invalid:border-destructive aria-invalid:ring-[3px]
+      aria-invalid:ring-destructive/20
+      data-checked:bg-primary
+      data-disabled:cursor-not-allowed data-disabled:opacity-50
+      data-unchecked:bg-input
+      data-[size=default]:h-[18.4px] data-[size=default]:w-[32px]
+      data-[size=sm]:h-[14px] data-[size=sm]:w-[24px]
+      dark:aria-invalid:border-destructive/50
+      dark:aria-invalid:ring-destructive/40
+      dark:data-unchecked:bg-input/80
+    `,
+				className,
+			)}
+			data-size={size}
+			data-slot="switch"
+			{...props}
+		>
+			<SwitchPrimitive.Thumb
+				className="
+      pointer-events-none block rounded-full bg-background ring-0
+      transition-transform
+      group-data-[size=default]/switch:size-4
+      group-data-[size=sm]/switch:size-3
+      group-data-[size=default]/switch:data-checked:translate-x-[calc(100%-2px)]
+      group-data-[size=sm]/switch:data-checked:translate-x-[calc(100%-2px)]
+      group-data-[size=default]/switch:data-unchecked:translate-x-0
+      group-data-[size=sm]/switch:data-unchecked:translate-x-0
+      dark:data-checked:bg-primary-foreground
+      dark:data-unchecked:bg-foreground
+    "
+				data-slot="switch-thumb"
+			/>
+		</SwitchPrimitive.Root>
+	)
 }
-
-Switch.displayName = SwitchPrimitives.Root.displayName;

@@ -1,31 +1,31 @@
-import { useMedia } from 'react-use';
+import { useMedia } from 'react-use'
 
 export function useDesktopMediaQuery() {
-    return useMedia('(min-width: 1280px)', false);
+	return useMedia('(min-width: 1280px)', false)
 }
 
 export function useLaptopMediaQuery() {
-    return useMedia('(min-width: 1024px)', false);
+	return useMedia('(min-width: 1024px)', false)
 }
 
 export function useMobileMediaQuery() {
-    return useMedia('(min-width: 320px)', true);
+	return useMedia('(min-width: 320px)', true)
 }
 
 export function useTabletMediaQuery() {
-    return useMedia('(min-width: 768px)', false);
+	return useMedia('(min-width: 768px)', false)
 }
 
 export function useBreakpoints() {
-    const gtMobile = useMobileMediaQuery();
-    const gtTablet = useTabletMediaQuery();
-    const gtLaptop = useLaptopMediaQuery();
-    const gtDesktop = useDesktopMediaQuery();
+	const gtMobile = useMobileMediaQuery()
+	const gtTablet = useTabletMediaQuery()
+	const gtLaptop = useLaptopMediaQuery()
+	const gtDesktop = useDesktopMediaQuery()
 
-    return {
-        gtDesktop,
-        gtLaptop,
-        gtMobile,
-        gtTablet,
-    };
+	return {
+		gtDesktop,
+		gtLaptop,
+		gtMobile,
+		gtTablet,
+	}
 }

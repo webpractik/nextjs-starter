@@ -7,7 +7,7 @@
             "#/*": ["./src/*"]
         },
         "plugins": [{ "name": "next" }],
-        "types": ["@vitest/browser/providers/playwright", "./src/types/global.d.ts"]
+        "types": ["./src/types/global.d.ts"]
     },
     "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", ".storybook"],
     "exclude": ["node_modules", ".next", "build", "dist", "packages/routes"]

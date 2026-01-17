@@ -1,0 +1,15 @@
+apis:
+  talentmind@v1:
+    root: ./openapi/openapi.yaml
+
+extends:
+  - recommended
+
+rules:
+  no-unused-components: warn
+  operation-operationId: error
+  operation-summary: error
+  operation-description: warn
+  tag-description: warn
+  security-defined: off
+  info-license: off

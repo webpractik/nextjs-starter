@@ -1,9 +1,9 @@
-import { headers } from 'next/headers';
+import { headers } from 'next/headers'
 
 export async function getURL() {
-    const headersList = await headers();
+	const headersList = await headers()
 
-    const url = headersList.get('x-url') ?? '';
+	const url = headersList.get('x-url') ?? ''
 
-    return new URL(url);
+	return new URL(url)
 }

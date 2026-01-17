@@ -1,126 +1,130 @@
-import { withSentryConfig } from '@sentry/nextjs';
-import { createJiti } from 'jiti';
-import { nanoid } from 'nanoid';
-import type { NextConfig } from 'next';
-import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin';
-import { environment as clientEnv } from '#/env/client';
-import { environment as serverEnv } from '#/env/server';
-import { headers } from '~/headers';
+import type { NextConfig } from 'next'
+import { environment as clientEnv } from '#/env/client'
+import { environment as serverEnv } from '#/env/server'
+import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin'
+import { withSentryConfig } from '@sentry/nextjs'
+import { createJiti } from 'jiti'
+import { nanoid } from 'nanoid'
+import { headers } from '~/headers'
 
 const jiti = createJiti(import.meta.url);
 
 (async () => {
-    try {
-        await jiti.import('./src/env/client', {});
-        await jiti.import('./src/env/server', {});
-    } catch {}
-})();
+	try {
+		await jiti.import('./src/env/client', {})
+		await jiti.import('./src/env/server', {})
+	}
+	catch {}
+})()
 
 const nextConfig: NextConfig = {
-    reactStrictMode: true,
+	output: 'standalone',
 
-    poweredByHeader: false,
+	reactStrictMode: true,
 
-    cleanDistDir: true,
+	reactCompiler: true,
 
-    webpack: (config, { isServer }) => {
-        if (isServer) {
-            config.ignoreWarnings = [{ module: /opentelemetry/ }];
-        }
+	cacheComponents: false,
 
-        if (process.env.ANALYZE === 'true') {
-            if (config.name === 'client') {
-                config.plugins.push(
-                    new RsdoctorWebpackPlugin({
-                        disableClientServer: true,
-                    })
-                );
-            } else if (config.name === 'server') {
-                config.plugins.push(
-                    new RsdoctorWebpackPlugin({
-                        disableClientServer: true,
-                        output: {
-                            reportDir: './.next/server',
-                        },
-                    })
-                );
-            }
-        }
+	typedRoutes: true,
 
-        return config;
-    },
+	reactProductionProfiling: false,
 
-    allowedDevOrigins: ['localhost', process.env.NEXT_PUBLIC_FRONT_URL as string],
+	poweredByHeader: false,
 
-    experimental: {
-        webpackBuildWorker: true,
-        parallelServerCompiles: true,
-        parallelServerBuildTraces: true,
-        serverSourceMaps: true,
-        webpackMemoryOptimizations: true,
-        optimizePackageImports: ['react-use', 'lodash-es', 'lucide-react'],
-    },
+	cleanDistDir: true,
 
-    generateBuildId: () => `${nanoid()}-${new Date().toISOString()}`,
+	turbopack: {},
 
-    devIndicators: {
-        position: 'top-right',
-    },
+	webpack: (config) => {
+		if (process.env.ANALYZE === 'true') {
+			if (config.name === 'client') {
+				config.plugins.push(
+					new RsdoctorWebpackPlugin({
+						disableClientServer: true,
+					}),
+				)
+			}
+			else if (config.name === 'server') {
+				config.plugins.push(
+					new RsdoctorWebpackPlugin({
+						disableClientServer: true,
+						output: {
+							reportDir: './.next/server',
+						},
+					}),
+				)
+			}
+		}
 
-    images: {
-        disableStaticImages: true,
-        dangerouslyAllowSVG: true,
-    },
+		return config
+	},
 
-    async rewrites() {
-        if (!clientEnv.NEXT_PUBLIC_BFF_PATH || !serverEnv.BACK_INTERNAL_URL) {
-            throw new Error('Missing bff envs');
-        }
+	allowedDevOrigins: ['localhost', process.env.NEXT_PUBLIC_FRONT_URL as string],
 
-        return {
-            beforeFiles: [
-                {
-                    source: `${clientEnv.NEXT_PUBLIC_BFF_PATH}/:path*`,
-                    destination: `${serverEnv.BACK_INTERNAL_URL}/:path*`,
-                },
-            ],
-        };
-    },
+	experimental: {
+		serverSourceMaps: true,
+		optimizePackageImports: ['react-use', 'lodash-es', 'lucide-react'],
+	},
 
-    headers,
+	generateBuildId: () => `${nanoid()}-${new Date().toISOString()}`,
 
-    logging: {
-        fetches: {
-            fullUrl: true,
-        },
-    },
-};
+	devIndicators: {
+		position: 'top-right',
+	},
 
-const isProduction =
-    process.env.NODE_ENV === 'production' && process.env.NEXT_PUBLIC_APP_ENV === 'PROD';
+	images: {
+		disableStaticImages: true,
+		dangerouslyAllowSVG: true,
+	},
 
-const withSentry = () => {
-    if (process.env.NEXT_PUBLIC_SENTRY_DSN && process.env.NEXT_PUBLIC_SENTRY_DSN?.length > 0) {
-        return withSentryConfig(nextConfig, {
-            org: process.env.SENTRY_ORG,
-            project: process.env.APP_NAME,
-            authToken: process.env.SENTRY_AUTH_TOKEN,
-            sentryUrl: process.env.SENTRY_URL,
-            silent: true,
-            widenClientFileUpload: true,
-            sourcemaps: { deleteSourcemapsAfterUpload: true },
-            reactComponentAnnotation: { enabled: true },
-            disableLogger: true,
-            telemetry: false,
-            bundleSizeOptimizations: {
-                excludeDebugStatements: true,
-                excludeReplayShadowDom: true,
-                excludeReplayIframe: true,
-            },
-        });
-    }
+	async rewrites() {
+		if (!clientEnv.NEXT_PUBLIC_BFF_PATH || !serverEnv.BACK_INTERNAL_URL) {
+			throw new Error('Missing bff envs')
+		}
 
-    return nextConfig;
-};
+		return {
+			beforeFiles: [
+				{
+					source: `${clientEnv.NEXT_PUBLIC_BFF_PATH}/:path*`,
+					destination: `${serverEnv.BACK_INTERNAL_URL}/:path*`,
+				},
+			],
+		}
+	},
 
-export default isProduction ? withSentry() : nextConfig;
+	headers,
+
+	logging: {
+		fetches: {
+			fullUrl: true,
+		},
+	},
+}
+
+const isProduction
+	= process.env.NODE_ENV === 'production' && process.env.NEXT_PUBLIC_APP_ENV === 'PROD'
+
+function withSentry() {
+	if (process.env.NEXT_PUBLIC_SENTRY_DSN && process.env.NEXT_PUBLIC_SENTRY_DSN?.length > 0) {
+		return withSentryConfig(nextConfig, {
+			org: process.env.SENTRY_ORG,
+			project: process.env.APP_NAME,
+			authToken: process.env.SENTRY_AUTH_TOKEN,
+			sentryUrl: process.env.SENTRY_URL,
+			silent: true,
+			widenClientFileUpload: true,
+			sourcemaps: { deleteSourcemapsAfterUpload: true },
+			telemetry: false,
+			bundleSizeOptimizations: {
+				excludeDebugStatements: true,
+				excludeReplayShadowDom: true,
+				excludeReplayIframe: true,
+			},
+		})
+	}
+
+	return nextConfig
+}
+
+export default isProduction ? withSentry() : nextConfig

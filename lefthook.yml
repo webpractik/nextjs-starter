@@ -2,13 +2,14 @@
 #   https://lefthook.dev/configuration/
 #
 pre-commit:
-    jobs:
-        - run: npx lint-staged
+  jobs:
+    - run: npx lint-staged
 
 prepare-commit-msg:
-    commands:
-        commitizen:
-            interactive: true
-            run: npx cz --hook
-            env:
-                LEFTHOOK: 0
+  commands:
+    commitizen:
+      skip: merge
+      interactive: true
+      run: npx cz --hook
+      env:
+        LEFTHOOK: 0

@@ -1,11 +1,5 @@
 arrowParens: avoid
-plugins:
-    - prettier-plugin-tailwindcss
 printWidth: 100
 singleQuote: true
 tabWidth: 4
-tailwindFunctions:
-    - cn
-    - cva
-tailwindStylesheet: ./app/globals.css
 trailingComma: es5

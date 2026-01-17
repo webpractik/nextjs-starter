@@ -1,19 +1,19 @@
-'use client';
+'use client'
 
-import * as Sentry from '@sentry/nextjs';
-import { useEffect } from 'react';
+import { ErrorFallback } from '#/components/utilities/error-boundary'
+import * as Sentry from '@sentry/nextjs'
 
-import { ErrorFallback } from '@/_shared/utilities/error-boundary';
+import { useEffect } from 'react'
 
-type ErrorProps = {
-    error: { digest?: string } & Error;
-    reset: () => void;
-};
+interface ErrorProps {
+	error: { digest?: string } & Error
+	reset: () => void
+}
 
 export default function ErrorPage({ error, reset }: Readonly<ErrorProps>) {
-    useEffect(() => {
-        Sentry.captureException(error);
-    }, [error]);
+	useEffect(() => {
+		Sentry.captureException(error)
+	}, [error])
 
-    return <ErrorFallback error={error} resetError={reset} />;
+	return <ErrorFallback error={error} resetError={reset} />
 }
