@@ -19,6 +19,7 @@ dependency-graph.svg
 packages/*/node_modules
 storybook.log
 report
+docs/superpowers
 
 # dependencies
 /node_modules

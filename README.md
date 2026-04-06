@@ -2,49 +2,48 @@
 
 A robust boilerplate for quickly building web applications with Next.js.
 
-## 🪄 Features:
+## Features
 
-- Next 15+ (app router, server components)
+- Next.js 16 (App Router, Server Components, React Compiler)
 - React 19
-- Typescript
-- Tailwind
-- ESLint
+- TypeScript 6
+- Tailwind CSS 4
+- ESLint (flat config)
 - Prettier
 - Lefthook
 - Commitizen
-- Vitest
+- Vitest (browser mode)
 - Playwright
 - Lint-staged
 - Storybook
-- Sentry
+- Sentry + Vercel OTEL
 - Rsdoctor
 - Nuqs
 - Kubb API Codegen
-- Design tokens (style-dictionary)
-- Env validation
+- Design tokens (Style Dictionary)
+- Env validation (Zod + @t3-oss/env)
 
-## 🚀 Get started
+## Get started
 
-1. Install the project using `npx create-next-app -e https://github.com/webpractik/nextjs-starter --use-npm`
+1. Install the project using `bunx create-next-app -e https://github.com/webpractik/nextjs-starter`
 2. Copy environment variables to .env (`cp .env.example .env`) and configure them.
-3. Start the development server with `npm run dev`
+3. Start the development server with `bun run dev`
 
-## 🎯 Deploy
+## Deploy
 
-- **Node:** `^22`
-- **Npm:** `^10`
+- **Bun:** `^1.3`
 - **App Port:** `3000`
 - **Healthcheck:** `/api/health`
 - **Ready:** `/api/ready`
 - **Prometheus Metrics:** `/api/metrics`
 
-## Run production mode:
+## Run production mode
 
-- `npm ci`
-- `npm run build`
-- `npm run prod`
+- `bun install`
+- `bun run build`
+- `bun run prod`
 
-## 📦 Additional utilities:
+## Additional utilities
 
 - [nanoid](https://www.npmjs.com/package/nanoid) - Generate unique IDs
 - [lodash-es](https://lodash.com/docs) - Utility library
