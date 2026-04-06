@@ -1,10 +1,6 @@
+import { isDev } from '#/constants/env'
 import { clientEnvironment } from '../../src/env/client'
 import { serverEnvironment } from '../../src/env/server'
-
-/**
- * RequestCredentials
- */
-export type RequestCredentials = 'omit' | 'same-origin' | 'include'
 
 /**
  * Subset of FetchRequestConfig
@@ -13,9 +9,8 @@ export interface RequestConfig<TData = unknown> {
 	baseURL?: string
 	url?: string
 	method?: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE' | 'OPTIONS' | 'HEAD'
-	params?: unknown
+	params?: Record<string, string | number | boolean | null | undefined>
 	data?: TData | FormData
-	responseType?: 'arraybuffer' | 'blob' | 'document' | 'json' | 'text' | 'stream'
 	signal?: AbortSignal
 	headers?: [string, string][] | Record<string, string>
 	credentials?: RequestCredentials
@@ -63,42 +58,57 @@ export type Client = <TData, _TError = unknown, TVariables = unknown>(
 	config: RequestConfig<TVariables>,
 ) => Promise<ResponseConfig<TData>>
 
-async function fetch<TData, _TError = unknown, TVariables = unknown>(paramsConfig: RequestConfig<TVariables>): Promise<ResponseConfig<TData>> {
-	const normalizedParams = new URLSearchParams()
+function getBaseUrl() {
+	if (typeof window === 'undefined') {
+		return serverEnvironment.BACK_INTERNAL_URL
+	}
 
+	if (isDev) {
+		return clientEnvironment.NEXT_PUBLIC_BFF_PATH
+	}
+
+	return clientEnvironment.NEXT_PUBLIC_BACK_URL
+}
+
+async function fetch<TData, _TError = unknown, TVariables = unknown>(paramsConfig: RequestConfig<TVariables>): Promise<ResponseConfig<TData>> {
 	const config = mergeConfig(getConfig(), paramsConfig)
 
-	Object.entries(config.params || {}).forEach(([key, value]) => {
-		if (value !== undefined) {
-			normalizedParams.append(key, value === null ? 'null' : value.toString())
-		}
-	})
-
-	const baseURL
-		= typeof window === 'undefined'
-			? serverEnvironment.BACK_INTERNAL_URL
-			: clientEnvironment.NEXT_PUBLIC_BACK_URL
-
+	const baseURL = getBaseUrl()
 	let targetUrl = [baseURL, config.url].filter(Boolean).join('')
 
 	if (config.params) {
-		targetUrl += `?${normalizedParams}`
+		const searchParams = new URLSearchParams()
+
+		for (const [key, value] of Object.entries(config.params)) {
+			if (value !== undefined) {
+				searchParams.append(key, value === null ? 'null' : String(value))
+			}
+		}
+
+		targetUrl += `?${searchParams}`
+	}
+
+	const isFormData = config.data instanceof FormData
+	const headers: Record<string, string> = {
+		...(Array.isArray(config.headers) ? Object.fromEntries(config.headers) : config.headers),
+		...(!isFormData && { 'Content-Type': 'application/json' }),
 	}
 
 	const response = await globalThis.fetch(targetUrl, {
-		credentials: 'include',
+		credentials: config.credentials ?? 'include',
 		method: config.method?.toUpperCase(),
-		body: config.data instanceof FormData ? config.data : JSON.stringify(config.data),
+		body: isFormData ? config.data as FormData : JSON.stringify(config.data),
 		signal: config.signal,
-		headers: { ...config.headers, 'Content-Type': 'application/json' },
+		headers,
 	})
+
+	if (!response.ok) {
+		const errorData = await response.json()
+		throw new Error(response.statusText, { cause: { data: errorData, status: response.status, statusText: response.statusText } })
+	}
 
 	const data
 		= [204, 205, 304].includes(response.status) || !response.body ? {} : await response.json()
-
-	if (!response.ok) {
-		throw new Error(response.statusText, { cause: { data, status: response.status, statusText: response.statusText } })
-	}
 
 	return {
 		data: data as TData,
