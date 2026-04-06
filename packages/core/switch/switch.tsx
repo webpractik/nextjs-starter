@@ -37,7 +37,7 @@ export function Switch({
 			{...props}
 		>
 			<SwitchPrimitive.Thumb
-				className="
+				className={`
       pointer-events-none block rounded-full bg-background ring-0
       transition-transform
       group-data-[size=default]/switch:size-4
@@ -48,7 +48,7 @@ export function Switch({
       group-data-[size=sm]/switch:data-unchecked:translate-x-0
       dark:data-checked:bg-primary-foreground
       dark:data-unchecked:bg-foreground
-    "
+    `}
 				data-slot="switch-thumb"
 			/>
 		</SwitchPrimitive.Root>

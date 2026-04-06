@@ -2,6 +2,14 @@
 
 A robust boilerplate for quickly building web applications with Next.js.
 
+## Get started
+
+1. Install the project using `bunx create-next-app -e https://github.com/webpractik/nextjs-starter`
+2. Copy environment variables to .env (`cp .env.example .env`) and configure them.
+3. Sync git hooks: `npx lefthook install`
+4. Start the development server with `bun run dev`
+
+
 ## Features
 
 - Next.js 16 (App Router, Server Components, React Compiler)
@@ -22,12 +30,6 @@ A robust boilerplate for quickly building web applications with Next.js.
 - Kubb API Codegen
 - Design tokens (Style Dictionary)
 - Env validation (Zod + @t3-oss/env)
-
-## Get started
-
-1. Install the project using `bunx create-next-app -e https://github.com/webpractik/nextjs-starter`
-2. Copy environment variables to .env (`cp .env.example .env`) and configure them.
-3. Start the development server with `bun run dev`
 
 ## Deploy
 

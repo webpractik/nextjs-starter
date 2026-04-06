@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import { Field } from '@base-ui/react/field'
 
 import { GlobeIcon } from 'lucide-react'

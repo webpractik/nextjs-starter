@@ -1,7 +1,8 @@
 import type { NextConfig } from 'next/dist/server/config-shared'
+import { isDev } from '#/constants/env'
 
 export const headers: NextConfig['headers'] = async () => {
-	if (process.env.NODE_ENV !== 'production') {
+	if (isDev) {
 		return []
 	}
 

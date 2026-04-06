@@ -1,0 +1,9 @@
+# Deploy stage — configure for your target environment
+# Examples: Docker registry push, Kubernetes deploy, SSH deploy
+#
+# deploy:
+#   stage: deploy
+#   script:
+#     - echo "Deploy not configured"
+#   only:
+#     - main

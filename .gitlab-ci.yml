@@ -1,0 +1,6 @@
+stages:
+  - build
+  - deploy
+include:
+  - .gitlab/build.yaml
+  - .gitlab/deploy.yaml

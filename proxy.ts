@@ -1,18 +1,12 @@
-import type { NextRequest } from 'next/server'
-import { NextResponse } from 'next/server'
+import { chainProxy } from '#/proxy/chain'
+import { injectHeaders } from '#/proxy/inject-headers'
+import { requestLogging } from '#/proxy/request-logging'
+
+export const proxy = chainProxy([
+	requestLogging,
+	injectHeaders,
+])
 
 export const config = {
 	matcher: ['/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)'],
-}
-
-export function proxy(request: NextRequest) {
-	const requestHeaders = new Headers(request.headers)
-
-	requestHeaders.set('x-url', request.url)
-
-	return NextResponse.next({
-		request: {
-			headers: requestHeaders,
-		},
-	})
 }

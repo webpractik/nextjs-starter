@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next'
 
-import { environment } from '#/env/client'
+import { clientEnvironment } from '#/env/client'
 
 export default function sitemap(): MetadataRoute.Sitemap {
 	return [
@@ -8,7 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 			changeFrequency: 'yearly',
 			lastModified: new Date(),
 			priority: 1,
-			url: environment.NEXT_PUBLIC_FRONT_URL,
+			url: clientEnvironment.NEXT_PUBLIC_FRONT_URL,
 		},
 	]
 }

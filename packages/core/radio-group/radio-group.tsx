@@ -40,14 +40,14 @@ export function RadioGroupItem({ className, ...props }: RadioPrimitive.Root.Prop
 		>
 			<RadioPrimitive.Indicator
 				data-slot="radio-group-indicator"
-				className="
+				className={`
       flex size-4 items-center justify-center text-primary
       group-aria-invalid/radio-group-item:text-destructive
-    "
+    `}
 			>
-				<CircleIcon className="
+				<CircleIcon className={`
       absolute top-1/2 left-1/2 size-2 -translate-1/2 fill-current
-    "
+    `}
 				/>
 			</RadioPrimitive.Indicator>
 		</RadioPrimitive.Root>

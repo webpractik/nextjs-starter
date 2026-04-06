@@ -3,13 +3,13 @@
 #
 pre-commit:
   jobs:
-    - run: npx lint-staged
+    - run: bunx lint-staged
 
 prepare-commit-msg:
   commands:
     commitizen:
       skip: merge
       interactive: true
-      run: npx cz --hook
+      run: bunx cz --hook
       env:
         LEFTHOOK: 0

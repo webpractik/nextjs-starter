@@ -1,7 +1,7 @@
 import { createEnv } from '@t3-oss/env-nextjs'
 import { z } from 'zod'
 
-export const environment = createEnv({
+export const serverEnvironment = createEnv({
 	emptyStringAsUndefined: true,
 	experimental__runtimeEnv: process.env,
 	server: {

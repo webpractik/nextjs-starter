@@ -1,14 +1,64 @@
 import antfu from '@antfu/eslint-config'
 import eslintPluginBetterTailwindcss from 'eslint-plugin-better-tailwindcss'
+import jsxA11y from 'eslint-plugin-jsx-a11y'
+
+const preferTemplate = {
+	rules: {
+		'multiline-classname': {
+			meta: {
+				type: 'suggestion',
+				fixable: 'code',
+				schema: [],
+			},
+			create(context) {
+				const escapeForTemplateLiteral = str =>
+					str.replace(/`/g, '\\`').replace(/\$\{/g, '\\${')
+
+				return {
+					JSXAttribute(node) {
+						if (node.name?.type !== 'JSXIdentifier')
+							return
+						if (node.name.name !== 'className')
+							return
+
+						// Only handle: className="...multiline..."
+						if (
+							node.value?.type === 'Literal'
+							&& typeof node.value.value === 'string'
+							&& node.value.value.includes('\n')
+						) {
+							const raw = node.value.value
+
+							context.report({
+								node: node.value,
+								message:
+                                    'Multiline className strings can cause hydration errors. Use a template literal/expression instead.',
+								fix(fixer) {
+									const escaped = escapeForTemplateLiteral(raw)
+									return fixer.replaceText(node.value, `{\`${escaped}\`}`)
+								},
+							})
+						}
+					},
+				}
+			},
+		},
+	},
+}
 
 export default antfu(
 	{
 		type: 'app',
 		gitignore: true,
 		stylistic: {
+			jsx: true,
 			indent: 'tab',
 			quotes: 'single',
-			jsx: true,
+			tabWidth: 4,
+			trailingComma: 'always-multiline',
+			arrowParens: false,
+			severity: 'warn',
+			braceStyle: 'stroustrup',
 		},
 		formatters: {
 			css: true,
@@ -20,7 +70,7 @@ export default antfu(
 		react: true,
 		jsonc: false,
 		markdown: true,
-		ignores: ['.kuber', 'styles', 'packages/api/bundled.yaml', 'packages/api/codegen'],
+		ignores: ['.kuber', 'styles', 'packages/api/bundled.yaml', 'packages/api/codegen', 'docs'],
 	},
 	{
 		rules: {
@@ -48,6 +98,7 @@ export default antfu(
 		},
 	},
 	{ ...eslintPluginBetterTailwindcss.configs.recommended },
+	jsxA11y.flatConfigs.recommended,
 	{
 		settings: {
 			'better-tailwindcss': {
@@ -55,14 +106,12 @@ export default antfu(
 			},
 		},
 	},
-	// {
-	//     extends: [
-	//         eslintPluginBetterTailwindcss.configs.recommended
-	//     ],
-	//     settings: {
-	//         "better-tailwindcss": {
-	//             entryPoint: "src/styles/globals.css",
-	//         }
-	//     }
-	// },
+	{
+		plugins: {
+			preferTemplate,
+		},
+		rules: {
+			'preferTemplate/multiline-classname': 'error',
+		},
+	},
 )

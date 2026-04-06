@@ -14,36 +14,36 @@ const whileInView = { filter: 'blur(0px)', opacity: 1, y: 0 }
 
 export function Hero() {
 	return (
-		<div className="
+		<div className={`
     relative flex size-full h-screen flex-col items-center justify-center
     bg-radial from-black to-black/95 text-slate-950
-  "
+  `}
 		>
 			<motion.div
-				className="
+				className={`
       pointer-events-none relative flex flex-col items-center justify-center
       gap-4 px-4
-    "
+    `}
 				initial={initialState}
 				transition={transition}
 				whileInView={whileInView}
 			>
 
 				<Typography
-					className="
+					className={`
        bg-linear-to-b from-neutral-50 to-neutral-400 bg-clip-text text-center
        text-4xl font-bold text-transparent
        md:text-7xl
-     "
+     `}
 					variant="h1"
 				>
 					Next Starter
 				</Typography>
-				<div className="
+				<div className={`
       max-w-3xl bg-linear-to-b from-neutral-50 to-neutral-400 bg-clip-text py-4
       text-center font-extralight text-transparent
       md:text-2xl
-    "
+    `}
 				>
 					Этот стартовый комплект нацелен на предоставление разработчикам надежной основы
 					для создания приложений на Next.js, обеспечивая соблюдение лучших практик по

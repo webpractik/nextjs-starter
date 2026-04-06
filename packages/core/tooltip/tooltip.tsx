@@ -9,7 +9,7 @@ export function TooltipProvider({
 	...props
 }: TooltipPrimitive.Provider.Props) {
 	return (
-	// eslint-disable-next-line react/no-context-provider
+
 		<TooltipPrimitive.Provider
 			data-slot="tooltip-provider"
 			delay={delay}
@@ -72,7 +72,7 @@ export function TooltipContent({
 					{...props}
 				>
 					{children}
-					<TooltipPrimitive.Arrow className="
+					<TooltipPrimitive.Arrow className={`
        z-50 size-2.5 translate-y-[calc(-50%-2px)] rotate-45 rounded-[2px]
        bg-foreground fill-foreground
        data-[side=bottom]:top-1
@@ -81,7 +81,7 @@ export function TooltipContent({
        data-[side=right]:top-1/2! data-[side=right]:-left-1
        data-[side=right]:-translate-y-1/2
        data-[side=top]:-bottom-2.5
-     "
+     `}
 					/>
 				</TooltipPrimitive.Popup>
 			</TooltipPrimitive.Positioner>

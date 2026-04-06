@@ -1,5 +1,7 @@
 import type { StorybookConfig } from '@storybook/nextjs'
 
+const nodeModulesRe = /node_modules/
+
 const config: StorybookConfig = {
 	stories: ['../app/**/*.stories.tsx', '../packages/core/**/*.stories.tsx'],
 	addons: [
@@ -16,7 +18,7 @@ const config: StorybookConfig = {
 			shouldRemoveUndefinedFromOptional: true,
 			shouldExtractLiteralValuesFromEnum: true,
 			shouldExtractValuesFromUnion: true,
-			propFilter: prop => (prop.parent ? !/node_modules/.test(prop.parent.fileName) : true),
+			propFilter: prop => (prop.parent ? !nodeModulesRe.test(prop.parent.fileName) : true),
 		},
 	},
 	features: {

@@ -6,6 +6,7 @@ import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react'
 import * as React from 'react'
 import { cn } from '../cn'
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const Select = SelectPrimitive.Root
 
 export function SelectGroup({ className, ...props }: SelectPrimitive.Group.Props) {
@@ -69,9 +70,9 @@ export function SelectTrigger({
 			{children}
 			<SelectPrimitive.Icon
 				render={(
-					<ChevronDownIcon className="
+					<ChevronDownIcon className={`
        pointer-events-none size-4 text-muted-foreground
-     "
+     `}
 					/>
 				)}
 			/>
@@ -164,18 +165,18 @@ export function SelectItem({
 			)}
 			{...props}
 		>
-			<SelectPrimitive.ItemText className="
+			<SelectPrimitive.ItemText className={`
      flex flex-1 shrink-0 gap-2 whitespace-nowrap
-   "
+   `}
 			>
 				{children}
 			</SelectPrimitive.ItemText>
 			<SelectPrimitive.ItemIndicator
 				render={(
-					<span className="
+					<span className={`
        pointer-events-none absolute right-2 flex size-4 items-center
        justify-center
-     "
+     `}
 					/>
 				)}
 			>

@@ -1,0 +1,35 @@
+typecheck:
+  stage: build
+  image: oven/bun:${BUN_VERSION}
+  cache:
+    key:
+      files:
+        - bun.lock
+    paths:
+      - node_modules/
+  before_script:
+    - bun install --frozen-lockfile
+  script:
+    - bun run tsc
+
+build:
+  stage: build
+  image: oven/bun:${BUN_VERSION}
+  cache:
+    key:
+      files:
+        - bun.lock
+    paths:
+      - node_modules/
+      - .next/cache/
+  before_script:
+    - bun install --frozen-lockfile
+    - cp .env.example .env
+    - sh .gitlab/env.sh
+  script:
+    - bun run build
+  artifacts:
+    paths:
+      - .next/standalone/
+      - .next/static/
+    expire_in: 1 hour

@@ -1,6 +1,7 @@
 import type { NextConfig } from 'next'
-import { environment as clientEnv } from '#/env/client'
-import { environment as serverEnv } from '#/env/server'
+import { isProd } from '#/constants/env'
+import { clientEnvironment } from '#/env/client'
+import { serverEnvironment } from '#/env/server'
 import { RsdoctorWebpackPlugin } from '@rsdoctor/webpack-plugin'
 import { withSentryConfig } from '@sentry/nextjs'
 import { createJiti } from 'jiti'
@@ -24,7 +25,7 @@ const nextConfig: NextConfig = {
 
 	reactCompiler: true,
 
-	cacheComponents: false,
+	cacheComponents: true,
 
 	typedRoutes: true,
 
@@ -79,15 +80,15 @@ const nextConfig: NextConfig = {
 	},
 
 	async rewrites() {
-		if (!clientEnv.NEXT_PUBLIC_BFF_PATH || !serverEnv.BACK_INTERNAL_URL) {
+		if (!clientEnvironment.NEXT_PUBLIC_BFF_PATH || !serverEnvironment.BACK_INTERNAL_URL) {
 			throw new Error('Missing bff envs')
 		}
 
 		return {
 			beforeFiles: [
 				{
-					source: `${clientEnv.NEXT_PUBLIC_BFF_PATH}/:path*`,
-					destination: `${serverEnv.BACK_INTERNAL_URL}/:path*`,
+					source: `${clientEnvironment.NEXT_PUBLIC_BFF_PATH}/:path*`,
+					destination: `${serverEnvironment.BACK_INTERNAL_URL}/:path*`,
 				},
 			],
 		}
@@ -101,9 +102,6 @@ const nextConfig: NextConfig = {
 		},
 	},
 }
-
-const isProduction
-	= process.env.NODE_ENV === 'production' && process.env.NEXT_PUBLIC_APP_ENV === 'PROD'
 
 function withSentry() {
 	if (process.env.NEXT_PUBLIC_SENTRY_DSN && process.env.NEXT_PUBLIC_SENTRY_DSN?.length > 0) {
@@ -127,4 +125,4 @@ function withSentry() {
 	return nextConfig
 }
 
-export default isProduction ? withSentry() : nextConfig
+export default isProd ? withSentry() : nextConfig

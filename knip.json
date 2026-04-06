@@ -1,0 +1,22 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "tags": [
+    "-lintignore"
+  ],
+  "ignore": [
+    "packages/api/**",
+    "instrumentation-client.js",
+    "vitest.config.ts",
+    "vitest.setup.ts"
+  ],
+  "workspaces": {
+    ".": {
+      "vitest": {
+        "config": []
+      }
+    },
+    "packages/core": {
+
+    }
+  }
+}

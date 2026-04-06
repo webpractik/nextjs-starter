@@ -27,6 +27,7 @@ export function Tabs({
 	)
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const tabsListVariants = cva(
 	`
    group/tabs-list inline-flex w-fit items-center justify-center rounded-lg

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs'
 
 import { Button } from '../button'
 import { Input } from '../input'
@@ -118,10 +118,10 @@ export const LongContent: Story = {
 	render: () => (
 		<Dialog>
 			<DialogTrigger render={<Button />}>Open Long Dialog</DialogTrigger>
-			<DialogContent className="
+			<DialogContent className={`
      max-h-[80vh] overflow-y-auto
      sm:max-w-lg
-   "
+   `}
 			>
 				<DialogHeader>
 					<DialogTitle>Terms of Service</DialogTitle>
