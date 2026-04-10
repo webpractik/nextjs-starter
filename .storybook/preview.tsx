@@ -1,13 +1,10 @@
-import type { Preview } from '@storybook/nextjs'
+import type { Preview } from '@storybook/nextjs-vite'
 import { geistSans } from '../src/fonts/geist'
 
 import '../src/styles/globals.css'
 
 const preview: Preview = {
 	parameters: {
-		actions: {
-			argTypesRegex: '^on[A-Z].*',
-		},
 		controls: {
 			expanded: true,
 			matchers: {
@@ -24,10 +21,7 @@ const preview: Preview = {
 	},
 	decorators: [
 		Story => (
-			<div className={`
-     ${geistSans.variable}
-   `}
-			>
+			<div className={geistSans.variable}>
 				<Story />
 			</div>
 		),

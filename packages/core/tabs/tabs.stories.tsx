@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { BellIcon, SettingsIcon, UserIcon } from 'lucide-react'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs'

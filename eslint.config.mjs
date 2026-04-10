@@ -1,6 +1,8 @@
 import antfu from '@antfu/eslint-config'
+
 import eslintPluginBetterTailwindcss from 'eslint-plugin-better-tailwindcss'
 import jsxA11y from 'eslint-plugin-jsx-a11y'
+import storybook from 'eslint-plugin-storybook'
 
 const preferTemplate = {
 	rules: {
@@ -99,6 +101,7 @@ export default antfu(
 	},
 	{ ...eslintPluginBetterTailwindcss.configs.recommended },
 	jsxA11y.flatConfigs.recommended,
+	storybook.configs['flat/recommended'],
 	{
 		settings: {
 			'better-tailwindcss': {

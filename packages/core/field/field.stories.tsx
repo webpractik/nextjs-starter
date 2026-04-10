@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 
 import { Checkbox } from '../checkbox'
 import { Input } from '../input'
@@ -12,7 +12,6 @@ import {
 	FieldGroup,
 	FieldLabel,
 	FieldLegend,
-	FieldSeparator,
 	FieldSet,
 	FieldTitle,
 } from './field'
@@ -138,39 +137,6 @@ export const FieldSetExample: Story = {
 					<FieldLabel htmlFor="bio">Bio</FieldLabel>
 					<Textarea id="bio" placeholder="Tell us about yourself" />
 					<FieldDescription>Max 500 characters.</FieldDescription>
-				</Field>
-			</FieldGroup>
-		</FieldSet>
-	),
-}
-
-export const WithSeparator: Story = {
-	render: () => (
-		<FieldSet>
-			<FieldLegend>Settings</FieldLegend>
-			<FieldGroup>
-				<Field orientation="horizontal">
-					<FieldContent>
-						<FieldTitle>Notifications</FieldTitle>
-						<FieldDescription>Receive push notifications.</FieldDescription>
-					</FieldContent>
-					<Switch />
-				</Field>
-				<FieldSeparator />
-				<Field orientation="horizontal">
-					<FieldContent>
-						<FieldTitle>Dark mode</FieldTitle>
-						<FieldDescription>Toggle dark mode theme.</FieldDescription>
-					</FieldContent>
-					<Switch />
-				</Field>
-				<FieldSeparator>or</FieldSeparator>
-				<Field orientation="horizontal">
-					<Checkbox id="auto-theme" />
-					<FieldContent>
-						<FieldTitle>Use system theme</FieldTitle>
-						<FieldDescription>Automatically match your OS setting.</FieldDescription>
-					</FieldContent>
 				</Field>
 			</FieldGroup>
 		</FieldSet>

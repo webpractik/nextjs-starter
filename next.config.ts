@@ -23,7 +23,7 @@ const nextConfig: NextConfig = {
 
 	reactStrictMode: true,
 
-	reactCompiler: true,
+	reactCompiler: isProd,
 
 	cacheComponents: true,
 

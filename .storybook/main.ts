@@ -1,16 +1,29 @@
-import type { StorybookConfig } from '@storybook/nextjs'
+import type { StorybookConfig } from '@storybook/nextjs-vite'
 
-const nodeModulesRe = /node_modules/
+import { dirname } from 'node:path'
+
+import { fileURLToPath } from 'node:url'
+
+const nodeModulesRegex = /node_modules/
+
+function getAbsolutePath(value: string) {
+	return dirname(fileURLToPath(import.meta.resolve(`${value}/package.json`)))
+}
 
 const config: StorybookConfig = {
-	stories: ['../app/**/*.stories.tsx', '../packages/core/**/*.stories.tsx'],
-	addons: [
-		'@storybook/addon-onboarding',
-		'@storybook/addon-links',
-		'@storybook/addon-designs',
-		'@storybook/addon-docs',
+	stories: [
+		'../app/**/*.stories.tsx',
+		'../packages/core/**/*.stories.tsx',
+		'../src/**/*.mdx',
+		'../src/**/*.stories.@(js|jsx|mjs|ts|tsx)',
 	],
-	framework: '@storybook/nextjs',
+	addons: [
+		getAbsolutePath('@storybook/addon-vitest'),
+		getAbsolutePath('@storybook/addon-a11y'),
+		getAbsolutePath('@storybook/addon-docs'),
+		getAbsolutePath('@storybook/addon-designs'),
+	],
+	framework: getAbsolutePath('@storybook/nextjs-vite'),
 	typescript: {
 		check: false,
 		reactDocgen: 'react-docgen-typescript',
@@ -18,13 +31,11 @@ const config: StorybookConfig = {
 			shouldRemoveUndefinedFromOptional: true,
 			shouldExtractLiteralValuesFromEnum: true,
 			shouldExtractValuesFromUnion: true,
-			propFilter: prop => (prop.parent ? !nodeModulesRe.test(prop.parent.fileName) : true),
+			propFilter: prop => (prop.parent ? !nodeModulesRegex.test(prop.parent.fileName) : true),
 		},
 	},
-	features: {
-		experimentalRSC: true,
-	},
-	staticDirs: ['../public'],
+	staticDirs: [
+		'../public',
+	],
 }
-
 export default config
