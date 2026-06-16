@@ -1,32 +1,32 @@
 import type { ReactNode } from 'react'
 
 import {
-	useDesktopMediaQuery,
-	useLaptopMediaQuery,
-	useMobileMediaQuery,
-	useTabletMediaQuery,
+    useDesktopMediaQuery,
+    useLaptopMediaQuery,
+    useMobileMediaQuery,
+    useTabletMediaQuery,
 } from '#/hooks/use-responsive'
 
 export function Desktop({ children }: { children: ReactNode }): ReactNode {
-	const isDesktop = useDesktopMediaQuery()
+    const isDesktop = useDesktopMediaQuery()
 
-	return isDesktop ? children : null
+    return isDesktop ? children : null
 }
 
 export function Laptop({ children }: { children: ReactNode }): ReactNode {
-	const isLaptop = useLaptopMediaQuery()
+    const isLaptop = useLaptopMediaQuery()
 
-	return isLaptop ? children : null
+    return isLaptop ? children : null
 }
 
 export function Mobile({ children }: { children: ReactNode }): ReactNode {
-	const isMobile = useMobileMediaQuery()
+    const isMobile = useMobileMediaQuery()
 
-	return isMobile ? children : null
+    return isMobile ? children : null
 }
 
 export function Tablet({ children }: { children: ReactNode }): ReactNode {
-	const isTablet = useTabletMediaQuery()
+    const isTablet = useTabletMediaQuery()
 
-	return isTablet ? children : null
+    return isTablet ? children : null
 }

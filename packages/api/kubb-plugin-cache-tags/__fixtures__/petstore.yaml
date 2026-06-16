@@ -1,0 +1,35 @@
+openapi: 3.1.0
+info:
+    title: Petstore test
+    version: 1.0.0
+paths:
+    /products:
+        get:
+            tags: [products]
+            responses:
+                '200':
+                    description: ok
+    /products/{productId}:
+        get:
+            tags: [products]
+            parameters:
+                - name: productId
+                  in: path
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                '200':
+                    description: ok
+    /orders/{orderId}:
+        get:
+            tags: [orders]
+            parameters:
+                - name: orderId
+                  in: path
+                  required: true
+                  schema:
+                      type: integer
+            responses:
+                '200':
+                    description: ok

@@ -1,0 +1,20 @@
+// ВНИМАНИЕ: файл сгенерирован kubb-plugin-cache-tags. Не редактируйте вручную.
+import { updateTag } from 'next/cache'
+
+export const feedTag = 'feed' as const
+
+export function feedItemTag(
+	params: { itemId: string },
+): `feed:itemId:${string}` {
+	return `feed:itemId:${params.itemId}`
+}
+
+export async function revalidateFeed() {
+	updateTag(feedTag)
+}
+
+export async function revalidateFeedItem(
+	params: { itemId: string },
+): Promise<void> {
+	updateTag(feedItemTag(params))
+}

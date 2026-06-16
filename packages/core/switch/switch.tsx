@@ -1,19 +1,18 @@
 'use client'
 
 import { Switch as SwitchPrimitive } from '@base-ui/react/switch'
+
 import { cn } from '../cn'
 
 export function Switch({
-	className,
-	size = 'default',
-	...props
+    className,
+    size = 'default',
+    ...props
 }: {
-	size?: 'default' | 'sm'
+    size?: 'default' | 'sm'
 } & SwitchPrimitive.Root.Props) {
-	return (
-		<SwitchPrimitive.Root
-			className={cn(
-				`
+    return (
+        <SwitchPrimitive.Root className={cn(`
       peer group/switch relative inline-flex shrink-0 items-center rounded-full
       border border-transparent shadow-xs transition-all outline-none
       after:absolute after:-inset-x-3 after:-inset-y-2
@@ -29,15 +28,8 @@ export function Switch({
       dark:aria-invalid:border-destructive/50
       dark:aria-invalid:ring-destructive/40
       dark:data-unchecked:bg-input/80
-    `,
-				className,
-			)}
-			data-size={size}
-			data-slot="switch"
-			{...props}
-		>
-			<SwitchPrimitive.Thumb
-				className={`
+    `, className)} data-size={size} data-slot="switch" {...props}>
+            <SwitchPrimitive.Thumb className={`
       pointer-events-none block rounded-full bg-background ring-0
       transition-transform
       group-data-[size=default]/switch:size-4
@@ -48,9 +40,7 @@ export function Switch({
       group-data-[size=sm]/switch:data-unchecked:translate-x-0
       dark:data-checked:bg-primary-foreground
       dark:data-unchecked:bg-foreground
-    `}
-				data-slot="switch-thumb"
-			/>
-		</SwitchPrimitive.Root>
-	)
+    `} data-slot="switch-thumb" />
+        </SwitchPrimitive.Root>
+    )
 }

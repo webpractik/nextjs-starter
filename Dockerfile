@@ -3,7 +3,7 @@ FROM oven/bun:1.3 AS deps
 
 WORKDIR /app
 
-COPY package.json bun.lockb ./
+COPY package.json bun.lock ./
 COPY packages/core/package.json ./packages/core/
 COPY packages/api/package.json ./packages/api/
 COPY packages/logger/package.json ./packages/logger/
@@ -14,7 +14,7 @@ COPY packages/ts-config/package.json ./packages/ts-config/
 RUN bun install --frozen-lockfile
 
 # Stage 2: Build
-FROM oven/bun:1.3 AS builder
+FROM node:24-slim AS builder
 
 ARG NEXT_PUBLIC_APP_ENV
 ARG NEXT_PUBLIC_FRONT_URL
@@ -33,16 +33,17 @@ ENV SENTRY_ORG=${SENTRY_ORG}
 ENV SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
 ENV SENTRY_URL=${SENTRY_URL}
 ENV APP_NAME=${APP_NAME}
+ENV NEXT_TELEMETRY_DISABLED=1
 
 WORKDIR /app
 
-COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+COPY --from=deps /app/node_modules ./node_modules
 
-RUN bun run build
+RUN npm run build
 
 # Stage 3: Runner
-FROM oven/bun:1.3 AS runner
+FROM node:24-slim AS runner
 
 ENV LOCALTIME=Europe/Moscow
 RUN ln -snf /usr/share/zoneinfo/$LOCALTIME /etc/localtime && echo $LOCALTIME > /etc/timezone
@@ -65,6 +66,6 @@ EXPOSE 3000
 
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
+ENV NEXT_TELEMETRY_DISABLED=1
 
-CMD ["bun", "run", "prod"]
-
+CMD ["node", "server.js"]

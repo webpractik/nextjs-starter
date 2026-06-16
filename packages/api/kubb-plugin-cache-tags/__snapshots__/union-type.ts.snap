@@ -1,0 +1,20 @@
+// ВНИМАНИЕ: файл сгенерирован kubb-plugin-cache-tags. Не редактируйте вручную.
+import { updateTag } from 'next/cache'
+
+export const productsTag = 'products' as const
+
+export function productTag(
+	params: { productId: string | number },
+): `products:productId:${string}` {
+	return `products:productId:${params.productId}`
+}
+
+export async function revalidateProducts() {
+	updateTag(productsTag)
+}
+
+export async function revalidateProduct(
+	params: { productId: string | number },
+): Promise<void> {
+	updateTag(productTag(params))
+}

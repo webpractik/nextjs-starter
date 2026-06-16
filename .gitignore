@@ -20,6 +20,8 @@ packages/*/node_modules
 storybook.log
 report
 docs/superpowers
+.remember
+next-env.d.ts
 
 # dependencies
 /node_modules

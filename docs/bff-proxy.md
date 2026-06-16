@@ -4,11 +4,11 @@
 
 Fetch-клиент (`packages/api/fetch.client.ts`) выбирает baseURL в зависимости от окружения:
 
-| Контекст | baseURL | Переменная |
-|---|---|---|
-| Сервер (всегда) | Внутренний URL бэкенда | `BACK_INTERNAL_URL` |
-| Клиент, dev | Через Next.js rewrite-прокси | `NEXT_PUBLIC_BFF_PATH` |
-| Клиент, prod | Напрямую к бэкенду | `NEXT_PUBLIC_BACK_URL` |
+| Контекст        | baseURL                      | Переменная             |
+| --------------- | ---------------------------- | ---------------------- |
+| Сервер (всегда) | Внутренний URL бэкенда       | `BACK_INTERNAL_URL`    |
+| Клиент, dev     | Через Next.js rewrite-прокси | `NEXT_PUBLIC_BFF_PATH` |
+| Клиент, prod    | Напрямую к бэкенду           | `NEXT_PUBLIC_BACK_URL` |
 
 В dev-режиме клиентские запросы идут на относительный путь `/bff-api/*`, который Next.js через rewrite проксирует на `BACK_INTERNAL_URL`. Это позволяет обойти CORS при локальной разработке.
 

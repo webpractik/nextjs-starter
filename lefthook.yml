@@ -2,14 +2,27 @@
 #   https://lefthook.dev/configuration/
 #
 pre-commit:
-  jobs:
-    - run: bunx lint-staged
+    jobs:
+        - name: lint and format
+          group:
+              piped: true
+              jobs:
+                  - name: lint
+                    run: bun run lint --no-warn-ignored {staged_files}
+                    glob: '*.{js,mjs,jsx,ts,mts,tsx,md,json,jsonc,yaml,yml,toml}'
+                  - name: format
+                    run: bun fmt --no-error-on-unmatched-pattern {staged_files}
+                    glob: '*.{js,mjs,jsx,ts,mts,tsx,md,json,jsonc,yaml,yml,toml,html,css}'
+                    stage_fixed: true
+        - name: typecheck
+          run: bun run tsc
+          glob: '*.{ts,mts,tsx}'
 
 prepare-commit-msg:
-  commands:
-    commitizen:
-      skip: merge
-      interactive: true
-      run: bunx cz --hook
-      env:
-        LEFTHOOK: 0
+    commands:
+        commitizen:
+            skip: 'merge'
+            interactive: true
+            run: bunx cz --hook
+            env:
+                LEFTHOOK: '0'
