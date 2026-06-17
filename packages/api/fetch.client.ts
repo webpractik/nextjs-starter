@@ -1,24 +1,28 @@
 import { isDev } from '#/constants/env'
+import {
+    getBrowserMockScenario,
+    getRequestMockScenario,
+    isBrowserRuntimeMockModeEnabled,
+    isRequestMockModeEnabled,
+} from '#/mock-mode/runtime'
 
 import { clientEnvironment } from '../../src/env/client'
 import { serverEnvironment } from '../../src/env/server'
+import { serializeSearchParams } from './search-params'
 
 /** Subset of FetchRequestConfig */
 export interface RequestConfig<TData = unknown> {
     baseURL?: string
     url?: string
     method?: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE' | 'OPTIONS' | 'HEAD'
-    // `string[]` включён, чтобы OpenAPI query-параметры типа `status: string[]`
-    // у `findPetsByStatus` проходили в тип без cast'ов. Runtime-loop ниже
-    // сериализует массивы как `key=v1&key=v2` (OpenAPI `form`/`explode`).
-    params?: Record<string, string | string[] | number | boolean | null | undefined>
+    // Object shape keeps generated OpenAPI query params assignable without casts.
+    // Runtime serialization lives in `search-params.ts`.
+    params?: object
     data?: TData | FormData
     signal?: AbortSignal
     headers?: [string, string][] | Record<string, string>
     credentials?: RequestCredentials
 }
-
-type QueryParamPrimitive = string | number | boolean | null | undefined
 
 /** Subset of FetchResponse */
 export interface ResponseConfig<TData = unknown> {
@@ -72,33 +76,91 @@ function getBaseUrl() {
     return clientEnvironment.NEXT_PUBLIC_BACK_URL
 }
 
+function isEnvFlagEnabled(value: boolean | string | undefined) {
+    return value === true || value === 'true'
+}
+
+async function isMockModeEnabled(config: Partial<RequestConfig>) {
+    if (typeof window === 'undefined') {
+        if (
+            isEnvFlagEnabled(process.env.MOCK_MODE) ||
+            isEnvFlagEnabled(serverEnvironment.MOCK_MODE) ||
+            isRequestMockModeEnabled(config.headers)
+        ) {
+            return true
+        }
+
+        if (process.env.NEXT_RUNTIME !== 'nodejs' && process.env.NEXT_RUNTIME !== 'edge') {
+            return false
+        }
+
+        try {
+            const { headers } = await import('next/headers')
+            return isRequestMockModeEnabled(await headers())
+        } catch {
+            return false
+        }
+    }
+
+    return (
+        isEnvFlagEnabled(process.env.NEXT_PUBLIC_MOCK_MODE ?? process.env.MOCK_MODE) ||
+        isEnvFlagEnabled(clientEnvironment.NEXT_PUBLIC_MOCK_MODE) ||
+        isRequestMockModeEnabled(config.headers) ||
+        isBrowserRuntimeMockModeEnabled()
+    )
+}
+
+async function getRawMockScenario(config: Partial<RequestConfig>) {
+    const rawFromConfig = getRequestMockScenario(config.headers)
+    if (rawFromConfig != null) {
+        return rawFromConfig
+    }
+
+    if (typeof window === 'undefined') {
+        if (process.env.NEXT_RUNTIME !== 'nodejs' && process.env.NEXT_RUNTIME !== 'edge') {
+            return
+        }
+
+        try {
+            const { headers } = await import('next/headers')
+            return getRequestMockScenario(await headers())
+        } catch {
+            return
+        }
+    }
+
+    return getBrowserMockScenario()
+}
+
+async function getMockScenario(config: Partial<RequestConfig>) {
+    const raw = await getRawMockScenario(config)
+    if (raw == null) return
+
+    const { isBaseMockScenarioName } = await import('./mock-scenarios')
+    if (!isBaseMockScenarioName(raw)) return
+    return raw
+}
+
 async function fetch<TData, _TError = unknown, TVariables = unknown>(
     paramsConfig: RequestConfig<TVariables>,
 ): Promise<ResponseConfig<TData>> {
     const config = mergeConfig(getConfig(), paramsConfig)
 
+    const isMockMode = await isMockModeEnabled(config)
+    if (isMockMode) {
+        const { getMockResponse } = await import('./mock-client')
+        const scenario = await getMockScenario(config)
+        return getMockResponse<TData>(config, scenario)
+    }
+
     const baseURL = getBaseUrl()
     let targetUrl = [baseURL, config.url].filter(Boolean).join('')
 
     if (config.params) {
-        const searchParams = new URLSearchParams()
-
-        const appendParam = (key: string, value: QueryParamPrimitive) => {
-            if (value === undefined) return
-            searchParams.append(key, value === null ? 'null' : String(value))
+        const serializedSearchParams = serializeSearchParams(config.params)
+        if (serializedSearchParams !== '') {
+            targetUrl += `?${serializedSearchParams}`
         }
-
-        for (const [key, value] of Object.entries(config.params)) {
-            // Массив → `key=v1&key=v2` (OpenAPI style `form`/`explode`), иначе
-            // `String([...])` даст `key=v1,v2`, что невалидно для большинства API.
-            if (Array.isArray(value)) {
-                for (const item of value as QueryParamPrimitive[]) appendParam(key, item)
-            } else {
-                appendParam(key, value as QueryParamPrimitive)
-            }
-        }
-
-        targetUrl += `?${searchParams}`
     }
 
     const isFormData = config.data instanceof FormData

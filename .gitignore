@@ -21,6 +21,7 @@ storybook.log
 report
 docs/superpowers
 .remember
+.vitest-attachments
 next-env.d.ts
 
 # dependencies
@@ -57,6 +58,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 /test-results/
+/allure-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/

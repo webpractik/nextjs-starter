@@ -7,6 +7,7 @@ export const clientEnvironment = createEnv({
         NEXT_PUBLIC_BFF_PATH: z.string(),
         NEXT_PUBLIC_FRONT_URL: z.url(),
         NEXT_PUBLIC_BACK_URL: z.url(),
+        NEXT_PUBLIC_MOCK_MODE: z.stringbool().default(false),
         NEXT_PUBLIC_SENTRY_DSN: z.url(),
     },
     emptyStringAsUndefined: true,
@@ -15,6 +16,7 @@ export const clientEnvironment = createEnv({
         NEXT_PUBLIC_BFF_PATH: process.env.NEXT_PUBLIC_BFF_PATH,
         NEXT_PUBLIC_FRONT_URL: process.env.NEXT_PUBLIC_FRONT_URL,
         NEXT_PUBLIC_BACK_URL: process.env.NEXT_PUBLIC_BACK_URL,
+        NEXT_PUBLIC_MOCK_MODE: process.env.NEXT_PUBLIC_MOCK_MODE ?? process.env.MOCK_MODE,
         NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
     },
 })

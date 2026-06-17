@@ -50,12 +50,6 @@ export default antfu(
         type: 'app',
         gitignore: true,
         stylistic: false,
-        formatters: {
-            css: true,
-            html: true,
-            json: true,
-            markdown: true,
-        },
         imports: { 'import/newline-after-import': ['error', { count: 1 }] },
         perfectionist: { overrides: { 'perfectionist/sort-imports': 'off' } },
         nextjs: true,
@@ -103,6 +97,13 @@ export default antfu(
         },
         rules: {
             'preferTemplate/multiline-classname': 'error',
+        },
+    },
+    {
+        rules: {
+            'better-tailwindcss/enforce-consistent-line-wrapping': 0,
+            'jsonc/sort-keys': 0,
+            'yaml/plain-scalar': 0,
         },
     },
 )

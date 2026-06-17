@@ -13,6 +13,7 @@ export const serverEnvironment = createEnv({
         PORT: z.string().transform(Number).pipe(z.number()),
         HTTP_AUTH_LOGIN: z.string().optional(),
         HTTP_AUTH_PASS: z.string().optional(),
+        MOCK_MODE: z.stringbool().default(false),
         SENTRY_AUTH_TOKEN: z.string(),
         SENTRY_DSN: z.url(),
         SENTRY_ORG: z.string(),

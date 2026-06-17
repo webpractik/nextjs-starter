@@ -21,16 +21,18 @@ bun run analyze          # Build with Rsdoctor bundle analysis
 bun run tsc              # TypeScript type checking
 bun run lint             # ESLint
 bun run lint-fix         # ESLint with auto-fix
-bun run unit-test        # Vitest single run
-bun run e2e-test         # Playwright E2E tests
+bun run test             # Vitest single run
+bun run test:e2e         # Playwright E2E tests
 
 # Testing - single files
 bunx vitest run path/to/file.test.tsx       # Single unit test
 bunx playwright test src/tests/e2e/foo.ts   # Single E2E test
 
 # Testing - modes
-bun run unit-test-watch  # Vitest watch mode
-bun run unit-coverage    # Coverage report
+bun run test:watch       # Vitest watch mode
+bun run test:coverage    # Coverage report
+bun run test:unit        # Vitest unit project
+bun run test:component   # Vitest component/browser project
 
 # API Generation (run from packages/api)
 cd packages/api && bun run generate   # Bundle OpenAPI spec + generate TypeScript client
@@ -104,7 +106,7 @@ src/
 
 ## Testing
 
-- **Vitest**: Browser mode with Playwright/Chromium provider. Uses `@testing-library/react` + `vitest`. Aliases resolved via `vite-tsconfig-paths`.
+- **Vitest**: Unit/component projects with Playwright/Chromium browser mode for component tests. Component tests render through `vitest-browser-react`; config also provides env injection from `.env`, Allure reporting, and native Vite `resolve.tsconfigPaths`.
 - **Playwright E2E**: Chromium, Firefox, WebKit. Port configurable via `FRONT_PORT` (default 3000). Auto-starts dev server locally, prod server in CI. 2 retries in CI.
 - **Storybook**: Stories co-located in `app/` and `packages/core/`. Framework: `@storybook/nextjs` with experimental RSC support. Addons: designs, docs, links.
 

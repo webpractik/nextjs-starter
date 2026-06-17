@@ -9,6 +9,7 @@ import { pluginTs } from '@kubb/plugin-ts'
 import { pluginZod } from '@kubb/plugin-zod'
 
 import { pluginCacheTags } from './kubb-plugin-cache-tags'
+import { pluginMockClientRoutes } from './kubb-plugin-mock-client-routes'
 
 export default defineConfig([
     {
@@ -99,6 +100,8 @@ export default defineConfig([
                 unknownType: 'unknown',
                 seed: [100],
             }),
+
+            pluginMockClientRoutes(),
 
             pluginZod({
                 dateType: 'date',

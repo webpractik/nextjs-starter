@@ -11,7 +11,6 @@
         "build": "next build",
         "build-storybook": "storybook build",
         "dev": "next dev --turbo",
-        "e2e-test": "playwright test",
         "fmt": "oxfmt",
         "fmt:check": "oxfmt --check",
         "jscpd": "npx jscpd",
@@ -20,10 +19,13 @@
         "lint-fix": "eslint --fix",
         "prod": "next start",
         "storybook": "storybook dev -p 6006",
-        "tsc": "tsc --project tsconfig.json --noEmit --pretty",
-        "unit-coverage": "vitest run --coverage",
-        "unit-test": "vitest run",
-        "unit-test-watch": "vitest"
+        "test": "vitest run",
+        "test:component": "vitest run --project component",
+        "test:coverage": "vitest run --coverage",
+        "test:e2e": "playwright test",
+        "test:unit": "vitest run --project unit",
+        "test:watch": "vitest",
+        "tsc": "tsc --project tsconfig.json --noEmit --pretty"
     },
     "dependencies": {
         "@hookform/resolvers": "5.2.2",
@@ -70,8 +72,6 @@
         "@storybook/nextjs-vite": "10.4.6",
         "@tailwindcss/postcss": "4.3.1",
         "@tailwindcss/typography": "0.5.20",
-        "@testing-library/react": "16.3.2",
-        "@testing-library/user-event": "14.6.1",
         "@total-typescript/ts-reset": "0.6.1",
         "@types/lodash-es": "4.17.12",
         "@types/node": "25.9.3",
@@ -83,6 +83,8 @@
         "@vitest/browser-playwright": "4.1.9",
         "@vitest/coverage-v8": "4.1.9",
         "ajv": "8.20.0",
+        "allure-js-commons": "3.9.0",
+        "allure-vitest": "3.9.0",
         "babel-plugin-react-compiler": "1.0.0",
         "commitizen": "4.3.2",
         "cssnano": "8.0.2",
@@ -106,8 +108,9 @@
         "typed-query-selector": "2.12.2",
         "typescript": "6.0.3",
         "vite": "8.0.16",
-        "vite-tsconfig-paths": "6.1.1",
-        "vitest": "4.1.9"
+        "vite-plugin-svgr": "5.2.0",
+        "vitest": "4.1.9",
+        "vitest-browser-react": "2.2.0"
     },
     "overrides": {
         "storybook": "$storybook"
