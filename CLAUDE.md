@@ -19,8 +19,8 @@ bun run analyze          # Build with Rsdoctor bundle analysis
 
 # Code Quality
 bun run tsc              # TypeScript type checking
-bun run lint             # ESLint
-bun run lint-fix         # ESLint with auto-fix
+bun run lint             # Oxlint
+bun run lint-fix         # Oxlint with auto-fix
 bun run test             # Vitest single run
 bun run test:e2e         # Playwright E2E tests
 
@@ -91,7 +91,7 @@ src/
 
 **Environment Variables**: Always validated with Zod schemas in `src/env/`. Client vars use `NEXT_PUBLIC_` prefix. Import as `import { environment } from '#/env/client'` or `'#/env/server'`.
 
-**Imports**: Use `@repo/*` package imports, not relative paths to packages. ESLint enforces this via `no-restricted-imports`.
+**Imports**: Use `@repo/*` package imports, not relative paths to packages. Oxlint enforces this via `no-restricted-imports`.
 
 **API Codegen**: OpenAPI specs in `packages/api/openapi/` are bundled via Redocly into `bundled.yaml`, then Kubb generates types (`codegen/models/`), fetch clients (`codegen/`, using custom `fetch.client.ts`), Zod validators (`codegen/zod/`), and React Query hooks (`codegen/hooks/`), grouped by OpenAPI tag.
 
@@ -100,9 +100,9 @@ src/
 ## Code Style
 
 - **TypeScript**: Strictest rules — `noUncheckedIndexedAccess`, `verbatimModuleSyntax`, `erasableSyntaxOnly`, `noUnusedLocals/Parameters`
-- **ESLint**: `@antfu/eslint-config` flat config — tab indentation, single quotes, JSX enabled, CSS/HTML/JSON/Markdown formatters, better-tailwindcss plugin, jsx-a11y, Next.js rules, custom multiline-classname rule
-- **Prettier**: Configured via `eslint-plugin-format` (no standalone config file)
-- **Git hooks**: Lefthook runs lint-staged on pre-commit (`tsc` + `lint` on staged `.ts(x)` files), Commitizen on prepare-commit-msg
+- **Oxlint**: `.oxlintrc.json` with migrated ESLint-compatible rules, better-tailwindcss, jsx-a11y, Next.js, Storybook, React rules, and custom multiline-classname rule
+- **Oxfmt**: `.oxfmtrc.json` handles formatting, Tailwind class sorting, package.json sorting, and import sorting
+- **Git hooks**: Lefthook runs `tsc` + `lint` on staged `.ts(x)` files and formats staged web files, Commitizen on prepare-commit-msg
 
 ## Testing
 

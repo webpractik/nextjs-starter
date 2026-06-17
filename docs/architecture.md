@@ -48,11 +48,11 @@
 
 Если ни один паттерн не подходит — это сигнал, что границы модулей проведены неверно: либо логика должна жить в одном из модулей, либо общая часть выделяется в третий модуль/shared.
 
-### ESLint Enforcement (TODO)
+### Oxlint Enforcement (TODO)
 
-> Правила границ ниже **ещё не внедрены** в `eslint.config.ts`. Текущий конфиг (`@antfu/eslint-config`) проверяет только `no-restricted-imports` для `@repo/*`. Внедрение `eslint-plugin-boundaries` — отдельная задача.
+> Правила границ ниже **ещё не внедрены** в `.oxlintrc.json`. Текущий конфиг проверяет только `no-restricted-imports` для `@repo/*`. Внедрение совместимого boundaries-правила — отдельная задача.
 
-Целевые правила (через `eslint-plugin-boundaries` или `eslint-plugin-import/no-restricted-paths`):
+Целевые правила (через совместимый JS plugin или native oxlint-правило, когда оно появится):
 
 - `src/modules/*` не может импортировать из другого `src/modules/*`
 - `src/components/*`, `src/hooks/*`, `src/utils/*` не могут импортировать из `app/`

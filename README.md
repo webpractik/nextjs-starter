@@ -15,9 +15,8 @@ A robust boilerplate for quickly building web applications with Next.js.
 - React 19
 - TypeScript 6 (erasable syntax, strict mode)
 - Tailwind CSS 4 + tw-animate-css
-- ESLint 10 (flat config, @antfu/eslint-config) + jsx-a11y
-- Prettier (via eslint-plugin-format)
-- Lefthook + Commitizen + lint-staged
+- Oxlint 1 + Oxfmt
+- Lefthook + Commitizen
 - Vitest 4 (browser mode, Playwright provider)
 - Playwright E2E (Chromium, Firefox, WebKit)
 - Storybook 10

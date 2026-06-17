@@ -6,7 +6,6 @@
 .turbo
 dist
 .env
-.eslintcache
 .million
 storybook-static
 coverage-ts

@@ -251,7 +251,7 @@ vi.spyOn(petClient, 'getPetById').mockResolvedValue({
 ### Регенерация и git
 
 - Папка `codegen/mocks/` — артефакт, **никогда не редактируется руками**, всегда перегенерируется через `bun run generate`.
-- В `.eslintrc` `codegen/` уже игнорируется, так что fake-импорты `@faker-js/faker` не вызывают лишних ругательств.
+- В `.oxlintrc.json` `codegen/` уже игнорируется, так что fake-импорты `@faker-js/faker` не вызывают лишних ругательств.
 - `@faker-js/faker` должен быть установлен как обычная зависимость `packages/api`, а не devDependency — сгенерированные фабрики импортируют его напрямую.
 
 ## Fetch-клиент
@@ -285,4 +285,4 @@ import { createGetPetById200 } from '@repo/api/codegen/mocks/petService/createGe
 - Папка `codegen/` — сгенерированный код, не редактируйте вручную
 - После изменения спеки всегда запускайте `bun run generate`
 - `bundled.yaml` — артефакт сборки, коммитится в репозиторий для удобства ревью
-- Линтинг ESLint игнорирует `packages/api/codegen` и `packages/api/bundled.yaml`
+- Oxlint игнорирует `packages/api/codegen` и `packages/api/bundled.yaml`

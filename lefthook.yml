@@ -8,7 +8,7 @@ pre-commit:
               parallel: true
               jobs:
                   - name: lint
-                    run: bun run lint --no-warn-ignored {staged_files}
+                    run: bun run lint --no-error-on-unmatched-pattern {staged_files}
                     glob: '*.{js,mjs,jsx,ts,mts,tsx,md,json,jsonc,yaml,yml,toml}'
                   - name: format
                     run: bun fmt --no-error-on-unmatched-pattern {staged_files}
