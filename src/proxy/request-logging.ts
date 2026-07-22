@@ -2,7 +2,7 @@ import type { NextRequest, NextResponse } from 'next/server'
 
 import type { ProxyFn } from './chain'
 
-import logger from '@repo/logger'
+import logger from '#/observability/logger'
 
 export const requestLogging: ProxyFn = (request: NextRequest, response: NextResponse) => {
     const start = Date.now()

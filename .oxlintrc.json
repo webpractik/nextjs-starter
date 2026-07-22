@@ -477,10 +477,6 @@
                     {
                         "group": ["~/packages/api/*"],
                         "message": "Please use import from @repo/api instead"
-                    },
-                    {
-                        "group": ["~/packages/logger/*"],
-                        "message": "Please use import from @repo/logger instead"
                     }
                 ]
             }

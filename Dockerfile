@@ -6,10 +6,7 @@ WORKDIR /app
 COPY package.json bun.lock ./
 COPY packages/core/package.json ./packages/core/
 COPY packages/api/package.json ./packages/api/
-COPY packages/logger/package.json ./packages/logger/
-COPY packages/metrics/package.json ./packages/metrics/
 COPY packages/design-tokens/package.json ./packages/design-tokens/
-COPY packages/ts-config/package.json ./packages/ts-config/
 
 RUN bun install --frozen-lockfile
 

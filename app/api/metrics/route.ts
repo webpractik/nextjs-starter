@@ -1,5 +1,6 @@
-import { register } from '@repo/metrics'
 import { NextResponse } from 'next/server'
+
+import { register } from '#/observability/metrics'
 
 export async function GET() {
     const metrics = await register.metrics()

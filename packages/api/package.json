@@ -22,7 +22,6 @@
         "@kubb/plugin-ts": "4.38.0",
         "@kubb/plugin-zod": "4.38.0",
         "@redocly/cli": "2.33.2",
-        "@repo/logger": "*",
         "change-case": "5.4.4",
         "pluralize": "8.0.0"
     },

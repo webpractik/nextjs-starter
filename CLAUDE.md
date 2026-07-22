@@ -52,10 +52,7 @@ bun cz                   # Commitizen interactive commit (conventional commits)
 packages/
 ├── core/           # @repo/core - UI component library (@base-ui/react, shadcn, Sonner, RHF)
 ├── api/            # @repo/api - Kubb codegen from OpenAPI → fetch clients, Zod schemas, React Query hooks, TS types
-├── logger/         # @repo/logger - Logging (Adze)
-├── metrics/        # @repo/metrics - Prometheus metrics (prom-client)
-├── design-tokens/  # @repo/design-tokens - Style Dictionary → CSS variables
-└── ts-config/      # @repo/ts-config - Shared TypeScript base config
+└── design-tokens/  # @repo/design-tokens - Style Dictionary → CSS variables
 ```
 
 ### Application Structure
@@ -70,6 +67,7 @@ src/
 ├── constants/         # Environment helpers (isDev, isProd, isBrowser)
 ├── env/              # Zod-validated env vars (client.ts, server.ts) via @t3-oss/env-nextjs
 ├── hooks/            # Custom React hooks
+├── observability/    # Application logging (Adze) and Prometheus metrics (prom-client)
 ├── proxy/            # BFF proxy pipeline (chain.ts, inject-headers.ts, request-logging.ts)
 ├── styles/           # Tailwind globals and CSS theme variables (HSL-based)
 ├── tests/e2e/        # Playwright E2E tests
