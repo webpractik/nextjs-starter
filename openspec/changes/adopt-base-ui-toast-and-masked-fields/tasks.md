@@ -34,7 +34,7 @@
 
 ## 6. Final Verification
 
-- [ ] 6.1 Format only changed files with Oxfmt, run the focused Toast, Attachment, and masked-field browser tests, then run `npm run test:unit` and `npm run test:component` without skipped tests.
-- [ ] 6.2 Run `npm run tsc`, `npm run lint`, and `npm run knip`, resolving regressions introduced by this change and separately identifying any unchanged baseline findings.
-- [ ] 6.3 Run `npm run build-storybook` and `npm run build`, verify the production output has no reachable Sonner module, and report any environment-only blocker with its exact failing stage.
-- [ ] 6.4 Review the final diff for unrelated edits and accidental generated artifacts, confirm every spec scenario is implemented or tested, and run `openspec validate adopt-base-ui-toast-and-masked-fields --type change --strict --no-interactive`.
+- [x] 6.1 Format only changed files with Oxfmt, run the focused Toast, Attachment, and masked-field browser tests, then run `npm run test:unit` and `npm run test:component` without skipped tests.
+- [x] 6.2 Run `npm run tsc`, `npm run lint`, and `npm run knip`, resolving regressions introduced by this change and separately identifying any unchanged baseline findings.
+- [x] 6.3 Run `npm run build-storybook` and `npm run build`, verify the production output has no reachable Sonner module, and report any environment-only blocker with its exact failing stage.
+- [x] 6.4 Review the final diff for unrelated edits and accidental generated artifacts, confirm every spec scenario is implemented or tested, and run `openspec validate adopt-base-ui-toast-and-masked-fields --type change --strict --no-interactive`.
