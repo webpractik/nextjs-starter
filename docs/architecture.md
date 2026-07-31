@@ -1,6 +1,6 @@
 # Архитектура
 
-Модульная архитектура для Next.js 16 + React 19 + TypeScript 6 monorepo стартера.
+Модульная архитектура для Next.js 16 + React 19 + TypeScript 7 monorepo стартера.
 Масштабируется от лендинга до 50+ страниц. Построена на принципах clean architecture, Atomic Design и модели серверных/клиентских компонентов Next.js.
 
 ## Слои

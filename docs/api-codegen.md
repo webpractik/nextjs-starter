@@ -55,13 +55,13 @@ packages/api/
 cd packages/api
 
 # Полная генерация (бандлинг + кодогенерация)
-bun run generate
+npm run gen
 
 # Только бандлинг спеки
-bun run bundle
+npm run bundle
 
 # Линтинг спеки
-bun run lint:openapi
+npm run lint:openapi
 ```
 
 ## Пайплайн генерации
@@ -126,7 +126,7 @@ openapi.yaml + openapi/{paths,components}
     - `description` — рекомендуется.
     - `tags` — **критично**: задаёт папку в `codegen/{tag}/` и имя файла React Query хука.
 5. **(Опционально)** Положите примеры запроса в `openapi/code_samples/<lang>/<operationId>/` и сошлитесь через `x-codeSamples` в операции.
-6. Запустите `bun run generate` — Redocly соберёт `bundled.yaml`, Kubb перегенерирует `codegen/`.
+6. Запустите `npm run gen`: Redocly соберёт `bundled.yaml`, а Kubb перегенерирует `codegen/`.
 
 ### Правила Redocly
 
@@ -250,7 +250,7 @@ vi.spyOn(petClient, 'getPetById').mockResolvedValue({
 
 ### Регенерация и git
 
-- Папка `codegen/mocks/` — артефакт, **никогда не редактируется руками**, всегда перегенерируется через `bun run generate`.
+- Папка `codegen/mocks/` — артефакт, **никогда не редактируется руками**, всегда перегенерируется через `npm run gen`.
 - В `.oxlintrc.json` `codegen/` уже игнорируется, так что fake-импорты `@faker-js/faker` не вызывают лишних ругательств.
 - `@faker-js/faker` должен быть установлен как обычная зависимость `packages/api`, а не devDependency — сгенерированные фабрики импортируют его напрямую.
 
@@ -283,6 +283,6 @@ import { createGetPetById200 } from '@repo/api/codegen/mocks/petService/createGe
 ## Важно
 
 - Папка `codegen/` — сгенерированный код, не редактируйте вручную
-- После изменения спеки всегда запускайте `bun run generate`
+- После изменения спеки всегда запускайте `npm run gen`
 - `bundled.yaml` — артефакт сборки, коммитится в репозиторий для удобства ревью
 - Oxlint игнорирует `packages/api/codegen` и `packages/api/bundled.yaml`

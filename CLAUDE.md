@@ -4,53 +4,53 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Next.js 16 + React 19 + TypeScript 6 monorepo starter with Tailwind CSS 4, enterprise monitoring (Sentry + OTEL), and strict type safety. Requires Node ^24, bun ^1.3.
+Next.js 16 + React 19 + TypeScript 7 monorepo starter with Tailwind CSS 4, enterprise monitoring (Sentry + OTEL), and strict type safety. Requires Node.js ^24 and npm.
 
 ## Commands
 
 ```bash
 # Development
-bun run dev              # Dev server with Turbopack
-bun run storybook        # Storybook at port 6006
+npm run dev              # Dev server with Turbopack
+npm run storybook        # Storybook at port 6006
 
 # Building
-bun run build            # Production build (standalone output)
-bun run analyze          # Build with Rsdoctor bundle analysis
+npm run build            # Production build (standalone output)
+npm run analyze          # Analyze the production bundle
 
 # Code Quality
-bun run tsc              # TypeScript type checking
-bun run lint             # Oxlint
-bun run lint-fix         # Oxlint with auto-fix
-bun run test             # Vitest single run
-bun run test:e2e         # Playwright E2E tests
+npm run tsc              # TypeScript type checking
+npm run lint             # Oxlint
+npm run lint-fix         # Oxlint with auto-fix
+npm run test             # Vitest single run
+npm run test:e2e         # Playwright E2E tests
 
 # Testing - single files
-bunx vitest run path/to/file.test.tsx       # Single unit test
-bunx playwright test src/tests/e2e/foo.ts   # Single E2E test
+npx vitest run path/to/file.test.tsx       # Single unit test
+npx playwright test src/tests/e2e/foo.ts   # Single E2E test
 
 # Testing - modes
-bun run test:watch       # Vitest watch mode
-bun run test:coverage    # Coverage report
-bun run test:unit        # Vitest unit project
-bun run test:component   # Vitest component/browser project
+npm run test:watch       # Vitest watch mode
+npm run test:coverage    # Coverage report
+npm run test:unit        # Vitest unit project
+npm run test:component   # Vitest component/browser project
 
-# API Generation (run from packages/api)
-cd packages/api && bun run generate   # Bundle OpenAPI spec + generate TypeScript client
+# API Generation
+npm --workspace @repo/api run gen   # Bundle OpenAPI spec + generate TypeScript client
 
 # Code Analysis
-bun run knip             # Detect unused code (strict mode)
+npm run knip             # Detect unused code (strict mode)
 
 # Git
-bun cz                   # Commitizen interactive commit (conventional commits)
+npx cz                   # Commitizen interactive commit (conventional commits)
 ```
 
 ## Architecture
 
-### Monorepo Packages (bun workspaces)
+### Monorepo Packages (npm workspaces)
 
 ```
 packages/
-├── core/           # @repo/core - UI component library (@base-ui/react, shadcn, Sonner, RHF)
+├── core/           # @repo/core - UI component library (@base-ui/react, shadcn, Sonner, TanStack Form)
 ├── api/            # @repo/api - Kubb codegen from OpenAPI → fetch clients, Zod schemas, React Query hooks, TS types
 └── design-tokens/  # @repo/design-tokens - Style Dictionary → CSS variables
 ```
@@ -84,6 +84,15 @@ src/
 ### Key Patterns
 
 **Component Variants**: Use Class Variance Authority (CVA) for component styling variants.
+
+**Forms**: Import the single typed form composition layer from `@repo/core/form`. Create forms with
+`useAppForm`, render a native `<form>` whose submit handler calls `form.handleSubmit()`, bind fields
+through `form.AppField`, and wrap form components with `form.AppForm`. Registered fields are
+`TextField`, `TextareaField`, `NumberField`, `CheckboxField`, `SwitchField`, `SelectField`,
+`RadioGroupField`, and `SliderField`; `SubmitButton` tracks submit validity and progress. Pass Zod
+schemas directly to TanStack `validators` through Standard Schema—no resolver adapter is required.
+The root provider exposes TanStack Form Devtools only in development and keeps both devtools
+packages outside the active production/test path.
 
 **API Proxy (BFF)**: Root `proxy.ts` + composable pipeline (`src/proxy/chain.ts`). В dev клиент идёт через Next.js rewrite (`/bff-api` → `BACK_INTERNAL_URL`), в prod — напрямую по `NEXT_PUBLIC_BACK_URL`. Сервер всегда использует `BACK_INTERNAL_URL`. Подробнее: [`docs/bff-proxy.md`](docs/bff-proxy.md).
 
