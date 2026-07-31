@@ -8,10 +8,12 @@ import { z } from 'zod'
 
 const formSchema = z.object({
     acceptsTerms: z.boolean(),
+    birthDate: z.string().regex(/^\d{2}\.\d{2}\.\d{4}$/, 'Use DD.MM.YYYY'),
     channel: z.string(),
     confidence: z.number(),
     enabled: z.boolean(),
     projectName: z.string().min(3, 'Use at least three characters'),
+    phone: z.string().regex(/^\+7 \d{3} \d{3}-\d{2}-\d{2}$/, 'Use a complete phone'),
     seats: z.number().min(1),
     stack: z.string(),
     summary: z.string(),
@@ -19,10 +21,12 @@ const formSchema = z.object({
 
 interface DemoFormValues {
     acceptsTerms: boolean
+    birthDate: string
     channel: string
     confidence: number
     enabled: boolean
     projectName: string
+    phone: string
     seats: number
     stack: string
     summary: string
@@ -30,10 +34,12 @@ interface DemoFormValues {
 
 const defaultValues: DemoFormValues = {
     acceptsTerms: false,
+    birthDate: '01.01.2020',
     channel: 'email',
     confidence: 40,
     enabled: false,
     projectName: '',
+    phone: '+7 999 123-45-67',
     seats: 1,
     stack: 'start',
     summary: 'Initial summary',
@@ -65,6 +71,12 @@ function DemoForm({ onSubmit }: { onSubmit: (_values: DemoFormValues) => void })
         >
             <form.AppField name="projectName">
                 {(field) => <field.TextField label="Project name" />}
+            </form.AppField>
+            <form.AppField name="birthDate">
+                {(field) => <field.DateField label="Birth date" />}
+            </form.AppField>
+            <form.AppField name="phone">
+                {(field) => <field.PhoneField label="Phone" />}
             </form.AppField>
             <form.AppField name="summary">
                 {(field) => <field.TextareaField label="Summary" />}
@@ -125,6 +137,12 @@ it('submits inferred values from every registered field with direct Zod validati
     await expect.element(submit).toBeDisabled()
 
     await projectName.fill('Apollo')
+    const birthDate = screen.getByRole('textbox', { name: 'Birth date' })
+    await birthDate.clear()
+    await userEvent.type(birthDate, '31122026')
+    const phone = screen.getByRole('textbox', { name: 'Phone' })
+    await phone.clear()
+    await userEvent.type(phone, '9123456789')
     await screen.getByRole('textbox', { name: 'Summary' }).fill('Launch checklist')
     await screen.getByRole('spinbutton', { name: 'Seats' }).fill('7')
     await screen.getByRole('checkbox', { name: 'Accept terms' }).click()
@@ -144,10 +162,12 @@ it('submits inferred values from every registered field with direct Zod validati
         .poll(() => onSubmit.mock.calls.at(0)?.at(0))
         .toEqual({
             acceptsTerms: true,
+            birthDate: '31.12.2026',
             channel: 'sms',
             confidence: 41,
             enabled: true,
             projectName: 'Apollo',
+            phone: '+7 912 345-67-89',
             seats: 7,
             stack: 'query',
             summary: 'Launch checklist',

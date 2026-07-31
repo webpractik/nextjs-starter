@@ -4,7 +4,9 @@ import { createFormHook } from '@tanstack/react-form'
 
 import {
     CheckboxField,
+    DateField,
     NumberField,
+    PhoneField,
     RadioGroupField,
     SelectField,
     SliderField,
@@ -17,7 +19,9 @@ import { SubmitButton } from './submit-button'
 
 const fieldComponents = {
     CheckboxField,
+    DateField,
     NumberField,
+    PhoneField,
     RadioGroupField,
     SelectField,
     SliderField,

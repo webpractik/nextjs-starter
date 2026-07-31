@@ -7,10 +7,12 @@ import { useAppForm } from '.'
 
 const showcaseSchema = z.object({
     acceptsTerms: z.boolean(),
+    birthDate: z.string().regex(/^\d{2}\.\d{2}\.\d{4}$/, 'Use DD.MM.YYYY'),
     channel: z.string(),
     confidence: z.number(),
     enabled: z.boolean(),
     projectName: z.string().min(3, 'Use at least three characters'),
+    phone: z.string().regex(/^\+7 \d{3} \d{3}-\d{2}-\d{2}$/, 'Enter a complete phone'),
     seats: z.number().min(1),
     stack: z.string(),
     summary: z.string(),
@@ -21,10 +23,12 @@ function FormShowcase() {
     const form = useAppForm({
         defaultValues: {
             acceptsTerms: false,
+            birthDate: '',
             channel: 'email',
             confidence: 60,
             enabled: true,
             projectName: '',
+            phone: '+7 ',
             seats: 3,
             stack: 'query',
             summary: '',
@@ -50,6 +54,24 @@ function FormShowcase() {
                             description="This name is shown throughout the workspace."
                             label="Project name"
                             placeholder="Apollo"
+                        />
+                    )}
+                </form.AppField>
+                <form.AppField name="birthDate">
+                    {(field) => (
+                        <field.DateField
+                            description="Stored as a masked DD.MM.YYYY string."
+                            label="Birth date"
+                            placeholder="ДД.ММ.ГГГГ"
+                        />
+                    )}
+                </form.AppField>
+                <form.AppField name="phone">
+                    {(field) => (
+                        <field.PhoneField
+                            description="Stored as a masked international string."
+                            label="Phone"
+                            placeholder="+7 999 123-45-67"
                         />
                     )}
                 </form.AppField>
