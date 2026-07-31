@@ -1,17 +1,19 @@
+ARG NODE_VERSION=24.18
+
 # Stage 1: Dependencies
-FROM oven/bun:1.3 AS deps
+FROM node:${NODE_VERSION}-alpine AS deps
 
 WORKDIR /app
 
-COPY package.json bun.lock ./
+COPY package.json package-lock.json .npmrc ./
 COPY packages/core/package.json ./packages/core/
 COPY packages/api/package.json ./packages/api/
 COPY packages/design-tokens/package.json ./packages/design-tokens/
 
-RUN bun install --frozen-lockfile
+RUN npm ci
 
 # Stage 2: Build
-FROM node:24-slim AS builder
+FROM node:${NODE_VERSION}-alpine AS builder
 
 ARG NEXT_PUBLIC_APP_ENV
 ARG NEXT_PUBLIC_FRONT_URL
@@ -40,17 +42,19 @@ COPY --from=deps /app/node_modules ./node_modules
 RUN npm run build
 
 # Stage 3: Runner
-FROM node:24-slim AS runner
+FROM node:${NODE_VERSION}-alpine AS runner
 
 ENV LOCALTIME=Europe/Moscow
-RUN ln -snf /usr/share/zoneinfo/$LOCALTIME /etc/localtime && echo $LOCALTIME > /etc/timezone
+RUN apk add --no-cache tzdata && \
+    cp /usr/share/zoneinfo/$LOCALTIME /etc/localtime && \
+    echo $LOCALTIME > /etc/timezone
 
 WORKDIR /app
 
 ENV NODE_ENV=production
 
-RUN groupadd --system --gid 1001 nodejs && \
-    useradd --system --uid 1001 --gid nodejs nextjs
+RUN addgroup -S -g 1001 nodejs && \
+    adduser -S -u 1001 -G nodejs nextjs
 
 # Standalone сборка включает минимальный набор файлов
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./

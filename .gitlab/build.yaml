@@ -1,33 +1,33 @@
 typecheck:
     stage: build
-    image: oven/bun:${BUN_VERSION}
+    image: node:24-slim
     cache:
         key:
             files:
-                - bun.lock
+                - package-lock.json
         paths:
-            - node_modules/
+            - .npm/
     before_script:
-        - bun install --frozen-lockfile
+        - npm ci --cache .npm --prefer-offline
     script:
-        - bun run tsc
+        - npm run tsc
 
 build:
     stage: build
-    image: oven/bun:${BUN_VERSION}
+    image: node:24-slim
     cache:
         key:
             files:
-                - bun.lock
+                - package-lock.json
         paths:
-            - node_modules/
+            - .npm/
             - .next/cache/
     before_script:
-        - bun install --frozen-lockfile
+        - npm ci --cache .npm --prefer-offline
         - cp .env.example .env
         - sh .gitlab/env.sh
     script:
-        - bun run build
+        - npm run build
     artifacts:
         paths:
             - .next/standalone/

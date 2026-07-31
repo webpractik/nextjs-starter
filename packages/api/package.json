@@ -9,27 +9,27 @@
     },
     "scripts": {
         "bundle": "redocly bundle openapi/openapi.yaml -o bundled.yaml",
-        "gen": "bun run bundle && kubb generate --config kubb.config.ts",
+        "gen": "npm run bundle && kubb generate --config kubb.config.ts",
         "lint:openapi": "redocly lint",
         "test": "vitest run --config vitest.config.ts"
     },
     "dependencies": {
-        "@kubb/cli": "4.38.0",
-        "@kubb/core": "4.38.0",
-        "@kubb/plugin-client": "4.38.0",
-        "@kubb/plugin-oas": "4.38.0",
-        "@kubb/plugin-react-query": "4.38.0",
-        "@kubb/plugin-ts": "4.38.0",
-        "@kubb/plugin-zod": "4.38.0",
-        "@redocly/cli": "2.33.2",
+        "@kubb/cli": "4.39.2",
+        "@kubb/core": "4.39.2",
+        "@kubb/plugin-client": "4.39.2",
+        "@kubb/plugin-oas": "4.39.2",
+        "@kubb/plugin-react-query": "4.39.2",
+        "@kubb/plugin-ts": "4.39.2",
+        "@kubb/plugin-zod": "4.39.2",
+        "@redocly/cli": "2.43.2",
         "change-case": "5.4.4",
         "pluralize": "8.0.0"
     },
     "devDependencies": {
-        "@faker-js/faker": "10.4.0",
-        "@kubb/oas": "4.38.0",
-        "@kubb/plugin-faker": "4.38.0",
+        "@faker-js/faker": "10.5.0",
+        "@kubb/oas": "4.39.2",
+        "@kubb/plugin-faker": "4.39.2",
         "@types/pluralize": "0.0.33",
-        "vitest": "^4.1.9"
+        "vitest": "^4.1.10"
     }
 }

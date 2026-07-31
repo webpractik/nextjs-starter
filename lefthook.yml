@@ -8,14 +8,14 @@ pre-commit:
               parallel: true
               jobs:
                   - name: lint
-                    run: bun run lint --no-error-on-unmatched-pattern {staged_files}
+                    run: npm run lint -- --no-error-on-unmatched-pattern {staged_files}
                     glob: '*.{js,mjs,jsx,ts,mts,tsx,md,json,jsonc,yaml,yml,toml}'
                   - name: format
-                    run: bun fmt --no-error-on-unmatched-pattern {staged_files}
+                    run: npm run fmt -- --no-error-on-unmatched-pattern {staged_files}
                     glob: '*.{js,mjs,jsx,ts,mts,tsx,md,json,jsonc,yaml,yml,toml,html,css}'
                     stage_fixed: true
         - name: typecheck
-          run: bun run tsc
+          run: npm run tsc
           glob: '*.{ts,mts,tsx}'
 
 prepare-commit-msg:
@@ -24,6 +24,6 @@ prepare-commit-msg:
             skip:
                 - merge
             interactive: true
-            run: bunx cz --hook
+            run: npx cz --hook
             env:
                 LEFTHOOK: '0'
