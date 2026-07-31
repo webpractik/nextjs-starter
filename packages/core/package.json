@@ -11,8 +11,12 @@
     },
     "dependencies": {
         "@base-ui/react": "1.6.0",
+        "@maskito/core": "5.3.1",
+        "@maskito/kit": "5.3.1",
+        "@maskito/phone": "5.3.1",
+        "@maskito/react": "5.3.1",
         "@tanstack/react-form": "1.33.2",
-        "sonner": "2.0.7",
+        "libphonenumber-js": "1.13.10",
         "zod": "4.4.3"
     },
     "peerDependencies": {

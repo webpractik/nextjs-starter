@@ -11,7 +11,7 @@
         "bundle": "redocly bundle openapi/openapi.yaml -o bundled.yaml",
         "gen": "npm run bundle && kubb generate --config kubb.config.ts",
         "lint:openapi": "redocly lint",
-        "test": "vitest run --config vitest.config.ts"
+        "test": "vitest run --root ../.. --config vitest.config.ts --project unit packages/api"
     },
     "dependencies": {
         "@kubb/cli": "4.39.2",
