@@ -125,7 +125,7 @@ cacheTag('products', `product-${id}`) // коллекция + конкретны
 
 Это позволяет инвалидировать как один элемент (`updateTag('product-123')`), так и всю коллекцию (`updateTag('products')`).
 
-В этом проекте строки тегов не пишутся руками — их генерирует kubb-плагин из OpenAPI (см. раздел «Кодогенерируемые хелперы тегов» ниже). Импортируй `productsTag` / `productTag(...)` из `@repo/api/tags` вместо литералов, чтобы read- и write-стороны всегда совпадали.
+В этом проекте строки тегов не пишутся руками — их генерирует kubb-плагин из OpenAPI (см. раздел «Кодогенерируемые хелперы тегов» ниже). Импортируй `productsTag` / `productTag(...)` из `@repo/api/codegen/tags` вместо литералов, чтобы read- и write-стороны всегда совпадали.
 
 ### Ограничение: runtime API
 
@@ -554,7 +554,7 @@ export async function updateProduct(id: string, data: ProductInput) {
 
 ### Кодогенерируемые хелперы тегов
 
-Строки тегов не пишутся руками. На каждой генерации API kubb-плагин `kubb-plugin-cache-tags` обходит OpenAPI и под каждый тег операции создаёт файл в `packages/api/tags/`. Внутри — четыре экспорта на сущность:
+Строки тегов не пишутся руками. На каждой генерации API kubb-плагин `kubb-plugin-cache-tags` обходит OpenAPI и под каждый тег операции создаёт файл в `packages/api/codegen/tags/`. Внутри — четыре экспорта на сущность:
 
 - `productsTag` — литерал коллекции (`'products'`).
 - `productTag({ productId })` — функция, возвращающая типизированную строку entity-тега (`products:productId:${productId}`).
@@ -564,14 +564,14 @@ export async function updateProduct(id: string, data: ProductInput) {
 Index реэкспортирует их как namespace, поэтому импорт выглядит так:
 
 ```ts
-import { products, orders } from '@repo/api/tags'
+import { products, orders } from '@repo/api/codegen/tags'
 ```
 
 **Read-сторона** — на тех же тегах размечаем `use cache`-компоненты:
 
 ```tsx
 import { cacheLife, cacheTag } from 'next/cache'
-import { products } from '@repo/api/tags'
+import { products } from '@repo/api/codegen/tags'
 import { getProduct } from '@repo/api/codegen/products'
 
 async function ProductDetails({ productId }: { productId: string }) {
@@ -590,7 +590,7 @@ async function ProductDetails({ productId }: { productId: string }) {
 // app/(public)/products/actions.ts
 'use server'
 
-import { products } from '@repo/api/tags'
+import { products } from '@repo/api/codegen/tags'
 import { updateProduct as updateProductApi } from '@repo/api/codegen/products'
 
 export async function updateProduct(productId: string, data: ProductInput) {
@@ -603,7 +603,7 @@ export async function updateProduct(productId: string, data: ProductInput) {
 
 Зачем это нужно:
 
-- **Один источник истины.** Backend переименовал тег или параметр сущности — `bun run generate` перегенерирует `packages/api/tags/`, и TypeScript подсветит все места, где формат тега больше не сходится. Литералы `cacheTag('product-${id}')` такой защиты не дают.
+- **Один источник истины.** Если backend переименует тег или параметр сущности, `npm --workspace @repo/api run gen` перегенерирует `packages/api/codegen/tags/`. TypeScript подсветит все места, где формат тега больше не сходится. Литералы `cacheTag('product-${id}')` такой защиты не дают.
 - **Типобезопасные параметры.** `productTag({ productId })` принимает объект ровно той формы, которую отдаёт OpenAPI. Опечатка в имени параметра ломает билд, а не молча инвалидирует пустое множество.
 - **Симметрия read/write.** Read-компонент и Server Action импортируют один и тот же модуль, поэтому невозможна ситуация, когда мутация инвалидирует `'product-123'`, а кэш помечен как `'products:productId:123'`.
 
@@ -656,7 +656,7 @@ import { cookies } from 'next/headers'
 import { cache } from 'react'
 import { cacheLife, cacheTag } from 'next/cache'
 import { getProduct } from '@repo/api/products'
-import { products } from '@repo/api/tags'
+import { products } from '@repo/api/codegen/tags'
 
 const loadProduct = cache((id: string) => getProduct({ params: { id } }))
 
@@ -726,5 +726,5 @@ async function CartStatus({ productId }: { productId: string }) {
 5. Каждый блок данных — в свою пару `<ErrorBoundary>` + `<Suspense>` с skeleton-fallback.
 6. Фильтры/пагинация → URL state (`searchParams` / `nuqs`), `key` на `<Suspense>` для сброса.
 7. Для `generateMetadata` — fetch, обёрнутый в `React.cache()`.
-8. Для мутаций — Server Action + `revalidate*()` хелпер из `@repo/api/tags` (или `updateTag()` напрямую, если нужен тег вне OpenAPI). Если нужен мгновенный отклик в UI — `useOptimistic`. Если требуется обновить уже отрендеренный экран — `router.refresh()` после Server Action.
+8. Для мутаций — Server Action + `revalidate*()` хелпер из `@repo/api/codegen/tags` (или `updateTag()` напрямую, если нужен тег вне OpenAPI). Если нужен мгновенный отклик в UI — `useOptimistic`. Если требуется обновить уже отрендеренный экран — `router.refresh()` после Server Action.
 9. На read- и write-стороне используй один и тот же кодогенерируемый тег (`productsTag` / `productTag(...)`) — никаких строковых литералов, чтобы регенерация API ломала билд, а не кэш.
