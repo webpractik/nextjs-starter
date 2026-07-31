@@ -4,6 +4,7 @@ import type { ReactNode } from 'react'
 import { Toaster } from '@repo/core/sonner'
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
+import { FormDevtoolsProvider } from '#/components/providers/form-devtools-provider'
 import { QueryProvider } from '#/components/providers/query-provider'
 import { geistSans } from '#/fonts/geist'
 import { cn } from '#/utils/cn'
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                         </main>
                     </QueryProvider>
                 </NuqsAdapter>
+                <FormDevtoolsProvider />
             </body>
         </html>
     )

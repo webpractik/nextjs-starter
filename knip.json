@@ -9,10 +9,14 @@
     ],
     "workspaces": {
         ".": {
+            "ignoreDependencies": ["@tanstack/react-devtools", "@tanstack/react-form-devtools"],
             "vitest": {
                 "config": []
             }
         },
-        "packages/core": {}
+        "packages/core": {
+            "ignoreDependencies": ["@tanstack/react-form"],
+            "ignoreFiles": ["form/**", "slider/**"]
+        }
     }
 }

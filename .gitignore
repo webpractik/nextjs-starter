@@ -30,6 +30,7 @@ next-env.d.ts
 
 # testing
 /coverage
+__screenshots__
 
 # next.js
 /.next/
