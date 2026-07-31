@@ -8,7 +8,6 @@ import { playwright } from '@vitest/browser-playwright'
 import svgr from 'vite-plugin-svgr'
 import { defineConfig } from 'vitest/config'
 
-const sonnerMock = fileURLToPath(new URL('./src/tests/mocks/sonner.ts', import.meta.url))
 const nextNavigationMock = fileURLToPath(
     new URL('./src/tests/mocks/next-navigation.ts', import.meta.url),
 )
@@ -80,7 +79,6 @@ export default defineConfig({
             'next/link.js',
             'nuqs',
             'nuqs/server',
-            'sonner',
             'tailwind-merge',
             'vitest-browser-react',
         ],
@@ -96,7 +94,6 @@ export default defineConfig({
             { find: /^next\/navigation$/, replacement: nextNavigationMock },
             { find: /^next\/script$/, replacement: nextScriptMock },
             { find: /^next\/image$/, replacement: nextImageMock },
-            { find: /^sonner$/, replacement: sonnerMock },
         ],
         tsconfigPaths: true,
     },
@@ -138,7 +135,6 @@ export default defineConfig({
                         'next/link.js',
                         'nuqs',
                         'nuqs/server',
-                        'sonner',
                         'tailwind-merge',
                         'vitest-browser-react',
                     ],

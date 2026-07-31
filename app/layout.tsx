@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 
-import { Toaster } from '@repo/core/sonner'
+import { Toaster } from '@repo/core/toast'
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 import { FormDevtoolsProvider } from '#/components/providers/form-devtools-provider'
