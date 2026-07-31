@@ -22,6 +22,7 @@ const nextConfig: NextConfig = {
     experimental: {
         serverSourceMaps: true,
         optimizePackageImports: ['react-use', 'lodash-es', 'lucide-react'],
+        useTypeScriptCli: true,
     },
     generateBuildId: () => `${nanoid()}-${new Date().toISOString()}`,
     devIndicators: {
@@ -47,7 +48,7 @@ const nextConfig: NextConfig = {
     },
     headers,
     logging: isDev
-        ? { browserToTerminal: true, serverFunctions: true, fetches: { fullUrl: true } }
+        ? { browserToTerminal: false, serverFunctions: true, fetches: { fullUrl: true } }
         : false,
 }
 
