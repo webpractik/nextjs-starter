@@ -3,20 +3,12 @@
 #
 pre-commit:
     jobs:
-        - name: lint and format
-          group:
-              parallel: true
-              jobs:
-                  - name: lint
-                    run: npm run lint -- --no-error-on-unmatched-pattern {staged_files}
-                    glob: '*.{js,mjs,jsx,ts,mts,tsx,md,json,jsonc,yaml,yml,toml}'
-                  - name: format
-                    run: npm run fmt -- --no-error-on-unmatched-pattern {staged_files}
-                    glob: '*.{js,mjs,jsx,ts,mts,tsx,md,json,jsonc,yaml,yml,toml,html,css}'
-                    stage_fixed: true
-        - name: typecheck
-          run: npm run tsc
-          glob: '*.{ts,mts,tsx}'
+        - name: format
+          run: npm run fmt -- --no-error-on-unmatched-pattern {staged_files}
+          glob: '*.{js,mjs,jsx,ts,mts,tsx,md,json,jsonc,yaml,yml,toml,html,css}'
+          stage_fixed: true
+        - name: verify
+          run: npm run verify:fast
 
 prepare-commit-msg:
     commands:

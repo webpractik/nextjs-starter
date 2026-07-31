@@ -1,0 +1,37 @@
+.node-verification:
+    image: node:24-slim
+    cache:
+        key:
+            files:
+                - package-lock.json
+        paths:
+            - .npm/
+    before_script:
+        - npm ci --cache .npm --prefer-offline
+
+codequality:
+    extends: .node-verification
+    stage: codequality
+    script:
+        - npm run verify:fast
+
+test:
+    extends: .node-verification
+    stage: test
+    variables:
+        PLAYWRIGHT_BROWSERS_PATH: .cache/ms-playwright
+    cache:
+        - key:
+              files:
+                  - package-lock.json
+          paths:
+              - .npm/
+        - key:
+              prefix: playwright
+              files:
+                  - package-lock.json
+          paths:
+              - .cache/ms-playwright/
+    script:
+        - npx playwright install --with-deps chromium
+        - npm run test

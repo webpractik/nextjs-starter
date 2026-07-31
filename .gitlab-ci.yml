@@ -1,6 +1,7 @@
 stages:
-    - build
+    - codequality
+    - test
     - deploy
 include:
-    - .gitlab/build.yaml
+    - .gitlab/verify.yaml
     - .gitlab/deploy.yaml
