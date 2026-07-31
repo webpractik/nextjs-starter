@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
     output: 'standalone',
     reactStrictMode: true,
     reactCompiler: isProd,
-    cacheComponents: false,
+    cacheComponents: true,
     typedRoutes: true,
     reactProductionProfiling: false,
     poweredByHeader: false,
