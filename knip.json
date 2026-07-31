@@ -9,13 +9,24 @@
     ],
     "workspaces": {
         ".": {
-            "ignoreDependencies": ["@tanstack/react-devtools", "@tanstack/react-form-devtools"],
+            "ignoreDependencies": [
+                "@tanstack/react-devtools",
+                "@tanstack/react-form-devtools",
+                "shadcn"
+            ],
             "vitest": {
                 "config": []
             }
         },
         "packages/core": {
-            "ignoreDependencies": ["@tanstack/react-form"],
+            "ignoreDependencies": [
+                "@maskito/core",
+                "@maskito/kit",
+                "@maskito/phone",
+                "@maskito/react",
+                "@tanstack/react-form",
+                "libphonenumber-js"
+            ],
             "ignoreFiles": ["form/**", "slider/**"]
         }
     }
