@@ -1,40 +1,46 @@
-# NextJS Starter
+# Next.js Starter
 
-A robust boilerplate for quickly building web applications with Next.js.
+A production-oriented Next.js monorepo starter with a shared component library, typed API
+generation, observability, and browser-backed tests.
 
-## Get started
+## Quick start
 
-1. Create the project using `npx create-next-app@latest -e https://github.com/webpractik/nextjs-starter`
-2. Copy environment variables to .env (`cp .env.example .env`) and configure them.
-3. Sync git hooks: `npx lefthook install`
-4. Start the development server with `npm run dev`
+Requirements: Node.js 24 and the npm version bundled with it.
 
-## Features
+```bash
+npm ci
+cp .env.example .env
+npx lefthook install
+npm run dev
+```
 
-- Next.js 16 (App Router, Server Components, React Compiler, Component Caching)
-- React 19
-- TypeScript 7 (erasable syntax, strict mode)
-- Tailwind CSS 4 + tw-animate-css
-- Oxlint 1 + Oxfmt
-- Lefthook + Commitizen
-- Vitest 4 (browser mode, Playwright provider)
-- Playwright E2E (Chromium, Firefox, WebKit)
-- Storybook 10
-- Sentry 10 + Vercel OTEL
-- Next.js bundle analysis
-- Nuqs (URL state management)
-- Kubb API Codegen (fetch clients, Zod validators, React Query hooks)
-- TanStack Form (typed fields, direct Zod validation, development devtools)
-- Design tokens (Style Dictionary → CSS variables)
-- Env validation (Zod 4 + @t3-oss/env-nextjs)
-- Knip (unused code detection)
-- @base-ui/react + shadcn component library
+The application validates environment variables while loading the Next.js config. Review
+[the environment reference](docs/environment.md) before replacing the safe local values in
+`.env`.
+
+## Current capabilities
+
+- Next.js 16 App Router, React 19, TypeScript 7, and Tailwind CSS 4.
+- Cache Components enabled; the React Compiler is enabled only for production builds.
+- npm workspaces for `@repo/core` and `@repo/api`.
+- Base UI/shadcn-style primitives and typed TanStack Form composition in `@repo/core`.
+- OpenAPI 3.2 source contract, Redocly validation, and Kubb-generated TypeScript models, fetch
+  clients, Zod schemas, React Query hooks, Faker factories, mock routes, and cache tags.
+- Runtime mock mode without a live backend.
+- Sentry, OpenTelemetry, Adze logging, and Prometheus metrics.
+- Vitest unit and real-browser component projects, Playwright E2E, and Storybook.
+- Oxfmt, Oxlint, Knip, JSCPD, Lefthook, and Commitizen.
+
+The Petstore contract under `packages/api/openapi/` is a code-generation example. It does not add a
+Petstore backend or Next.js Route Handlers. Kubb 4.39.2 also reports OpenAPI 3.2 as officially
+unsupported even though this repository's direct generation and TypeScript checks pass. See
+[API code generation](docs/api-codegen.md) for the exact compatibility policy.
 
 ## Forms
 
 Reusable forms are exposed from `@repo/core/form` through one typed `useAppForm` factory. It
-registers `TextField`, `TextareaField`, `NumberField`, `CheckboxField`, `SwitchField`,
-`SelectField`, `RadioGroupField`, `SliderField`, and `SubmitButton`.
+registers text, textarea, number, date, phone, checkbox, switch, select, radio-group, and slider
+fields together with `SubmitButton`.
 
 Use a native `<form>` element and delegate its submit event to the TanStack form instance. Zod 4
 schemas implement Standard Schema and can be passed directly without a resolver:
@@ -74,34 +80,45 @@ export function ProjectForm() {
 }
 ```
 
-TanStack Form Devtools and its Form plugin are mounted only in development. The production and
-test application paths render no devtools host and do not statically import the devtools packages.
+TanStack Form Devtools are mounted only in development and are kept outside production and test
+application paths.
 
-## Requirements
+## Verification
 
-- **Node.js:** `^24`
-- **npm:** Included with Node.js
+```bash
+npm run verify:fast # formatting, lint, TypeScript
+npm run test        # all Vitest projects
+npm run test:e2e    # standalone Playwright E2E
+npm run verify      # full local gate
+```
 
-## Deploy
+The full local `verify` runs `verify:fast`, Knip, JSCPD, all Vitest projects, and then standalone
+Playwright E2E. Lefthook formats staged files and uses `verify:fast` for pre-commit checks.
 
-- **App Port:** `3000`
-- **Healthcheck:** `/api/health`
-- **Ready:** `/api/ready`
-- **Prometheus Metrics:** `/api/metrics`
+GitLab CI runs `verify:fast` and Vitest in separate stages. It does not run standalone Playwright
+E2E or create a deployable Next.js build. Deploy jobs must build or obtain their own bundle, and
+project-level or remote GitLab includes must be checked separately for dependencies on the removed
+`build` job and artifacts. See [testing guidelines](docs/testing-guidelines.md) and
+[deployment](docs/deployment.md).
 
-## Run production mode
+## Production endpoints
 
-- `npm install`
-- `npm run build`
-- `npm run prod`
+- Health: `/api/health`
+- Readiness: `/api/ready`
+- Prometheus metrics: `/api/metrics`
 
-## Additional utilities
+Both health and readiness currently return a constant `200`; readiness does not probe upstream
+dependencies. Run a local production build with `npm run build` followed by `npm run prod`.
 
-- [nanoid](https://www.npmjs.com/package/nanoid) - Generate unique IDs
-- [lodash-es](https://lodash.com/docs) - Utility library
-- [react-use](https://github.com/streamich/react-use#readme) - Collection of hooks for React
-- [dayjs](https://day.js.org/) - Date manipulation library
-- [framer-motion](https://motion.dev/) - Animation library
-- [isomorphic-dompurify](https://www.npmjs.com/package/isomorphic-dompurify) - DOM sanitization library
-- [clsx](https://www.npmjs.com/package/clsx) + [tailwind-merge](https://www.npmjs.com/package/tailwind-merge) - CSS class name utilities
-- [tsafe](https://www.npmjs.com/package/tsafe) + [type-fest](https://www.npmjs.com/package/type-fest) - TypeScript utility types
+## Documentation
+
+Start with the [documentation index](docs/README.md). The main operational references are:
+
+- [Architecture](docs/architecture.md)
+- [Environment variables](docs/environment.md)
+- [API code generation](docs/api-codegen.md)
+- [BFF proxy](docs/bff-proxy.md)
+- [Mock mode](docs/mock-mode.md)
+- [Cache and streaming](docs/cache-and-streaming.md)
+- [Testing guidelines](docs/testing-guidelines.md)
+- [Deployment](docs/deployment.md)

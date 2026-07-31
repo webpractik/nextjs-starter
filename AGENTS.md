@@ -25,17 +25,19 @@
 - `.npmrc` включает `save-exact`, `engine-strict` и `legacy-peer-deps`; не меняйте эти установки без
   отдельного решения.
 
-### Известные расхождения документации и конфигов
+### Зафиксированные ограничения
 
-- В `next.config.ts` сейчас `cacheComponents: false`. Не применяйте рекомендации из
-  `docs/cache-and-streaming.md` как включённое поведение, пока Cache Components не активированы
-  отдельным изменением.
+- В `next.config.ts` включён `cacheComponents: true`. Директива `'use cache: private'` при этом
+  остаётся экспериментальной возможностью Next.js и не должна становиться production default без
+  отдельной оценки.
 - React Compiler включается только в production через `reactCompiler: isProd`, а не во всех
   режимах.
-- `packages/api/.gitignore` игнорирует `bundled.yaml`, хотя `docs/api-codegen.md` говорит, что файл
-  коммитится. Не добавляйте артефакт принудительно, пока политика не будет согласована.
-- `CLAUDE.md` полезен как обзор, но содержит устаревающие сводные утверждения. Для флагов Next.js,
-  Storybook, тестов и команд всегда перепроверяйте реальные конфиги.
+- Канонический контракт использует OpenAPI 3.2. Redocly его поддерживает, но Kubb 4.39.2 выводит
+  предупреждение об отсутствии официальной поддержки 3.2. Не понижайте версию и не добавляйте
+  скрытую 3.1-копию без отдельного решения; доказательство совместимости — полный `gen` и `tsc`.
+- Текущий `Dockerfile` ещё ссылается на удалённый workspace `packages/design-tokens` и не передаёт
+  все обязательные env в builder. Считайте Docker deployment заблокированным до отдельного
+  исправления; подробности — в `docs/deployment.md`.
 
 ## Проект и runtime
 
@@ -64,12 +66,13 @@
 - `src/tests/` — общая тестовая инфраструктура и Playwright E2E.
 - `packages/core/` (`@repo/core`) — дизайн-система и UI-примитивы.
 - `packages/api/` (`@repo/api`) — OpenAPI, Redocly/Kubb, fetch-клиент, моки и сгенерированный API.
-- `packages/design-tokens/` (`@repo/design-tokens`) — Style Dictionary и CSS-токены.
+- `docs/README.md` — индекс документации и её статусов.
 - `docs/architecture.md` — подробная модель слоёв и размещения кода.
 - `docs/bff-proxy.md` — выбор API base URL в server/dev/prod.
 - `docs/api-codegen.md` — правила OpenAPI и генерации клиента.
-- `docs/cache-and-streaming.md` — целевые паттерны кеширования/streaming; учитывайте, что
-  `cacheComponents` сейчас выключен.
+- `docs/cache-and-streaming.md` — действующие правила Cache Components и streaming.
+- `docs/environment.md`, `docs/deployment.md`, `docs/mock-mode.md`,
+  `docs/testing-guidelines.md` — профильные operational references.
 
 ## Архитектурные границы
 
@@ -122,7 +125,7 @@
 ## Импорты и TypeScript
 
 - Используйте алиасы: `~/*` для корня, `@/*` для `app/`, `#/*` для `src/`.
-- Пакеты импортируются через `@repo/core`, `@repo/api`, `@repo/design-tokens`, а не через
+- Пакеты импортируются через `@repo/core` и `@repo/api`, а не через
   `~/packages/...` или длинные относительные пути.
 - Отделяйте type-only imports через `import type`; это требуется `verbatimModuleSyntax` и
   линтером.
@@ -156,6 +159,9 @@
 - `next.config.ts` импортирует валидированные env и создаёт BFF rewrite; build/dev могут падать до
   компиляции при отсутствующих переменных. Для локального запуска сначала создайте `.env` из
   `.env.example`.
+- Cache Components включены через `cacheComponents: true`. Перед использованием `use cache`,
+  `cacheLife`, `cacheTag`, `updateTag` или `revalidateTag` сверяйтесь с
+  `docs/cache-and-streaming.md` и актуальной документацией Next.js.
 - `output: 'standalone'` необходим текущей контейнерной схеме; не выключайте его без изменения
   deploy pipeline.
 - Static image imports отключены, SVG разрешены через image config. Учитывайте это при выборе
@@ -185,16 +191,19 @@
 ## API и кодогенерация
 
 - Исходник истины — `packages/api/openapi/openapi.yaml` и его `$ref`-файлы в `paths/` и
-  `components/`.
+  `components/`; каноническая версия контракта — OpenAPI 3.2.0.
 - Каждая операция должна иметь уникальный `operationId`, обязательный `summary` и корректный
   `tags`; tag определяет группировку сгенерированных клиентов и hooks.
 - Порядок pipeline: Redocly bundle → `bundled.yaml` → Kubb → `packages/api/codegen/`.
+- `bundled.yaml` — игнорируемый промежуточный артефакт. `openapi/` и `codegen/` коммитятся.
 - `packages/api/codegen/`, включая models, hooks, Zod, mocks, tags и routes, вручную не редактируется.
   Kubb запускается с `output.clean: true`, поэтому ручные изменения будут удалены.
 - После изменения OpenAPI выполните `npm --workspace @repo/api run gen` и связанные tests.
-- Кастомный `packages/api/fetch.client.ts` возвращает непосредственно `data`; не меняйте контракт
-  на полный response без синхронного изменения Kubb config и generated React Query hooks.
-- Infinite Query глобально выключен и включается точечно для операций с корректным cursor param.
+- Transport `packages/api/fetch.client.ts` возвращает `ResponseConfig<TData>`. Сгенерированные
+  Kubb-клиенты при `dataReturnType: 'data'` валидируют `res.data` и возвращают `TData`; не смешивайте
+  эти два уровня контракта.
+- Infinite Query глобально выключен и включается точечно для операций с корректным параметром
+  пагинации; пример `findPetsByStatus` использует `offset`.
 - Generated Zod-схемы остаются в `@repo/api/codegen/zod`; не копируйте их в `src/schemas`.
 - Для тестов и Storybook используйте generated Faker factories и mock client, а не вручную
   дублированные API fixtures, если нужная фабрика уже существует.
@@ -210,6 +219,9 @@
   `@storybook/nextjs-vite`, autodocs и a11y addon.
 - Интерактивное поведение проверяйте browser component test, а визуальные состояния — stories;
   одно не заменяет другое.
+- Формы создавайте через `useAppForm` из `@repo/core/form`: нативный `<form>`,
+  `event.preventDefault()`, `void form.handleSubmit()`, поля через `form.AppField`, form-компоненты
+  внутри `form.AppForm`. Zod-схемы передаются напрямую в TanStack validators через Standard Schema.
 
 ## Тестирование
 
@@ -221,7 +233,8 @@
 - Обычный `src/**/*.test.ts` без `.unit.` не попадает ни в один project. Выбирайте имя файла
   намеренно.
 - Component tests пишутся через `vitest-browser-react`, не через jsdom assumptions. Next
-  navigation/image/script и Sonner уже заменяются тестовыми aliases из `src/tests/mocks`.
+  navigation/image/script заменяются тестовыми aliases из `src/tests/mocks`; Base UI Toast
+  проверяется реальным browser-компонентом без отдельного mock alias.
 - Vitest загружает разрешённые env values сначала из process, затем из корневого `.env`; не
   дублируйте env setup в каждом test file.
 - Playwright E2E лежат в `src/tests/e2e`, выполняются в Chromium, Firefox и WebKit. Локально config
@@ -276,7 +289,6 @@ npm --workspace @repo/api run test
 npm --workspace @repo/api run gen
 npm --workspace @repo/api run bundle
 npm --workspace @repo/api run lint:openapi
-npm --workspace @repo/design-tokens run build-tokens
 ```
 
 ## Рабочий процесс и проверка

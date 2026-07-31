@@ -1,129 +1,17 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Claude Code must read [`AGENTS.md`](AGENTS.md) before changing this repository. `AGENTS.md` is the
+authoritative operational guide for package management, architecture, generated code, testing,
+formatting, and verification.
 
-## Project Overview
+Do not treat this file as a snapshot of versions or framework flags. Read executable configs and
+the relevant source files, then use the [documentation index](docs/README.md) to find the focused
+guide for the task.
 
-Next.js 16 + React 19 + TypeScript 7 monorepo starter with Tailwind CSS 4, enterprise monitoring (Sentry + OTEL), and strict type safety. Requires Node.js ^24 and npm.
+Claude-specific reminders:
 
-## Commands
-
-```bash
-# Development
-npm run dev              # Dev server with Turbopack
-npm run storybook        # Storybook at port 6006
-
-# Building
-npm run build            # Production build (standalone output)
-npm run analyze          # Analyze the production bundle
-
-# Code Quality
-npm run tsc              # TypeScript type checking
-npm run lint             # Oxlint
-npm run lint-fix         # Oxlint with auto-fix
-npm run test             # Vitest single run
-npm run test:e2e         # Playwright E2E tests
-
-# Testing - single files
-npx vitest run path/to/file.test.tsx       # Single unit test
-npx playwright test src/tests/e2e/foo.ts   # Single E2E test
-
-# Testing - modes
-npm run test:watch       # Vitest watch mode
-npm run test:coverage    # Coverage report
-npm run test:unit        # Vitest unit project
-npm run test:component   # Vitest component/browser project
-
-# API Generation
-npm --workspace @repo/api run gen   # Bundle OpenAPI spec + generate TypeScript client
-
-# Code Analysis
-npm run knip             # Detect unused code (strict mode)
-
-# Git
-npx cz                   # Commitizen interactive commit (conventional commits)
-```
-
-## Architecture
-
-### Monorepo Packages (npm workspaces)
-
-```
-packages/
-├── core/           # @repo/core - UI component library (@base-ui/react, shadcn, Sonner, TanStack Form)
-├── api/            # @repo/api - Kubb codegen from OpenAPI → fetch clients, Zod schemas, React Query hooks, TS types
-└── design-tokens/  # @repo/design-tokens - Style Dictionary → CSS variables
-```
-
-### Application Structure
-
-```
-app/                    # Next.js App Router
-├── api/               # API routes (health, metrics, ready)
-└── (public)/          # Public route group
-
-src/
-├── components/        # Shared components
-├── constants/         # Environment helpers (isDev, isProd, isBrowser)
-├── env/              # Zod-validated env vars (client.ts, server.ts) via @t3-oss/env-nextjs
-├── hooks/            # Custom React hooks
-├── observability/    # Application logging (Adze) and Prometheus metrics (prom-client)
-├── proxy/            # BFF proxy pipeline (chain.ts, inject-headers.ts, request-logging.ts)
-├── styles/           # Tailwind globals and CSS theme variables (HSL-based)
-├── tests/e2e/        # Playwright E2E tests
-├── types/            # Global type declarations
-└── utils/            # Utilities (cn, get-query-client, get-url, wait)
-```
-
-### Path Aliases
-
-- `~/*` → project root
-- `@/*` → `app/` directory
-- `#/*` → `src/` directory
-
-### Key Patterns
-
-**Component Variants**: Use Class Variance Authority (CVA) for component styling variants.
-
-**Forms**: Import the single typed form composition layer from `@repo/core/form`. Create forms with
-`useAppForm`, render a native `<form>` whose submit handler calls `form.handleSubmit()`, bind fields
-through `form.AppField`, and wrap form components with `form.AppForm`. Registered fields are
-`TextField`, `TextareaField`, `NumberField`, `CheckboxField`, `SwitchField`, `SelectField`,
-`RadioGroupField`, and `SliderField`; `SubmitButton` tracks submit validity and progress. Pass Zod
-schemas directly to TanStack `validators` through Standard Schema—no resolver adapter is required.
-The root provider exposes TanStack Form Devtools only in development and keeps both devtools
-packages outside the active production/test path.
-
-**API Proxy (BFF)**: Root `proxy.ts` + composable pipeline (`src/proxy/chain.ts`). В dev клиент идёт через Next.js rewrite (`/bff-api` → `BACK_INTERNAL_URL`), в prod — напрямую по `NEXT_PUBLIC_BACK_URL`. Сервер всегда использует `BACK_INTERNAL_URL`. Подробнее: [`docs/bff-proxy.md`](docs/bff-proxy.md).
-
-**Environment Variables**: Always validated with Zod schemas in `src/env/`. Client vars use `NEXT_PUBLIC_` prefix. Import as `import { environment } from '#/env/client'` or `'#/env/server'`.
-
-**Imports**: Use `@repo/*` package imports, not relative paths to packages. Oxlint enforces this via `no-restricted-imports`.
-
-**API Codegen**: OpenAPI specs in `packages/api/openapi/` are bundled via Redocly into `bundled.yaml`, then Kubb generates types (`codegen/models/`), fetch clients (`codegen/`, using custom `fetch.client.ts`), Zod validators (`codegen/zod/`), and React Query hooks (`codegen/hooks/`), grouped by OpenAPI tag.
-
-**Monitoring**: Server instrumentation registers Vercel OTEL + Sentry (conditional on DSN). Client instrumentation initializes Sentry with session replay. Both use env-based environment tagging (`{APP_ENV}-server`/`{APP_ENV}-client`).
-
-## Code Style
-
-- **TypeScript**: Strictest rules — `noUncheckedIndexedAccess`, `verbatimModuleSyntax`, `erasableSyntaxOnly`, `noUnusedLocals/Parameters`
-- **Oxlint**: `.oxlintrc.json` with migrated ESLint-compatible rules, better-tailwindcss, jsx-a11y, Next.js, Storybook, React rules, and custom multiline-classname rule
-- **Oxfmt**: `.oxfmtrc.json` handles formatting, Tailwind class sorting, package.json sorting, and import sorting
-- **Git hooks**: Lefthook runs `tsc` + `lint` on staged `.ts(x)` files and formats staged web files, Commitizen on prepare-commit-msg
-
-## Testing
-
-- **Vitest**: Unit/component projects with Playwright/Chromium browser mode for component tests. Component tests render through `vitest-browser-react`; config also provides env injection from `.env`, Allure reporting, and native Vite `resolve.tsconfigPaths`.
-- **Playwright E2E**: Chromium, Firefox, WebKit. Port configurable via `FRONT_PORT` (default 3000). Auto-starts dev server locally, prod server in CI. 2 retries in CI.
-- **Storybook**: Stories co-located in `app/` and `packages/core/`. Framework: `@storybook/nextjs` with experimental RSC support. Addons: designs, docs, links.
-
-## Next.js Config Highlights
-
-- `output: 'standalone'` for Docker deployments
-- React Compiler enabled (`reactCompiler: true`)
-- Component caching enabled (`cacheComponents: true`)
-- Typed routes enabled (`typedRoutes: true`)
-- Turbopack for dev
-- `optimizePackageImports`: `react-use`, `lodash-es`, `lucide-react`
-- Production headers: CSP, HSTS, Permissions-Policy, streaming support (`X-Accel-Buffering: no`)
-- Source maps uploaded to Sentry then deleted (prod only, conditional on `NEXT_PUBLIC_SENTRY_DSN`)
+- preserve unrelated changes in the working tree;
+- use npm under Node.js 24;
+- edit OpenAPI sources and regenerate `packages/api/codegen/` instead of editing generated files;
+- keep Server Components as the default and make client boundaries as narrow as practical;
+- report the exact checks run and any checks skipped or blocked.
