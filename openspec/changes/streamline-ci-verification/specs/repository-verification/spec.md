@@ -1,11 +1,12 @@
 ## ADDED Requirements
 
-### Requirement: Canonical code-quality commands
+### Requirement: Canonical repository verification commands
 
 Корневой npm manifest SHALL предоставлять `verify:fast` как быстрый code-quality gate и `verify`
-как полный code-quality gate. `verify:fast` SHALL запускать format check, lint и TypeScript
-typecheck; `verify` SHALL дополнительно запускать проверки unused code и code duplication. Любая
-ошибка вложенной команды MUST завершать соответствующий gate с ненулевым exit code.
+как полный локальный repository gate. `verify:fast` SHALL запускать format check, lint и TypeScript
+typecheck; `verify` SHALL последовательно запускать `verify:fast`, проверки unused code и code
+duplication, все Vitest projects и standalone Playwright E2E. Любая ошибка вложенной команды MUST
+завершать соответствующий gate с ненулевым exit code.
 
 #### Scenario: Быстрая проверка проходит
 
@@ -14,11 +15,18 @@ typecheck; `verify` SHALL дополнительно запускать пров
 - **THEN** format check, lint и TypeScript typecheck завершаются успешно без запуска Knip, JSCPD,
   Vitest, Playwright E2E или Next.js build
 
-#### Scenario: Полная code-quality проверка проходит
+#### Scenario: Полная локальная проверка проходит
 
-- **WHEN** разработчик или CI запускает `npm run verify`
-- **THEN** выполняется весь `verify:fast`, после него Knip и JSCPD, а итоговый exit code отражает
-  результат всех выполненных проверок
+- **WHEN** разработчик локально запускает `npm run verify` с настроенными browser и application
+  prerequisites
+- **THEN** выполняется весь `verify:fast`, после него Knip, JSCPD, все Vitest projects и Playwright
+  E2E, а итоговый exit code отражает результат всех выполненных проверок
+
+#### Scenario: Vitest завершается до Playwright E2E
+
+- **WHEN** полный локальный `verify` успешно завершил статические проверки
+- **THEN** он выполняет `npm run test` до `npm run test:e2e` и не запускает Playwright E2E, если
+  Vitest завершился ошибкой
 
 #### Scenario: Вложенная проверка завершается ошибкой
 
@@ -42,13 +50,13 @@ typecheck; `verify` SHALL дополнительно запускать пров
 ### Requirement: CI quality and test topology
 
 GitLab CI SHALL объявлять последовательные stages `codequality`, `test` и `deploy`. Stage
-`codequality` SHALL содержать job, вызывающий `npm run verify`, а stage `test` SHALL содержать job,
-вызывающий `npm run test`. Оба jobs MUST использовать Node.js 24, `npm ci` и cache key, связанный с
-`package-lock.json`.
+`codequality` SHALL содержать job, вызывающий только `npm run verify:fast`, а stage `test` SHALL
+содержать job, вызывающий `npm run test`. Оба jobs MUST использовать Node.js 24, `npm ci` и cache
+key, связанный с `package-lock.json`. CI MUST NOT вызывать полный `npm run verify`.
 
 #### Scenario: Code-quality gate останавливает pipeline
 
-- **WHEN** `npm run verify` завершается ошибкой в job stage `codequality`
+- **WHEN** `npm run verify:fast` завершается ошибкой в job stage `codequality`
 - **THEN** pipeline завершается ошибкой до запуска stage `test` и `deploy`
 
 #### Scenario: Vitest gate запускается после code quality

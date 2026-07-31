@@ -3,9 +3,10 @@
 - [ ] 1.1 Add JSCPD as an exact root devDependency, switch the `jscpd` script to its local binary,
       update `package-lock.json`, and verify the resolved package with `npm ls jscpd`.
 - [ ] 1.2 Add `verify:fast` with ordered `fmt:check`, `lint`, and `tsc` checks, then add `verify` as
-      `verify:fast` followed by `knip` and `jscpd`.
-- [ ] 1.3 Confirm both verification scripts propagate a failing child exit code and do not invoke
-      Vitest, Playwright E2E, or Next.js build commands.
+      `verify:fast` followed by `knip`, `jscpd`, `test`, and `test:e2e`.
+- [ ] 1.3 Confirm both verification scripts propagate a failing child exit code, full `verify`
+      executes Vitest before Playwright E2E, and `verify:fast` invokes neither test runner nor Next.js
+      build commands.
 
 ## 2. Pre-commit Integration
 
@@ -18,7 +19,7 @@
 
 - [ ] 3.1 Add one verification include with a shared Node.js 24/npm template using `npm ci`, `.npm`
       cache, and a cache key derived from `package-lock.json`.
-- [ ] 3.2 Add a `codequality` job that runs `npm run verify` and a following `test` job that runs
+- [ ] 3.2 Add a `codequality` job that runs only `npm run verify:fast` and a following `test` job that runs
       only `npm run test`.
 - [ ] 3.3 Provision and cache the Chromium prerequisites required by the existing Vitest component
       provider without adding `playwright test`, `test:e2e`, or a Next.js server command.
@@ -31,7 +32,8 @@
 ## 4. Documentation
 
 - [ ] 4.1 Document `npm run verify` and `npm run verify:fast`, their intended CI/pre-commit usage,
-      and the fact that the CI test stage runs Vitest but not standalone Playwright E2E.
+      the local Vitest-plus-Playwright composition of full `verify`, and the fact that the CI test
+      stage runs Vitest but not standalone Playwright E2E.
 - [ ] 4.2 Remove or update documentation that still describes typecheck/build as the current GitLab
       CI gates without changing unrelated build and deployment instructions.
 
@@ -39,10 +41,12 @@
 
 - [ ] 5.1 Format only changed manifests, YAML, Markdown, and lockfile-supported files with Oxfmt,
       then review the diff for unrelated working-tree changes.
-- [ ] 5.2 Run fresh `npm run verify:fast` and `npm run verify`, resolving only failures introduced
-      by this change.
+- [ ] 5.2 Run fresh `npm run verify:fast`, then run full `npm run verify` locally and confirm its
+      ordered static, Vitest, and Playwright E2E checks, resolving only failures introduced by this
+      change.
 - [ ] 5.3 Run fresh `npm run test` with the CI-equivalent Chromium prerequisites and confirm both
-      Vitest projects execute without starting a Next.js server or Playwright E2E runner.
+      Vitest projects execute without starting a Next.js server or standalone Playwright E2E runner;
+      confirm the CI graph never invokes full `verify` or `test:e2e`.
 - [ ] 5.4 Validate the merged GitLab CI configuration with GitLab CI lint when available; otherwise
       perform a local structural check of stages, includes, jobs, cache, and forbidden commands.
 - [ ] 5.5 Run `openspec validate streamline-ci-verification --type change --strict --no-interactive`

@@ -12,16 +12,18 @@
 `npm run test` запускает Vitest projects `unit` и `component`. Component project управляется
 Vitest, но использует существующий `@vitest/browser-playwright` provider для headless Chromium.
 Отдельный `npm run test:e2e` запускает Playwright test runner и поднимает Next.js-приложение; этот
-контур в новый CI не входит.
+контур войдёт в полный локальный `verify`, но не в новый CI.
 
 ## Goals / Non-Goals
 
 **Goals:**
 
-- Создать стабильные npm entry points для полного и быстрого code-quality набора.
+- Создать стабильные npm entry points для полного локального прогона и быстрой статической
+  проверки.
 - Сделать npm scripts источником истины для CI и pre-commit вместо дублирования отдельных команд.
 - Заменить CI build/typecheck topology на последовательные `codequality` и `test` gates.
-- Запускать все существующие Vitest projects без production build и без standalone Playwright E2E.
+- В CI запускать все существующие Vitest projects без production build и без standalone
+  Playwright E2E.
 - Сохранить Node.js 24, npm, lockfile-based cache и автоматическое форматирование staged-файлов.
 
 **Non-Goals:**
@@ -34,25 +36,27 @@ Vitest, но использует существующий `@vitest/browser-play
 
 ## Decisions
 
-### 1. Разделить полный и быстрый code-quality contracts
+### 1. Разделить полный локальный и быстрый verification contracts
 
 В корневом `package.json` будут определены scripts:
 
 - `verify:fast`: последовательно запускает `fmt:check`, `lint` и `tsc`;
-- `verify`: сначала запускает `verify:fast`, затем `knip` и `jscpd`.
+- `verify`: сначала запускает `verify:fast`, затем `knip`, `jscpd`, `test` и `test:e2e`.
 
 Команды выполняются последовательно через `&&`, чтобы первая ошибка немедленно завершала gate с
-ненулевым exit code и сохраняла читаемый вывод. `verify` намеренно означает полный code-quality
-gate, а Vitest остаётся отдельным `test` gate: это позволяет CI отображать статические ошибки и
-ошибки тестов в разных stages без повторного запуска одних и тех же проверок.
+ненулевым exit code и сохраняла читаемый вывод. `verify` означает полный локальный gate: после
+статических проверок он запускает все Vitest projects, а затем standalone Playwright E2E. Команда
+`verify:fast` остаётся общей быстрой границей для CI и pre-commit.
 
 `jscpd` будет добавлен как exact root devDependency, а одноимённый script будет использовать
 локальный binary. Сейчас `npx jscpd` может загрузить незафиксированную версию во время CI, что
 нарушает воспроизводимость `npm ci`.
 
-Альтернативы: включить `npm run test` в `verify` или запустить все проверки параллельно. Первая
-дублировала бы Vitest между `codequality` и `test` stages, вторая усложнила бы диагностику и могла
-бы создать конкуренцию за CPU/память на runner.
+Полный `verify` не используется в CI, потому что он запустил бы Playwright E2E вопреки заданной
+CI topology. Альтернатива условно пропускать E2E внутри `verify` по переменной `CI` отвергнута:
+одна и та же команда должна иметь предсказуемый состав. Параллельный запуск также отвергнут, потому
+что усложнил бы диагностику, создал конкуренцию за CPU/память и мог конфликтовать с dev-сервером
+Playwright.
 
 ### 2. Использовать отдельный CI job для каждого gate
 
@@ -60,7 +64,7 @@ gate, а Vitest остаётся отдельным `test` gate: это позв
 verification config вместо `.gitlab/build.yaml`. В verification config будут два jobs с общей
 скрытой Node.js 24/npm template:
 
-- `codequality` выполняет `npm run verify` в stage `codequality`;
+- `codequality` выполняет `npm run verify:fast` в stage `codequality`;
 - `test` выполняет `npm run test` в stage `test`.
 
 Оба jobs выполняют `npm ci --cache .npm --prefer-offline` и используют cache key от
@@ -69,9 +73,10 @@ cache и `.next` artifacts удаляются вместе со старым bui
 компилируют и не запускают Next.js.
 
 Один verification include с общей hidden template выбран вместо двух почти одинаковых файлов,
-чтобы не дублировать image/cache/install contract. Альтернатива с одним job `npm run verify && npm
-run test` отвергнута: она не создаёт требуемые независимые stages и ухудшает видимость причины
-падения pipeline.
+чтобы не дублировать image/cache/install contract. Knip и JSCPD остаются частью полного локального
+`verify`, но не CI `codequality`: пользователь явно выбрал `verify:fast` для этого stage.
+Альтернатива с одним job `npm run verify` отвергнута: она добавила бы Playwright E2E в CI, не
+создала бы требуемые независимые stages и ухудшила видимость причины падения pipeline.
 
 ### 3. Считать Vitest единственным test runner в новом CI
 
@@ -99,7 +104,8 @@ Pre-commit сохраняет отдельный staged-format job с `stage_fix
 
 `verify:fast` проверяет репозиторий целиком, а не пытается прокинуть `{staged_files}` через цепочку
 npm scripts. Это гарантирует корректный TypeScript project check и один и тот же контракт при
-ручном и hook-запуске. Более дорогие Knip/JSCPD и Vitest остаются за пределами pre-commit.
+ручном и hook-запуске. Более дорогие Knip/JSCPD, Vitest и Playwright E2E остаются за пределами
+pre-commit.
 
 Альтернатива сохранить отдельные staged lint/typecheck команды отвергнута, поскольку тогда hook
 снова имел бы собственную оркестрацию и мог разойтись с `verify:fast`.
@@ -119,8 +125,13 @@ stages, а не точки расширения deployment pipeline.
 - Удаление `.next` artifacts может сломать внешний deploy job, не хранящийся в текущем
   `.gitlab/deploy.yaml` → отметить CI contract как breaking, проверить project-level includes и
   при необходимости откатить CI config до добавления нового artifact producer.
-- Полный `verify:fast` может быть медленнее текущего staged lint → оставить Knip, JSCPD и Vitest за
-  пределами hook и измерить реальное время при внедрении.
+- Полный `verify:fast` может быть медленнее текущего staged lint → оставить Knip, JSCPD, Vitest и
+  Playwright E2E за пределами hook и измерить реальное время при внедрении.
+- Полный локальный `verify` будет долгим и потребует browser binaries, корректного `.env` и
+  свободного `FRONT_PORT` для Playwright web server → документировать prerequisites и оставить эту
+  команду явным локальным gate, не вызываемым pre-commit или CI.
+- CI `codequality` не запускает Knip и JSCPD → считать это осознанным обменом на быстрый pipeline;
+  полный локальный `verify` остаётся местом для этих проверок.
 - Vitest component tests требуют Chromium, отсутствующий в базовом Node image → явно подготовить
   browser/system dependencies и кешировать browser binaries, не добавляя Playwright E2E job.
 - JSCPD сейчас запускается через незакреплённый `npx` package → добавить exact devDependency и
@@ -131,12 +142,13 @@ stages, а не точки расширения deployment pipeline.
 
 ## Migration Plan
 
-1. Добавить exact JSCPD dependency и scripts `verify:fast`/`verify`, обновив lockfile.
+1. Добавить exact JSCPD dependency и scripts `verify:fast`/`verify`, включив Vitest и Playwright
+   E2E только в полный локальный `verify`, затем обновить lockfile.
 2. Перевести Lefthook на staged format плюс `npm run verify:fast` и локально проверить hook config.
 3. Добавить verification CI config с общим Node/npm setup и jobs `codequality`/`test`.
 4. Обновить root stages/includes, затем удалить `.gitlab/build.yaml` и его artifact contract.
-5. Запустить `verify:fast`, `verify`, `test` и проверки конфигураций; убедиться, что команды build и
-   Playwright E2E не вызываются новым CI graph.
+5. Локально запустить `verify:fast` и полный `verify`; отдельно проверить CI graph и убедиться, что
+   он вызывает `verify:fast` плюс Vitest, но не Next.js build и не Playwright E2E.
 
 Изменение не требует data migration. Для rollback восстанавливаются прежние `.gitlab-ci.yml` и
 `.gitlab/build.yaml`, удаляются новые verification jobs/scripts и возвращается прежняя Lefthook
