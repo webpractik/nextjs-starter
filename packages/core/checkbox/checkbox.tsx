@@ -18,11 +18,11 @@ export function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) 
       aria-invalid:border-destructive aria-invalid:ring-[3px]
       aria-invalid:ring-destructive/20
       aria-invalid:aria-checked:border-primary
-      data-checked:border-primary data-checked:bg-primary
-      data-checked:text-primary-foreground
-      dark:bg-input/30
-      dark:aria-invalid:border-destructive/50
+      dark:bg-input/30 dark:aria-invalid:border-destructive/50
       dark:aria-invalid:ring-destructive/40
+      data-checked:border-primary
+      data-checked:bg-primary
+      data-checked:text-primary-foreground
       dark:data-checked:bg-primary
     `, className)} {...props}>
             <CheckboxPrimitive.Indicator data-slot="checkbox-indicator" className={`

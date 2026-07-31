@@ -22,9 +22,9 @@ export function Tabs({
 export const tabsListVariants = cva(`
    group/tabs-list inline-flex w-fit items-center justify-center rounded-lg
    p-[3px] text-muted-foreground
-   group-data-horizontal/tabs:h-9
    group-data-[orientation=vertical]/tabs:h-fit
    group-data-[orientation=vertical]/tabs:flex-col
+   group-data-horizontal/tabs:h-9
    data-[variant=line]:rounded-none
  `, {
     variants: {
@@ -65,10 +65,10 @@ export function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
       focus-visible:ring-ring/50 focus-visible:outline-1
       focus-visible:outline-ring
       disabled:pointer-events-none disabled:opacity-50
-      group-data-[variant=default]/tabs-list:data-active:shadow-sm
-      group-data-[variant=line]/tabs-list:data-active:shadow-none
       dark:text-muted-foreground
       dark:hover:text-foreground
+      group-data-[variant=default]/tabs-list:data-active:shadow-sm
+      group-data-[variant=line]/tabs-list:data-active:shadow-none
       [&_svg]:pointer-events-none [&_svg]:shrink-0
       [&_svg:not([class*=\'size-\'])]:size-4
     `, `

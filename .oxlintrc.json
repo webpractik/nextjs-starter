@@ -29,6 +29,8 @@
         }
     },
     "ignorePatterns": [
+        "**/.agents",
+        "**/.claude",
         "**/.idea",
         "**/.vscode",
         "**/.turbo",
