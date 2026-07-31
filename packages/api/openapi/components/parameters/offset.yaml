@@ -1,0 +1,9 @@
+name: offset
+in: query
+required: false
+description: Zero-based collection offset.
+schema:
+    type: integer
+    minimum: 0
+    default: 0
+example: 0

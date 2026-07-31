@@ -1,0 +1,4 @@
+type: string
+description: Current lifecycle status of a pet.
+enum: [available, pending, sold]
+example: available

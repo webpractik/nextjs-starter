@@ -1,0 +1,10 @@
+description: The requested pet does not exist.
+content:
+    application/problem+json:
+        schema:
+            $ref: ../schemas/problem.yaml
+        example:
+            status: 404
+            code: pet_not_found
+            title: Pet not found
+            detail: No pet exists for the supplied identifier.

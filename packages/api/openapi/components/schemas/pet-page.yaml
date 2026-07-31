@@ -1,0 +1,21 @@
+type: object
+additionalProperties: false
+required: [items, offset, limit, total]
+properties:
+    items:
+        type: array
+        items:
+            $ref: ./pet.yaml
+    offset:
+        type: integer
+        minimum: 0
+        example: 0
+    limit:
+        type: integer
+        minimum: 1
+        maximum: 100
+        example: 20
+    total:
+        type: integer
+        minimum: 0
+        example: 1

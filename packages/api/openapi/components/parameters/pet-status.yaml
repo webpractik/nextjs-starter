@@ -1,0 +1,12 @@
+name: status
+in: query
+required: false
+description: Return pets matching any supplied status.
+style: form
+explode: true
+schema:
+    type: array
+    uniqueItems: true
+    items:
+        $ref: ../schemas/pet-status.yaml
+example: [available, pending]

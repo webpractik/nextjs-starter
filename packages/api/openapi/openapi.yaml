@@ -1,0 +1,45 @@
+openapi: 3.2.0
+info:
+    title: Next.js Starter Petstore API
+    summary: Example contract for the API generation pipeline
+    description: A small Petstore contract used to verify generated clients, hooks, schemas, mocks, and cache tags.
+    version: 1.0.0
+servers:
+    - url: /
+      description: Current application origin
+tags:
+    - name: pets
+      description: Example pet catalog operations
+paths:
+    /pets:
+        $ref: ./paths/pets.yaml
+    /pets/{petId}:
+        $ref: ./paths/pets-by-id.yaml
+components:
+    schemas:
+        Pet:
+            $ref: ./components/schemas/pet.yaml
+        PetStatus:
+            $ref: ./components/schemas/pet-status.yaml
+        PetPage:
+            $ref: ./components/schemas/pet-page.yaml
+        CreatePet:
+            $ref: ./components/schemas/create-pet.yaml
+        UpdatePet:
+            $ref: ./components/schemas/update-pet.yaml
+        Problem:
+            $ref: ./components/schemas/problem.yaml
+    parameters:
+        PetId:
+            $ref: ./components/parameters/pet-id.yaml
+        PetStatusFilter:
+            $ref: ./components/parameters/pet-status.yaml
+        Offset:
+            $ref: ./components/parameters/offset.yaml
+        Limit:
+            $ref: ./components/parameters/limit.yaml
+    responses:
+        NotFound:
+            $ref: ./components/responses/not-found.yaml
+        ValidationError:
+            $ref: ./components/responses/validation-error.yaml

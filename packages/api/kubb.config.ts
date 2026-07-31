@@ -120,9 +120,15 @@ export default defineConfig([
         input: {
             path: 'bundled.yaml',
         },
+        // Oxfmt needs a second pass for a generated Zod schema with an accessor and
+        // `uniqueItems`; keep `gen` idempotently formatted until that edge case is fixed.
+        hooks: {
+            done: 'oxfmt ./codegen',
+        },
         output: {
             clean: true,
             path: './codegen',
+            format: 'oxfmt',
             extension: {
                 '.ts': '',
             },

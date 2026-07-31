@@ -1,0 +1,50 @@
+parameters:
+    - $ref: ../components/parameters/pet-id.yaml
+get:
+    operationId: getPetById
+    summary: Get a pet
+    description: Returns one pet by its stable identifier.
+    tags: [pets]
+    responses:
+        '200':
+            description: The requested pet.
+            content:
+                application/json:
+                    schema:
+                        $ref: ../components/schemas/pet.yaml
+        '404':
+            $ref: ../components/responses/not-found.yaml
+patch:
+    operationId: updatePet
+    summary: Update a pet
+    description: Partially updates the name or status of one pet.
+    tags: [pets]
+    requestBody:
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: ../components/schemas/update-pet.yaml
+                example:
+                    status: sold
+    responses:
+        '200':
+            description: The updated pet.
+            content:
+                application/json:
+                    schema:
+                        $ref: ../components/schemas/pet.yaml
+        '404':
+            $ref: ../components/responses/not-found.yaml
+        '422':
+            $ref: ../components/responses/validation-error.yaml
+delete:
+    operationId: deletePet
+    summary: Delete a pet
+    description: Removes one pet from the example catalog.
+    tags: [pets]
+    responses:
+        '204':
+            description: The pet was deleted.
+        '404':
+            $ref: ../components/responses/not-found.yaml

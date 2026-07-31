@@ -1,0 +1,19 @@
+type: object
+additionalProperties: false
+required: [id, name, status, createdAt]
+properties:
+    id:
+        type: string
+        minLength: 1
+        example: pet_01j1a2b3c4
+    name:
+        type: string
+        minLength: 1
+        maxLength: 120
+        example: Pixel
+    status:
+        $ref: ./pet-status.yaml
+    createdAt:
+        type: string
+        format: date-time
+        example: '2026-07-31T09:00:00Z'

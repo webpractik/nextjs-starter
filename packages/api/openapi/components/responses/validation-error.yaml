@@ -1,0 +1,10 @@
+description: The request does not satisfy the contract.
+content:
+    application/problem+json:
+        schema:
+            $ref: ../schemas/problem.yaml
+        example:
+            status: 422
+            code: validation_error
+            title: Validation failed
+            detail: Check the supplied parameters or request body.

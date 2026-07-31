@@ -1,0 +1,8 @@
+name: petId
+in: path
+required: true
+description: Stable pet identifier.
+schema:
+    type: string
+    minLength: 1
+example: pet_01j1a2b3c4

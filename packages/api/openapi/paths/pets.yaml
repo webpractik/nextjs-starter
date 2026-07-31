@@ -1,0 +1,50 @@
+get:
+    operationId: findPetsByStatus
+    summary: Find pets by status
+    description: Returns one offset-based page of pets, optionally filtered by status.
+    tags: [pets]
+    parameters:
+        - $ref: ../components/parameters/pet-status.yaml
+        - $ref: ../components/parameters/offset.yaml
+        - $ref: ../components/parameters/limit.yaml
+    responses:
+        '200':
+            description: One page of pets.
+            content:
+                application/json:
+                    schema:
+                        $ref: ../components/schemas/pet-page.yaml
+                    example:
+                        items:
+                            - id: pet_01j1a2b3c4
+                              name: Pixel
+                              status: available
+                              createdAt: '2026-07-31T09:00:00Z'
+                        offset: 0
+                        limit: 20
+                        total: 1
+        '422':
+            $ref: ../components/responses/validation-error.yaml
+post:
+    operationId: createPet
+    summary: Create a pet
+    description: Adds one pet to the example catalog.
+    tags: [pets]
+    requestBody:
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: ../components/schemas/create-pet.yaml
+                example:
+                    name: Pixel
+                    status: available
+    responses:
+        '201':
+            description: The created pet.
+            content:
+                application/json:
+                    schema:
+                        $ref: ../components/schemas/pet.yaml
+        '422':
+            $ref: ../components/responses/validation-error.yaml
