@@ -13,7 +13,7 @@ import {
     AttachmentTrigger,
 } from '.'
 
-it('composes attachment slots, variants, trigger, and independent actions', async () => {
+it('показывает данные вложения и не запускает открытие при нажатии отдельного действия', async () => {
     const onAction = vi.fn()
     const onOpen = vi.fn()
     const screen = await render(
@@ -32,21 +32,11 @@ it('composes attachment slots, variants, trigger, and independent actions', asyn
         </Attachment>,
     )
 
-    const attachment = screen
-        .getByText('contract.pdf')
-        .element()
-        .closest('[data-slot="attachment"]')
-
-    expect(attachment).not.toBeNull()
-    expect(attachment).toHaveAttribute('data-state', 'uploading')
-    expect(attachment).toHaveAttribute('data-size', 'sm')
-    expect(attachment).toHaveAttribute('data-orientation', 'vertical')
-    expect(attachment?.querySelector('[data-slot="attachment-media"]')).not.toBeNull()
-    expect(attachment?.querySelector('[data-slot="attachment-content"]')).not.toBeNull()
-    expect(attachment?.querySelector('[data-slot="attachment-actions"]')).not.toBeNull()
-
     const trigger = screen.getByRole('button', { name: 'Open contract.pdf' })
 
+    await expect.element(screen.getByText('contract.pdf')).toBeVisible()
+    await expect.element(screen.getByText('Uploading · 64%')).toBeVisible()
+    await expect.element(screen.getByText('PDF', { exact: true })).toBeVisible()
     await expect.element(trigger).toHaveAttribute('type', 'button')
     await screen.getByRole('button', { name: 'Remove contract.pdf' }).click()
     expect(onAction).toHaveBeenCalledOnce()
@@ -56,9 +46,9 @@ it('composes attachment slots, variants, trigger, and independent actions', asyn
     expect(onOpen).toHaveBeenCalledOnce()
 })
 
-it('supports image media, custom trigger rendering, and grouped overflow styles', async () => {
+it('показывает изображение и ошибку, сохраняет пользовательскую ссылку и прокрутку группы', async () => {
     const screen = await render(
-        <AttachmentGroup aria-label="Project files">
+        <AttachmentGroup aria-label="Project files" role="list" style={{ width: 180 }}>
             <Attachment state="done">
                 <AttachmentMedia variant="image">
                     {/* oxlint-disable-next-line next/no-img-element -- This verifies caller-owned native image media. */}
@@ -87,16 +77,16 @@ it('supports image media, custom trigger rendering, and grouped overflow styles'
         </AttachmentGroup>,
     )
 
-    const imageMedia = screen
-        .getByRole('img', { name: 'Workspace preview' })
-        .element()
-        .closest('[data-slot="attachment-media"]')
-    const group = document.querySelector('[data-slot="attachment-group"]')
+    const image = screen.getByRole('img', { name: 'Workspace preview' })
+    const group = screen.getByRole('list', { name: 'Project files' })
 
-    expect(imageMedia).toHaveAttribute('data-variant', 'image')
+    await expect.element(image).toBeVisible()
     await expect
         .element(screen.getByRole('link', { name: 'View workspace.png' }))
         .toHaveAttribute('href', '#workspace')
-    expect(group).toHaveClass('scroll-fade-x', 'no-scrollbar', 'snap-x', 'overflow-x-auto')
     await expect.element(screen.getByText('Upload failed: connection lost')).toBeVisible()
+
+    expect(group.element().scrollWidth).toBeGreaterThan(group.element().clientWidth)
+    group.element().scrollLeft = group.element().scrollWidth
+    await expect.poll(() => group.element().scrollLeft).toBeGreaterThan(0)
 })

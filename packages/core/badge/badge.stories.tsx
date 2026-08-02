@@ -21,42 +21,42 @@ type Story = StoryObj<typeof Badge>
 
 export const Default: Story = {
     args: {
-        children: 'Badge',
+        children: 'Метка',
         variant: 'default',
     },
 }
 
 export const Outline: Story = {
     args: {
-        children: 'Outline',
+        children: 'Контурная',
         variant: 'outline',
     },
 }
 
 export const Secondary: Story = {
     args: {
-        children: 'Secondary',
+        children: 'Вторичная',
         variant: 'secondary',
     },
 }
 
 export const Ghost: Story = {
     args: {
-        children: 'Ghost',
+        children: 'Прозрачная',
         variant: 'ghost',
     },
 }
 
 export const Destructive: Story = {
     args: {
-        children: 'Destructive',
+        children: 'Опасная',
         variant: 'destructive',
     },
 }
 
 export const Link: Story = {
     args: {
-        children: 'Link',
+        children: 'Ссылка',
         variant: 'link',
     },
 }
@@ -66,7 +66,7 @@ export const WithIcon: Story = {
         children: (
             <>
                 <CheckIcon data-icon="inline-start" />
-                Verified
+                Подтверждено
             </>
         ),
         variant: 'default',
@@ -77,7 +77,7 @@ export const WithIconEnd: Story = {
     args: {
         children: (
             <>
-                Close
+                Закрыть
                 <XIcon data-icon="inline-end" />
             </>
         ),
@@ -88,12 +88,12 @@ export const WithIconEnd: Story = {
 export const AllVariants: Story = {
     render: () => (
         <div className="flex flex-wrap gap-2">
-            <Badge variant="default">Default</Badge>
-            <Badge variant="outline">Outline</Badge>
-            <Badge variant="secondary">Secondary</Badge>
-            <Badge variant="ghost">Ghost</Badge>
-            <Badge variant="destructive">Destructive</Badge>
-            <Badge variant="link">Link</Badge>
+            <Badge variant="default">Обычная</Badge>
+            <Badge variant="outline">Контурная</Badge>
+            <Badge variant="secondary">Вторичная</Badge>
+            <Badge variant="ghost">Прозрачная</Badge>
+            <Badge variant="destructive">Опасная</Badge>
+            <Badge variant="link">Ссылка</Badge>
         </div>
     ),
 }

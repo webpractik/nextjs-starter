@@ -23,33 +23,39 @@ type Story = StoryObj<typeof Toaster>
 
 export const Default: Story = {
     render: () => (
-        <Button onClick={() => toast.add({ title: 'Workspace saved' })}>Show toast</Button>
+        <Button onClick={() => toast.add({ title: 'Рабочее пространство сохранено' })}>
+            Показать уведомление
+        </Button>
     ),
 }
 
 export const Statuses: Story = {
     render: () => (
         <div className="flex flex-wrap gap-2">
-            <Button onClick={() => toast.add({ title: 'Changes saved', type: 'success' })}>
-                Success
+            <Button onClick={() => toast.add({ title: 'Изменения сохранены', type: 'success' })}>
+                Успех
             </Button>
-            <Button onClick={() => toast.add({ title: 'New version available', type: 'info' })}>
-                Info
+            <Button onClick={() => toast.add({ title: 'Доступна новая версия', type: 'info' })}>
+                Информация
             </Button>
             <Button
-                onClick={() => toast.add({ title: 'Check the imported values', type: 'warning' })}
+                onClick={() =>
+                    toast.add({ title: 'Проверьте импортированные значения', type: 'warning' })
+                }
                 variant="outline"
             >
-                Warning
+                Предупреждение
             </Button>
             <Button
-                onClick={() => toast.add({ title: 'Could not save changes', type: 'error' })}
+                onClick={() =>
+                    toast.add({ title: 'Не удалось сохранить изменения', type: 'error' })
+                }
                 variant="destructive"
             >
-                Error
+                Ошибка
             </Button>
-            <Button onClick={() => toast.add({ title: 'Uploading report', type: 'loading' })}>
-                Loading
+            <Button onClick={() => toast.add({ title: 'Отчёт загружается', type: 'loading' })}>
+                Загрузка
             </Button>
         </div>
     ),
@@ -60,12 +66,12 @@ export const WithDescription: Story = {
         <Button
             onClick={() =>
                 toast.add({
-                    description: 'The review is scheduled for Monday at 10:00.',
-                    title: 'Event created',
+                    description: 'Проверка назначена на понедельник, 10:00.',
+                    title: 'Событие создано',
                 })
             }
         >
-            Show details
+            Показать подробности
         </Button>
     ),
 }
@@ -76,16 +82,16 @@ export const WithAction: Story = {
             onClick={() =>
                 toast.add({
                     actionProps: {
-                        children: 'Undo',
-                        onClick: () => toast.add({ title: 'File restored', type: 'success' }),
+                        children: 'Отменить',
+                        onClick: () => toast.add({ title: 'Файл восстановлен', type: 'success' }),
                     },
-                    description: 'quarterly-report.pdf',
-                    title: 'File deleted',
+                    description: 'квартальный-отчёт.pdf',
+                    title: 'Файл удалён',
                 })
             }
             variant="outline"
         >
-            Delete file
+            Удалить файл
         </Button>
     ),
 }
@@ -95,17 +101,17 @@ export const PromiseLifecycle: Story = {
         <Button
             onClick={() => {
                 const upload = new Promise<string>((resolve) => {
-                    setTimeout(resolve, 1500, 'quarterly-report.pdf')
+                    setTimeout(resolve, 1500, 'квартальный-отчёт.pdf')
                 })
 
                 void toast.promise(upload, {
-                    error: 'Upload failed',
-                    loading: 'Uploading report',
-                    success: (filename) => `Uploaded ${filename}`,
+                    error: 'Не удалось загрузить файл',
+                    loading: 'Отчёт загружается',
+                    success: (filename) => `Файл ${filename} загружен`,
                 })
             }}
         >
-            Upload report
+            Загрузить отчёт
         </Button>
     ),
 }
@@ -115,13 +121,13 @@ export const Persistent: Story = {
         <Button
             onClick={() =>
                 toast.add({
-                    description: 'Close this notification manually.',
+                    description: 'Закройте это уведомление вручную.',
                     timeout: 0,
-                    title: 'Persistent notification',
+                    title: 'Постоянное уведомление',
                 })
             }
         >
-            Show persistent toast
+            Показать постоянное уведомление
         </Button>
     ),
 }
@@ -130,12 +136,12 @@ export const Stacking: Story = {
     render: () => (
         <Button
             onClick={() => {
-                toast.add({ title: 'Profile updated', type: 'success' })
-                toast.add({ title: 'Team invited', type: 'info' })
-                toast.add({ title: 'Report queued', type: 'loading' })
+                toast.add({ title: 'Профиль обновлён', type: 'success' })
+                toast.add({ title: 'Команда приглашена', type: 'info' })
+                toast.add({ title: 'Отчёт добавлен в очередь', type: 'loading' })
             }}
         >
-            Show stack
+            Показать несколько уведомлений
         </Button>
     ),
 }

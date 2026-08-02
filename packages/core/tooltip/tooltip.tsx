@@ -39,7 +39,7 @@ export function TooltipContent({
                 sideOffset={sideOffset}
                 className="isolate z-50"
             >
-                <TooltipPrimitive.Popup data-slot="tooltip-content" className={cn(`
+                <TooltipPrimitive.Popup role="tooltip" data-slot="tooltip-content" className={cn(`
         z-50 w-fit max-w-xs origin-(--transform-origin) rounded-md bg-foreground
         px-3 py-1.5 text-xs text-background
         data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2

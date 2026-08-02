@@ -22,23 +22,25 @@ export default meta
 
 type Story = StoryObj<typeof Dialog>
 
+const longContentParagraphKeys = Array.from({ length: 10 }, (_, index) => `paragraph-${index + 1}`)
+
 export const Default: Story = {
     render: () => (
         <Dialog>
-            <DialogTrigger render={<Button />}>Open Dialog</DialogTrigger>
+            <DialogTrigger render={<Button />}>Открыть диалог</DialogTrigger>
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
-                    <DialogTitle>Dialog Title</DialogTitle>
+                    <DialogTitle>Заголовок диалога</DialogTitle>
                     <DialogDescription>
-                        This is a dialog description. It can contain more details about the dialog
-                        content.
+                        Это описание диалога. Здесь можно разместить дополнительные сведения о его
+                        содержимом.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="py-4">
-                    <p>Dialog content goes here.</p>
+                    <p>Здесь находится содержимое диалога.</p>
                 </div>
                 <DialogFooter>
-                    <Button>Save</Button>
+                    <Button>Сохранить</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
@@ -48,27 +50,27 @@ export const Default: Story = {
 export const WithForm: Story = {
     render: () => (
         <Dialog>
-            <DialogTrigger render={<Button />}>Edit Profile</DialogTrigger>
+            <DialogTrigger render={<Button />}>Редактировать профиль</DialogTrigger>
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
-                    <DialogTitle>Edit Profile</DialogTitle>
+                    <DialogTitle>Редактирование профиля</DialogTitle>
                     <DialogDescription>
-                        Make changes to your profile here. Click save when you're done.
+                        Измените данные профиля. Когда закончите, нажмите «Сохранить».
                     </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
                     <div className="grid gap-2">
-                        <Label htmlFor="name">Name</Label>
-                        <Input id="name" defaultValue="Pavel Durov" />
+                        <Label htmlFor="name">Имя</Label>
+                        <Input id="name" defaultValue="Павел Дуров" />
                     </div>
                     <div className="grid gap-2">
-                        <Label htmlFor="username">Username</Label>
+                        <Label htmlFor="username">Имя пользователя</Label>
                         <Input id="username" defaultValue="@durov" />
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button variant="outline">Cancel</Button>
-                    <Button>Save changes</Button>
+                    <Button variant="outline">Отмена</Button>
+                    <Button>Сохранить изменения</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
@@ -78,18 +80,18 @@ export const WithForm: Story = {
 export const Confirmation: Story = {
     render: () => (
         <Dialog>
-            <DialogTrigger render={<Button variant="destructive" />}>Delete Account</DialogTrigger>
+            <DialogTrigger render={<Button variant="destructive" />}>Удалить аккаунт</DialogTrigger>
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
-                    <DialogTitle>Are you sure?</DialogTitle>
+                    <DialogTitle>Вы уверены?</DialogTitle>
                     <DialogDescription>
-                        This action cannot be undone. This will permanently delete your account and
-                        remove your data from our servers.
+                        Это действие нельзя отменить. Аккаунт и все ваши данные будут безвозвратно
+                        удалены с наших серверов.
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
-                    <Button variant="outline">Cancel</Button>
-                    <Button variant="destructive">Delete</Button>
+                    <Button variant="outline">Отмена</Button>
+                    <Button variant="destructive">Удалить</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
@@ -99,16 +101,16 @@ export const Confirmation: Story = {
 export const WithoutCloseButton: Story = {
     render: () => (
         <Dialog>
-            <DialogTrigger render={<Button />}>Open Dialog</DialogTrigger>
+            <DialogTrigger render={<Button />}>Открыть диалог</DialogTrigger>
             <DialogContent className="sm:max-w-md" showCloseButton={false}>
                 <DialogHeader>
-                    <DialogTitle>No Close Button</DialogTitle>
+                    <DialogTitle>Без кнопки закрытия</DialogTitle>
                     <DialogDescription>
-                        This dialog doesn't have a close button in the corner.
+                        У этого диалога нет кнопки закрытия в углу.
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter showCloseButton>
-                    <Button>Confirm</Button>
+                    <Button>Подтвердить</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
@@ -118,27 +120,27 @@ export const WithoutCloseButton: Story = {
 export const LongContent: Story = {
     render: () => (
         <Dialog>
-            <DialogTrigger render={<Button />}>Open Long Dialog</DialogTrigger>
+            <DialogTrigger render={<Button />}>Открыть длинный диалог</DialogTrigger>
             <DialogContent className={`
      max-h-[80vh] overflow-y-auto
      sm:max-w-lg
    `}>
                 <DialogHeader>
-                    <DialogTitle>Terms of Service</DialogTitle>
-                    <DialogDescription>Please read and accept our terms.</DialogDescription>
+                    <DialogTitle>Условия использования</DialogTitle>
+                    <DialogDescription>Прочитайте и примите наши условия.</DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4 py-4">
-                    {Array.from({ length: 10 }).map((_, i) => (
-                        <p key={i}>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
-                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                            veniam, quis nostrud exercitation ullamco laboris.
+                    {longContentParagraphKeys.map((paragraphKey) => (
+                        <p key={paragraphKey}>
+                            Это пример длинного текста в прокручиваемом диалоге. Он помогает
+                            проверить расположение заголовка, содержимого и кнопок при большом
+                            объёме информации.
                         </p>
                     ))}
                 </div>
                 <DialogFooter>
-                    <Button variant="outline">Decline</Button>
-                    <Button>Accept</Button>
+                    <Button variant="outline">Отклонить</Button>
+                    <Button>Принять</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

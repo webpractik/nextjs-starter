@@ -11,6 +11,9 @@ export default meta
 
 type Story = StoryObj<typeof Skeleton>
 
+const listSkeletonRowKeys = Array.from({ length: 5 }, (_, index) => `list-row-${index + 1}`)
+const tableSkeletonRowKeys = Array.from({ length: 4 }, (_, index) => `table-row-${index + 1}`)
+
 export const Default: Story = {
     args: {
         className: 'h-4 w-48',
@@ -56,8 +59,8 @@ export const ProfileSkeleton: Story = {
 export const ListSkeleton: Story = {
     render: () => (
         <div className="space-y-4">
-            {Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} className="flex items-center space-x-4">
+            {listSkeletonRowKeys.map((rowKey) => (
+                <div key={rowKey} className="flex items-center space-x-4">
                     <Skeleton className="size-10 rounded-full" />
                     <div className="flex-1 space-y-2">
                         <Skeleton className="h-4 w-3/4" />
@@ -78,8 +81,8 @@ export const TableSkeleton: Story = {
                 <Skeleton className="h-8 w-24" />
                 <Skeleton className="h-8 w-32" />
             </div>
-            {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="flex gap-4">
+            {tableSkeletonRowKeys.map((rowKey) => (
+                <div key={rowKey} className="flex gap-4">
                     <Skeleton className="h-6 w-32" />
                     <Skeleton className="h-6 w-48" />
                     <Skeleton className="h-6 w-24" />

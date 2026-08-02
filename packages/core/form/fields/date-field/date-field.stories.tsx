@@ -3,10 +3,8 @@ import type { ReactNode } from 'react'
 
 import type { DateFieldProps } from '.'
 
-import { useForm } from '@tanstack/react-form'
-
 import { DateField } from '.'
-import { fieldContext } from '../../form-context'
+import { FieldStory } from '../shared/field-story'
 
 interface DateFieldStoryProps {
     dateOptions?: DateFieldProps['dateOptions']
@@ -14,7 +12,7 @@ interface DateFieldStoryProps {
     description?: ReactNode
     disabled?: boolean
     label: ReactNode
-    validate?: (_value: string) => string | undefined
+    validate?: (_value: unknown) => string | undefined
 }
 
 function DateFieldStory({
@@ -25,37 +23,16 @@ function DateFieldStory({
     label,
     validate,
 }: DateFieldStoryProps) {
-    const form = useForm({ defaultValues: { value: defaultValue } })
-
     return (
-        <div className="w-full max-w-sm space-y-3">
-            <form.Field
-                name="value"
-                validators={{
-                    onBlur: ({ value }) => validate?.(value),
-                    onMount: ({ value }) => validate?.(value),
-                }}
-            >
-                {(field) => (
-                    <fieldContext.Provider value={field}>
-                        <DateField
-                            dateOptions={dateOptions}
-                            description={description}
-                            disabled={disabled}
-                            label={label}
-                            placeholder="ДД.ММ.ГГГГ"
-                        />
-                    </fieldContext.Provider>
-                )}
-            </form.Field>
-            <form.Subscribe selector={(state) => state.values.value}>
-                {(value) => (
-                    <output className="block text-xs text-muted-foreground">
-                        Form value: {value || 'empty'}
-                    </output>
-                )}
-            </form.Subscribe>
-        </div>
+        <FieldStory defaultValue={defaultValue} validate={validate}>
+            <DateField
+                dateOptions={dateOptions}
+                description={description}
+                disabled={disabled}
+                label={label}
+                placeholder="ДД.ММ.ГГГГ"
+            />
+        </FieldStory>
     )
 }
 
@@ -70,32 +47,32 @@ type Story = StoryObj<typeof DateFieldStory>
 
 export const Default: Story = {
     args: {
-        description: 'The masked display string is stored in form state.',
-        label: 'Birth date',
+        description: 'Строка с маской сохраняется в состоянии формы.',
+        label: 'Дата рождения',
     },
 }
 
-const usDateOptions = {
-    locale: 'en-US',
+const ruDateOptions = {
+    locale: 'ru-RU',
     max: new Date(2030, 11, 31),
     min: new Date(2020, 0, 1),
 }
 
 export const Configured: Story = {
     args: {
-        dateOptions: usDateOptions,
-        defaultValue: '12/31/2026',
-        description: 'US locale, constrained to calendar years 2020–2030.',
-        label: 'Review date',
+        dateOptions: ruDateOptions,
+        defaultValue: '31.12.2026',
+        description: 'Русская локаль, доступны календарные годы с 2020-го по 2030-й.',
+        label: 'Дата проверки',
     },
 }
 
 export const Validation: Story = {
     args: {
         defaultValue: '01.01.2026',
-        description: 'This example requires the end of 2026.',
-        label: 'Deadline',
-        validate: (value) => (value === '31.12.2026' ? undefined : 'Deadline must be 31.12.2026'),
+        description: 'В этом примере требуется последний день 2026 года.',
+        label: 'Срок',
+        validate: (value) => (value === '31.12.2026' ? undefined : 'Укажите срок 31.12.2026'),
     },
 }
 
@@ -103,6 +80,6 @@ export const Disabled: Story = {
     args: {
         defaultValue: '31.12.2026',
         disabled: true,
-        label: 'Archived date',
+        label: 'Архивная дата',
     },
 }

@@ -61,7 +61,7 @@ function ChoiceFieldsDemo() {
     )
 }
 
-it('binds checkbox and switch controls to boolean field state and blur metadata', async () => {
+it('синхронизирует checkbox и switch с boolean-состоянием и помечает их после потери фокуса', async () => {
     const screen = await render(<ChoiceFieldsDemo />)
     const checkbox = screen.getByRole('checkbox', { name: 'Accept terms' })
     const switchControl = screen.getByRole('switch', { name: 'Enable workspace' })
@@ -94,7 +94,7 @@ it('binds checkbox and switch controls to boolean field state and blur metadata'
         .toHaveTextContent('{"acceptsTerms":true,"enabled":true}')
 })
 
-it('propagates disabled state to the choice control and field container', async () => {
+it('делает отключённый checkbox недоступным и помечает его контейнер', async () => {
     const screen = await render(<ChoiceFieldsDemo />)
     const checkbox = screen.getByRole('checkbox', { name: 'Archived' })
 

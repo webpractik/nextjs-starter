@@ -41,7 +41,7 @@ function TextFieldShellDemo() {
     )
 }
 
-it('associates one alert, description, and metadata with a stable text control', async () => {
+it('связывает текстовое поле с label, описанием и общей ошибкой, сохраняя id после обновления', async () => {
     const screen = await render(<TextFieldShellDemo />)
     const control = screen.getByRole('textbox', { name: 'Project name' })
     const label = screen.getByText('Project name')
@@ -71,7 +71,7 @@ it('associates one alert, description, and metadata with a stable text control',
     await expect.element(screen.getByRole('alert')).not.toBeInTheDocument()
 })
 
-it('associates a choice label and description with its control', async () => {
+it('связывает поле выбора с label и описанием и отражает его meta-состояние', async () => {
     const fieldApi = fieldWithMeta(
         {
             errors: [],

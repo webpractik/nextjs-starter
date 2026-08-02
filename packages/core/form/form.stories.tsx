@@ -7,12 +7,12 @@ import { useAppForm } from '.'
 
 const showcaseSchema = z.object({
     acceptsTerms: z.boolean(),
-    birthDate: z.string().regex(/^\d{2}\.\d{2}\.\d{4}$/, 'Use DD.MM.YYYY'),
+    birthDate: z.string().regex(/^\d{2}\.\d{2}\.\d{4}$/, 'Используйте формат ДД.ММ.ГГГГ'),
     channel: z.string(),
     confidence: z.number(),
     enabled: z.boolean(),
-    projectName: z.string().min(3, 'Use at least three characters'),
-    phone: z.string().regex(/^\+7 \d{3} \d{3}-\d{2}-\d{2}$/, 'Enter a complete phone'),
+    projectName: z.string().min(3, 'Введите не менее трёх символов'),
+    phone: z.string().regex(/^\+7 \d{3} \d{3}-\d{2}-\d{2}$/, 'Введите номер полностью'),
     seats: z.number().min(1),
     stack: z.string(),
     summary: z.string(),
@@ -51,17 +51,17 @@ function FormShowcase() {
                 <form.AppField name="projectName">
                     {(field) => (
                         <field.TextField
-                            description="This name is shown throughout the workspace."
-                            label="Project name"
-                            placeholder="Apollo"
+                            description="Это название отображается во всём рабочем пространстве."
+                            label="Название проекта"
+                            placeholder="Аполлон"
                         />
                     )}
                 </form.AppField>
                 <form.AppField name="birthDate">
                     {(field) => (
                         <field.DateField
-                            description="Stored as a masked DD.MM.YYYY string."
-                            label="Birth date"
+                            description="Сохраняется как строка в формате ДД.ММ.ГГГГ."
+                            label="Дата рождения"
                             placeholder="ДД.ММ.ГГГГ"
                         />
                     )}
@@ -69,22 +69,22 @@ function FormShowcase() {
                 <form.AppField name="phone">
                     {(field) => (
                         <field.PhoneField
-                            description="Stored as a masked international string."
-                            label="Phone"
+                            description="Сохраняется как строка в международном формате."
+                            label="Телефон"
                             placeholder="+7 999 123-45-67"
                         />
                     )}
                 </form.AppField>
                 <form.AppField name="summary">
-                    {(field) => <field.TextareaField label="Summary" rows={3} />}
+                    {(field) => <field.TextareaField label="Краткое описание" rows={3} />}
                 </form.AppField>
                 <form.AppField name="seats">
-                    {(field) => <field.NumberField label="Seats" min={1} />}
+                    {(field) => <field.NumberField label="Количество мест" min={1} />}
                 </form.AppField>
                 <form.AppField name="stack">
                     {(field) => (
                         <field.SelectField
-                            label="Primary library"
+                            label="Основная библиотека"
                             options={[
                                 { label: 'TanStack Query', value: 'query' },
                                 { label: 'TanStack Router', value: 'router' },
@@ -95,25 +95,25 @@ function FormShowcase() {
                 <form.AppField name="channel">
                     {(field) => (
                         <field.RadioGroupField
-                            label="Notification channel"
+                            label="Канал уведомлений"
                             options={[
-                                { label: 'Email', value: 'email' },
-                                { label: 'SMS', value: 'sms' },
+                                { label: 'Электронная почта', value: 'email' },
+                                { label: 'СМС', value: 'sms' },
                             ]}
                         />
                     )}
                 </form.AppField>
                 <form.AppField name="confidence">
-                    {(field) => <field.SliderField label="Delivery confidence" />}
+                    {(field) => <field.SliderField label="Уверенность в сроках" />}
                 </form.AppField>
                 <form.AppField name="enabled">
-                    {(field) => <field.SwitchField label="Enable workspace" />}
+                    {(field) => <field.SwitchField label="Включить рабочее пространство" />}
                 </form.AppField>
                 <form.AppField name="acceptsTerms">
-                    {(field) => <field.CheckboxField label="Accept terms" />}
+                    {(field) => <field.CheckboxField label="Принять условия" />}
                 </form.AppField>
                 <form.AppForm>
-                    <form.SubmitButton>Save project</form.SubmitButton>
+                    <form.SubmitButton>Сохранить проект</form.SubmitButton>
                 </form.AppForm>
             </form>
 

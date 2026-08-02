@@ -46,9 +46,9 @@ export const Vertical: Story = {
 export const BetweenText: Story = {
     render: () => (
         <div className="w-64 space-y-4">
-            <p className="text-sm">Section above</p>
+            <p className="text-sm">Раздел выше</p>
             <Separator />
-            <p className="text-sm">Section below</p>
+            <p className="text-sm">Раздел ниже</p>
         </div>
     ),
 }
@@ -56,11 +56,11 @@ export const BetweenText: Story = {
 export const VerticalBetweenItems: Story = {
     render: () => (
         <div className="flex h-5 items-center gap-4 text-sm">
-            <span>Item 1</span>
+            <span>Элемент 1</span>
             <Separator orientation="vertical" />
-            <span>Item 2</span>
+            <span>Элемент 2</span>
             <Separator orientation="vertical" />
-            <span>Item 3</span>
+            <span>Элемент 3</span>
         </div>
     ),
 }

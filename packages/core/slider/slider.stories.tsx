@@ -23,7 +23,7 @@ export const Default: Story = {
     render: () => (
         <Slider defaultValue={40}>
             <div className="flex items-center justify-between">
-                <SliderLabel>Build confidence</SliderLabel>
+                <SliderLabel>Уверенность в сборке</SliderLabel>
                 <SliderValue />
             </div>
             <SliderControl>
@@ -40,14 +40,14 @@ export const Range: Story = {
     render: () => (
         <Slider defaultValue={[20, 80]}>
             <div className="flex items-center justify-between">
-                <SliderLabel>Confidence range</SliderLabel>
+                <SliderLabel>Диапазон уверенности</SliderLabel>
                 <SliderValue>{(_formattedValues, values) => values.join(' – ')}</SliderValue>
             </div>
             <SliderControl>
                 <SliderTrack>
                     <SliderIndicator />
-                    <SliderThumb aria-label="Minimum confidence" index={0} />
-                    <SliderThumb aria-label="Maximum confidence" index={1} />
+                    <SliderThumb aria-label="Минимальная уверенность" index={0} />
+                    <SliderThumb aria-label="Максимальная уверенность" index={1} />
                 </SliderTrack>
             </SliderControl>
         </Slider>
@@ -57,7 +57,7 @@ export const Range: Story = {
 export const Disabled: Story = {
     render: () => (
         <Slider disabled defaultValue={65}>
-            <SliderLabel>Locked confidence</SliderLabel>
+            <SliderLabel>Зафиксированная уверенность</SliderLabel>
             <SliderControl>
                 <SliderTrack>
                     <SliderIndicator />

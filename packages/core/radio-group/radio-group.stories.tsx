@@ -17,15 +17,15 @@ export const Default: Story = {
         <RadioGroup defaultValue="option-1">
             <div className="flex items-center gap-2">
                 <RadioGroupItem value="option-1" id="option-1" />
-                <Label htmlFor="option-1">Option 1</Label>
+                <Label htmlFor="option-1">Вариант 1</Label>
             </div>
             <div className="flex items-center gap-2">
                 <RadioGroupItem value="option-2" id="option-2" />
-                <Label htmlFor="option-2">Option 2</Label>
+                <Label htmlFor="option-2">Вариант 2</Label>
             </div>
             <div className="flex items-center gap-2">
                 <RadioGroupItem value="option-3" id="option-3" />
-                <Label htmlFor="option-3">Option 3</Label>
+                <Label htmlFor="option-3">Вариант 3</Label>
             </div>
         </RadioGroup>
     ),
@@ -36,11 +36,11 @@ export const NoDefault: Story = {
         <RadioGroup>
             <div className="flex items-center gap-2">
                 <RadioGroupItem value="a" id="a" />
-                <Label htmlFor="a">Choice A</Label>
+                <Label htmlFor="a">Вариант А</Label>
             </div>
             <div className="flex items-center gap-2">
                 <RadioGroupItem value="b" id="b" />
-                <Label htmlFor="b">Choice B</Label>
+                <Label htmlFor="b">Вариант Б</Label>
             </div>
         </RadioGroup>
     ),
@@ -51,12 +51,12 @@ export const Disabled: Story = {
         <RadioGroup defaultValue="enabled">
             <div className="flex items-center gap-2">
                 <RadioGroupItem value="enabled" id="enabled" />
-                <Label htmlFor="enabled">Enabled option</Label>
+                <Label htmlFor="enabled">Доступный вариант</Label>
             </div>
             <div className="flex items-center gap-2">
                 <RadioGroupItem value="disabled" id="disabled" disabled />
                 <Label htmlFor="disabled" className="opacity-50">
-                    Disabled option
+                    Недоступный вариант
                 </Label>
             </div>
         </RadioGroup>
@@ -68,11 +68,11 @@ export const Invalid: Story = {
         <RadioGroup aria-invalid>
             <div className="flex items-center gap-2">
                 <RadioGroupItem value="yes" id="yes" aria-invalid />
-                <Label htmlFor="yes">Yes</Label>
+                <Label htmlFor="yes">Да</Label>
             </div>
             <div className="flex items-center gap-2">
                 <RadioGroupItem value="no" id="no" aria-invalid />
-                <Label htmlFor="no">No</Label>
+                <Label htmlFor="no">Нет</Label>
             </div>
         </RadioGroup>
     ),
@@ -84,22 +84,24 @@ export const WithDescriptions: Story = {
             <div className="flex gap-2">
                 <RadioGroupItem value="personal" id="personal" className="mt-1" />
                 <div className="grid gap-1">
-                    <Label htmlFor="personal">Personal</Label>
-                    <p className="text-sm text-muted-foreground">Use for personal projects</p>
+                    <Label htmlFor="personal">Личное</Label>
+                    <p className="text-sm text-muted-foreground">Для личных проектов</p>
                 </div>
             </div>
             <div className="flex gap-2">
                 <RadioGroupItem value="team" id="team" className="mt-1" />
                 <div className="grid gap-1">
-                    <Label htmlFor="team">Team</Label>
-                    <p className="text-sm text-muted-foreground">Share with your team members</p>
+                    <Label htmlFor="team">Командное</Label>
+                    <p className="text-sm text-muted-foreground">
+                        Для совместной работы с командой
+                    </p>
                 </div>
             </div>
             <div className="flex gap-2">
                 <RadioGroupItem value="enterprise" id="enterprise" className="mt-1" />
                 <div className="grid gap-1">
-                    <Label htmlFor="enterprise">Enterprise</Label>
-                    <p className="text-sm text-muted-foreground">For large organizations</p>
+                    <Label htmlFor="enterprise">Корпоративное</Label>
+                    <p className="text-sm text-muted-foreground">Для крупных организаций</p>
                 </div>
             </div>
         </RadioGroup>
@@ -111,15 +113,15 @@ export const Horizontal: Story = {
         <RadioGroup defaultValue="left" className="flex flex-row gap-4">
             <div className="flex items-center gap-2">
                 <RadioGroupItem value="left" id="left" />
-                <Label htmlFor="left">Left</Label>
+                <Label htmlFor="left">Слева</Label>
             </div>
             <div className="flex items-center gap-2">
                 <RadioGroupItem value="center" id="center" />
-                <Label htmlFor="center">Center</Label>
+                <Label htmlFor="center">По центру</Label>
             </div>
             <div className="flex items-center gap-2">
                 <RadioGroupItem value="right" id="right" />
-                <Label htmlFor="right">Right</Label>
+                <Label htmlFor="right">Справа</Label>
             </div>
         </RadioGroup>
     ),

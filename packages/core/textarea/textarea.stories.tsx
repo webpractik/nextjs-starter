@@ -25,37 +25,37 @@ type Story = StoryObj<typeof Textarea>
 
 export const Default: Story = {
     args: {
-        placeholder: 'Type your message here...',
+        placeholder: 'Введите сообщение…',
     },
 }
 
 export const WithValue: Story = {
     args: {
         defaultValue:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            'Это пример заранее заполненного многострочного поля с текстом на русском языке.',
     },
 }
 
 export const Disabled: Story = {
     args: {
-        placeholder: 'Disabled textarea',
+        placeholder: 'Недоступное текстовое поле',
         disabled: true,
     },
 }
 
 export const Invalid: Story = {
     args: {
-        placeholder: 'Invalid textarea',
+        placeholder: 'Текстовое поле с ошибкой',
         'aria-invalid': true,
-        defaultValue: 'Invalid content',
+        defaultValue: 'Некорректное содержимое',
     },
 }
 
 export const WithLabel: Story = {
     render: () => (
         <div className="grid gap-2">
-            <Label htmlFor="message">Message</Label>
-            <Textarea id="message" placeholder="Type your message here..." />
+            <Label htmlFor="message">Сообщение</Label>
+            <Textarea id="message" placeholder="Введите сообщение…" />
         </div>
     ),
 }
@@ -63,9 +63,9 @@ export const WithLabel: Story = {
 export const WithDescription: Story = {
     render: () => (
         <div className="grid gap-2">
-            <Label htmlFor="bio">Bio</Label>
-            <Textarea id="bio" placeholder="Tell us a little bit about yourself" />
-            <p className="text-sm text-muted-foreground">You can use up to 500 characters.</p>
+            <Label htmlFor="bio">О себе</Label>
+            <Textarea id="bio" placeholder="Немного расскажите о себе" />
+            <p className="text-sm text-muted-foreground">Можно ввести до 500 символов.</p>
         </div>
     ),
 }
@@ -73,9 +73,9 @@ export const WithDescription: Story = {
 export const WithMaxLength: Story = {
     render: () => (
         <div className="grid gap-2">
-            <Label htmlFor="limited">Limited Input</Label>
-            <Textarea id="limited" placeholder="Max 100 characters" maxLength={100} />
-            <p className="text-sm text-muted-foreground">Maximum 100 characters.</p>
+            <Label htmlFor="limited">Поле с ограничением</Label>
+            <Textarea id="limited" placeholder="Не более 100 символов" maxLength={100} />
+            <p className="text-sm text-muted-foreground">Не более 100 символов.</p>
         </div>
     ),
 }
@@ -84,17 +84,17 @@ export const Required: Story = {
     render: () => (
         <div className="grid gap-2">
             <Label htmlFor="required-textarea">
-                Description
+                Описание
                 <span className="text-destructive">*</span>
             </Label>
-            <Textarea id="required-textarea" placeholder="This field is required" required />
+            <Textarea id="required-textarea" placeholder="Это поле обязательно" required />
         </div>
     ),
 }
 
 export const ReadOnly: Story = {
     args: {
-        defaultValue: 'This content is read-only and cannot be edited.',
+        defaultValue: 'Это содержимое доступно только для чтения.',
         readOnly: true,
     },
 }
@@ -103,12 +103,12 @@ export const CustomSize: Story = {
     render: () => (
         <div className="space-y-4">
             <div className="grid gap-2">
-                <Label>Small (rows=2)</Label>
-                <Textarea placeholder="Small textarea" rows={2} />
+                <Label>Маленькое (2 строки)</Label>
+                <Textarea placeholder="Маленькое текстовое поле" rows={2} />
             </div>
             <div className="grid gap-2">
-                <Label>Large (rows=8)</Label>
-                <Textarea placeholder="Large textarea" rows={8} />
+                <Label>Большое (8 строк)</Label>
+                <Textarea placeholder="Большое текстовое поле" rows={8} />
             </div>
         </div>
     ),

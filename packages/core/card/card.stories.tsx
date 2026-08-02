@@ -30,14 +30,14 @@ export const Default: Story = {
     render: (args) => (
         <Card {...args}>
             <CardHeader>
-                <CardTitle>Card Title</CardTitle>
-                <CardDescription>Card description goes here</CardDescription>
+                <CardTitle>Заголовок карточки</CardTitle>
+                <CardDescription>Здесь находится описание карточки</CardDescription>
             </CardHeader>
             <CardContent>
-                <p>Card content with some text inside.</p>
+                <p>Содержимое карточки с небольшим текстом.</p>
             </CardContent>
             <CardFooter>
-                <Button>Action</Button>
+                <Button>Действие</Button>
             </CardFooter>
         </Card>
     ),
@@ -50,11 +50,11 @@ export const Small: Story = {
     render: (args) => (
         <Card {...args}>
             <CardHeader>
-                <CardTitle>Small Card</CardTitle>
-                <CardDescription>Compact version</CardDescription>
+                <CardTitle>Маленькая карточка</CardTitle>
+                <CardDescription>Компактный вариант</CardDescription>
             </CardHeader>
             <CardContent>
-                <p>Content for small card.</p>
+                <p>Содержимое маленькой карточки.</p>
             </CardContent>
         </Card>
     ),
@@ -67,16 +67,16 @@ export const WithAction: Story = {
     render: () => (
         <Card className="w-96">
             <CardHeader>
-                <CardTitle>Card with Action</CardTitle>
-                <CardDescription>This card has an action button in the header</CardDescription>
+                <CardTitle>Карточка с действием</CardTitle>
+                <CardDescription>В заголовке этой карточки есть кнопка действия</CardDescription>
                 <CardAction>
                     <Button variant="outline" size="sm">
-                        Edit
+                        Изменить
                     </Button>
                 </CardAction>
             </CardHeader>
             <CardContent>
-                <p>Some content goes here.</p>
+                <p>Здесь находится содержимое.</p>
             </CardContent>
         </Card>
     ),
@@ -86,8 +86,8 @@ export const Simple: Story = {
     render: () => (
         <Card className="w-64">
             <CardContent>
-                <p className="text-2xl font-bold">$1,234</p>
-                <p className="text-muted-foreground">Total Revenue</p>
+                <p className="text-2xl font-bold">1 234 ₽</p>
+                <p className="text-muted-foreground">Общая выручка</p>
             </CardContent>
         </Card>
     ),
@@ -97,15 +97,15 @@ export const WithFooterActions: Story = {
     render: () => (
         <Card className="w-96">
             <CardHeader>
-                <CardTitle>Confirm Action</CardTitle>
-                <CardDescription>Are you sure you want to proceed?</CardDescription>
+                <CardTitle>Подтверждение действия</CardTitle>
+                <CardDescription>Продолжить выполнение?</CardDescription>
             </CardHeader>
             <CardContent>
-                <p>This action cannot be undone.</p>
+                <p>Это действие нельзя отменить.</p>
             </CardContent>
             <CardFooter className="gap-2">
-                <Button variant="outline">Cancel</Button>
-                <Button>Confirm</Button>
+                <Button variant="outline">Отмена</Button>
+                <Button>Подтвердить</Button>
             </CardFooter>
         </Card>
     ),

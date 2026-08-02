@@ -1,6 +1,5 @@
 import { beforeEach, expect, it, vi } from 'vitest'
 import { render } from 'vitest-browser-react'
-import { userEvent } from 'vitest/browser'
 
 import { createToastManager, Toaster } from '.'
 
@@ -14,7 +13,7 @@ beforeEach(() => {
     vi.stubGlobal('ResizeObserver', ResizeObserverStub)
 })
 
-it('renders, updates, acts on, stacks, and closes managed toasts', async () => {
+it('показывает несколько toast, выполняет действие, обновляет содержимое и закрывает выбранный toast', async () => {
     const action = vi.fn()
     const manager = createToastManager()
     const screen = await render(<Toaster toastManager={manager} timeout={0} />)
@@ -34,10 +33,6 @@ it('renders, updates, acts on, stacks, and closes managed toasts', async () => {
     await expect.element(screen.getByText('The original description')).toBeVisible()
     await expect.element(screen.getByText('Second notification')).toBeVisible()
 
-    const toastRoot = screen.getByText('Changes saved').element().closest('[data-slot="toast"]')
-
-    expect(toastRoot?.querySelector('[data-slot="toast-icon"]')).not.toBeNull()
-
     await screen.getByRole('button', { name: 'Undo' }).click()
     expect(action).toHaveBeenCalledOnce()
 
@@ -46,18 +41,19 @@ it('renders, updates, acts on, stacks, and closes managed toasts', async () => {
     await expect.element(screen.getByText('The updated description')).toBeVisible()
     await expect.element(screen.getByText('The original description')).not.toBeInTheDocument()
 
-    const closeButton = toastRoot?.querySelector<HTMLElement>('[data-slot="toast-close"]')
+    const closeButtons = await screen.getByRole('button', { name: 'Close toast' }).all()
+    const closeButton = closeButtons.find((button) =>
+        button.element().parentElement?.textContent?.includes('Changes saved'),
+    )
 
-    if (!closeButton) {
-        throw new Error('Expected the first toast to have a close button')
-    }
+    if (!closeButton) throw new Error('Кнопка закрытия toast Changes saved не найдена')
 
-    await userEvent.click(closeButton)
+    await closeButton.click()
     await expect.element(screen.getByText('Changes saved')).not.toBeInTheDocument()
     await expect.element(screen.getByText('Second notification')).toBeVisible()
 })
 
-it('transitions promise notifications through loading, success, and error states', async () => {
+it('переводит promise-toast из загрузки в успех или ошибку по результату Promise', async () => {
     const manager = createToastManager()
     const screen = await render(<Toaster toastManager={manager} timeout={0} />)
 

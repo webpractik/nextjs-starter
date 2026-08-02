@@ -26,7 +26,7 @@ type Story = StoryObj<typeof Input>
 
 export const Default: Story = {
     args: {
-        placeholder: 'Enter text...',
+        placeholder: 'Введите текст…',
     },
 }
 
@@ -40,7 +40,7 @@ export const Email: Story = {
 export const Password: Story = {
     args: {
         type: 'password',
-        placeholder: 'Enter password',
+        placeholder: 'Введите пароль',
     },
 }
 
@@ -54,7 +54,7 @@ export const Number: Story = {
 export const Search: Story = {
     args: {
         type: 'search',
-        placeholder: 'Search...',
+        placeholder: 'Поиск…',
     },
 }
 
@@ -66,23 +66,23 @@ export const File: Story = {
 
 export const Disabled: Story = {
     args: {
-        placeholder: 'Disabled input',
+        placeholder: 'Недоступное поле',
         disabled: true,
     },
 }
 
 export const Invalid: Story = {
     args: {
-        placeholder: 'Invalid input',
+        placeholder: 'Поле с ошибкой',
         'aria-invalid': true,
-        defaultValue: 'Invalid value',
+        defaultValue: 'Некорректное значение',
     },
 }
 
 export const WithLabel: Story = {
     render: () => (
         <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">Электронная почта</Label>
             <Input id="email" type="email" placeholder="email@example.com" />
         </div>
     ),
@@ -90,6 +90,6 @@ export const WithLabel: Story = {
 
 export const WithValue: Story = {
     args: {
-        defaultValue: 'Pre-filled value',
+        defaultValue: 'Предзаполненное значение',
     },
 }

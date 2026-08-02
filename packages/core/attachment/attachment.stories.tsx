@@ -41,11 +41,11 @@ export const DefaultFile: Story = {
                 <FileTextIcon />
             </AttachmentMedia>
             <AttachmentContent>
-                <AttachmentTitle>quarterly-report.pdf</AttachmentTitle>
-                <AttachmentDescription>PDF · 2.4 MB</AttachmentDescription>
+                <AttachmentTitle>квартальный-отчёт.pdf</AttachmentTitle>
+                <AttachmentDescription>PDF · 2,4 МБ</AttachmentDescription>
             </AttachmentContent>
             <AttachmentActions>
-                <AttachmentAction aria-label="Download quarterly-report.pdf">
+                <AttachmentAction aria-label="Скачать файл «квартальный-отчёт.pdf»">
                     <DownloadIcon />
                 </AttachmentAction>
             </AttachmentActions>
@@ -58,14 +58,14 @@ export const ImagePreview: Story = {
         <Attachment orientation="vertical">
             <AttachmentMedia variant="image">
                 {/* oxlint-disable-next-line next/no-img-element -- Attachment previews are caller-owned content. */}
-                <img alt="Workspace dashboard preview" src={workspacePreview} />
+                <img alt="Предпросмотр рабочей панели" src={workspacePreview} />
             </AttachmentMedia>
             <AttachmentContent>
-                <AttachmentTitle>workspace.png</AttachmentTitle>
-                <AttachmentDescription>PNG · 820 KB</AttachmentDescription>
+                <AttachmentTitle>рабочая-панель.png</AttachmentTitle>
+                <AttachmentDescription>PNG · 820 КБ</AttachmentDescription>
             </AttachmentContent>
             <AttachmentActions>
-                <AttachmentAction aria-label="Remove workspace.png">
+                <AttachmentAction aria-label="Удалить файл «рабочая-панель.png»">
                     <XIcon />
                 </AttachmentAction>
             </AttachmentActions>
@@ -74,11 +74,15 @@ export const ImagePreview: Story = {
 }
 
 const lifecycleStates = [
-    { description: 'Waiting to upload', label: 'brief.pdf', state: 'idle' },
-    { description: 'Uploading · 64%', label: 'research.pdf', state: 'uploading' },
-    { description: 'Scanning file', label: 'contract.pdf', state: 'processing' },
-    { description: 'Upload failed: connection lost', label: 'archive.zip', state: 'error' },
-    { description: 'PDF · 1.8 MB', label: 'invoice.pdf', state: 'done' },
+    { description: 'Ожидает загрузки', label: 'бриф.pdf', state: 'idle' },
+    { description: 'Загрузка · 64%', label: 'исследование.pdf', state: 'uploading' },
+    { description: 'Проверка файла', label: 'договор.pdf', state: 'processing' },
+    {
+        description: 'Не удалось загрузить: соединение потеряно',
+        label: 'архив.zip',
+        state: 'error',
+    },
+    { description: 'PDF · 1,8 МБ', label: 'счёт.pdf', state: 'done' },
 ] as const
 
 export const LifecycleStates: Story = {
@@ -94,7 +98,7 @@ export const LifecycleStates: Story = {
                         <AttachmentDescription>{item.description}</AttachmentDescription>
                     </AttachmentContent>
                     <AttachmentActions>
-                        <AttachmentAction aria-label={`Remove ${item.label}`}>
+                        <AttachmentAction aria-label={`Удалить файл «${item.label}»`}>
                             <XIcon />
                         </AttachmentAction>
                     </AttachmentActions>
@@ -104,17 +108,23 @@ export const LifecycleStates: Story = {
     ),
 }
 
+const attachmentSizes = [
+    ['default', 'Обычный размер'],
+    ['sm', 'Маленький размер'],
+    ['xs', 'Очень маленький размер'],
+] as const
+
 export const Sizes: Story = {
     render: () => (
         <div className="flex flex-col items-start gap-3">
-            {(['default', 'sm', 'xs'] as const).map((size) => (
+            {attachmentSizes.map(([size, label]) => (
                 <Attachment key={size} size={size}>
                     <AttachmentMedia>
                         <FileTextIcon />
                     </AttachmentMedia>
                     <AttachmentContent>
-                        <AttachmentTitle>design-system.pdf</AttachmentTitle>
-                        <AttachmentDescription>{size} · 680 KB</AttachmentDescription>
+                        <AttachmentTitle>дизайн-система.pdf</AttachmentTitle>
+                        <AttachmentDescription>{label} · 680 КБ</AttachmentDescription>
                     </AttachmentContent>
                 </Attachment>
             ))}
@@ -129,19 +139,19 @@ export const Trigger: Story = {
                 <FileImageIcon />
             </AttachmentMedia>
             <AttachmentContent>
-                <AttachmentTitle>desk-reference.jpg</AttachmentTitle>
-                <AttachmentDescription>JPG · 1.1 MB</AttachmentDescription>
+                <AttachmentTitle>рабочее-место.jpg</AttachmentTitle>
+                <AttachmentDescription>JPG · 1,1 МБ</AttachmentDescription>
             </AttachmentContent>
             <AttachmentActions>
-                <AttachmentAction aria-label="Remove desk-reference.jpg">
+                <AttachmentAction aria-label="Удалить файл «рабочее-место.jpg»">
                     <XIcon />
                 </AttachmentAction>
             </AttachmentActions>
             <AttachmentTrigger
-                aria-label="Open desk-reference.jpg"
+                aria-label="Открыть файл «рабочее-место.jpg»"
                 render={
                     <a href="#desk-reference">
-                        <span className="sr-only">Open desk-reference.jpg</span>
+                        <span className="sr-only">Открыть файл «рабочее-место.jpg»</span>
                     </a>
                 }
             />
@@ -150,16 +160,19 @@ export const Trigger: Story = {
 }
 
 const groupFiles = [
-    ['project-brief.pdf', 'PDF · 480 KB'],
-    ['wireframes.fig', 'FIG · 3.2 MB'],
-    ['research-notes.md', 'Markdown · 24 KB'],
-    ['brand-assets.zip', 'ZIP · 8.7 MB'],
-    ['release-checklist.pdf', 'PDF · 920 KB'],
+    ['бриф-проекта.pdf', 'PDF · 480 КБ'],
+    ['макеты.fig', 'FIG · 3,2 МБ'],
+    ['заметки-исследования.md', 'Markdown · 24 КБ'],
+    ['материалы-бренда.zip', 'ZIP · 8,7 МБ'],
+    ['чек-лист-релиза.pdf', 'PDF · 920 КБ'],
 ] as const
 
 export const Group: Story = {
+    parameters: {
+        layout: 'padded',
+    },
     render: () => (
-        <AttachmentGroup aria-label="Project files" className="max-w-md">
+        <AttachmentGroup aria-label="Файлы проекта" className="mx-auto w-full max-w-md">
             {groupFiles.map(([name, description]) => (
                 <Attachment key={name}>
                     <AttachmentMedia>
@@ -169,7 +182,7 @@ export const Group: Story = {
                         <AttachmentTitle>{name}</AttachmentTitle>
                         <AttachmentDescription>{description}</AttachmentDescription>
                     </AttachmentContent>
-                    <AttachmentTrigger aria-label={`Open ${name}`} />
+                    <AttachmentTrigger aria-label={`Открыть файл «${name}»`} />
                 </Attachment>
             ))}
         </AttachmentGroup>

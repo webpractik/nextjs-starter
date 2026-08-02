@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 
 import { Field } from '@base-ui/react/field'
-import { GlobeIcon } from 'lucide-react'
+import { CircleIcon, SquareIcon, TriangleIcon } from 'lucide-react'
 
 import { Label } from '../label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select'
@@ -15,25 +15,28 @@ export default meta
 
 type Story = StoryObj<typeof Select>
 
-const items = [
-    { value: null, label: 'Select theme' },
-    { value: 'system', label: 'System default' },
-    { value: 'light', label: 'Light' },
-    { value: 'dark', label: 'Dark' },
-]
+const neutralOptions = [
+    { label: 'Первый вариант', value: 'first' },
+    { label: 'Второй вариант', value: 'second' },
+    { label: 'Третий вариант', value: 'third' },
+] as const
+
+function NeutralOptions() {
+    return neutralOptions.map(({ label, value }) => (
+        <SelectItem key={value} value={value}>
+            {label}
+        </SelectItem>
+    ))
+}
 
 export const Default: Story = {
     render: () => (
-        <Select items={items}>
+        <Select items={neutralOptions}>
             <SelectTrigger className="w-48">
-                <SelectValue />
+                <SelectValue placeholder="Выберите вариант" />
             </SelectTrigger>
             <SelectContent>
-                {items.map(({ value, label }) => (
-                    <SelectItem key={label} value={value}>
-                        {label}
-                    </SelectItem>
-                ))}
+                <NeutralOptions />
             </SelectContent>
         </Select>
     ),
@@ -41,15 +44,12 @@ export const Default: Story = {
 
 export const Small: Story = {
     render: () => (
-        <Select defaultValue="sm">
+        <Select defaultValue="second" items={neutralOptions}>
             <SelectTrigger size="sm" className="w-32">
                 <SelectValue />
             </SelectTrigger>
             <SelectContent>
-                <SelectItem value="xs">XS</SelectItem>
-                <SelectItem value="sm">SM</SelectItem>
-                <SelectItem value="md">MD</SelectItem>
-                <SelectItem value="lg">LG</SelectItem>
+                <NeutralOptions />
             </SelectContent>
         </Select>
     ),
@@ -58,20 +58,15 @@ export const Small: Story = {
 export const WithLabel: Story = {
     render: () => (
         <Field.Root className="grid gap-2">
-            <Field.Label render={Label} htmlFor="country">
-                Country
+            <Field.Label render={<Label />} htmlFor="option">
+                Вариант
             </Field.Label>
-            <Select defaultValue="Select country">
-                <SelectTrigger id="country" className="w-56">
-                    <SelectValue />
+            <Select items={neutralOptions}>
+                <SelectTrigger id="option" className="w-56">
+                    <SelectValue placeholder="Выберите вариант" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="us">United States</SelectItem>
-                    <SelectItem value="uk">United Kingdom</SelectItem>
-                    <SelectItem value="ca">Canada</SelectItem>
-                    <SelectItem value="au">Australia</SelectItem>
-                    <SelectItem value="de">Germany</SelectItem>
-                    <SelectItem value="fr">France</SelectItem>
+                    <NeutralOptions />
                 </SelectContent>
             </Select>
         </Field.Root>
@@ -80,13 +75,12 @@ export const WithLabel: Story = {
 
 export const Disabled: Story = {
     render: () => (
-        <Select disabled defaultValue="1">
+        <Select disabled defaultValue="second" items={neutralOptions}>
             <SelectTrigger className="w-48">
                 <SelectValue />
             </SelectTrigger>
             <SelectContent>
-                <SelectItem value="1">Item 1</SelectItem>
-                <SelectItem value="2">Item 2</SelectItem>
+                <NeutralOptions />
             </SelectContent>
         </Select>
     ),
@@ -94,15 +88,15 @@ export const Disabled: Story = {
 
 export const DisabledItem: Story = {
     render: () => (
-        <Select defaultValue="Select a plan">
+        <Select>
             <SelectTrigger className="w-48">
-                <SelectValue />
+                <SelectValue placeholder="Выберите вариант" />
             </SelectTrigger>
             <SelectContent>
-                <SelectItem value="free">Free</SelectItem>
-                <SelectItem value="pro">Pro</SelectItem>
-                <SelectItem value="enterprise" disabled>
-                    Enterprise (Coming soon)
+                <SelectItem value="first">Первый вариант</SelectItem>
+                <SelectItem value="second">Второй вариант</SelectItem>
+                <SelectItem value="third" disabled>
+                    Недоступный вариант
                 </SelectItem>
             </SelectContent>
         </Select>
@@ -111,26 +105,22 @@ export const DisabledItem: Story = {
 
 export const WithIcons: Story = {
     render: () => (
-        <Select defaultValue="en">
+        <Select defaultValue="circle">
             <SelectTrigger className="w-48">
                 <SelectValue />
             </SelectTrigger>
             <SelectContent>
-                <SelectItem value="en">
-                    <GlobeIcon className="size-4" />
-                    English
+                <SelectItem value="circle">
+                    <CircleIcon className="size-4" />
+                    Круг
                 </SelectItem>
-                <SelectItem value="ru">
-                    <GlobeIcon className="size-4" />
-                    Russian
+                <SelectItem value="square">
+                    <SquareIcon className="size-4" />
+                    Квадрат
                 </SelectItem>
-                <SelectItem value="de">
-                    <GlobeIcon className="size-4" />
-                    German
-                </SelectItem>
-                <SelectItem value="fr">
-                    <GlobeIcon className="size-4" />
-                    French
+                <SelectItem value="triangle">
+                    <TriangleIcon className="size-4" />
+                    Треугольник
                 </SelectItem>
             </SelectContent>
         </Select>

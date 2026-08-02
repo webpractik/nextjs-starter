@@ -47,7 +47,7 @@ function RangeSlider() {
     )
 }
 
-it('updates a controlled scalar value and preserves the commit callback', async () => {
+it('стрелкой обновляет управляемое scalar-значение и сообщает о завершении изменения', async () => {
     const onCommit = vi.fn<(_value: number | readonly number[]) => void>()
     const screen = await render(<ScalarSlider onCommit={onCommit} />)
     const slider = screen.getByRole('slider', { name: 'Build confidence' })
@@ -63,7 +63,7 @@ it('updates a controlled scalar value and preserves the commit callback', async 
     expect(onCommit).toHaveBeenCalledWith(41, expect.anything())
 })
 
-it('updates the selected thumb of a controlled range', async () => {
+it('стрелкой обновляет только выбранную границу управляемого диапазона', async () => {
     const screen = await render(<RangeSlider />)
     const minimum = screen.getByRole('slider', { name: 'Minimum confidence' })
     const maximum = screen.getByRole('slider', { name: 'Maximum confidence' })
@@ -79,7 +79,7 @@ it('updates the selected thumb of a controlled range', async () => {
     await expect.element(screen.getByText('20 - 81')).toBeVisible()
 })
 
-it('disables interaction for every slider thumb', async () => {
+it('не фокусирует и не изменяет ползунок в отключённом состоянии', async () => {
     const onValueChange = vi.fn()
     const screen = await render(
         <Slider disabled value={25} onValueChange={onValueChange}>

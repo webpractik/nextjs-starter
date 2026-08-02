@@ -17,8 +17,8 @@ type Story = StoryObj<typeof Tooltip>
 export const Default: Story = {
     render: () => (
         <Tooltip>
-            <TooltipTrigger render={<Button variant="outline" />}>Hover me</TooltipTrigger>
-            <TooltipContent>This is a tooltip</TooltipContent>
+            <TooltipTrigger render={<Button variant="outline" />}>Наведите курсор</TooltipTrigger>
+            <TooltipContent>Это подсказка</TooltipContent>
         </Tooltip>
     ),
 }
@@ -26,8 +26,8 @@ export const Default: Story = {
 export const Top: Story = {
     render: () => (
         <Tooltip>
-            <TooltipTrigger render={<Button variant="outline" />}>Top</TooltipTrigger>
-            <TooltipContent side="top">Tooltip on top</TooltipContent>
+            <TooltipTrigger render={<Button variant="outline" />}>Сверху</TooltipTrigger>
+            <TooltipContent side="top">Подсказка сверху</TooltipContent>
         </Tooltip>
     ),
 }
@@ -35,8 +35,8 @@ export const Top: Story = {
 export const Bottom: Story = {
     render: () => (
         <Tooltip>
-            <TooltipTrigger render={<Button variant="outline" />}>Bottom</TooltipTrigger>
-            <TooltipContent side="bottom">Tooltip on bottom</TooltipContent>
+            <TooltipTrigger render={<Button variant="outline" />}>Снизу</TooltipTrigger>
+            <TooltipContent side="bottom">Подсказка снизу</TooltipContent>
         </Tooltip>
     ),
 }
@@ -44,8 +44,8 @@ export const Bottom: Story = {
 export const Left: Story = {
     render: () => (
         <Tooltip>
-            <TooltipTrigger render={<Button variant="outline" />}>Left</TooltipTrigger>
-            <TooltipContent side="left">Tooltip on left</TooltipContent>
+            <TooltipTrigger render={<Button variant="outline" />}>Слева</TooltipTrigger>
+            <TooltipContent side="left">Подсказка слева</TooltipContent>
         </Tooltip>
     ),
 }
@@ -53,8 +53,8 @@ export const Left: Story = {
 export const Right: Story = {
     render: () => (
         <Tooltip>
-            <TooltipTrigger render={<Button variant="outline" />}>Right</TooltipTrigger>
-            <TooltipContent side="right">Tooltip on right</TooltipContent>
+            <TooltipTrigger render={<Button variant="outline" />}>Справа</TooltipTrigger>
+            <TooltipContent side="right">Подсказка справа</TooltipContent>
         </Tooltip>
     ),
 }
@@ -62,12 +62,12 @@ export const Right: Story = {
 export const WithIcon: Story = {
     render: () => (
         <div className="flex items-center gap-2">
-            <span>Need help?</span>
+            <span>Нужна помощь?</span>
             <Tooltip>
                 <TooltipTrigger
                     render={<HelpCircleIcon className="size-4 cursor-help text-muted-foreground" />}
                 />
-                <TooltipContent>Click here for more information</TooltipContent>
+                <TooltipContent>Нажмите, чтобы узнать больше</TooltipContent>
             </Tooltip>
         </div>
     ),
@@ -76,10 +76,12 @@ export const WithIcon: Story = {
 export const OnIconButton: Story = {
     render: () => (
         <Tooltip>
-            <TooltipTrigger render={<Button variant="outline" size="icon" aria-label="Add item" />}>
+            <TooltipTrigger
+                render={<Button variant="outline" size="icon" aria-label="Добавить элемент" />}
+            >
                 <PlusIcon />
             </TooltipTrigger>
-            <TooltipContent>Add new item</TooltipContent>
+            <TooltipContent>Добавить новый элемент</TooltipContent>
         </Tooltip>
     ),
 }
@@ -88,20 +90,20 @@ export const AllSides: Story = {
     render: () => (
         <div className="flex items-center justify-center gap-4 p-20">
             <Tooltip>
-                <TooltipTrigger render={<Button variant="outline" />}>Top</TooltipTrigger>
-                <TooltipContent side="top">Top tooltip</TooltipContent>
+                <TooltipTrigger render={<Button variant="outline" />}>Сверху</TooltipTrigger>
+                <TooltipContent side="top">Подсказка сверху</TooltipContent>
             </Tooltip>
             <Tooltip>
-                <TooltipTrigger render={<Button variant="outline" />}>Right</TooltipTrigger>
-                <TooltipContent side="right">Right tooltip</TooltipContent>
+                <TooltipTrigger render={<Button variant="outline" />}>Справа</TooltipTrigger>
+                <TooltipContent side="right">Подсказка справа</TooltipContent>
             </Tooltip>
             <Tooltip>
-                <TooltipTrigger render={<Button variant="outline" />}>Bottom</TooltipTrigger>
-                <TooltipContent side="bottom">Bottom tooltip</TooltipContent>
+                <TooltipTrigger render={<Button variant="outline" />}>Снизу</TooltipTrigger>
+                <TooltipContent side="bottom">Подсказка снизу</TooltipContent>
             </Tooltip>
             <Tooltip>
-                <TooltipTrigger render={<Button variant="outline" />}>Left</TooltipTrigger>
-                <TooltipContent side="left">Left tooltip</TooltipContent>
+                <TooltipTrigger render={<Button variant="outline" />}>Слева</TooltipTrigger>
+                <TooltipContent side="left">Подсказка слева</TooltipContent>
             </Tooltip>
         </div>
     ),
@@ -112,11 +114,11 @@ export const WithLongContent: Story = {
         <Tooltip>
             <TooltipTrigger render={<Button variant="outline" />}>
                 <InfoIcon className="mr-2 size-4" />
-                Info
+                Информация
             </TooltipTrigger>
             <TooltipContent className="max-w-xs">
-                This is a tooltip with longer content. It can contain more detailed information
-                about the element being hovered.
+                Это подсказка с более длинным текстом. Здесь можно разместить подробную информацию
+                об элементе, на который наведён курсор.
             </TooltipContent>
         </Tooltip>
     ),
@@ -125,8 +127,8 @@ export const WithLongContent: Story = {
 export const WithOffset: Story = {
     render: () => (
         <Tooltip>
-            <TooltipTrigger render={<Button variant="outline" />}>With Offset</TooltipTrigger>
-            <TooltipContent sideOffset={16}>Tooltip with 16px offset</TooltipContent>
+            <TooltipTrigger render={<Button variant="outline" />}>Со смещением</TooltipTrigger>
+            <TooltipContent sideOffset={16}>Подсказка со смещением 16 пикселей</TooltipContent>
         </Tooltip>
     ),
 }

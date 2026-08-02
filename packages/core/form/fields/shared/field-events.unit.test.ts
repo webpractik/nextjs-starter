@@ -2,7 +2,7 @@ import { expect, it, vi } from 'vitest'
 
 import { handleFieldBlur } from './field-events'
 
-it('runs the consumer blur callback before marking the field as touched', () => {
+it('вызывает пользовательский onBlur до пометки поля как затронутого', () => {
     const calls: string[] = []
     const field = {
         handleBlur: vi.fn<() => void>(() => {

@@ -78,19 +78,19 @@ export function SliderField({
                     <SliderControl>
                         <SliderTrack>
                             <SliderIndicator />
-                            {thumbs.map((thumb) => (
-                                <SliderThumb
-                                    aria-describedby={controlProps['aria-describedby']}
-                                    aria-invalid={controlProps['aria-invalid']}
-                                    aria-labelledby={
-                                        getThumbLabel ? undefined : controlProps['aria-labelledby']
-                                    }
-                                    getAriaLabel={getThumbLabel}
-                                    index={thumb.index}
-                                    key={thumb.key}
-                                />
-                            ))}
                         </SliderTrack>
+                        {thumbs.map((thumb) => (
+                            <SliderThumb
+                                aria-describedby={controlProps['aria-describedby']}
+                                aria-invalid={controlProps['aria-invalid']}
+                                aria-labelledby={
+                                    getThumbLabel ? undefined : controlProps['aria-labelledby']
+                                }
+                                getAriaLabel={getThumbLabel}
+                                index={thumb.index}
+                                key={thumb.key}
+                            />
+                        ))}
                     </SliderControl>
                 </Slider>
             )}

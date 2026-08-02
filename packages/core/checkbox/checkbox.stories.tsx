@@ -53,7 +53,7 @@ export const WithLabel: Story = {
     render: () => (
         <div className="flex items-center gap-2">
             <Checkbox id="terms" />
-            <Label htmlFor="terms">Accept terms and conditions</Label>
+            <Label htmlFor="terms">Принять условия использования</Label>
         </div>
     ),
 }
@@ -62,7 +62,7 @@ export const WithLabelChecked: Story = {
     render: () => (
         <div className="flex items-center gap-2">
             <Checkbox id="newsletter" defaultChecked />
-            <Label htmlFor="newsletter">Subscribe to newsletter</Label>
+            <Label htmlFor="newsletter">Подписаться на рассылку</Label>
         </div>
     ),
 }
@@ -72,15 +72,15 @@ export const Group: Story = {
         <div className="grid gap-3">
             <div className="flex items-center gap-2">
                 <Checkbox id="option-1" defaultChecked />
-                <Label htmlFor="option-1">Option 1</Label>
+                <Label htmlFor="option-1">Вариант 1</Label>
             </div>
             <div className="flex items-center gap-2">
                 <Checkbox id="option-2" />
-                <Label htmlFor="option-2">Option 2</Label>
+                <Label htmlFor="option-2">Вариант 2</Label>
             </div>
             <div className="flex items-center gap-2">
                 <Checkbox id="option-3" />
-                <Label htmlFor="option-3">Option 3</Label>
+                <Label htmlFor="option-3">Вариант 3</Label>
             </div>
         </div>
     ),

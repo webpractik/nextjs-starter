@@ -16,6 +16,7 @@
         "@maskito/phone": "5.3.1",
         "@maskito/react": "5.3.1",
         "@tanstack/react-form": "1.33.2",
+        "isomorphic-dompurify": "3.21.0",
         "libphonenumber-js": "1.13.10",
         "zod": "4.4.3"
     },

@@ -99,11 +99,9 @@ function DateFieldsDemo({
     )
 }
 
-it('formats typed and pasted dates while keeping masked strings controlled', async () => {
+it('форматирует введённую дату и отражает внешнее обновление управляемого значения', async () => {
     const screen = await render(<DateFieldsDemo onRequiredDateBlur={() => undefined} />)
     const typedDate = screen.getByRole('textbox', { name: 'Typed date' })
-    const pastedDate = screen.getByRole('textbox', { name: 'Pasted date' })
-    const clipboardSource = screen.getByRole('textbox', { name: 'Date clipboard source' })
 
     await userEvent.type(typedDate, '31122026')
     await expect.element(typedDate).toHaveValue('31.12.2026')
@@ -111,36 +109,50 @@ it('formats typed and pasted dates while keeping masked strings controlled', asy
         .element(screen.getByRole('status', { name: 'Typed date value' }))
         .toHaveTextContent('31.12.2026')
 
-    await clipboardSource.click()
-    await userEvent.keyboard('{Control>}a{/Control}')
-    await userEvent.copy()
-    await pastedDate.click()
-    await userEvent.paste()
-    await expect.element(pastedDate).toHaveValue('01.02.2027')
-    await expect
-        .element(screen.getByRole('status', { name: 'Pasted date value' }))
-        .toHaveTextContent('01.02.2027')
-
     await screen.getByRole('button', { name: 'Set external date' }).click()
     await expect.element(typedDate).toHaveValue('15.01.2027')
 })
 
-it('honors locale and bounds and exposes blur validation and disabled metadata', async () => {
-    let touchedDuringBlur: string | null = null
-    const onRequiredDateBlur = vi.fn((event: FocusEvent<HTMLInputElement>) => {
-        touchedDuringBlur =
-            event.currentTarget.closest('[data-slot="field"]')?.getAttribute('data-touched') ?? null
-    })
-    const screen = await render(<DateFieldsDemo onRequiredDateBlur={onRequiredDateBlur} />)
+it('форматирует вставленные восемь цифр и сохраняет маску в состоянии формы', async () => {
+    const screen = await render(<DateFieldsDemo onRequiredDateBlur={() => undefined} />)
+    const pastedDate = screen.getByRole('textbox', { name: 'Pasted date' })
+    const clipboardSource = screen.getByRole('textbox', { name: 'Date clipboard source' })
+
+    const clipboardInput = clipboardSource.element()
+    if (!(clipboardInput instanceof HTMLInputElement)) {
+        throw new Error('Источник содержимого буфера обмена не является input')
+    }
+
+    clipboardInput.select()
+    await userEvent.copy()
+    await pastedDate.click()
+    await userEvent.paste()
+
+    await expect.element(pastedDate).toHaveValue('01.02.2027')
+    await expect
+        .element(screen.getByRole('status', { name: 'Pasted date value' }))
+        .toHaveTextContent('01.02.2027')
+})
+
+it('форматирует дату по заданной локали и ограничивает её допустимым диапазоном', async () => {
+    const screen = await render(<DateFieldsDemo onRequiredDateBlur={() => undefined} />)
     const configuredDate = screen.getByRole('textbox', { name: 'Configured date' })
-    const requiredDate = screen.getByRole('textbox', { name: 'Required date' })
-    const disabledDate = screen.getByRole('textbox', { name: 'Disabled date' })
 
     await userEvent.type(configuredDate, '12312019')
     await expect.element(configuredDate).toHaveValue('01/01/2020')
     await configuredDate.clear()
     await userEvent.type(configuredDate, '12312031')
     await expect.element(configuredDate).toHaveValue('12/31/2030')
+})
+
+it('после потери фокуса помечает поле даты и связывает с ним сообщение об ошибке', async () => {
+    let touchedDuringBlur: string | null = null
+    const onRequiredDateBlur = vi.fn((event: FocusEvent<HTMLInputElement>) => {
+        touchedDuringBlur =
+            event.currentTarget.closest('[data-slot="field"]')?.getAttribute('data-touched') ?? null
+    })
+    const screen = await render(<DateFieldsDemo onRequiredDateBlur={onRequiredDateBlur} />)
+    const requiredDate = screen.getByRole('textbox', { name: 'Required date' })
 
     await requiredDate.click()
     await userEvent.tab()
@@ -159,6 +171,11 @@ it('honors locale and bounds and exposes blur validation and disabled metadata',
     await expect.element(requiredDate).toHaveAttribute('aria-invalid', 'true')
     expect(describedBy).toContain(description.element().id)
     expect(describedBy).toContain(error.element().id)
+})
+
+it('делает отключённое поле даты недоступным для ввода и сохраняет числовую клавиатуру', async () => {
+    const screen = await render(<DateFieldsDemo onRequiredDateBlur={() => undefined} />)
+    const disabledDate = screen.getByRole('textbox', { name: 'Disabled date' })
 
     await expect.element(disabledDate).toBeDisabled()
     await expect.element(disabledDate).toHaveAttribute('inputmode', 'numeric')
@@ -249,7 +266,7 @@ function PhoneFieldsDemo({
     )
 }
 
-it('formats a strict Russian phone while keeping its masked string controlled', async () => {
+it('форматирует российский номер и отражает внешнее обновление управляемого значения', async () => {
     const screen = await render(<PhoneFieldsDemo onRequiredPhoneBlur={() => undefined} />)
     const russianPhone = screen.getByRole('textbox', { name: 'Russian phone' })
 
@@ -266,19 +283,22 @@ it('formats a strict Russian phone while keeping its masked string controlled', 
     await expect.element(russianPhone).toHaveAttribute('autocomplete', 'tel')
 })
 
-it('supports alternate phone configuration and blur validation metadata', async () => {
+it('форматирует номер по альтернативной конфигурации США', async () => {
+    const screen = await render(<PhoneFieldsDemo onRequiredPhoneBlur={() => undefined} />)
+    const usPhone = screen.getByRole('textbox', { name: 'US national phone' })
+
+    await userEvent.type(usPhone, '2025550123')
+    await expect.element(usPhone).toHaveValue('(202) 555-0123')
+})
+
+it('после потери фокуса помечает поле телефона и связывает с ним сообщение об ошибке', async () => {
     let touchedDuringBlur: string | null = null
     const onRequiredPhoneBlur = vi.fn((event: FocusEvent<HTMLInputElement>) => {
         touchedDuringBlur =
             event.currentTarget.closest('[data-slot="field"]')?.getAttribute('data-touched') ?? null
     })
     const screen = await render(<PhoneFieldsDemo onRequiredPhoneBlur={onRequiredPhoneBlur} />)
-    const usPhone = screen.getByRole('textbox', { name: 'US national phone' })
     const requiredPhone = screen.getByRole('textbox', { name: 'Required phone' })
-    const disabledPhone = screen.getByRole('textbox', { name: 'Disabled phone' })
-
-    await userEvent.type(usPhone, '2025550123')
-    await expect.element(usPhone).toHaveValue('(202) 555-0123')
 
     await requiredPhone.click()
     await userEvent.tab()
@@ -297,6 +317,11 @@ it('supports alternate phone configuration and blur validation metadata', async 
     await expect.element(requiredPhone).toHaveAttribute('aria-invalid', 'true')
     expect(describedBy).toContain(description.element().id)
     expect(describedBy).toContain(error.element().id)
+})
+
+it('делает отключённое поле телефона недоступным для ввода', async () => {
+    const screen = await render(<PhoneFieldsDemo onRequiredPhoneBlur={() => undefined} />)
+    const disabledPhone = screen.getByRole('textbox', { name: 'Disabled phone' })
 
     await expect.element(disabledPhone).toBeDisabled()
     expect(disabledPhone.element().closest('[data-slot="field"]')).toHaveAttribute(

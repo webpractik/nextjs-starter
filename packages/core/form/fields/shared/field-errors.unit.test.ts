@@ -12,7 +12,7 @@ function fieldWithErrors(errors: unknown[]) {
     } as Parameters<typeof fieldErrorMessages>[0]
 }
 
-it('collects every user-facing message from supported nested error shapes', () => {
+it('собирает пользовательские сообщения из всех поддерживаемых вложенных форм ошибок', () => {
     expect(
         fieldErrorMessages(
             fieldWithErrors([
@@ -35,7 +35,7 @@ it('collects every user-facing message from supported nested error shapes', () =
     ])
 })
 
-it('ignores empty values and objects without a string message', () => {
+it('игнорирует пустые значения и объекты без строкового сообщения', () => {
     const emptyError = new Error('placeholder')
     emptyError.message = ''
 

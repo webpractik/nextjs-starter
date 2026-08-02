@@ -89,7 +89,7 @@ function TextFieldsDemo({ onNameBlur }: { onNameBlur: () => void }) {
     )
 }
 
-it('keeps text input state controlled and renders blur validation feedback', async () => {
+it('синхронизирует текстовое поле с внешним состоянием и показывает ошибку после потери фокуса', async () => {
     const onNameBlur = vi.fn()
     const screen = await render(<TextFieldsDemo onNameBlur={onNameBlur} />)
     const input = screen.getByRole('textbox', { name: 'Project name' })
@@ -112,7 +112,7 @@ it('keeps text input state controlled and renders blur validation feedback', asy
     await expect.element(input).toHaveAttribute('aria-invalid', 'true')
 })
 
-it('keeps textarea state controlled across user and external updates', async () => {
+it('синхронизирует textarea с пользовательскими и внешними обновлениями', async () => {
     const screen = await render(<TextFieldsDemo onNameBlur={() => undefined} />)
     const textarea = screen.getByRole('textbox', { name: 'Summary' })
 
@@ -124,7 +124,7 @@ it('keeps textarea state controlled across user and external updates', async () 
     await expect.element(textarea).toHaveValue('External summary')
 })
 
-it('normalizes empty numbers and honors custom number parse and format functions', async () => {
+it('преобразует пустое число в undefined и применяет пользовательские parse и format', async () => {
     const screen = await render(<TextFieldsDemo onNameBlur={() => undefined} />)
     const seats = screen.getByRole('spinbutton', { name: 'Seats' })
     const budget = screen.getByRole('spinbutton', { name: 'Budget' })

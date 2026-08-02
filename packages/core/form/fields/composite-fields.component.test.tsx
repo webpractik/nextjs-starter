@@ -91,7 +91,7 @@ function CompositeFieldsDemo({ onSelectOpenChange, onSliderCommit }: CompositeFi
     )
 }
 
-it('updates select and radio values while preserving composite touched callbacks', async () => {
+it('обновляет select и radio, сохраняет callback закрытия и помечает поля затронутыми', async () => {
     const onSelectOpenChange = vi.fn<(_open: boolean) => void>()
     const screen = await render(
         <CompositeFieldsDemo
@@ -123,7 +123,7 @@ it('updates select and radio values while preserving composite touched callbacks
         .toHaveTextContent('"channel":"sms"')
 })
 
-it('updates scalar and range sliders and preserves commit behavior', async () => {
+it('обновляет scalar и range ползунки, подписи и состояние формы после commit', async () => {
     const onSliderCommit = vi.fn<(_value: number | readonly number[]) => void>()
     const screen = await render(
         <CompositeFieldsDemo
@@ -159,4 +159,30 @@ it('updates scalar and range sliders and preserves commit behavior', async () =>
     await expect
         .element(screen.getByRole('status', { name: 'Composite values' }))
         .toHaveTextContent('"confidenceRange":[20,81]')
+})
+
+it('оставляет выступающие края ползунка видимыми и доступными для указателя', async () => {
+    const screen = await render(
+        <CompositeFieldsDemo
+            onSelectOpenChange={() => undefined}
+            onSliderCommit={() => undefined}
+        />,
+    )
+    const slider = screen.getByRole('slider', { exact: true, name: 'Confidence' })
+    const thumb = slider.element().closest<HTMLElement>('[data-slot="slider-thumb"]')
+
+    if (!thumb) throw new Error('Визуальный ползунок не найден')
+
+    const bounds = thumb.getBoundingClientRect()
+    const upperEdgeTarget = document.elementFromPoint(
+        bounds.left + bounds.width / 2,
+        bounds.top + 1,
+    )
+    const lowerEdgeTarget = document.elementFromPoint(
+        bounds.left + bounds.width / 2,
+        bounds.bottom - 1,
+    )
+
+    expect(thumb.contains(upperEdgeTarget)).toBe(true)
+    expect(thumb.contains(lowerEdgeTarget)).toBe(true)
 })

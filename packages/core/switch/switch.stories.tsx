@@ -67,7 +67,7 @@ export const WithLabel: Story = {
     render: () => (
         <div className="flex items-center gap-2">
             <Switch id="airplane-mode" />
-            <Label htmlFor="airplane-mode">Airplane Mode</Label>
+            <Label htmlFor="airplane-mode">Авиарежим</Label>
         </div>
     ),
 }
@@ -76,7 +76,7 @@ export const WithLabelChecked: Story = {
     render: () => (
         <div className="flex items-center gap-2">
             <Switch id="dark-mode" defaultChecked />
-            <Label htmlFor="dark-mode">Dark Mode</Label>
+            <Label htmlFor="dark-mode">Тёмная тема</Label>
         </div>
     ),
 }
@@ -86,22 +86,24 @@ export const SettingsList: Story = {
         <div className="w-80 space-y-4">
             <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                    <Label htmlFor="notifications">Push Notifications</Label>
-                    <p className="text-sm text-muted-foreground">Receive push notifications</p>
+                    <Label htmlFor="notifications">Пуш-уведомления</Label>
+                    <p className="text-sm text-muted-foreground">Получать пуш-уведомления</p>
                 </div>
                 <Switch id="notifications" defaultChecked />
             </div>
             <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                    <Label htmlFor="emails">Email Updates</Label>
-                    <p className="text-sm text-muted-foreground">Receive email updates</p>
+                    <Label htmlFor="emails">Обновления по электронной почте</Label>
+                    <p className="text-sm text-muted-foreground">
+                        Получать обновления по электронной почте
+                    </p>
                 </div>
                 <Switch id="emails" />
             </div>
             <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                    <Label htmlFor="marketing">Marketing</Label>
-                    <p className="text-sm text-muted-foreground">Receive marketing emails</p>
+                    <Label htmlFor="marketing">Маркетинговые рассылки</Label>
+                    <p className="text-sm text-muted-foreground">Получать маркетинговые письма</p>
                 </div>
                 <Switch id="marketing" />
             </div>
@@ -114,11 +116,11 @@ export const AllSizes: Story = {
         <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
                 <Switch size="sm" defaultChecked />
-                <Label>Small</Label>
+                <Label>Маленький</Label>
             </div>
             <div className="flex items-center gap-2">
                 <Switch size="default" defaultChecked />
-                <Label>Default</Label>
+                <Label>Обычный</Label>
             </div>
         </div>
     ),

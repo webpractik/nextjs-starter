@@ -28,63 +28,63 @@ type Story = StoryObj<typeof Button>
 
 export const Default: Story = {
     args: {
-        children: 'Button',
+        children: 'Кнопка',
         variant: 'default',
     },
 }
 
 export const Outline: Story = {
     args: {
-        children: 'Outline',
+        children: 'Контурная',
         variant: 'outline',
     },
 }
 
 export const Secondary: Story = {
     args: {
-        children: 'Secondary',
+        children: 'Вторичная',
         variant: 'secondary',
     },
 }
 
 export const Ghost: Story = {
     args: {
-        children: 'Ghost',
+        children: 'Прозрачная',
         variant: 'ghost',
     },
 }
 
 export const Destructive: Story = {
     args: {
-        children: 'Destructive',
+        children: 'Опасное действие',
         variant: 'destructive',
     },
 }
 
 export const Link: Story = {
     args: {
-        children: 'Link',
+        children: 'Ссылка',
         variant: 'link',
     },
 }
 
 export const Small: Story = {
     args: {
-        children: 'Small',
+        children: 'Маленькая',
         size: 'sm',
     },
 }
 
 export const ExtraSmall: Story = {
     args: {
-        children: 'XS',
+        children: 'Очень маленькая',
         size: 'xs',
     },
 }
 
 export const Large: Story = {
     args: {
-        children: 'Large',
+        children: 'Большая',
         size: 'lg',
     },
 }
@@ -93,7 +93,7 @@ export const Icon: Story = {
     args: {
         children: <PlusIcon />,
         size: 'icon',
-        'aria-label': 'Add',
+        'aria-label': 'Добавить',
     },
 }
 
@@ -101,7 +101,7 @@ export const IconSmall: Story = {
     args: {
         children: <PlusIcon />,
         size: 'icon-sm',
-        'aria-label': 'Add',
+        'aria-label': 'Добавить',
     },
 }
 
@@ -110,7 +110,7 @@ export const WithIcon: Story = {
         children: (
             <>
                 <MailIcon data-icon="inline-start" />
-                Send Email
+                Отправить письмо
             </>
         ),
     },
@@ -118,7 +118,7 @@ export const WithIcon: Story = {
 
 export const Disabled: Story = {
     args: {
-        children: 'Disabled',
+        children: 'Недоступна',
         disabled: true,
     },
 }
@@ -126,12 +126,12 @@ export const Disabled: Story = {
 export const AllVariants: Story = {
     render: () => (
         <div className="flex flex-wrap gap-4">
-            <Button variant="default">Default</Button>
-            <Button variant="outline">Outline</Button>
-            <Button variant="secondary">Secondary</Button>
-            <Button variant="ghost">Ghost</Button>
-            <Button variant="destructive">Destructive</Button>
-            <Button variant="link">Link</Button>
+            <Button variant="default">Обычная</Button>
+            <Button variant="outline">Контурная</Button>
+            <Button variant="secondary">Вторичная</Button>
+            <Button variant="ghost">Прозрачная</Button>
+            <Button variant="destructive">Опасное действие</Button>
+            <Button variant="link">Ссылка</Button>
         </div>
     ),
 }
@@ -139,10 +139,10 @@ export const AllVariants: Story = {
 export const AllSizes: Story = {
     render: () => (
         <div className="flex flex-wrap items-center gap-4">
-            <Button size="xs">Extra Small</Button>
-            <Button size="sm">Small</Button>
-            <Button size="default">Default</Button>
-            <Button size="lg">Large</Button>
+            <Button size="xs">Очень маленькая</Button>
+            <Button size="sm">Маленькая</Button>
+            <Button size="default">Обычная</Button>
+            <Button size="lg">Большая</Button>
         </div>
     ),
 }

@@ -48,7 +48,7 @@ function SubmitButtonDemo({
     )
 }
 
-it('uses submit type and disables when canSubmit is false by default', async () => {
+it('по умолчанию блокирует кнопку отправки, когда форма не готова', async () => {
     const screen = await render(<SubmitButtonDemo />)
     const input = screen.getByRole('textbox', { name: 'Name' })
     const button = screen.getByRole('button', { name: 'Save' })
@@ -60,8 +60,9 @@ it('uses submit type and disables when canSubmit is false by default', async () 
     await expect.element(button).toBeDisabled()
 })
 
-it('allows submission before validation when disableUntilValid is false', async () => {
-    const screen = await render(<SubmitButtonDemo disableUntilValid={false} />)
+it('оставляет кнопку доступной без блокировки по валидности, но не обходит проверку формы', async () => {
+    const onSubmit = vi.fn()
+    const screen = await render(<SubmitButtonDemo disableUntilValid={false} onSubmit={onSubmit} />)
     const input = screen.getByRole('textbox', { name: 'Name' })
     const button = screen.getByRole('button', { name: 'Save' })
 
@@ -69,15 +70,19 @@ it('allows submission before validation when disableUntilValid is false', async 
     await input.fill('')
 
     await expect.element(button).toBeEnabled()
+    await button.click()
+
+    expect(onSubmit).not.toHaveBeenCalled()
+    await expect.element(screen.getByText('Required')).toBeVisible()
 })
 
-it('preserves an explicit disabled prop', async () => {
+it('сохраняет явную блокировку даже для валидной формы', async () => {
     const screen = await render(<SubmitButtonDemo disabled initialName="Ready" />)
 
     await expect.element(screen.getByRole('button', { name: 'Save' })).toBeDisabled()
 })
 
-it('disables while the form submission is in progress', async () => {
+it('блокирует кнопку на время асинхронной отправки и включает после завершения', async () => {
     let resolveSubmission: (() => void) | undefined
     const submission = new Promise<void>((resolve) => {
         resolveSubmission = resolve

@@ -34,8 +34,8 @@ type Story = StoryObj<typeof Field>
 export const Default: Story = {
     render: () => (
         <Field>
-            <FieldLabel htmlFor="name">Name</FieldLabel>
-            <Input id="name" placeholder="Enter your name" />
+            <FieldLabel htmlFor="name">Имя</FieldLabel>
+            <Input id="name" placeholder="Введите имя" />
         </Field>
     ),
 }
@@ -43,9 +43,9 @@ export const Default: Story = {
 export const WithDescription: Story = {
     render: () => (
         <Field>
-            <FieldLabel htmlFor="email">Email</FieldLabel>
+            <FieldLabel htmlFor="email">Электронная почта</FieldLabel>
             <Input id="email" type="email" placeholder="email@example.com" />
-            <FieldDescription>We'll never share your email with anyone else.</FieldDescription>
+            <FieldDescription>Мы никому не передадим вашу электронную почту.</FieldDescription>
         </Field>
     ),
 }
@@ -53,9 +53,9 @@ export const WithDescription: Story = {
 export const WithError: Story = {
     render: () => (
         <Field data-invalid="true">
-            <FieldLabel htmlFor="password">Password</FieldLabel>
+            <FieldLabel htmlFor="password">Пароль</FieldLabel>
             <Input id="password" type="password" aria-invalid />
-            <FieldError>Password must be at least 8 characters.</FieldError>
+            <FieldError>Пароль должен содержать не менее 8 символов.</FieldError>
         </Field>
     ),
 }
@@ -63,13 +63,13 @@ export const WithError: Story = {
 export const WithMultipleErrors: Story = {
     render: () => (
         <Field data-invalid="true">
-            <FieldLabel htmlFor="password2">Password</FieldLabel>
+            <FieldLabel htmlFor="password2">Пароль</FieldLabel>
             <Input id="password2" type="password" aria-invalid />
             <FieldError
                 errors={[
-                    { message: 'Must be at least 8 characters' },
-                    { message: 'Must contain a number' },
-                    { message: 'Must contain a special character' },
+                    { message: 'Не менее 8 символов' },
+                    { message: 'Добавьте хотя бы одну цифру' },
+                    { message: 'Добавьте хотя бы один специальный символ' },
                 ]}
             />
         </Field>
@@ -79,7 +79,7 @@ export const WithMultipleErrors: Story = {
 export const HorizontalOrientation: Story = {
     render: () => (
         <Field orientation="horizontal">
-            <FieldLabel htmlFor="username">Username</FieldLabel>
+            <FieldLabel htmlFor="username">Имя пользователя</FieldLabel>
             <Input id="username" placeholder="@username" />
         </Field>
     ),
@@ -90,9 +90,9 @@ export const WithCheckbox: Story = {
         <Field orientation="horizontal">
             <Checkbox id="terms" />
             <FieldContent>
-                <FieldTitle>Accept terms and conditions</FieldTitle>
+                <FieldTitle>Принять условия использования</FieldTitle>
                 <FieldDescription>
-                    You agree to our Terms of Service and Privacy Policy.
+                    Вы соглашаетесь с Условиями использования и Политикой конфиденциальности.
                 </FieldDescription>
             </FieldContent>
         </Field>
@@ -103,8 +103,10 @@ export const WithSwitch: Story = {
     render: () => (
         <Field orientation="horizontal">
             <FieldContent>
-                <FieldTitle>Marketing emails</FieldTitle>
-                <FieldDescription>Receive emails about new products and features.</FieldDescription>
+                <FieldTitle>Маркетинговые рассылки</FieldTitle>
+                <FieldDescription>
+                    Получать письма о новых продуктах и возможностях.
+                </FieldDescription>
             </FieldContent>
             <Switch />
         </Field>
@@ -114,8 +116,8 @@ export const WithSwitch: Story = {
 export const Disabled: Story = {
     render: () => (
         <Field data-disabled="true">
-            <FieldLabel htmlFor="disabled">Disabled field</FieldLabel>
-            <Input id="disabled" placeholder="Can't edit this" disabled />
+            <FieldLabel htmlFor="disabled">Недоступное поле</FieldLabel>
+            <Input id="disabled" placeholder="Редактирование недоступно" disabled />
         </Field>
     ),
 }
@@ -123,20 +125,20 @@ export const Disabled: Story = {
 export const FieldSetExample: Story = {
     render: () => (
         <FieldSet>
-            <FieldLegend>Personal Information</FieldLegend>
+            <FieldLegend>Личная информация</FieldLegend>
             <FieldGroup>
                 <Field>
-                    <FieldLabel htmlFor="first-name">First name</FieldLabel>
-                    <Input id="first-name" placeholder="John" />
+                    <FieldLabel htmlFor="first-name">Имя</FieldLabel>
+                    <Input id="first-name" placeholder="Иван" />
                 </Field>
                 <Field>
-                    <FieldLabel htmlFor="last-name">Last name</FieldLabel>
-                    <Input id="last-name" placeholder="Doe" />
+                    <FieldLabel htmlFor="last-name">Фамилия</FieldLabel>
+                    <Input id="last-name" placeholder="Иванов" />
                 </Field>
                 <Field>
-                    <FieldLabel htmlFor="bio">Bio</FieldLabel>
-                    <Textarea id="bio" placeholder="Tell us about yourself" />
-                    <FieldDescription>Max 500 characters.</FieldDescription>
+                    <FieldLabel htmlFor="bio">О себе</FieldLabel>
+                    <Textarea id="bio" placeholder="Расскажите о себе" />
+                    <FieldDescription>Не более 500 символов.</FieldDescription>
                 </Field>
             </FieldGroup>
         </FieldSet>
@@ -147,19 +149,19 @@ export const LegendVariants: Story = {
     render: () => (
         <div className="space-y-6">
             <FieldSet>
-                <FieldLegend variant="legend">Legend variant (default)</FieldLegend>
+                <FieldLegend variant="legend">Вариант легенды (по умолчанию)</FieldLegend>
                 <FieldGroup>
                     <Field>
-                        <FieldLabel htmlFor="l1">Field</FieldLabel>
+                        <FieldLabel htmlFor="l1">Поле</FieldLabel>
                         <Input id="l1" />
                     </Field>
                 </FieldGroup>
             </FieldSet>
             <FieldSet>
-                <FieldLegend variant="label">Label variant</FieldLegend>
+                <FieldLegend variant="label">Вариант подписи</FieldLegend>
                 <FieldGroup>
                     <Field>
-                        <FieldLabel htmlFor="l2">Field</FieldLabel>
+                        <FieldLabel htmlFor="l2">Поле</FieldLabel>
                         <Input id="l2" />
                     </Field>
                 </FieldGroup>

@@ -123,7 +123,7 @@ function DemoForm({ onSubmit }: { onSubmit: (_values: DemoFormValues) => void })
     )
 }
 
-it('submits inferred values from every registered field with direct Zod validation', async () => {
+it('валидирует Zod-схемой все поля и отправляет их типизированные пользовательские значения', async () => {
     const onSubmit = vi.fn<(_values: DemoFormValues) => void>()
     const screen = await render(<DemoForm onSubmit={onSubmit} />)
     const projectName = screen.getByRole('textbox', { name: 'Project name' })

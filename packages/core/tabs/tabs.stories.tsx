@@ -23,20 +23,20 @@ export const Default: Story = {
     render: () => (
         <Tabs defaultValue="account">
             <TabsList>
-                <TabsTrigger value="account">Account</TabsTrigger>
-                <TabsTrigger value="password">Password</TabsTrigger>
-                <TabsTrigger value="settings">Settings</TabsTrigger>
+                <TabsTrigger value="account">Аккаунт</TabsTrigger>
+                <TabsTrigger value="password">Пароль</TabsTrigger>
+                <TabsTrigger value="settings">Настройки</TabsTrigger>
             </TabsList>
             <TabsContent value="account">
                 <p className="text-muted-foreground">
-                    Manage your account settings and preferences.
+                    Управляйте настройками и параметрами аккаунта.
                 </p>
             </TabsContent>
             <TabsContent value="password">
-                <p className="text-muted-foreground">Change your password and security settings.</p>
+                <p className="text-muted-foreground">Измените пароль и настройки безопасности.</p>
             </TabsContent>
             <TabsContent value="settings">
-                <p className="text-muted-foreground">Configure application settings.</p>
+                <p className="text-muted-foreground">Настройте приложение.</p>
             </TabsContent>
         </Tabs>
     ),
@@ -46,18 +46,18 @@ export const LineVariant: Story = {
     render: () => (
         <Tabs defaultValue="overview">
             <TabsList variant="line">
-                <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="analytics">Analytics</TabsTrigger>
-                <TabsTrigger value="reports">Reports</TabsTrigger>
+                <TabsTrigger value="overview">Обзор</TabsTrigger>
+                <TabsTrigger value="analytics">Аналитика</TabsTrigger>
+                <TabsTrigger value="reports">Отчёты</TabsTrigger>
             </TabsList>
             <TabsContent value="overview">
-                <p className="text-muted-foreground">Overview content goes here.</p>
+                <p className="text-muted-foreground">Здесь находится содержимое обзора.</p>
             </TabsContent>
             <TabsContent value="analytics">
-                <p className="text-muted-foreground">Analytics content goes here.</p>
+                <p className="text-muted-foreground">Здесь находится содержимое аналитики.</p>
             </TabsContent>
             <TabsContent value="reports">
-                <p className="text-muted-foreground">Reports content goes here.</p>
+                <p className="text-muted-foreground">Здесь находится содержимое отчётов.</p>
             </TabsContent>
         </Tabs>
     ),
@@ -67,26 +67,26 @@ export const Vertical: Story = {
     render: () => (
         <Tabs defaultValue="profile" orientation="vertical">
             <TabsList>
-                <TabsTrigger value="profile">Profile</TabsTrigger>
-                <TabsTrigger value="account">Account</TabsTrigger>
-                <TabsTrigger value="security">Security</TabsTrigger>
-                <TabsTrigger value="notifications">Notifications</TabsTrigger>
+                <TabsTrigger value="profile">Профиль</TabsTrigger>
+                <TabsTrigger value="account">Аккаунт</TabsTrigger>
+                <TabsTrigger value="security">Безопасность</TabsTrigger>
+                <TabsTrigger value="notifications">Уведомления</TabsTrigger>
             </TabsList>
             <TabsContent value="profile" className="px-4">
-                <h3 className="font-semibold">Profile Settings</h3>
-                <p className="text-muted-foreground">Manage your profile information.</p>
+                <h3 className="font-semibold">Настройки профиля</h3>
+                <p className="text-muted-foreground">Управляйте данными профиля.</p>
             </TabsContent>
             <TabsContent value="account" className="px-4">
-                <h3 className="font-semibold">Account Settings</h3>
-                <p className="text-muted-foreground">Manage your account settings.</p>
+                <h3 className="font-semibold">Настройки аккаунта</h3>
+                <p className="text-muted-foreground">Управляйте настройками аккаунта.</p>
             </TabsContent>
             <TabsContent value="security" className="px-4">
-                <h3 className="font-semibold">Security Settings</h3>
-                <p className="text-muted-foreground">Manage your security preferences.</p>
+                <h3 className="font-semibold">Настройки безопасности</h3>
+                <p className="text-muted-foreground">Управляйте параметрами безопасности.</p>
             </TabsContent>
             <TabsContent value="notifications" className="px-4">
-                <h3 className="font-semibold">Notification Settings</h3>
-                <p className="text-muted-foreground">Manage your notification preferences.</p>
+                <h3 className="font-semibold">Настройки уведомлений</h3>
+                <p className="text-muted-foreground">Управляйте параметрами уведомлений.</p>
             </TabsContent>
         </Tabs>
     ),
@@ -96,18 +96,18 @@ export const VerticalLine: Story = {
     render: () => (
         <Tabs defaultValue="general" orientation="vertical">
             <TabsList variant="line">
-                <TabsTrigger value="general">General</TabsTrigger>
-                <TabsTrigger value="appearance">Appearance</TabsTrigger>
-                <TabsTrigger value="advanced">Advanced</TabsTrigger>
+                <TabsTrigger value="general">Общие</TabsTrigger>
+                <TabsTrigger value="appearance">Оформление</TabsTrigger>
+                <TabsTrigger value="advanced">Дополнительно</TabsTrigger>
             </TabsList>
             <TabsContent value="general" className="px-4">
-                <p className="text-muted-foreground">General settings content.</p>
+                <p className="text-muted-foreground">Содержимое общих настроек.</p>
             </TabsContent>
             <TabsContent value="appearance" className="px-4">
-                <p className="text-muted-foreground">Appearance settings content.</p>
+                <p className="text-muted-foreground">Содержимое настроек оформления.</p>
             </TabsContent>
             <TabsContent value="advanced" className="px-4">
-                <p className="text-muted-foreground">Advanced settings content.</p>
+                <p className="text-muted-foreground">Содержимое дополнительных настроек.</p>
             </TabsContent>
         </Tabs>
     ),
@@ -119,25 +119,25 @@ export const WithIcons: Story = {
             <TabsList>
                 <TabsTrigger value="profile">
                     <UserIcon />
-                    Profile
+                    Профиль
                 </TabsTrigger>
                 <TabsTrigger value="notifications">
                     <BellIcon />
-                    Notifications
+                    Уведомления
                 </TabsTrigger>
                 <TabsTrigger value="settings">
                     <SettingsIcon />
-                    Settings
+                    Настройки
                 </TabsTrigger>
             </TabsList>
             <TabsContent value="profile">
-                <p className="text-muted-foreground">Profile content.</p>
+                <p className="text-muted-foreground">Содержимое профиля.</p>
             </TabsContent>
             <TabsContent value="notifications">
-                <p className="text-muted-foreground">Notifications content.</p>
+                <p className="text-muted-foreground">Содержимое уведомлений.</p>
             </TabsContent>
             <TabsContent value="settings">
-                <p className="text-muted-foreground">Settings content.</p>
+                <p className="text-muted-foreground">Содержимое настроек.</p>
             </TabsContent>
         </Tabs>
     ),
@@ -147,17 +147,17 @@ export const Disabled: Story = {
     render: () => (
         <Tabs defaultValue="active">
             <TabsList>
-                <TabsTrigger value="active">Active Tab</TabsTrigger>
+                <TabsTrigger value="active">Активная вкладка</TabsTrigger>
                 <TabsTrigger value="disabled" disabled>
-                    Disabled Tab
+                    Недоступная вкладка
                 </TabsTrigger>
-                <TabsTrigger value="another">Another Tab</TabsTrigger>
+                <TabsTrigger value="another">Другая вкладка</TabsTrigger>
             </TabsList>
             <TabsContent value="active">
-                <p className="text-muted-foreground">Active tab content.</p>
+                <p className="text-muted-foreground">Содержимое активной вкладки.</p>
             </TabsContent>
             <TabsContent value="another">
-                <p className="text-muted-foreground">Another tab content.</p>
+                <p className="text-muted-foreground">Содержимое другой вкладки.</p>
             </TabsContent>
         </Tabs>
     ),
@@ -167,29 +167,28 @@ export const WithRichContent: Story = {
     render: () => (
         <Tabs defaultValue="details" className="w-full max-w-lg">
             <TabsList>
-                <TabsTrigger value="details">Details</TabsTrigger>
-                <TabsTrigger value="specs">Specifications</TabsTrigger>
-                <TabsTrigger value="reviews">Reviews</TabsTrigger>
+                <TabsTrigger value="details">Описание</TabsTrigger>
+                <TabsTrigger value="specs">Характеристики</TabsTrigger>
+                <TabsTrigger value="reviews">Отзывы</TabsTrigger>
             </TabsList>
             <TabsContent value="details" className="space-y-4">
-                <h3 className="font-semibold">Product Details</h3>
+                <h3 className="font-semibold">Описание товара</h3>
                 <p className="text-muted-foreground">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-                    incididunt ut labore et dolore magna aliqua.
+                    Подробная информация о товаре, его назначении и основных особенностях.
                 </p>
             </TabsContent>
             <TabsContent value="specs" className="space-y-4">
-                <h3 className="font-semibold">Technical Specifications</h3>
+                <h3 className="font-semibold">Технические характеристики</h3>
                 <ul className="space-y-2 text-muted-foreground">
-                    <li>Weight: 1.5kg</li>
-                    <li>Dimensions: 30x20x10cm</li>
-                    <li>Material: Aluminum</li>
-                    <li>Color: Space Gray</li>
+                    <li>Вес: 1,5 кг</li>
+                    <li>Размеры: 30 × 20 × 10 см</li>
+                    <li>Материал: алюминий</li>
+                    <li>Цвет: космический серый</li>
                 </ul>
             </TabsContent>
             <TabsContent value="reviews" className="space-y-4">
-                <h3 className="font-semibold">Customer Reviews</h3>
-                <p className="text-muted-foreground">4.5 out of 5 stars based on 128 reviews.</p>
+                <h3 className="font-semibold">Отзывы покупателей</h3>
+                <p className="text-muted-foreground">Оценка 4,5 из 5 на основе 128 отзывов.</p>
             </TabsContent>
         </Tabs>
     ),
