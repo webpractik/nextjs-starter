@@ -1,13 +1,15 @@
 import { createEnv } from '@t3-oss/env-nextjs'
 import { z } from 'zod'
 
+import { apiBaseUrlSchema } from './schemas'
+
 export const serverEnvironment = createEnv({
     emptyStringAsUndefined: true,
     experimental__runtimeEnv: process.env,
     server: {
         APP_ENV: z.enum(['LOCAL', 'WORK', 'RC', 'PROD']),
         APP_NAME: z.string(),
-        BACK_INTERNAL_URL: z.url(),
+        BACK_INTERNAL_URL: apiBaseUrlSchema,
         CI: z.enum(['true', 'false']).transform((value) => value === 'true'),
         FRONT_HOST: z.string(),
         PORT: z.string().transform(Number).pipe(z.number()),

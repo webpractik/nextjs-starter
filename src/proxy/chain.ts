@@ -3,8 +3,8 @@ import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
 export type ProxyFn = (
-    request: NextRequest,
-    response: NextResponse,
+    _request: NextRequest,
+    _response: NextResponse,
 ) => NextResponse | Response | Promise<NextResponse | Response>
 
 export function chainProxy(proxies: ProxyFn[]) {

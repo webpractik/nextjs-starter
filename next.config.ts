@@ -8,6 +8,8 @@ import { clientEnvironment } from '#/env/client'
 import { serverEnvironment } from '#/env/server'
 import { headers } from '~/headers'
 
+const frontendDevHostname = new URL(clientEnvironment.NEXT_PUBLIC_FRONT_URL).hostname
+
 const nextConfig: NextConfig = {
     output: 'standalone',
     reactStrictMode: true,
@@ -18,7 +20,7 @@ const nextConfig: NextConfig = {
     poweredByHeader: false,
     cleanDistDir: true,
     turbopack: {},
-    allowedDevOrigins: ['localhost', process.env.NEXT_PUBLIC_FRONT_URL as string],
+    allowedDevOrigins: ['localhost', frontendDevHostname],
     experimental: {
         serverSourceMaps: true,
         optimizePackageImports: ['react-use', 'lodash-es', 'lucide-react'],
@@ -33,6 +35,10 @@ const nextConfig: NextConfig = {
         dangerouslyAllowSVG: true,
     },
     async rewrites() {
+        if (!isDev) {
+            return []
+        }
+
         if (!clientEnvironment.NEXT_PUBLIC_BFF_PATH || !serverEnvironment.BACK_INTERNAL_URL) {
             throw new Error('Missing bff envs')
         }

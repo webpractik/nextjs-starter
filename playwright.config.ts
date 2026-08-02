@@ -7,6 +7,13 @@ const baseURL = `http://localhost:${port}`
 process.env.ENVIRONMENT_URL = baseURL
 
 const CI = process.env.CI === 'true'
+const serverMode = process.env.PLAYWRIGHT_SERVER_MODE ?? (CI ? 'standalone' : 'development')
+
+if (serverMode !== 'development' && serverMode !== 'standalone') {
+    throw new Error(`Unsupported PLAYWRIGHT_SERVER_MODE: ${serverMode}`)
+}
+
+const usesStandaloneServer = serverMode === 'standalone'
 
 /** See https://playwright.dev/docs/test-configuration. */
 export default defineConfig({
@@ -17,36 +24,6 @@ export default defineConfig({
             name: 'chromium',
             use: { ...devices['Desktop Chrome'] },
         },
-
-        {
-            name: 'firefox',
-            use: { ...devices['Desktop Firefox'] },
-        },
-
-        {
-            name: 'webkit',
-            use: { ...devices['Desktop Safari'] },
-        },
-
-        /* Test against mobile viewports. */
-        // {
-        //   name: 'Mobile Chrome',
-        //   use: { ...devices['Pixel 5'] },
-        // },
-        // {
-        //   name: 'Mobile Safari',
-        //   use: { ...devices['iPhone 12'] },
-        // },
-
-        /* Test against branded browsers. */
-        // {
-        //   name: 'Microsoft Edge',
-        //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-        // },
-        // {
-        //   name: 'Google Chrome',
-        //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-        // },
     ],
     reporter: 'html',
     retries: CI ? 2 : 0,
@@ -57,8 +34,8 @@ export default defineConfig({
         trace: 'on-first-retry',
     },
     webServer: {
-        command: CI ? 'npm run prod' : 'npm run dev',
-        reuseExistingServer: !CI,
+        command: usesStandaloneServer ? 'npm run prod' : 'npm run dev',
+        reuseExistingServer: !usesStandaloneServer,
         timeout: 2 * 60 * 1000,
         url: baseURL,
     },

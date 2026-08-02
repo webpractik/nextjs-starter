@@ -3,8 +3,6 @@ import type { StorybookConfig } from '@storybook/nextjs-vite'
 import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-const nodeModulesRegex = /node_modules/
-
 function getAbsolutePath(value: string) {
     return dirname(fileURLToPath(import.meta.resolve(`${value}/package.json`)))
 }
@@ -25,14 +23,7 @@ const config: StorybookConfig = {
     framework: getAbsolutePath('@storybook/nextjs-vite'),
     typescript: {
         check: false,
-        reactDocgen: 'react-docgen-typescript',
-        reactDocgenTypescriptOptions: {
-            shouldRemoveUndefinedFromOptional: true,
-            shouldExtractLiteralValuesFromEnum: true,
-            shouldExtractValuesFromUnion: true,
-            propFilter: (prop) =>
-                prop.parent ? !nodeModulesRegex.test(prop.parent.fileName) : true,
-        },
+        reactDocgen: false,
     },
     staticDirs: ['../public'],
 }

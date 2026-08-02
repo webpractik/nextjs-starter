@@ -17,7 +17,7 @@ function MountedFormDevtools() {
     )
 }
 
-it('makes the Form plugin available when a form and the development host are mounted', async () => {
+it('показывает плагин TanStack Form при открытии панели с подключённой формой', async () => {
     const screen = await render(<MountedFormDevtools />)
 
     await screen.getByRole('button', { name: 'Open TanStack Devtools' }).click()

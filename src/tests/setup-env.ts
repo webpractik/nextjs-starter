@@ -14,7 +14,7 @@ if (typeof globalThis.process === 'undefined') {
 }
 
 type FetchMock = (
-    ...args: Parameters<typeof globalThis.fetch>
+    ..._args: Parameters<typeof globalThis.fetch>
 ) => ReturnType<typeof globalThis.fetch>
 
 function formatFetchInput(input: Parameters<FetchMock>[0]) {

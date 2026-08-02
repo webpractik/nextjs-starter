@@ -9,6 +9,7 @@
     ],
     "workspaces": {
         ".": {
+            "entry": ["tools/prepare-standalone.mjs", "tools/run-standalone-e2e.mjs"],
             "ignoreDependencies": [
                 "@tanstack/react-devtools",
                 "@tanstack/react-form-devtools",

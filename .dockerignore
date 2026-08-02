@@ -1,0 +1,46 @@
+# Secrets and local environment
+.env
+.env.*
+*.env
+*.env.*
+!.env.example
+.secrets/
+secrets/
+*.key
+*.pem
+
+# Version control and editor metadata
+.git/
+.gitattributes
+.gitignore
+.github/
+.idea/
+.vscode/
+
+# Dependencies and framework output
+node_modules/
+**/node_modules/
+.next/
+**/.next/
+.turbo/
+out/
+build/
+dist/
+
+# Tests, reports and generated documentation
+coverage/
+coverage-ts/
+report/
+test-results/
+**/test-results/
+allure-results/
+**/allure-results/
+playwright-report/
+blob-report/
+.vitest-attachments/
+storybook-static/
+
+# Local runtime noise
+*.log
+.DS_Store
+*.tsbuildinfo

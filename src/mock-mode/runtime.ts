@@ -6,6 +6,10 @@ type HeadersInput = [string, string][] | Record<string, string> | Headers | unde
 
 const mockModeCookieName = 'mock-mode'
 const mockScenarioCookieName = 'mock-scenario'
+
+function areRuntimeMockOverridesAllowed() {
+    return process.env.NODE_ENV !== 'production'
+}
 const trailingSlashesPattern = /\/+$/
 
 export function isRuntimeMockFlagEnabled(value: string | null | undefined): boolean {
@@ -91,6 +95,8 @@ export function isMockModePagePath(pathname: string | null | undefined): boolean
 }
 
 export function isRequestMockModeEnabled(headers: HeadersInput): boolean {
+    if (!areRuntimeMockOverridesAllowed()) return false
+
     return (
         isMockModeCookieEnabled(getHeaderValue(headers, 'cookie')) ||
         isMockModePagePath(getPathnameFromUrl(getHeaderValue(headers, 'x-url')))
@@ -98,6 +104,8 @@ export function isRequestMockModeEnabled(headers: HeadersInput): boolean {
 }
 
 export function isBrowserRuntimeMockModeEnabled(): boolean {
+    if (!areRuntimeMockOverridesAllowed()) return false
+
     return (
         isMockModeCookieEnabled(globalThis.document?.cookie) ||
         isMockModePagePath(globalThis.window?.location.pathname)

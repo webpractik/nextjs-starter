@@ -22,6 +22,7 @@ docs/superpowers
 .remember
 .vitest-attachments
 next-env.d.ts
+.playwright-mcp
 
 # dependencies
 /node_modules
@@ -61,7 +62,6 @@ next-env.d.ts
 /allure-results/
 **/test-results/
 **/allure-results/
-**/.kubb/
 /playwright-report/
 /blob-report/
 /playwright/.cache/

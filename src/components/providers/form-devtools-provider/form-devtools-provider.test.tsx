@@ -3,7 +3,7 @@ import { render } from 'vitest-browser-react'
 
 import { FormDevtoolsProvider } from '.'
 
-it('renders no development tooling in the test environment', async () => {
+it('не добавляет инструменты разработки в DOM вне development-окружения', async () => {
     const screen = await render(
         <div data-testid="provider-root">
             <FormDevtoolsProvider />

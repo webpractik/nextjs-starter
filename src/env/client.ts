@@ -1,12 +1,14 @@
 import { createEnv } from '@t3-oss/env-nextjs'
 import { z } from 'zod'
 
+import { apiBaseUrlSchema, bffPathSchema } from './schemas'
+
 export const clientEnvironment = createEnv({
     client: {
         NEXT_PUBLIC_APP_ENV: z.enum(['LOCAL', 'WORK', 'RC', 'PROD']),
-        NEXT_PUBLIC_BFF_PATH: z.string(),
+        NEXT_PUBLIC_BFF_PATH: bffPathSchema,
         NEXT_PUBLIC_FRONT_URL: z.url(),
-        NEXT_PUBLIC_BACK_URL: z.url(),
+        NEXT_PUBLIC_BACK_URL: apiBaseUrlSchema,
         NEXT_PUBLIC_MOCK_MODE: z.stringbool().default(false),
         NEXT_PUBLIC_SENTRY_DSN: z.url(),
     },

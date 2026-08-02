@@ -5,8 +5,7 @@
 - Этот файл действует для всего репозитория. Если в подпапке появится более локальный
   `AGENTS.md`, его правила имеют приоритет для файлов внутри этой подпапки.
 - Перед изменениями прочитайте конфиги и документацию области задачи. Исполняемый конфиг и
-  фактический код приоритетнее `README.md`, `CLAUDE.md` и описательных документов, если они
-  расходятся.
+  фактический код приоритетнее `README.md` и описательных документов, если они расходятся.
 - Не исправляйте попутно чужие или уже существующие изменения рабочего дерева. Ограничивайте diff
   задачей пользователя.
 - Идентификаторы и код пишутся на английском. В документации, комментариях и пользовательском
@@ -32,12 +31,19 @@
   отдельной оценки.
 - React Compiler включается только в production через `reactCompiler: isProd`, а не во всех
   режимах.
-- Канонический контракт использует OpenAPI 3.2. Redocly его поддерживает, но Kubb 4.39.2 выводит
-  предупреждение об отсутствии официальной поддержки 3.2. Не понижайте версию и не добавляйте
-  скрытую 3.1-копию без отдельного решения; доказательство совместимости — полный `gen` и `tsc`.
-- Текущий `Dockerfile` ещё ссылается на удалённый workspace `packages/design-tokens` и не передаёт
-  все обязательные env в builder. Считайте Docker deployment заблокированным до отдельного
-  исправления; подробности — в `docs/deployment.md`.
+- Канонический контракт использует OpenAPI 3.2. Redocly bundle передаётся Hey API без понижения и
+  скрытой 3.1-копии; доказательство совместимости — полный `gen`, generated typecheck и root
+  `tsc`.
+- `@hey-api/openapi-ts@0.99.0` пока не запускается с project TypeScript 7.0.2. Только codegen
+  process направляет импорт `typescript` на alias `typescript-codegen@6.0.3`; удаляйте shim лишь
+  после успешного native TypeScript 7 probe и полного parity suite.
+- Контейнерный контур задан в `Dockerfile`, `.dockerignore`, `compose*.yaml` и `Makefile`: dev
+  использует target `development`, production — non-root standalone runner, а builder получает
+  `SENTRY_AUTH_TOKEN` через BuildKit secret. Конфигурационного блокера больше нет; development
+  smoke подтвердил startup, health checks и маршрутизацию к двум репликам. Hot update после
+  изменения исходника, production image и production startup ещё не проверены, поэтому не
+  объявляйте контур production-ready. Базовый Compose пока также передаёт `SENTRY_AUTH_TOKEN` в
+  runtime environment; подробности — в `docs/deployment.md`.
 
 ## Проект и runtime
 
@@ -58,14 +64,16 @@
 - `src/modules/` — доменная логика, общая для нескольких маршрутов. Директория создаётся по мере
   появления реальных модулей, а не заранее.
 - `src/components/` — переиспользуемые составные UI-компоненты и инфраструктурные providers.
-- `src/hooks/`, `src/utils/`, `src/constants/`, `src/schemas/`, `src/masks/` — shared-слой без
-  привязки к отдельному бизнес-модулю.
+- `src/constants/`, `src/hooks/`, `src/types/`, `src/utils/` — shared-слой без привязки к отдельному
+  бизнес-модулю. Новые shared-каталоги создавайте только вместе с реальным кодом.
 - `src/env/` — типизированные и валидируемые переменные окружения.
+- `src/mock-mode/` — выбор generated API mocks и сценария во время выполнения.
 - `src/proxy/` и корневой `proxy.ts` — pipeline Next.js proxy/BFF и служебные request headers.
 - `src/observability/` и `instrumentation*.ts` — логирование, метрики, Sentry и OTEL.
 - `src/tests/` — общая тестовая инфраструктура и Playwright E2E.
 - `packages/core/` (`@repo/core`) — дизайн-система и UI-примитивы.
-- `packages/api/` (`@repo/api`) — OpenAPI, Redocly/Kubb, fetch-клиент, моки и сгенерированный API.
+- `packages/api/` (`@repo/api`) — OpenAPI-контракт, Redocly/Hey API pipeline и публичные facets для
+  SDK, client, Query, Zod, Faker, mocks и cache tags.
 - `docs/README.md` — индекс документации и её статусов.
 - `docs/architecture.md` — подробная модель слоёв и размещения кода.
 - `docs/bff-proxy.md` — выбор API base URL в server/dev/prod.
@@ -85,6 +93,9 @@
 | shared `src/*` | `packages/*`                                 |
 | `packages/*`   | только другие `packages/*`                   |
 
+- `packages/api/client-config.ts` — известное исключение: файл импортирует root-level `src/env`,
+  `src/constants` и `src/mock-mode`. Не повторяйте и не расширяйте это направление зависимостей;
+  план развязки описан в `docs/architecture.md`.
 - Модуль в `src/modules/<name>` не импортирует другой модуль напрямую. Взаимодействие организуйте
   через композицию в route/layout, shared event bus или dependency injection/provider.
 - Эти границы пока не полностью контролируются Oxlint. Проверяйте их вручную при review.
@@ -179,7 +190,7 @@
 - В приложении потребляйте env через `serverEnvironment`/`clientEnvironment`. Прямой
   `process.env` оставляйте только для framework bootstrap и уже существующих build/runtime checks.
 - Никогда не переносите server secrets в client schema и не коммитьте `.env`.
-- Выбор base URL в `packages/api/fetch.client.ts`:
+- Выбор base URL в `packages/api/client-config.ts`:
     - server всегда использует `BACK_INTERNAL_URL`;
     - browser в development использует относительный `NEXT_PUBLIC_BFF_PATH` и Next rewrite;
     - browser в production использует `NEXT_PUBLIC_BACK_URL` напрямую.
@@ -193,18 +204,22 @@
 - Исходник истины — `packages/api/openapi/openapi.yaml` и его `$ref`-файлы в `paths/` и
   `components/`; каноническая версия контракта — OpenAPI 3.2.0.
 - Каждая операция должна иметь уникальный `operationId`, обязательный `summary` и корректный
-  `tags`; tag определяет группировку сгенерированных клиентов и hooks.
-- Порядок pipeline: Redocly bundle → `bundled.yaml` → Kubb → `packages/api/codegen/`.
+  `tags`; tags входят в query keys, mock metadata и generated cache helpers.
+- Порядок pipeline: Redocly bundle → `bundled.yaml` → Hey API → post-generation helpers → Oxfmt →
+  generated `tsc`.
 - `bundled.yaml` — игнорируемый промежуточный артефакт. `openapi/` и `codegen/` коммитятся.
-- `packages/api/codegen/`, включая models, hooks, Zod, mocks, tags и routes, вручную не редактируется.
-  Kubb запускается с `output.clean: true`, поэтому ручные изменения будут удалены.
+- `packages/api/codegen/`, включая types, SDK, client, Query options, Zod, Faker, cache tags и mock
+  routes, вручную не редактируется. Hey API запускается с `output.clean: true`, поэтому ручные
+  изменения будут удалены.
 - После изменения OpenAPI выполните `npm --workspace @repo/api run gen` и связанные tests.
-- Transport `packages/api/fetch.client.ts` возвращает `ResponseConfig<TData>`. Сгенерированные
-  Kubb-клиенты при `dataReturnType: 'data'` валидируют `res.data` и возвращают `TData`; не смешивайте
-  эти два уровня контракта.
-- Infinite Query глобально выключен и включается точечно для операций с корректным параметром
-  пагинации; пример `findPetsByStatus` использует `offset`.
-- Generated Zod-схемы остаются в `@repo/api/codegen/zod`; не копируйте их в `src/schemas`.
+- Публичные импорты идут только через `@repo/api`, `/client`, `/query`, `/schemas`, `/mocks` и
+  `/cache-tags`; generated deep paths и внутренние aliases вроде `Pet2` не являются контрактом.
+- SDK принимает `path`/`query`/`body` и по умолчанию возвращает discriminated result
+  `data`/`error`/`response`; `throwOnError: true` бросает parsed typed error. Успешные ответы
+  проверяются generated Zod-схемами, а `204` возвращает `data: undefined`.
+- `findPetsByStatusInfiniteOptions` преобразует numeric `pageParam` в `query.offset`, сохраняя
+  остальные filters и limit; Query options компонуйте с `useQuery`/`useMutation`/`useInfiniteQuery`.
+- Generated Zod-схемы экспортируются через `@repo/api/schemas`; не копируйте их в `src/schemas`.
 - Для тестов и Storybook используйте generated Faker factories и mock client, а не вручную
   дублированные API fixtures, если нужная фабрика уже существует.
 
@@ -237,8 +252,10 @@
   проверяется реальным browser-компонентом без отдельного mock alias.
 - Vitest загружает разрешённые env values сначала из process, затем из корневого `.env`; не
   дублируйте env setup в каждом test file.
-- Playwright E2E лежат в `src/tests/e2e`, выполняются в Chromium, Firefox и WebKit. Локально config
-  поднимает `npm run dev`, в CI — `npm run prod`.
+- Playwright E2E лежат в `src/tests/e2e` и выполняются в Chromium. По умолчанию config поднимает
+  `npm run dev`; `PLAYWRIGHT_SERVER_MODE=standalone` или `CI=true` переключает его на уже собранный
+  `npm run prod`. Самодостаточный `npm run test:e2e:standalone` сначала создаёт свежую сборку.
+- Текущий GitLab pipeline запускает Vitest, но не Playwright E2E и не production build.
 - Playwright использует `FRONT_PORT` с default `3000`; это отдельная переменная от server `PORT`.
 - При исправлении bug сначала добавьте или обновите минимальный regression test, затем проверьте,
   что он воспроизводит проблему и проходит с исправлением.
@@ -269,6 +286,8 @@ npm run lint-fix
 npm run fmt:check
 npm run knip
 npm run jscpd
+npm run verify:fast
+npm run verify
 
 # Тесты
 npm run test
@@ -276,6 +295,7 @@ npm run test:unit
 npm run test:component
 npm run test:coverage
 npm run test:e2e
+npm run test:e2e:standalone
 npx vitest run src/mock-mode/runtime.unit.test.ts --project unit
 npx vitest run src/components/utilities/error-boundary/error-boundary.test.tsx --project component
 npx playwright test src/tests/e2e/example.spec.ts
@@ -289,6 +309,13 @@ npm --workspace @repo/api run test
 npm --workspace @repo/api run gen
 npm --workspace @repo/api run bundle
 npm --workspace @repo/api run lint:openapi
+npm --workspace @repo/api run typecheck:generated
+
+# Docker Compose
+make compose-config-dev
+make compose-config-prod
+make compose-dev
+make compose-prod
 ```
 
 ## Рабочий процесс и проверка
@@ -301,8 +328,9 @@ npm --workspace @repo/api run lint:openapi
 4. Для generated code меняйте источник/генератор, затем регенерируйте; не патчите output.
 5. Запустите formatter check и самые узкие релевантные tests.
 6. Для TypeScript/React изменений дополнительно запустите `npm run tsc` и `npm run lint`.
-7. Для route, config, env, proxy или build-system изменений выполните `npm run build`, если
-   окружение позволяет.
+7. Для route, Next.js config, env или proxy изменений выполните `npm run build`, если окружение
+   позволяет. Для Docker/Compose дополнительно проверьте соответствующий `make compose-config-*`,
+   image build и smoke test изменённого режима.
 8. Для UI проверьте component tests и, когда меняется реальное browser behavior, Playwright или
    ручной browser smoke test.
 9. Перед завершением перечитайте diff, сообщите точные выполненные проверки и отдельно перечислите

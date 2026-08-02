@@ -13,7 +13,7 @@ export default meta
 
 type Story = StoryObj<typeof ErrorBoundary>
 
-const message = { message: 'Example error message' }
+const message = { message: 'Пример сообщения об ошибке' }
 
 export const Primary: Story = {
     args: {},

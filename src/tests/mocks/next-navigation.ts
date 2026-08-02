@@ -3,13 +3,13 @@ import { vi } from 'vitest'
 /* eslint-disable react/no-unnecessary-use-prefix -- Next.js navigation exports are hook-compatible mocks. */
 
 type MockFunction<Args extends unknown[] = unknown[], Result = unknown> = ((
-    ...args: Args
+    ..._args: Args
 ) => Result) & {
     mockReset: () => void
 }
 
 function createMockFunction<Args extends unknown[] = unknown[], Result = unknown>() {
-    return vi.fn<(...args: Args) => Result>() as MockFunction<Args, Result>
+    return vi.fn<(..._args: Args) => Result>() as MockFunction<Args, Result>
 }
 
 interface NextRouterMock {
