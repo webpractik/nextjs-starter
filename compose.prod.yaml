@@ -1,0 +1,35 @@
+services:
+    nextjs:
+        image: nextjs-starter:compose-production
+        build:
+            target: runner
+            args:
+                APP_ENV: '${APP_ENV:?APP_ENV is required}'
+                APP_NAME: '${APP_NAME:?APP_NAME is required}'
+                BACK_INTERNAL_URL: '${BACK_INTERNAL_URL:?BACK_INTERNAL_URL is required}'
+                CI: '${CI:?CI is required}'
+                FRONT_HOST: '${FRONT_HOST:?FRONT_HOST is required}'
+                MOCK_MODE: '${MOCK_MODE:?MOCK_MODE is required}'
+                NEXT_PUBLIC_APP_ENV: '${NEXT_PUBLIC_APP_ENV:?NEXT_PUBLIC_APP_ENV is required}'
+                NEXT_PUBLIC_BACK_URL: '${NEXT_PUBLIC_BACK_URL:?NEXT_PUBLIC_BACK_URL is required}'
+                NEXT_PUBLIC_BFF_PATH: '${NEXT_PUBLIC_BFF_PATH:?NEXT_PUBLIC_BFF_PATH is required}'
+                NEXT_PUBLIC_FRONT_URL: '${NEXT_PUBLIC_FRONT_URL:?NEXT_PUBLIC_FRONT_URL is required}'
+                NEXT_PUBLIC_MOCK_MODE: '${NEXT_PUBLIC_MOCK_MODE:?NEXT_PUBLIC_MOCK_MODE is required}'
+                NEXT_PUBLIC_SENTRY_DSN: '${NEXT_PUBLIC_SENTRY_DSN:?NEXT_PUBLIC_SENTRY_DSN is required}'
+                PORT: '3000'
+                SENTRY_DSN: '${SENTRY_DSN:?SENTRY_DSN is required}'
+                SENTRY_ORG: '${SENTRY_ORG:?SENTRY_ORG is required}'
+                SENTRY_URL: '${SENTRY_URL:?SENTRY_URL is required}'
+            secrets:
+                - source: sentry_auth_token
+                  target: sentry_auth_token
+        environment:
+            NODE_ENV: production
+        restart: unless-stopped
+
+    gateway:
+        restart: unless-stopped
+
+secrets:
+    sentry_auth_token:
+        environment: SENTRY_AUTH_TOKEN

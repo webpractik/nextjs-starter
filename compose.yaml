@@ -1,0 +1,115 @@
+name: nextjs-starter
+
+services:
+    nextjs:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        scale: 2
+        init: true
+        expose:
+            - '3000'
+        environment:
+            APP_ENV: '${APP_ENV:?APP_ENV is required}'
+            APP_NAME: '${APP_NAME:?APP_NAME is required}'
+            BACK_INTERNAL_URL: '${BACK_INTERNAL_URL:?BACK_INTERNAL_URL is required}'
+            CACHE_PROBE_ENABLED: '${CACHE_PROBE_ENABLED:-false}'
+            CACHE_PROBE_TOKEN: '${CACHE_PROBE_TOKEN:-}'
+            CI: '${CI:?CI is required}'
+            FRONT_HOST: '${FRONT_HOST:?FRONT_HOST is required}'
+            MOCK_MODE: '${MOCK_MODE:?MOCK_MODE is required}'
+            NEXT_PUBLIC_APP_ENV: '${NEXT_PUBLIC_APP_ENV:?NEXT_PUBLIC_APP_ENV is required}'
+            NEXT_PUBLIC_BACK_URL: '${NEXT_PUBLIC_BACK_URL:?NEXT_PUBLIC_BACK_URL is required}'
+            NEXT_PUBLIC_BFF_PATH: '${NEXT_PUBLIC_BFF_PATH:?NEXT_PUBLIC_BFF_PATH is required}'
+            NEXT_PUBLIC_FRONT_URL: '${NEXT_PUBLIC_FRONT_URL:?NEXT_PUBLIC_FRONT_URL is required}'
+            NEXT_PUBLIC_MOCK_MODE: '${NEXT_PUBLIC_MOCK_MODE:?NEXT_PUBLIC_MOCK_MODE is required}'
+            NEXT_PUBLIC_SENTRY_DSN: '${NEXT_PUBLIC_SENTRY_DSN:?NEXT_PUBLIC_SENTRY_DSN is required}'
+            PORT: '3000'
+            SENTRY_AUTH_TOKEN: '${SENTRY_AUTH_TOKEN:?SENTRY_AUTH_TOKEN is required}'
+            SENTRY_DSN: '${SENTRY_DSN:?SENTRY_DSN is required}'
+            SENTRY_ORG: '${SENTRY_ORG:?SENTRY_ORG is required}'
+            SENTRY_URL: '${SENTRY_URL:?SENTRY_URL is required}'
+            VALKEY_CACHE_MAX_ENTRY_BYTES: '${VALKEY_CACHE_MAX_ENTRY_BYTES:?VALKEY_CACHE_MAX_ENTRY_BYTES is required}'
+            VALKEY_CACHE_MAX_TTL_SECONDS: '${VALKEY_CACHE_MAX_TTL_SECONDS:?VALKEY_CACHE_MAX_TTL_SECONDS is required}'
+            VALKEY_CACHE_NAMESPACE: '${VALKEY_CACHE_NAMESPACE:?VALKEY_CACHE_NAMESPACE is required}'
+            VALKEY_URL: '${VALKEY_URL:?VALKEY_URL is required}'
+        depends_on:
+            valkey:
+                condition: service_healthy
+        extra_hosts:
+            - 'host.docker.internal:host-gateway'
+        labels:
+            - 'traefik.enable=true'
+            - 'traefik.docker.network=nextjs-starter_default'
+            - 'traefik.http.routers.nextjs.entrypoints=web'
+            - 'traefik.http.routers.nextjs.rule=PathPrefix(`/`)'
+            - 'traefik.http.routers.nextjs.service=nextjs'
+            - 'traefik.http.services.nextjs.loadbalancer.server.port=3000'
+            - 'traefik.http.services.nextjs.loadbalancer.passhostheader=true'
+            - 'traefik.http.services.nextjs.loadbalancer.healthcheck.path=/api/health'
+            - 'traefik.http.services.nextjs.loadbalancer.healthcheck.interval=5s'
+            - 'traefik.http.services.nextjs.loadbalancer.healthcheck.timeout=3s'
+        healthcheck:
+            test:
+                - CMD
+                - node
+                - -e
+                - >-
+                    fetch('http://127.0.0.1:3000/api/health')
+                    .then((response) => process.exit(response.ok ? 0 : 1))
+                    .catch(() => process.exit(1))
+            interval: 5s
+            timeout: 3s
+            retries: 24
+            start_period: 30s
+
+    valkey:
+        image: valkey/valkey:9.1.1-alpine@sha256:ee91f7a174ac4d6a6b0685b3a60e321f0a9dbbb691f9b0e285be2ba1d1be8328
+        command:
+            - valkey-server
+            - --save
+            - ''
+            - --appendonly
+            - 'no'
+            - --maxmemory
+            - '${VALKEY_MAXMEMORY:-128mb}'
+            - --maxmemory-policy
+            - volatile-ttl
+        expose:
+            - '6379'
+        mem_limit: '${VALKEY_MEMORY_LIMIT:-192m}'
+        restart: unless-stopped
+        security_opt:
+            - no-new-privileges:true
+        healthcheck:
+            test:
+                - CMD
+                - valkey-cli
+                - ping
+            interval: 5s
+            timeout: 3s
+            retries: 12
+            start_period: 5s
+
+    gateway:
+        image: traefik:v3.5.0@sha256:4e7175cfe19be83c6b928cae49dde2f2788fb307189a4dc9550b67acf30c11a5
+        depends_on:
+            nextjs:
+                condition: service_healthy
+        ports:
+            - '${FRONT_BIND_ADDRESS:-127.0.0.1}:${FRONT_PORT:-3000}:8080'
+        volumes:
+            - './docker/traefik/traefik.yaml:/etc/traefik/traefik.yaml:ro'
+            - '/var/run/docker.sock:/var/run/docker.sock:ro'
+        security_opt:
+            - no-new-privileges:true
+        healthcheck:
+            test:
+                - CMD
+                - traefik
+                - healthcheck
+                - --ping
+            interval: 5s
+            timeout: 3s
+            retries: 12
+            start_period: 5s

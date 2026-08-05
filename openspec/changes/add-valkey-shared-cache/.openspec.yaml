@@ -1,0 +1,5 @@
+schema: spec-driven
+created: 2026-08-02
+goal: Depends on add-docker-compose-modes being applied; add a Valkey-backed
+    Next.js cacheHandlers.default implementation and verify cross-instance cache
+    and tag invalidation behavior.

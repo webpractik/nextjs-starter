@@ -1,0 +1,10 @@
+services:
+    nextjs:
+        environment:
+            APP_ENV: LOCAL
+            CACHE_PROBE_ENABLED: 'true'
+            CACHE_PROBE_TOKEN: '${CACHE_PROBE_TOKEN:?CACHE_PROBE_TOKEN is required}'
+            CI: 'true'
+            NEXT_SERVER_ACTIONS_ENCRYPTION_KEY: '${NEXT_SERVER_ACTIONS_ENCRYPTION_KEY:-}'
+            VALKEY_CACHE_NAMESPACE: '${VALKEY_CACHE_NAMESPACE:?VALKEY_CACHE_NAMESPACE is required}'
+            VALKEY_URL: redis://valkey:6379

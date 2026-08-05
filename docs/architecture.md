@@ -46,11 +46,12 @@ transport adapter в application layer.
 ```text
 app/
 ├── (public)/                 публичные pages, loading/error states, route-local UI
-├── api/                      health, readiness и Prometheus Route Handlers
+├── api/                      health, readiness, metrics и gated cache probe
 ├── layout.tsx                глобальные providers и document shell
 └── global-error.tsx          корневая error boundary
 
 src/
+├── cache/                    server-only Valkey handler для Cache Components
 ├── components/               shared составные компоненты и providers
 ├── constants/                общие константы runtime
 ├── env/                      server/client environment schemas
@@ -103,6 +104,7 @@ segment. Schema, constants или utilities, общие только для эт
 | `packages/core/` interactive primitives   | Client API                                            |
 | Generated React Query hooks               | Client API                                            |
 | Generated models, Zod и fetch clients     | Universal, пока caller не добавил server-only context |
+| Valkey handler из `src/cache/`            | Только server                                         |
 | `src/env/server.ts`                       | Только server                                         |
 | `src/env/client.ts`                       | Допустим в client bundle                              |
 | `src/components/providers/query-provider` | Client boundary                                       |
@@ -136,13 +138,14 @@ client-facing слой; fetch clients/Zod/models могут использова
 
 ## Данные и состояние
 
-| Задача                          | Текущий инструмент                         |
-| ------------------------------- | ------------------------------------------ |
-| Server rendering и server cache | Async Server Components + Cache Components |
-| Client server-state             | TanStack Query                             |
-| URL filters/navigation state    | nuqs                                       |
-| Forms                           | TanStack Form + Zod                        |
-| Локальная интерактивность       | React state/reducer                        |
+| Задача                            | Текущий инструмент                         |
+| --------------------------------- | ------------------------------------------ |
+| Server rendering и server cache   | Async Server Components + Cache Components |
+| Shared cache обычного `use cache` | `cacheHandlers.default` + Valkey           |
+| Client server-state               | TanStack Query                             |
+| URL filters/navigation state      | nuqs                                       |
+| Forms                             | TanStack Form + Zod                        |
+| Локальная интерактивность         | React state/reducer                        |
 
 Cache Components и React Query сосуществуют. Выбор зависит от места потребления и требований к
 интерактивности, а не от универсального запрета одного подхода. Правила — в

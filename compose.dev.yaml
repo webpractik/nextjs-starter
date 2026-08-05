@@ -1,0 +1,30 @@
+services:
+    nextjs:
+        image: nextjs-starter:compose-development
+        build:
+            target: development
+        command:
+            - npm
+            - run
+            - dev
+            - --
+            - --hostname
+            - 0.0.0.0
+            - --port
+            - '3000'
+        environment:
+            NODE_ENV: development
+            WATCHPACK_POLLING: 'true'
+        labels:
+            - 'traefik.http.services.nextjs.loadbalancer.sticky.cookie=true'
+            - 'traefik.http.services.nextjs.loadbalancer.sticky.cookie.name=nextjs_dev_replica'
+            - 'traefik.http.services.nextjs.loadbalancer.sticky.cookie.httponly=true'
+            - 'traefik.http.services.nextjs.loadbalancer.sticky.cookie.samesite=lax'
+        volumes:
+            - type: bind
+              source: .
+              target: /app
+            - type: volume
+              target: /app/node_modules
+            - type: volume
+              target: /app/.next

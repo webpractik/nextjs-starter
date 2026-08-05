@@ -12,6 +12,7 @@
 | --------- | --------------------------- | ---------------------------------------------------------------------------------------------- |
 | Unit      | Node                        | `**/*.unit.test.ts(x)`, `packages/**/*.test.ts`                                                |
 | Component | Headless Chromium, real DOM | `**/*.component.test.ts(x)`, `app/**/*.test.tsx`, `src/**/*.test.tsx`                          |
+| Cache     | Node + Docker Valkey        | Handler integration и две реальные Compose-реплики                                             |
 | E2E       | Chromium, Firefox, WebKit   | `src/tests/e2e/**`                                                                             |
 | Storybook | Browser preview             | `app/**/*.stories.tsx`, `packages/core/**/*.stories.tsx`, `src/**/*.stories.*`, `src/**/*.mdx` |
 
@@ -45,6 +46,12 @@ npm --workspace @repo/api run test
 npm run test:coverage
 npm run test:watch
 
+# Shared cache и Compose
+npm run test:cache:integration
+npm run test:cache:matrix:dev
+npm run test:cache:matrix:prod
+npm run verify:cache:compose
+
 # Standalone E2E
 npm run test:e2e
 npx playwright test src/tests/e2e/example.spec.ts
@@ -60,6 +67,10 @@ npm run build-storybook
 ```bash
 npx playwright install --with-deps
 ```
+
+Cache/Compose-команды требуют Docker Engine, используют отдельные project names и очищают
+временные containers/networks после завершения. Они не входят в `npm run test` или
+`npm run verify`.
 
 ## Unit tests
 

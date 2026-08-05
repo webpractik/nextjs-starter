@@ -1,0 +1,230 @@
+import { spawnSync } from 'node:child_process'
+import { randomBytes, randomUUID } from 'node:crypto'
+
+const mode = process.argv[2] ?? 'development'
+if (mode !== 'development' && mode !== 'production') {
+    throw new Error('Expected cache matrix mode to be development or production')
+}
+
+const projectName = `nextjs-starter-cache-matrix-${mode}-${process.pid}`
+const probeKey = randomUUID().replaceAll('-', '')
+const probeToken = randomBytes(32).toString('hex')
+const cacheNamespace = `nextjs-starter:matrix:${randomUUID()}:v1`
+const modeOverlay = mode === 'development' ? 'compose.dev.yaml' : 'compose.prod.yaml'
+const composeArguments = [
+    'compose',
+    '--project-name',
+    projectName,
+    '--env-file',
+    '.env.example',
+    '--file',
+    'compose.yaml',
+    '--file',
+    modeOverlay,
+    '--file',
+    'compose.cache-probe-test.yaml',
+]
+const environment = {
+    ...process.env,
+    CACHE_PROBE_TOKEN: probeToken,
+    VALKEY_CACHE_NAMESPACE: cacheNamespace,
+    ...(mode === 'development'
+        ? { NEXT_SERVER_ACTIONS_ENCRYPTION_KEY: randomBytes(32).toString('base64') }
+        : {}),
+}
+
+function run(command, arguments_, options = {}) {
+    const result = spawnSync(command, arguments_, {
+        cwd: process.cwd(),
+        encoding: 'utf8',
+        env: environment,
+        stdio: options.capture ? 'pipe' : 'inherit',
+    })
+
+    if (result.status !== 0 && !options.allowFailure) {
+        throw new Error(`${command} failed with status ${result.status}`)
+    }
+
+    return result
+}
+
+function compose(...arguments_) {
+    return run('docker', [...composeArguments, ...arguments_])
+}
+
+function nextjsContainers() {
+    const output = run('docker', [...composeArguments, 'ps', '--format', 'json', 'nextjs'], {
+        capture: true,
+    }).stdout.trim()
+    const parsed = output.startsWith('[')
+        ? JSON.parse(output)
+        : output
+              .split('\n')
+              .filter(Boolean)
+              .map((line) => JSON.parse(line))
+
+    return parsed.map((container) => container.Name).sort()
+}
+
+function serviceContainer(service) {
+    const result = run('docker', [...composeArguments, 'ps', '--format', 'json', service], {
+        capture: true,
+    })
+    const output = result.stdout.trim()
+    const parsed = output.startsWith('[') ? JSON.parse(output) : [JSON.parse(output.split('\n')[0])]
+
+    return parsed[0].Name
+}
+
+async function waitForValkeySize(minimumSize) {
+    const valkeyContainer = serviceContainer('valkey')
+    const deadline = Date.now() + 5_000
+
+    while (Date.now() < deadline) {
+        const result = run('docker', ['exec', valkeyContainer, 'valkey-cli', 'dbsize'], {
+            capture: true,
+        })
+        if (Number(result.stdout.trim()) >= minimumSize) return
+        await new Promise((resolve) => setTimeout(resolve, 50))
+    }
+
+    throw new Error('Timed out waiting for the shared cache write')
+}
+
+const requestScript = `
+const [url, method] = process.argv.slice(1)
+const response = await fetch(url, {
+    method,
+    headers: { 'x-cache-probe-token': process.env.CACHE_PROBE_TOKEN },
+})
+const body = await response.text()
+process.stdout.write(JSON.stringify({ status: response.status, body }))
+`
+
+function rawRequest(caller, target, path, method = 'GET', allowFailure = false) {
+    const result = run(
+        'docker',
+        ['exec', caller, 'node', '-e', requestScript, `http://${target}:3000${path}`, method],
+        { capture: true, allowFailure },
+    )
+    if (result.status !== 0) {
+        return { status: 0, body: result.stderr }
+    }
+
+    return JSON.parse(result.stdout)
+}
+
+function request(caller, target, method = 'GET', allowFailure = false) {
+    const response = rawRequest(
+        caller,
+        target,
+        `/api/cache-probe?key=${probeKey}`,
+        method,
+        allowFailure,
+    )
+
+    return {
+        status: response.status,
+        body: response.body ? JSON.parse(response.body) : undefined,
+    }
+}
+
+function expect(condition, message) {
+    if (!condition) throw new Error(message)
+}
+
+function waitForReplicas() {
+    compose('up', '--detach', '--wait', '--scale', 'nextjs=2', 'nextjs')
+    const containers = nextjsContainers()
+    expect(containers.length === 2, 'Expected exactly two healthy Next.js replicas')
+    return containers
+}
+
+async function main() {
+    try {
+        compose('build', 'nextjs')
+
+        let [firstReplica, secondReplica] = waitForReplicas()
+        expect(firstReplica && secondReplica, 'Replica names are unavailable')
+
+        const firstRead = request(firstReplica, firstReplica)
+        await waitForValkeySize(1)
+        const sharedRead = request(firstReplica, secondReplica)
+        expect(firstRead.status === 200 && sharedRead.status === 200, 'Shared reads must succeed')
+        expect(
+            firstRead.body.generatedAt === sharedRead.body.generatedAt &&
+                firstRead.body.generatedBy === sharedRead.body.generatedBy,
+            `Replica 2 did not read the value generated by replica 1: ${JSON.stringify({ firstRead, sharedRead })}`,
+        )
+        expect(
+            firstRead.body.servedBy !== sharedRead.body.servedBy,
+            'Reads did not reach both replicas',
+        )
+
+        const invalidation = request(firstReplica, firstReplica, 'POST')
+        expect(invalidation.status === 200, 'Cross-replica invalidation must succeed')
+        await waitForValkeySize(2)
+        const regenerated = request(firstReplica, secondReplica)
+        expect(regenerated.status === 200, 'Read after invalidation must succeed')
+        expect(
+            regenerated.body.generatedAt !== firstRead.body.generatedAt &&
+                regenerated.body.generatedBy === regenerated.body.servedBy,
+            'Replica 2 did not regenerate after invalidation',
+        )
+        await waitForValkeySize(2)
+
+        for (const replica of [firstReplica, secondReplica]) {
+            const metrics = rawRequest(firstReplica, replica, '/api/metrics')
+            expect(metrics.status === 200, 'Replica metrics endpoint must succeed')
+            expect(
+                metrics.body.includes('cache_operations_total') &&
+                    metrics.body.includes('cache_invalidations_total') &&
+                    !metrics.body.includes(cacheNamespace) &&
+                    !metrics.body.includes(probeKey),
+                'Cache metrics are missing or expose unbounded cache data',
+            )
+        }
+
+        run('docker', ['rm', '--force', firstReplica])
+        const recreatedReplicas = waitForReplicas()
+        firstReplica = recreatedReplicas[0]
+        secondReplica = recreatedReplicas[1]
+        expect(firstReplica && secondReplica, 'Replica names after recreation are unavailable')
+        const afterReplicaRecreation = request(secondReplica, firstReplica)
+        expect(
+            afterReplicaRecreation.body.generatedAt === regenerated.body.generatedAt,
+            'Recreated Next.js replica did not retain the shared cache hit',
+        )
+
+        compose('rm', '--stop', '--force', 'valkey')
+        compose('up', '--detach', '--wait', 'valkey')
+        const coldRead = request(firstReplica, firstReplica)
+        await waitForValkeySize(1)
+        const sharedColdRead = request(firstReplica, secondReplica)
+        expect(
+            coldRead.status === 200 &&
+                sharedColdRead.status === 200 &&
+                coldRead.body.generatedAt !== regenerated.body.generatedAt &&
+                coldRead.body.generatedAt === sharedColdRead.body.generatedAt,
+            'Valkey recreation did not produce one shared cold-cache value',
+        )
+
+        compose('stop', 'valkey')
+        const outageRead = request(firstReplica, secondReplica)
+        expect(outageRead.status === 200, 'Cache read outage broke fresh rendering')
+        const outageInvalidation = request(firstReplica, firstReplica, 'POST', true)
+        expect(
+            outageInvalidation.status >= 500 || outageInvalidation.status === 0,
+            'Invalidation outage was incorrectly reported as successful',
+        )
+
+        process.stdout.write(`Shared cache ${mode} matrix passed.\n`)
+    } finally {
+        compose('down', '--volumes', '--remove-orphans')
+    }
+}
+
+main().catch((error) => {
+    console.error(error)
+    process.exitCode = 1
+})

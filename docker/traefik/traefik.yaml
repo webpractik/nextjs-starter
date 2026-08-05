@@ -1,0 +1,28 @@
+global:
+    checkNewVersion: false
+    sendAnonymousUsage: false
+
+entryPoints:
+    web:
+        address: ':8080'
+    ping:
+        address: ':8082'
+
+providers:
+    docker:
+        endpoint: 'unix:///var/run/docker.sock'
+        exposedByDefault: false
+        network: nextjs-starter_default
+        watch: true
+
+api:
+    dashboard: false
+
+ping:
+    entryPoint: ping
+
+accessLog:
+    format: json
+
+log:
+    level: INFO

@@ -15,6 +15,10 @@
 | [Cache and streaming](cache-and-streaming.md) | Объяснение + правила | Актуален | Cache Components, Suspense, tags и инвалидация           |
 | [Testing guidelines](testing-guidelines.md)   | Справочник           | Актуален | Имена файлов, Vitest projects, Playwright и Storybook    |
 | [Deployment](deployment.md)                   | How-to + ограничения | Актуален | Standalone build, Docker, GitLab CI и probes             |
+| [Docker Compose](docker-compose.md)           | How-to + ограничения | Актуален | Две реплики, Traefik, Valkey и Makefile-команды          |
+| [Observability](observability.md)             | Справочник           | Актуален | Логи, метрики, health/readiness и cache probe            |
+| [Security](security.md)                       | Справочник           | Актуален | Secrets, Docker socket, Valkey и diagnostic route        |
+| [Self-hosting](self-hosting.md)               | Объяснение           | Актуален | Multi-replica ограничения и shared cache                 |
 
 Публичный быстрый старт находится в [`README.md`](../README.md), а правила для coding agents — в
 [`AGENTS.md`](../AGENTS.md). Согласованные design/implementation plans под `docs/superpowers/`

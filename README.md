@@ -18,10 +18,20 @@ The application validates environment variables while loading the Next.js config
 [the environment reference](docs/environment.md) before replacing the safe local values in
 `.env`.
 
+`VALKEY_URL=redis://valkey:6379` is intended for the Compose network. To run the app directly on
+the host, point it at a host-reachable Valkey instance.
+
+## Docker Compose
+
+The development and standalone production topologies run two Next.js replicas behind Traefik with
+one shared ephemeral Valkey cache. See [Docker Compose](docs/docker-compose.md) for the exact
+Makefile commands, environment contract, and shutdown procedure.
+
 ## Current capabilities
 
 - Next.js 16 App Router, React 19, TypeScript 7, and Tailwind CSS 4.
-- Cache Components enabled; the React Compiler is enabled only for production builds.
+- Cache Components enabled with shared Valkey storage for ordinary `'use cache'`; the React
+  Compiler is enabled only for production builds.
 - npm workspaces for `@repo/core` and `@repo/api`.
 - Base UI/shadcn-style primitives and typed TanStack Form composition in `@repo/core`.
 - OpenAPI 3.2 source contract, Redocly validation, and Kubb-generated TypeScript models, fetch
@@ -89,6 +99,10 @@ application paths.
 npm run verify:fast # formatting, lint, TypeScript
 npm run test        # all Vitest projects
 npm run test:e2e    # standalone Playwright E2E
+npm run test:cache:integration
+npm run test:cache:matrix:dev
+npm run test:cache:matrix:prod
+npm run verify:cache:compose
 npm run verify      # full local gate
 ```
 
@@ -120,5 +134,7 @@ Start with the [documentation index](docs/README.md). The main operational refer
 - [BFF proxy](docs/bff-proxy.md)
 - [Mock mode](docs/mock-mode.md)
 - [Cache and streaming](docs/cache-and-streaming.md)
+- [Docker Compose](docs/docker-compose.md)
+- [Self-hosting](docs/self-hosting.md)
 - [Testing guidelines](docs/testing-guidelines.md)
 - [Deployment](docs/deployment.md)

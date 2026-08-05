@@ -26,9 +26,11 @@
 
 ### Зафиксированные ограничения
 
-- В `next.config.ts` включён `cacheComponents: true`. Директива `'use cache: private'` при этом
-  остаётся экспериментальной возможностью Next.js и не должна становиться production default без
-  отдельной оценки.
+- В `next.config.ts` включены `cacheComponents: true` и `cacheHandlers.default`: обычный
+  `'use cache'` использует Valkey между репликами. Это не настраивает singular `cacheHandler`,
+  `'use cache: private'`, `'use cache: remote'` или именованные handlers. Во время production
+  build handler не обращается к Valkey. Private cache остаётся экспериментальной возможностью и
+  не должна становиться production default без отдельной оценки.
 - React Compiler включается только в production через `reactCompiler: isProd`, а не во всех
   режимах.
 - Канонический контракт использует OpenAPI 3.2. Redocly bundle передаётся Hey API без понижения и
@@ -38,20 +40,19 @@
   process направляет импорт `typescript` на alias `typescript-codegen@6.0.3`; удаляйте shim лишь
   после успешного native TypeScript 7 probe и полного parity suite.
 - Контейнерный контур задан в `Dockerfile`, `.dockerignore`, `compose*.yaml` и `Makefile`: dev
-  использует target `development`, production — non-root standalone runner, а builder получает
-  `SENTRY_AUTH_TOKEN` через BuildKit secret. Конфигурационного блокера больше нет; development
-  smoke подтвердил startup, health checks и маршрутизацию к двум репликам. Hot update после
-  изменения исходника, production image и production startup ещё не проверены, поэтому не
-  объявляйте контур production-ready. Базовый Compose пока также передаёт `SENTRY_AUTH_TOKEN` в
-  runtime environment; подробности — в `docs/deployment.md`.
+  использует target `development`, production — non-root standalone runner, обе схемы запускают
+  две реплики с общим эфемерным Valkey. Builder получает `SENTRY_AUTH_TOKEN` через BuildKit secret,
+  но базовый Compose пока также передаёт token в runtime environment. Не объявляйте контур
+  production-ready только по нормализации config: актуальные проверки и оставшиеся риски
+  зафиксированы в `docs/deployment.md`.
 
 ## Проект и runtime
 
 - Это ESM-монорепозиторий на npm workspaces: Next.js 16 App Router, React 19, TypeScript 7,
   Tailwind CSS 4.
 - Корневое приложение собирается в Next.js standalone output и рассчитано на Node.js 24.
-- Основные инфраструктурные библиотеки: TanStack Query, Zod, nuqs, Sentry, OpenTelemetry, Adze и
-  Prometheus `prom-client`.
+- Основные инфраструктурные библиотеки: TanStack Query, Zod, nuqs, Sentry, OpenTelemetry, Adze,
+  Prometheus `prom-client` и Valkey client `iovalkey`.
 - UI-примитивы основаны на Base UI и shadcn-подходе; не подменяйте их Radix-компонентами без
   явного требования.
 - Для прямых dependencies сохраняйте exact versions согласно `.npmrc`; диапазоны оставляйте там,
@@ -67,6 +68,7 @@
 - `src/constants/`, `src/hooks/`, `src/types/`, `src/utils/` — shared-слой без привязки к отдельному
   бизнес-модулю. Новые shared-каталоги создавайте только вместе с реальным кодом.
 - `src/env/` — типизированные и валидируемые переменные окружения.
+- `src/cache/` — server-only обработчик общего Cache Components storage в Valkey.
 - `src/mock-mode/` — выбор generated API mocks и сценария во время выполнения.
 - `src/proxy/` и корневой `proxy.ts` — pipeline Next.js proxy/BFF и служебные request headers.
 - `src/observability/` и `instrumentation*.ts` — логирование, метрики, Sentry и OTEL.
@@ -79,7 +81,9 @@
 - `docs/bff-proxy.md` — выбор API base URL в server/dev/prod.
 - `docs/api-codegen.md` — правила OpenAPI и генерации клиента.
 - `docs/cache-and-streaming.md` — действующие правила Cache Components и streaming.
-- `docs/environment.md`, `docs/deployment.md`, `docs/mock-mode.md`,
+- `docs/docker-compose.md`, `docs/self-hosting.md`, `docs/deployment.md` — локальный контейнерный
+  контур, несколько реплик и выпуск.
+- `docs/environment.md`, `docs/mock-mode.md`, `docs/observability.md`,
   `docs/testing-guidelines.md` — профильные operational references.
 
 ## Архитектурные границы
@@ -170,9 +174,11 @@
 - `next.config.ts` импортирует валидированные env и создаёт BFF rewrite; build/dev могут падать до
   компиляции при отсутствующих переменных. Для локального запуска сначала создайте `.env` из
   `.env.example`.
-- Cache Components включены через `cacheComponents: true`. Перед использованием `use cache`,
-  `cacheLife`, `cacheTag`, `updateTag` или `revalidateTag` сверяйтесь с
-  `docs/cache-and-streaming.md` и актуальной документацией Next.js.
+- Cache Components включены через `cacheComponents: true`; `cacheHandlers.default` направляет
+  обычный `'use cache'` в `src/cache/valkey-handler.mjs`. Не считайте это настройкой private,
+  remote или именованного cache scope. Перед использованием `use cache`, `cacheLife`, `cacheTag`,
+  `updateTag` или `revalidateTag` сверяйтесь с `docs/cache-and-streaming.md` и актуальной
+  документацией Next.js.
 - `output: 'standalone'` необходим текущей контейнерной схеме; не выключайте его без изменения
   deploy pipeline.
 - Static image imports отключены, SVG разрешены через image config. Учитывайте это при выборе
@@ -190,6 +196,11 @@
 - В приложении потребляйте env через `serverEnvironment`/`clientEnvironment`. Прямой
   `process.env` оставляйте только для framework bootstrap и уже существующих build/runtime checks.
 - Никогда не переносите server secrets в client schema и не коммитьте `.env`.
+- `VALKEY_URL` и `VALKEY_CACHE_NAMESPACE` обязательны. URL может использовать `redis:` или
+  `rediss:`; credentials остаются только на server. Версионируйте namespace при несовместимом
+  изменении формата, чтобы старые записи не читались новым release.
+- `CACHE_PROBE_ENABLED` по умолчанию выключен. Probe разрешён только при `CI=true`, не в `PROD` и
+  с `CACHE_PROBE_TOKEN` длиной не меньше 32 символов; не включайте его как production endpoint.
 - Выбор base URL в `packages/api/client-config.ts`:
     - server всегда использует `BACK_INTERNAL_URL`;
     - browser в development использует относительный `NEXT_PUBLIC_BFF_PATH` и Next rewrite;
@@ -256,6 +267,10 @@
   `npm run dev`; `PLAYWRIGHT_SERVER_MODE=standalone` или `CI=true` переключает его на уже собранный
   `npm run prod`. Самодостаточный `npm run test:e2e:standalone` сначала создаёт свежую сборку.
 - Текущий GitLab pipeline запускает Vitest, но не Playwright E2E и не production build.
+- `npm run test:cache:integration` поднимает временный Valkey и проверяет handler. Команды
+  `test:cache:matrix:dev` и `test:cache:matrix:prod` проверяют общий кэш и invalidation между двумя
+  Compose-репликами, а `verify:cache:compose` — ограничения topology и failure cases. Эти
+  Docker-проверки не входят в `npm run test` или `npm run verify`.
 - Playwright использует `FRONT_PORT` с default `3000`; это отдельная переменная от server `PORT`.
 - При исправлении bug сначала добавьте или обновите минимальный regression test, затем проверьте,
   что он воспроизводит проблему и проходит с исправлением.
@@ -268,7 +283,9 @@
   инициализируется только в production.
 - Не логируйте credentials, cookies, authorization headers, персональные данные или полный env.
 - Prometheus использует общий registry из `src/observability/metrics`; endpoint — `/api/metrics`.
-  Health и readiness endpoints — `/api/health` и `/api/ready`.
+  Cache handler публикует counters операций и invalidation, а также histogram длительности.
+  Registry локален для процесса, поэтому в multi-replica окружении метрики собирайте с каждой
+  реплики. Health и readiness endpoints — `/api/health` и `/api/ready`.
 
 ## Основные команды
 
@@ -294,6 +311,10 @@ npm run test
 npm run test:unit
 npm run test:component
 npm run test:coverage
+npm run test:cache:integration
+npm run test:cache:matrix:dev
+npm run test:cache:matrix:prod
+npm run verify:cache:compose
 npm run test:e2e
 npm run test:e2e:standalone
 npx vitest run src/mock-mode/runtime.unit.test.ts --project unit
@@ -314,6 +335,8 @@ npm --workspace @repo/api run typecheck:generated
 # Docker Compose
 make compose-config-dev
 make compose-config-prod
+make compose-build-dev
+make compose-build-prod
 make compose-dev
 make compose-prod
 ```
@@ -329,7 +352,8 @@ make compose-prod
 5. Запустите formatter check и самые узкие релевантные tests.
 6. Для TypeScript/React изменений дополнительно запустите `npm run tsc` и `npm run lint`.
 7. Для route, Next.js config, env или proxy изменений выполните `npm run build`, если окружение
-   позволяет. Для Docker/Compose дополнительно проверьте соответствующий `make compose-config-*`,
+   позволяет. Для cache handler запустите узкие Unit tests, `test:cache:integration` и нужную cache
+   matrix. Для Docker/Compose дополнительно проверьте соответствующий `make compose-config-*`,
    image build и smoke test изменённого режима.
 8. Для UI проверьте component tests и, когда меняется реальное browser behavior, Playwright или
    ручной browser smoke test.

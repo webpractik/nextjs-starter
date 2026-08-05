@@ -1,31 +1,44 @@
-# Cache Components и streaming
+# Кеширование и streaming
 
-> Тип: объяснение + правила · Статус: включено · Источник истины: `next.config.ts`, generated cache
-> tags и официальная документация Next.js
+> Тип: руководство · Статус: актуально · Источники истины:
+> [`next.config.ts`](../next.config.ts),
+> [`src/cache/valkey/handler.ts`](../src/cache/valkey/handler.ts) и
+> [`@repo/api/cache-tags`](../packages/api/cache-tags.ts)
 
-`next.config.ts` содержит `cacheComponents: true`. Это opt-in режим Next.js 16, который объединяет
-Cache Components, Partial Prerendering и dynamic I/O behavior. Проект при этом сохраняет TanStack
-Query provider: server caching и client server-state являются двумя доступными инструментами, а не
-взаимоисключающими архитектурами.
+Эта страница помогает выбрать способ загрузки данных, настроить streaming и правильно обновлять
+кеш после мутаций.
 
-## Выбор data layer
+В проекте включён `cacheComponents: true`. В Next.js 16 этот флаг объединяет Cache Components,
+Partial Prerendering и dynamic I/O. Данные без явного кеширования загружаются во время запроса, а
+`'use cache'` позволяет кешировать выбранные функции и компоненты.
 
-| Сценарий                                   | Предпочтительный старт                          |
-| ------------------------------------------ | ----------------------------------------------- |
-| Данные нужны только для server-rendered UI | Async Server Component                          |
-| Общие данные выгодно переиспользовать      | `'use cache'` + `cacheLife`/`cacheTag`          |
-| Request-specific данные                    | Dynamic Server Component внутри `<Suspense>`    |
-| Client polling/realtime/частые refetch     | Generated TanStack Query hook                   |
-| Сложный optimistic client workflow         | React Query mutation или Server Action по месту |
-| Мутация формы с server authorization       | Server Action с повторной auth/validation       |
+В runtime обычный `'use cache'` подключён через `cacheHandlers.default` к Valkey, поэтому
+реплики с одинаковыми `VALKEY_URL` и `VALKEY_CACHE_NAMESPACE` видят общие записи и маркеры
+тегов. Во время production build handler не читает и не записывает Valkey.
 
-Не переносите data fetching на client только из-за наличия React Query. Но и не удаляйте client
-cache из интерактивного workflow только потому, что Cache Components включены.
+TanStack Query тоже остаётся частью проекта. Серверный кеш и клиентский кеш решают разные задачи и
+могут использоваться вместе.
 
-## Streaming
+## Что выбрать
 
-Async Server Components можно разделять независимыми Suspense boundaries. Route-level
-`loading.tsx` даёт fallback для segment; локальный `<Suspense>` позволяет стримить блоки независимо.
+| Задача                                     | С чего начать                                     |
+| ------------------------------------------ | ------------------------------------------------- |
+| Данные нужны только для серверного HTML    | Async Server Component                            |
+| Результат можно безопасно переиспользовать | `'use cache'` + `cacheLife` + `cacheTag`          |
+| Данные зависят от запроса                  | Dynamic Server Component внутри `<Suspense>`      |
+| Нужны polling, realtime или частый refetch | TanStack Query factory из `@repo/api/query`       |
+| Нужен сложный optimistic workflow          | React Query mutation или подходящая Server Action |
+| Форма меняет данные с проверкой прав       | Server Action с повторной auth и validation       |
+
+Не переносите загрузку данных в браузер только потому, что в проекте есть React Query. И наоборот:
+не удаляйте клиентский кеш из интерактивного сценария только из-за включённых Cache Components.
+
+## Как работает streaming
+
+Async Server Components можно разделять независимыми `Suspense`-границами:
+
+- `loading.tsx` показывает fallback для всего route segment;
+- локальный `<Suspense>` позволяет отправлять отдельный блок сразу после его готовности.
 
 ```tsx
 import { Suspense } from 'react'
@@ -39,22 +52,22 @@ export default function PetPage() {
 }
 ```
 
-Не делайте последовательный waterfall без причины. Независимые Promises стартуйте до первого
-`await` либо разносите по соседним async components. Fallback должен сохранять приблизительный
-размер итогового блока, чтобы уменьшать layout shift.
+Независимые запросы запускайте до первого `await` или разносите по соседним async-компонентам.
+Так страница не превращается в последовательный waterfall. Размер fallback должен быть близок к
+размеру готового блока, чтобы уменьшить layout shift.
 
-Для ошибок route rendering используйте ближайший `error.tsx`; `global-error.tsx` — последняя
-граница. Компонентная Sentry `ErrorBoundary` полезна для client subtree, но не заменяет segment
-error handling и не ловит произвольные ошибки event handlers.
+Ошибки рендеринга обрабатывает ближайший `error.tsx`; `global-error.tsx` остаётся последней
+границей. Клиентский Sentry `ErrorBoundary` полезен для отдельного subtree, но не заменяет
+segment-level error handling и не перехватывает произвольные ошибки event handlers.
 
-## `'use cache'`
+## Как добавить `'use cache'`
 
-Директива может применяться к async function, component или всему файлу. Serializable arguments и
-captured values становятся частью cache key.
+Директиву можно поставить в async-функции, компоненте или в начале файла. Аргументы и захваченные
+serializable-значения входят в cache key.
 
 ```tsx
-import { getPetById } from '@repo/api/codegen/clients/petsController/getPetById'
-import { pets } from '@repo/api/codegen/tags'
+import { getPetById } from '@repo/api'
+import { pets } from '@repo/api/cache-tags'
 import { cacheLife, cacheTag } from 'next/cache'
 
 export async function loadPet(petId: string) {
@@ -62,125 +75,164 @@ export async function loadPet(petId: string) {
     cacheLife('minutes')
     cacheTag(pets.petsTag, pets.petTag({ petId }))
 
-    return getPetById({ petId })
+    const { data } = await getPetById({ path: { petId }, throwOnError: true })
+    return data
 }
 ```
 
-Правила:
+Перед добавлением кеша проверьте:
 
-- явно выбирайте cache lifetime, соответствующий допустимой stale-границе;
-- оценивайте cardinality arguments: каждый набор значений создаёт отдельный ключ;
-- не передавайте secrets и session tokens как ключ shared cache;
-- не кешируйте personalized result в общей области только ради производительности;
-- измеряйте hit rate и память, особенно при self-hosting и нескольких replicas.
+1. Как долго результат может оставаться устаревшим? Укажите подходящий `cacheLife`.
+2. Сколько разных наборов аргументов возможно? Каждый набор создаёт отдельный ключ.
+3. Нет ли в ключе secret, session token или другого чувствительного значения?
+4. Не станет ли персональный результат общим для разных пользователей?
+5. Как изменятся hit rate и расход памяти, особенно при self-hosting?
 
-`cacheLife` применяется только внутри cache scope. Точные built-in profiles и значения могут
-меняться между версиями Next.js; не копируйте числовые предположения из старых гайдов — сверяйте
-[актуальную API reference](https://nextjs.org/docs/app/api-reference/functions/cacheLife).
+`cacheLife` работает только внутри cache scope. Встроенные профили и их значения могут меняться
+между версиями Next.js, поэтому сверяйтесь с
+[актуальным справочником](https://nextjs.org/docs/app/api-reference/functions/cacheLife).
 
-## Runtime APIs и `'use cache: private'`
+## Данные текущего запроса и `'use cache: private'`
 
-Обычный `'use cache'` не может напрямую читать `cookies()`, `headers()` или `searchParams`. Читайте
-их снаружи и передавайте только минимальное безопасное значение аргументом либо оставляйте
-компонент dynamic.
+Обычный `'use cache'` не может напрямую читать `cookies()`, `headers()` или `searchParams`.
+Предпочтительный вариант — прочитать их снаружи и передать в кешируемую функцию только минимальное
+безопасное значение. Если это не подходит, оставьте компонент dynamic.
 
-`'use cache: private'` — экспериментальная возможность. В актуальном Next.js результат не
-хранится в server cache: scope выполняется при каждом server render, а результат кешируется только
-в памяти browser и не переживает reload. Она разрешает request APIs, но недоступна в Route
-Handlers. Это не «приватный server cache на пользователя» и не production default.
+`'use cache: private'` — экспериментальная возможность, не рекомендуемая для production:
 
-Перед применением обязательно сверяйтесь с
-[официальным описанием](https://nextjs.org/docs/app/api-reference/directives/use-cache-private) и
-проверяйте конкретную версию Next.js.
+- разрешает `cookies()`, `headers()` и `searchParams` внутри cache scope;
+- выполняет функцию при каждом server render;
+- не сохраняет результат в server cache;
+- хранит результат только в памяти браузера и теряет его после reload;
+- недоступна в Route Handlers;
+- не использует настраиваемые cache handlers.
 
-## Cache tags
+Это не персональный server cache на пользователя. Перед применением проверьте поведение в
+[документации вашей версии Next.js](https://nextjs.org/docs/app/api-reference/directives/use-cache-private).
 
-Локальный Kubb plugin генерирует namespace по OpenAPI tag. Текущий контракт создаёт:
+## Какой handler используется
+
+| Scope или конфигурация | Текущий контракт                                                    |
+| ---------------------- | ------------------------------------------------------------------- |
+| `'use cache'`          | `cacheHandlers.default`: общий Valkey handler                       |
+| `'use cache: remote'`  | `cacheHandlers.remote` не задан: остаётся in-memory handler Next.js |
+| `'use cache: private'` | Не использует custom handlers и не хранит server entry              |
+| `'use cache: <name>'`  | Именованные handlers не настроены                                   |
+| `cacheHandler`         | Singular-контракт для ISR и Route Handler responses; не задан       |
+
+Наличие Valkey для `default` не делает `'use cache: remote'`, named scopes или общий
+server cache автоматически распределёнными.
+
+## Теги кеша
+
+Post-generator создаёт cache tags из OpenAPI tags:
 
 ```ts
-import { pets } from '@repo/api/codegen/tags'
+import { pets } from '@repo/api/cache-tags'
 
 pets.petsTag // 'pets'
 pets.petTag({ petId: 'pet_123' }) // 'pets:petId:pet_123'
 ```
 
-Используйте эти helpers и на read-, и на write-стороне. Строковые литералы легко расходятся после
-изменения contract parameters.
+Используйте generated helpers и при чтении, и при записи. Не дублируйте tags строками: после
+изменения параметров контракта такие строки легко расходятся.
 
-### `updateTag` и `revalidateTag`
+### Как обновить кеш
 
-| API                              | Где разрешён                    | Семантика                                  |
-| -------------------------------- | ------------------------------- | ------------------------------------------ |
-| `updateTag(tag)`                 | Только Server Action            | Немедленное expire для read-your-writes    |
-| `revalidateTag(tag, 'max')`      | Server Function и Route Handler | Stale-while-revalidate при следующем visit |
-| `revalidateTag(tag)` без profile | Не использовать                 | Deprecated blocking behavior               |
+| API                              | Где использовать                  | Что происходит                                          |
+| -------------------------------- | --------------------------------- | ------------------------------------------------------- |
+| `updateTag(tag)`                 | Только Server Action              | Кеш истекает сразу; следующий запрос ждёт свежие данные |
+| `revalidateTag(tag, 'max')`      | Server Function или Route Handler | Следующий визит получает stale-while-revalidate         |
+| `revalidateTag(tag)` без profile | Не использовать                   | Устаревшее blocking-поведение                           |
 
-Generated functions `pets.revalidatePet()` и `pets.revalidatePets()` внутри вызывают `updateTag`.
-Несмотря на имя `revalidate*`, они допустимы только из Server Action.
+Generated functions `pets.revalidatePet()` и `pets.revalidatePets()` вызывают `updateTag`.
+Несмотря на имя, они работают только внутри Server Action.
 
 ```ts
 'use server'
 
-import { updatePet } from '@repo/api/codegen/clients/petsController/updatePet'
-import { pets } from '@repo/api/codegen/tags'
+import { updatePet } from '@repo/api'
+import { pets } from '@repo/api/cache-tags'
 
 export async function markPetSold(petId: string) {
-    // Повторно проверьте authentication, authorization и входные данные здесь.
-    await updatePet({ petId, data: { status: 'sold' } })
+    // Повторно проверьте authentication, authorization и входные данные.
+    await updatePet({
+        body: { status: 'sold' },
+        path: { petId },
+        throwOnError: true,
+    })
     await pets.revalidatePet({ petId })
     await pets.revalidatePets()
 }
 ```
 
-Для webhook/Route Handler используйте `revalidateTag(pets.petsTag, 'max')` напрямую: generated
-wrapper на `updateTag` в этом контексте вызовет runtime error.
+В webhook или Route Handler вызывайте `revalidateTag(pets.petsTag, 'max')` напрямую. Generated
+wrapper на `updateTag` в этом контексте завершится runtime-ошибкой.
 
-Server Actions доступны по network request и должны рассматриваться как публичные mutation
-endpoints: проверяйте auth и permissions внутри каждой action, даже если UI скрывает кнопку.
+Server Actions доступны по сетевому запросу. Проверяйте auth, permissions и входные данные внутри
+каждой action, даже если кнопка скрыта в интерфейсе.
 
-## React Query остаётся поддержанным
+## Когда оставить React Query
 
-Root layout подключает `QueryProvider` и `ReactQueryStreamedHydration`. Generated hooks подходят
-для client-only данных, polling, realtime-driven refetch и сложных optimistic workflows.
+Root layout подключает `QueryProvider` и `ReactQueryStreamedHydration`. Hey API генерирует Query
+factories, которые подходят для client-only данных, polling и optimistic workflows.
 
 ```tsx
 'use client'
 
-import { useGetPetById } from '@repo/api/codegen/hooks/petsController/useGetPetById'
+import { getPetByIdOptions } from '@repo/api/query'
+import { useQuery } from '@tanstack/react-query'
 
 export function PetStatus({ petId }: { petId: string }) {
-    const query = useGetPetById({ petId })
+    const query = useQuery(getPetByIdOptions({ path: { petId } }))
     return <span>{query.data?.status}</span>
 }
 ```
 
-Для данных, уже полностью отрендеренных Server Component и не требующих client refetch, не
-создавайте второй источник истины в Query cache без необходимости.
+Если Server Component уже полностью отрисовал данные и браузеру не нужен refetch, не создавайте
+для них второй источник истины в Query cache.
 
-## Self-hosting и несколько replicas
+## Ограничения shared cache
 
-Обычный runtime cache по умолчанию находится в памяти процесса. В standalone/Docker deployment
-каждая replica имеет собственный cache; рестарты очищают его. Проект не настраивает общий
-`cacheHandlers` backend. Не обещайте cross-replica consistency без отдельного shared cache design.
+- Весь binary envelope записи — body и metadata — ограничен
+  `VALKEY_CACHE_MAX_ENTRY_BYTES` (default 1 MiB). Большая запись не кешируется.
+- Физический TTL entry key ограничен `VALKEY_CACHE_MAX_TTL_SECONDS` (default 24 часа).
+  Metadata `expire` не меняется, поэтому меньший cap может дать ранний miss, но не
+  продлевает логический lifetime.
+- Записи и tag markers хранятся отдельными hashed keys. При invalidation handler атомарно
+  обновляет markers, а на чтении проверяет явные и soft tags. Он не перебирает и не
+  удаляет сами entries.
+- Ошибка чтения даёт cache miss, а ошибка записи оставляет результат незакешированным.
+  Ошибка tag invalidation пробрасывается вызывающему коду.
+- Ожидание pending `set` для того же ключа работает только внутри одного процесса. В
+  handler нет distributed lock, поэтому одновременные misses на разных репликах могут вызвать
+  повторное вычисление.
 
-## Чеклист
+Compose запускает Valkey без RDB, AOF и persistent volume: рестарт даёт полностью
+холодный кеш, а eviction удаляет отдельные entries или markers. Операционные детали и границы
+проверки описаны в
+[документе о self-hosting](self-hosting.md).
 
-1. Определите, нужен ли data результат на client после hydration.
-2. Для dynamic блока добавьте осмысленный Suspense/loading fallback.
-3. Для `'use cache'` задайте lifetime и проверьте cardinality/чувствительность ключа.
-4. Используйте generated tags на обеих сторонах.
-5. `updateTag` вызывайте только из Server Action; для Route Handler используйте
-   `revalidateTag(tag, 'max')`.
-6. Проверяйте auth/authorization/validation внутри каждой Server Action.
-7. Тестируйте production build: cache и streaming behavior в dev отличаются.
-8. Для нескольких replicas отдельно решите вопрос shared cache и invalidation.
+## Чеклист перед merge
+
+1. Выбран правильный слой: Server Component, Cache Component или React Query.
+2. Для dynamic-блока есть понятный `Suspense`-fallback.
+3. Для `'use cache'` заданы lifetime и безопасный cache key.
+4. Для чтения и invalidation используются generated tags.
+5. `updateTag` вызывается только из Server Action.
+6. В каждой Server Action повторно проверяются auth, permissions и входные данные.
+7. Поведение проверено на production build: в development кеш и streaming могут отличаться.
+8. Выбранный scope действительно подключён к нужному shared или per-process handler.
 
 ## Официальные источники
 
 - [Cache Components](https://nextjs.org/docs/app/api-reference/config/next-config-js/cacheComponents)
 - [`use cache`](https://nextjs.org/docs/app/api-reference/directives/use-cache)
 - [`use cache: private`](https://nextjs.org/docs/app/api-reference/directives/use-cache-private)
+- [`use cache: remote`](https://nextjs.org/docs/app/api-reference/directives/use-cache-remote)
 - [`cacheLife`](https://nextjs.org/docs/app/api-reference/functions/cacheLife)
+- [`cacheHandler`](https://nextjs.org/docs/app/api-reference/config/next-config-js/incrementalCacheHandlerPath)
+- [`cacheHandlers`](https://nextjs.org/docs/app/api-reference/config/next-config-js/cacheHandlers)
 - [`updateTag`](https://nextjs.org/docs/app/api-reference/functions/updateTag)
 - [`revalidateTag`](https://nextjs.org/docs/app/api-reference/functions/revalidateTag)
-- [Mutating data and Server Actions](https://nextjs.org/docs/app/getting-started/mutating-data)
+- [Мутации и Server Actions](https://nextjs.org/docs/app/getting-started/mutating-data)

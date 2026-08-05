@@ -1,138 +1,161 @@
-# Deployment
+# Развёртывание
 
-> Тип: how-to + ограничения · Статус: локальный standalone flow работает; Docker/CI deploy требуют
-> доработки · Источник истины: `next.config.ts`, `Dockerfile`, `.gitlab-ci.yml` и Route Handlers
+> Назначение: быстро понять, какой способ запуска уже проверен и что ещё нужно сделать перед
+> production.
+>
+> Статус: конфигурация Compose, Valkey integration и cache matrix обоих режимов проверены
+> локально; gateway/browser smoke и GitLab deploy остаются отдельными задачами.
 
-Next.js настроен с `output: 'standalone'` и рассчитан на Node.js 24. Репозиторий умеет собрать
-production output локально, но текущий Dockerfile и GitLab pipeline не образуют готовый end-to-end
-deployment.
+Приложение собирается как Next.js standalone-сервер для Node.js 24. Поддерживаемый локальный путь —
+`npm run build` и `npm run prod`. Compose описывает две Next.js-реплики, общий эфемерный Valkey и
+Traefik gateway; development использует source mounts, production — один standalone image и
+non-root runner.
 
-## Локальная production-проверка
+## Что можно использовать сейчас
 
-```bash
-npm ci
-cp .env.example .env
-npm run build
-npm run prod
-```
+| Задача                        | Текущий статус                  | Куда перейти                             |
+| ----------------------------- | ------------------------------- | ---------------------------------------- |
+| Собрать production            | Build и Compose image проверены | [Запуск standalone](run-standalone.md)   |
+| Проверить dev/prod config     | Проверено с `.env.example`      | [Docker Compose](docker-compose.md)      |
+| Проверить Valkey handler      | Integration: 4 tests            | `npm run test:cache:integration`         |
+| Проверить две Next.js-реплики | Dev/prod cache matrix проверен  | Cache matrix из Docker Compose guide     |
+| Развернуть из GitLab CI       | Не настроено                    | `.gitlab-ci.yml`, `.gitlab/deploy.yaml`  |
+| Проверить готовность релиза   | Ручной checklist                | [Release и rollback](release-runbook.md) |
 
-Проверьте:
+Для локальной standalone-проверки используйте [отдельную пошаговую инструкцию](run-standalone.md),
+а для Compose и cache matrix — [локальное руководство](docker-compose.md).
 
-```bash
-curl --fail http://localhost:3000/api/health
-curl --fail http://localhost:3000/api/ready
-curl --fail http://localhost:3000/api/metrics
-```
+## Docker и Compose
 
-`npm run prod` использует `next start`. Container runtime запускает минимальный
-`.next/standalone/server.js`; это разные entrypoints одного build output.
+Dockerfile содержит отдельные targets:
 
-## Dockerfile
+| Target        | Назначение                                                   |
+| ------------- | ------------------------------------------------------------ |
+| `development` | `next dev` с исходниками                                     |
+| `builder`     | Production build с обязательными build-time переменными      |
+| `runner`      | Минимальный standalone runtime от пользователя без root-прав |
 
-Задуманный multi-stage flow:
+`.dockerignore` исключает локальные env-файлы, зависимости, результаты сборки и test artifacts.
+`SENTRY_AUTH_TOKEN` попадает в builder через BuildKit secret, а не через Docker build argument.
+Build загружает cache handler для валидации, но handler работает в build mode без обращения к
+Valkey. Реальный URL и общий namespace передаются только запущенным репликам.
 
-1. `deps` на `node:24-alpine` выполняет `npm ci` по workspace manifests.
-2. `builder` копирует source, получает build args и выполняет `npm run build`.
-3. `runner` копирует standalone server, static assets и `public/`, затем работает непривилегированным
-   пользователем `nextjs` на порту `3000`.
+Compose-файлы описывают две реплики `nextjs` и общий Valkey за одним Traefik gateway. Gateway
+публикует host-порт, а реплики и Valkey доступны только внутри Docker network. `compose.dev.yaml`
+выбирает development target и локальные mounts; `compose.prod.yaml` — standalone runner без
+исходников. Valkey не публикует host port, не имеет persistent volume, запускается без RDB/AOF и с
+`volatile-ttl` eviction policy.
 
-### Текущие блокеры
+### Что проверено для текущей реализации
 
-Docker image сейчас нельзя считать воспроизводимо собираемым:
+Проверка 2 августа 2026 года подтвердила:
 
-- `deps` выполняет `COPY packages/design-tokens/package.json`, но workspace удалён;
-- builder передаёт только часть variables, обязательных для импортируемых env schemas;
-- `NEXT_PUBLIC_BFF_PATH`, `BACK_INTERNAL_URL`, `APP_ENV`, `FRONT_HOST`, `PORT`, `CI` и server
-  `SENTRY_DSN` среди прочего не объявлены как build args;
-- `.dockerignore` отсутствует, поэтому локальные `.env`, build/test artifacts и другие лишние файлы
-  могут попасть в build context; случайно скопированный `.env` способен скрыть проблему и раскрыть
-  secrets в layers/context.
+- нормализацию development и production Compose configs с актуальным `.env.example`;
+- `npm run test:cache:integration`: четыре tests handler против временного Valkey, включая shared
+  entries, immediate/profiled/soft-tag invalidation, удаление повреждённой entry и восстановление
+  после outage;
+- cleanup изолированной test topology после integration run;
+- `npm run build` и production Compose build после подключения Valkey handler;
+- startup двух healthy Next.js-реплик и healthy Valkey в development и production;
+- полный development и production cache matrix: shared hit между репликами, immediate
+  invalidation, recreation одной Next.js replica, cold cache после recreation Valkey, fresh
+  rendering при outage и явный `503` test invalidation;
+- cache metrics на обеих репликах без namespace, probe key или payload в labels/output;
+- `npm run verify:cache:compose`, включая missing-env и unhealthy-Valkey startup failures.
 
-Исправление Dockerfile/.dockerignore является отдельной infrastructure задачей. Не обходите
-валидацию копированием реального `.env` в image и не передавайте secrets как публичные build args.
+Matrix обращается к application containers напрямую и не проверяет Traefik, HMR/Fast Refresh,
+browser console или TLS. Для production smoke используйте `localhost` или реальный TLS ingress:
+на HTTP-адресе nip.io CSP `upgrade-insecure-requests` повышает asset-запросы до HTTPS, а локальный
+Traefik TLS не завершает.
 
-### Build и runtime variables
+Matrix harness сам собирает свежий image выбранного режима, создаёт отдельный Compose project,
+использует случайные namespace/token и удаляет containers, network и anonymous volumes в `finally`.
 
-Public `NEXT_PUBLIC_*` значения должны быть корректны на этапе build. Server variables нужны
-builder из-за текущей config validation и повторно задаются контейнеру на runtime для
-instrumentation/API calls.
+### Rollback shared cache
 
-После исправления Dockerfile runtime запуск должен передавать как минимум полный server schema
-contract из [environment.md](environment.md). Не полагайтесь на builder `ENV`: final stage их не
-наследует.
+Valkey хранит только производный cache, поэтому миграция данных при rollback не нужна:
 
-Sentry auth token нужен для source map upload во время production build и не должен оставаться в
-final image. Предпочтителен BuildKit secret или CI secret mount, а не persisted `ARG`/`ENV` layer.
+1. Верните предыдущий immutable application image либо удалите только
+   `cacheHandlers.default` из `next.config.ts` и пересоберите все реплики одним artifact.
+2. Переключите обе реплики одновременно: смешанный release с разными cache contracts не должен
+   использовать один namespace.
+3. Проверьте fresh rendering, health/readiness и application latency. In-memory default handler
+   снова будет независимым в каждом процессе.
+4. Только после остановки всех реплик, использующих Valkey handler, удалите service. Текущая server
+   schema всё ещё требует `VALKEY_URL` и `VALKEY_CACHE_NAMESPACE`: сохраняйте валидные значения,
+   пока тот же artifact не удалит эти требования и Compose dependency. Старые keys можно не
+   очищать: они исчезнут по TTL или вместе с ephemeral container.
+5. Для отката только несовместимого cache format верните предыдущий image вместе с его namespace;
+   смена namespace всегда означает cold cache и требует запаса source capacity.
+
+Остановить локальную Compose topology можно командой `make compose-down`; изолированные integration
+и matrix scripts выполняют эквивалентный cleanup автоматически даже после failure.
+
+### Почему это ещё не production-ready
+
+- Valkey — единственная общая точка отказа. Persistence намеренно выключена: restart, recreation и
+  eviction дают cold cache. Поведение `volatile-ttl`, memory overhead и defaults `128mb`/`192m` под
+  реальной нагрузкой не проверены.
+- Compose Valkey не включает authentication или TLS и безопасен только пока `6379` остаётся внутри
+  изолированной network. Для внешнего managed endpoint нужен `rediss:`/credentials и отдельная
+  проверка.
+- `VALKEY_CACHE_NAMESPACE` должен быть одинаковым у всех реплик release. Rotation не удаляет старые
+  keys сразу, а смена namespace создаёт cold cache; нужен operational процесс и capacity allowance.
+- Cache reads и writes деградируют при backend error, но invalidation сообщает ошибку вызывающему
+  коду. `/api/ready` Valkey не проверяет, поэтому healthy replica может работать без shared cache.
+- `SENTRY_AUTH_TOKEN` попадает в builder как BuildKit secret, но базовый Compose-файл пока передаёт
+  token и в runtime environment. Перед production token должен остаться только build secret.
+- Traefik читает Docker socket. Даже read-only mount даёт чувствительный доступ к Docker API;
+  ограничьте доступ к host или используйте отдельный socket proxy.
+- Gateway работает на одном Docker host и не завершает TLS. Две реплики не дают high availability
+  при отказе host или gateway.
+- Prometheus registry остаётся отдельным в каждой реплике, а Valkey server metrics exporter не
+  настроен. Подробности — в [справочнике наблюдаемости](observability.md).
+
+Не копируйте реальный `.env` в image и не обходите env validation фиктивными production values.
+Build-time и runtime contract описан в [environment.md](environment.md).
 
 ## GitLab CI
 
-Текущий pipeline содержит stages:
+Pipeline содержит три stages: `codequality`, `test` и пустой `deploy`.
 
-```text
-codequality → test → deploy
-```
+- `codequality` запускает `npm run verify:fast`.
+- `test` устанавливает Chromium и запускает оба Vitest projects через `npm run test`.
+- Focused `npm run test:cache:integration` и dev/prod cache matrix отдельны и в pipeline не входят.
+- Production build и standalone Playwright E2E в CI не запускаются.
+- `.gitlab/deploy.yaml` содержит только заготовку: deploy job и artifact отсутствуют.
 
-- `codequality` выполняет `npm run verify:fast`.
-- `test` устанавливает Chromium prerequisites и выполняет `npm run test`, то есть оба Vitest
-  projects.
-- Standalone Playwright E2E не запускается.
-- Next.js production build не выполняется, `.next` artifacts не создаются.
-- `.gitlab/deploy.yaml` содержит только закомментированный extension point; deploy job отсутствует.
+Будущий deploy job должен собирать или получать immutable artifact. Подключить его к существующему
+`.next` нельзя: pipeline такой artifact сейчас не создаёт.
 
-Следовательно, deploy job нельзя просто подключить к существующему artifact: он должен отдельно
-построить image/bundle или получить его из нового build stage. Проверяйте также project-level и
-remote GitLab includes — они не видны из репозитория и могут ожидать удалённый `build` job.
+## Служебные endpoints
 
-## Health, readiness и metrics
+Семантика `/api/health`, `/api/ready` и `/api/metrics` описана в
+[справочнике наблюдаемости](observability.md). Для deployment важно, что readiness пока не
+проверяет зависимости, а metrics нужно закрыть на уровне сети или ingress.
 
-| Endpoint       | Текущее поведение                             | Чего не гарантирует                      |
-| -------------- | --------------------------------------------- | ---------------------------------------- |
-| `/api/health`  | Всегда JSON `{ "message": "OK" }`, status 200 | Доступность backend, Sentry или storage  |
-| `/api/ready`   | Всегда JSON `{ "message": "OK" }`, status 200 | Готовность зависимостей и прогрев cache  |
-| `/api/metrics` | Возвращает текущий Prometheus registry        | Authentication и network-level isolation |
+`/api/cache-probe` существует только для изолированных cache matrix: по умолчанию выключен,
+требует `CI=true`, непроизводственный `APP_ENV` и отдельный token. Не включайте его как обычный
+production endpoint.
 
-Используйте health как process/liveness probe. Readiness пока семантически эквивалентна liveness;
-не настраивайте на неё traffic gating с ожиданием upstream checks. Metrics endpoint нужно закрыть
-на ingress/network уровне, если он не должен быть публичным.
+## Перед production release
 
-## Reverse proxy и browser API
-
-В production приложение отправляет `X-Accel-Buffering: no`, чтобы reverse proxy не буферизовал
-streaming responses. Ingress всё равно нужно проверять отдельно: он может переопределить header,
-timeouts или compression.
-
-Browser API transport в production использует `NEXT_PUBLIC_BACK_URL` напрямую. Текущий CSP имеет
-`connect-src 'self' data: wss: ws:` и не добавляет произвольный HTTPS backend/Sentry origin.
-Cross-origin backend может быть заблокирован CSP даже при правильном CORS. До production launch
-нужно либо использовать same-origin URL, либо отдельно согласованно расширить CSP и протестировать
-CORS/cookies. Не ослабляйте CSP до `*`.
-
-## Observability и privacy
-
-- Server runtime регистрирует OTEL и Sentry; client Sentry запускается только в production.
-- `tracesSampleRate` сейчас равен `1` на server и client.
-- Client Sentry настроен с `sendDefaultPii: true`.
-- Prometheus registry process-local; несколько replicas отдают разные snapshots.
-
-Перед production проверьте стоимость sampling, data retention, consent/PII policy и фактическую
-доставку Sentry через CSP. Не утверждайте, что observability готова к требованиям конкретного
-проекта без этой проверки.
-
-## Release checklist
-
-1. Выполнить `npm ci`, полный verification и production build в чистом environment.
-2. Устранить Docker blockers или определить другой поддерживаемый artifact flow.
-3. Зафиксировать build-time public URLs и runtime server secrets/URLs.
-4. Проверить CORS, cookie attributes и CSP для production backend/Sentry origins.
-5. Проверить streaming через реальный ingress.
-6. Решить semantics readiness и доступ к metrics.
-7. Проверить Sentry PII/sampling и source map upload без утечки token.
-8. Добавить настоящий deploy job с rollout/rollback и artifact provenance.
-9. Выполнить smoke tests `/api/health`, `/api/ready`, `/api/metrics` и ключевого page/API flow.
+1. Синхронизируйте deployment env с `.env.example` и проверьте оба Compose config.
+2. Выполните focused Valkey integration и dev/prod cache matrix.
+3. Выполните `npm ci` и `npm run verify` в чистом окружении.
+4. Соберите и smoke-test production image; сохраните immutable artifact с Git SHA или digest.
+5. Проверьте build-time public URLs, runtime secrets, namespace rotation и memory/eviction limits.
+6. Проверьте CORS, cookies, CSP, streaming и telemetry через реальный ingress.
+7. Определите readiness, доступ к metrics, shutdown и правила для нескольких реплик.
+8. Добавьте deploy job и проверяемый rollback на предыдущий artifact.
+9. Выполните [release runbook](release-runbook.md).
 
 ## Связанные документы
 
-- [Environment](environment.md)
+- [Переменные окружения](environment.md)
+- [Docker Compose](docker-compose.md)
 - [BFF proxy](bff-proxy.md)
-- [Cache Components при self-hosting](cache-and-streaming.md)
-- [Testing guidelines](testing-guidelines.md)
+- [Запуск standalone](run-standalone.md)
+- [Self-hosting](self-hosting.md)
+- [Безопасность](security.md)
+- [Наблюдаемость](observability.md)
