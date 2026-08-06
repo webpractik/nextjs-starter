@@ -1,6 +1,0 @@
-export { operations } from './operations'
-export { createPet } from './petsController/createPet'
-export { deletePet } from './petsController/deletePet'
-export { findPetsByStatus } from './petsController/findPetsByStatus'
-export { getPetById } from './petsController/getPetById'
-export { updatePet } from './petsController/updatePet'

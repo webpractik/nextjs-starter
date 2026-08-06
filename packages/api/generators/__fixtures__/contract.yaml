@@ -1,0 +1,93 @@
+openapi: 3.2.0
+info:
+    title: Generator fixture
+    version: 1.0.0
+paths:
+    /pets/search:
+        get:
+            operationId: searchPets
+            summary: Search pets
+            tags: [pets]
+            responses:
+                '302':
+                    description: Redirected search
+                '200':
+                    description: Search result
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/pet-page'
+    /pets:
+        get:
+            operationId: findPetsByStatus
+            summary: Find pets
+            tags: [pets]
+            parameters:
+                - $ref: '#/components/parameters/offset'
+            responses:
+                '200':
+                    description: Pet page
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/pet-page'
+        post:
+            operationId: createPet
+            summary: Create pet
+            tags: [pets]
+            responses:
+                '201':
+                    description: Created pet
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/pet'
+    /pets/{petId}:
+        parameters:
+            - $ref: '#/components/parameters/pet-id'
+        get:
+            operationId: getPetById
+            summary: Get pet
+            tags: [pets]
+            responses:
+                '200':
+                    description: Pet
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/pet'
+        delete:
+            operationId: deletePet
+            summary: Delete pet
+            tags: [pets]
+            responses:
+                '204':
+                    description: Deleted
+components:
+    parameters:
+        pet-id:
+            name: petId
+            in: path
+            required: true
+            schema:
+                type: string
+        offset:
+            name: offset
+            in: query
+            schema:
+                type: integer
+    schemas:
+        pet:
+            type: object
+            required: [id]
+            properties:
+                id:
+                    type: string
+        pet-page:
+            type: object
+            required: [items]
+            properties:
+                items:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/pet'

@@ -2,38 +2,53 @@ import type { MockRoute } from './mock-client'
 
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-describe('mock-client', () => {
+describe('клиент сгенерированных моков', () => {
     afterEach(() => {
+        vi.doUnmock('./codegen/mock-client-routes')
+        vi.doUnmock('./mock-scenarios')
         vi.resetModules()
     })
 
-    it('returns a generated mock response for the first matching route', async () => {
+    it('возвращает ответ первого подходящего маршрута и помечает его как мок', async () => {
         const mockRoutes = [
             {
                 method: 'GET',
                 pattern: /^\/pet\/findByStatus$/,
                 create: () => [{ id: 1, name: 'Rex' }],
             },
+            {
+                method: 'GET',
+                pattern: /^\/pet\/findByStatus$/,
+                create: () => [{ id: 2, name: 'Second match' }],
+            },
         ] satisfies MockRoute[]
 
         vi.doMock('./codegen/mock-client-routes', () => ({ mockRoutes }))
 
         const { getMockResponse } = await import('./mock-client')
-        const response = await getMockResponse<Array<{ id: number; name: string }>>({
+        const response = await getMockResponse({
             method: 'GET',
             url: '/pet/findByStatus?status=available',
         })
 
-        expect(response).toMatchObject({
-            data: [{ id: 1, name: 'Rex' }],
-            status: 200,
-            statusText: 'OK',
-        })
+        expect(response).toBeInstanceOf(Response)
+        await expect(response.json()).resolves.toEqual([{ id: 1, name: 'Rex' }])
+        expect(response.status).toBe(200)
+        expect(response.statusText).toBe('OK')
         expect(response.headers.get('x-mock-mode')).toBe('true')
     })
 
-    it('allows a named scenario to override generated routes', async () => {
-        vi.doMock('./codegen/mock-client-routes', () => ({ mockRoutes: [] }))
+    it('отдаёт ответ именованного сценария раньше подходящего сгенерированного маршрута', async () => {
+        const mockRoutes = [
+            {
+                method: 'GET',
+                pattern: /^\/pet\/findByStatus$/,
+                status: 200,
+                create: () => [{ id: 1, name: 'Generated pet' }],
+            },
+        ] satisfies MockRoute[]
+
+        vi.doMock('./codegen/mock-client-routes', () => ({ mockRoutes }))
         vi.doMock('./mock-scenarios', () => ({
             getMockScenarioRoute: () => ({
                 method: 'GET',
@@ -44,7 +59,7 @@ describe('mock-client', () => {
         }))
 
         const { getMockResponse } = await import('./mock-client')
-        const response = await getMockResponse<Array<{ id: number; name: string }>>(
+        const response = await getMockResponse(
             {
                 method: 'GET',
                 url: '/pet/findByStatus',
@@ -52,10 +67,34 @@ describe('mock-client', () => {
             'default',
         )
 
-        expect(response).toMatchObject({
-            data: [{ id: 2, name: 'Scenario pet' }],
-            status: 202,
-            statusText: 'Accepted',
+        await expect(response.json()).resolves.toEqual([{ id: 2, name: 'Scenario pet' }])
+        expect(response.status).toBe(202)
+        expect(response.statusText).toBe('Accepted')
+    })
+
+    it('возвращает нативный пустой Response для маршрута со статусом 204', async () => {
+        const mockRoutes = [
+            {
+                method: 'DELETE',
+                operationId: 'deletePet',
+                pattern: /^\/pets\/[^/]+$/,
+                status: 204,
+                tag: 'pets',
+            },
+        ] satisfies MockRoute[]
+
+        vi.doMock('./codegen/mock-client-routes', () => ({ mockRoutes }))
+
+        const { getMockResponse } = await import('./mock-client')
+        const response = await getMockResponse({
+            method: 'DELETE',
+            url: 'https://api.example.test/pets/pet_123?audit=true',
         })
+
+        expect(response.status).toBe(204)
+        expect(response.body).toBeNull()
+        await expect(response.text()).resolves.toBe('')
+        expect(response.headers.get('content-type')).toBeNull()
+        expect(response.headers.get('x-mock-mode')).toBe('true')
     })
 })

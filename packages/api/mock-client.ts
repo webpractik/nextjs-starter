@@ -1,16 +1,29 @@
-import type { RequestConfig, ResponseConfig } from './fetch.client'
 import type { BaseMockScenarioName } from './mock-scenarios'
+
+import { en, Faker } from '@faker-js/faker'
 
 import { mockRoutes } from './codegen/mock-client-routes'
 import { getMockScenarioRoute } from './mock-scenarios'
 
-export type RequestMethod = NonNullable<RequestConfig['method']>
+export type RequestMethod = 'DELETE' | 'GET' | 'HEAD' | 'OPTIONS' | 'PATCH' | 'POST' | 'PUT'
+
+export interface MockRequestConfig {
+    headers?: HeadersInit
+    method?: string
+    url?: string
+}
+
+export interface MockFactoryOptions {
+    faker: Faker
+}
 
 export interface MockRoute {
+    create?: (_options: MockFactoryOptions) => unknown
     method: RequestMethod
+    operationId?: string
     pattern: RegExp
     status?: number
-    create: () => unknown
+    tag?: string
 }
 
 const statusTexts: Record<number, string> = {
@@ -22,20 +35,30 @@ const statusTexts: Record<number, string> = {
 }
 const trailingSlashesPattern = /\/+$/
 
-function normalizeMethod(method: RequestConfig['method']): RequestMethod {
-    return method ?? 'GET'
+function normalizeMethod(method: MockRequestConfig['method']): RequestMethod {
+    return (method?.toUpperCase() ?? 'GET') as RequestMethod
 }
 
-function normalizePath(url: RequestConfig['url']) {
-    const path = (url ?? '').split('?')[0]?.replace(trailingSlashesPattern, '')
+function normalizePath(url: MockRequestConfig['url']) {
+    let pathname = '/'
+    try {
+        pathname = new URL(url ?? '/', 'http://localhost').pathname
+    } catch {
+        pathname = url?.split('?')[0] ?? '/'
+    }
 
-    return path == null || path === '' ? '/' : path
+    const path = pathname.replace(trailingSlashesPattern, '')
+
+    return path === '' ? '/' : path
 }
 
-export async function getMockResponse<TData>(
-    config: Partial<RequestConfig>,
-    scenario?: BaseMockScenarioName,
-): Promise<ResponseConfig<TData>> {
+function createRequestFaker() {
+    const faker = new Faker({ locale: [en] })
+    faker.seed(100)
+    return faker
+}
+
+export async function getMockResponse(config: MockRequestConfig, scenario?: BaseMockScenarioName) {
     const method = normalizeMethod(config.method)
     const path = normalizePath(config.url)
     const route =
@@ -47,14 +70,18 @@ export async function getMockResponse<TData>(
     }
 
     const status = route.status ?? 200
-
-    return {
-        data: route.create() as TData,
-        status,
-        statusText: statusTexts[status] ?? 'OK',
-        headers: new Headers({
-            'content-type': 'application/json',
-            'x-mock-mode': 'true',
-        }),
+    const hasBody = status !== 204 && route.create !== undefined
+    const headers = new Headers({ 'x-mock-mode': 'true' })
+    if (hasBody) {
+        headers.set('content-type', 'application/json')
     }
+
+    return new Response(
+        hasBody ? JSON.stringify(route.create?.({ faker: createRequestFaker() })) : null,
+        {
+            headers,
+            status,
+            statusText: statusTexts[status] ?? 'OK',
+        },
+    )
 }

@@ -1,5 +1,0 @@
-// ВНИМАНИЕ: файл сгенерирован kubb-plugin-cache-tags. Не редактируйте вручную.
-
-export * as orders from './orders'
-export * as products from './products'
-export * as userProfiles from './user-profiles'

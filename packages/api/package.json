@@ -4,32 +4,45 @@
     "description": "",
     "license": "ISC",
     "author": "",
+    "type": "module",
+    "exports": {
+        ".": "./codegen/index.ts",
+        "./cache-tags": "./codegen/cache-tags/index.ts",
+        "./client": "./client.ts",
+        "./mocks": "./mocks.ts",
+        "./query": "./codegen/@tanstack/react-query.gen.ts",
+        "./schemas": "./codegen/zod.gen.ts"
+    },
     "publishConfig": {
         "access": "public"
     },
     "scripts": {
         "bundle": "redocly bundle openapi/openapi.yaml -o bundled.yaml",
-        "gen": "npm run bundle && kubb generate --config kubb.config.ts",
+        "format:generated": "oxfmt codegen && oxfmt codegen",
+        "gen": "npm run bundle && npm run generate:client && npm run generate:helpers && npm run format:generated && npm --prefix ../.. run tsc",
+        "generate:client": "node openapi-ts.config.ts",
+        "generate:helpers": "tsx generators/run-post-generate.ts",
         "lint:openapi": "redocly lint",
         "test": "vitest run --root ../.. --config vitest.config.ts --project unit packages/api"
     },
     "dependencies": {
-        "@kubb/cli": "4.39.2",
-        "@kubb/core": "4.39.2",
-        "@kubb/plugin-client": "4.39.2",
-        "@kubb/plugin-oas": "4.39.2",
-        "@kubb/plugin-react-query": "4.39.2",
-        "@kubb/plugin-ts": "4.39.2",
-        "@kubb/plugin-zod": "4.39.2",
-        "@redocly/cli": "2.43.2",
-        "change-case": "5.4.4",
-        "pluralize": "8.0.0"
+        "@faker-js/faker": "10.5.0",
+        "server-only": "0.0.1",
+        "zod": "4.4.3"
     },
     "devDependencies": {
-        "@faker-js/faker": "10.5.0",
-        "@kubb/oas": "4.39.2",
-        "@kubb/plugin-faker": "4.39.2",
+        "@hey-api/openapi-ts": "0.99.0",
+        "@redocly/cli": "2.43.2",
         "@types/pluralize": "0.0.33",
-        "vitest": "^4.1.10"
+        "change-case": "5.4.4",
+        "pluralize": "8.0.0",
+        "tsx": "4.23.4",
+        "typescript": "6.0.3",
+        "vitest": "4.1.10",
+        "yaml": "2.9.0"
+    },
+    "peerDependencies": {
+        "@tanstack/react-query": "^5.101.4",
+        "next": "^16.2.12"
     }
 }

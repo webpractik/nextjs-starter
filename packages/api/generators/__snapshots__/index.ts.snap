@@ -1,0 +1,6 @@
+// ВНИМАНИЕ: файл сгенерирован generate-cache-tags. Не редактируйте вручную.
+import 'server-only'
+
+export * as orders from './orders'
+export * as products from './products'
+export * as userProfiles from './user-profiles'

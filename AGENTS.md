@@ -32,11 +32,11 @@
 - React Compiler включается только в production через `reactCompiler: isProd`, а не во всех
   режимах.
 - Канонический контракт использует OpenAPI 3.2. Redocly bundle передаётся Hey API без понижения и
-  скрытой 3.1-копии; доказательство совместимости — полный `gen`, generated typecheck и root
-  `tsc`.
-- `@hey-api/openapi-ts@0.99.0` пока не запускается с project TypeScript 7.0.2. Только codegen
-  process направляет импорт `typescript` на alias `typescript-codegen@6.0.3`; удаляйте shim лишь
-  после успешного native TypeScript 7 probe и полного parity suite.
+  скрытой 3.1-копии; доказательство совместимости — полный `gen` и root `tsc`, включающий
+  generated output.
+- `@hey-api/openapi-ts@0.99.0` пока не запускается с project TypeScript 7.0.2. При прямом запуске
+  `openapi-ts.config.ts` направляет импорт `typescript` на локальный compiler workspace версии
+  6.0.3; удаляйте hook лишь после успешного native TypeScript 7 probe и полного parity suite.
 - Контейнерный контур задан в `Dockerfile`, `.dockerignore`, `compose*.yaml` и `Makefile`: dev
   использует target `development`, production — non-root standalone runner, а builder получает
   `SENTRY_AUTH_TOKEN` через BuildKit secret. Конфигурационного блокера больше нет; development
@@ -206,7 +206,7 @@
 - Каждая операция должна иметь уникальный `operationId`, обязательный `summary` и корректный
   `tags`; tags входят в query keys, mock metadata и generated cache helpers.
 - Порядок pipeline: Redocly bundle → `bundled.yaml` → Hey API → post-generation helpers → Oxfmt →
-  generated `tsc`.
+  root `tsc`, включающий generated output.
 - `bundled.yaml` — игнорируемый промежуточный артефакт. `openapi/` и `codegen/` коммитятся.
 - `packages/api/codegen/`, включая types, SDK, client, Query options, Zod, Faker, cache tags и mock
   routes, вручную не редактируется. Hey API запускается с `output.clean: true`, поэтому ручные
@@ -309,7 +309,6 @@ npm --workspace @repo/api run test
 npm --workspace @repo/api run gen
 npm --workspace @repo/api run bundle
 npm --workspace @repo/api run lint:openapi
-npm --workspace @repo/api run typecheck:generated
 
 # Docker Compose
 make compose-config-dev

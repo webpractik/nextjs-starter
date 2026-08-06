@@ -1,0 +1,10 @@
+// ВНИМАНИЕ: файл сгенерирован generate-cache-tags. Не редактируйте вручную.
+import 'server-only'
+
+import { updateTag } from 'next/cache'
+
+export const productsTag = 'products' as const
+
+export async function revalidateProducts() {
+    updateTag(productsTag)
+}

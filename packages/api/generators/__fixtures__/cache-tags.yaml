@@ -1,0 +1,41 @@
+openapi: 3.2.0
+info:
+    title: Cache tags generator fixture
+    version: 1.0.0
+paths:
+    /products:
+        get:
+            operationId: listProducts
+            summary: List products
+            tags: [products]
+            responses:
+                '200':
+                    description: Products
+    /products/{productId}:
+        parameters:
+            - name: productId
+              in: path
+              required: true
+              schema:
+                  type: string
+        get:
+            operationId: getProduct
+            summary: Get product
+            tags: [products]
+            responses:
+                '200':
+                    description: Product
+    /orders/{orderId}:
+        get:
+            operationId: getOrder
+            summary: Get order
+            tags: [orders]
+            parameters:
+                - name: orderId
+                  in: path
+                  required: true
+                  schema:
+                      type: integer
+            responses:
+                '200':
+                    description: Order

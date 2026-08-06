@@ -1,75 +1,89 @@
-# BFF proxy и API transport
+# Как API-запрос доходит до backend
 
-> Тип: объяснение · Статус: актуально · Источник истины: `next.config.ts`, `proxy.ts` и
-> `packages/api/fetch.client.ts`
+> Тип: объяснение · Статус: актуально · Источники истины:
+> [`next.config.ts`](../next.config.ts), [`proxy.ts`](../proxy.ts) и
+> [`packages/api/client-config.ts`](../packages/api/client-config.ts)
 
-Generated API clients используют один transport. Base URL выбирается по месту выполнения:
+**Когда читать:** если запрос уходит не на тот URL, падает только в production или теряет cookie
+на сервере.
 
-| Контекст            | Base URL                       | Источник               |
-| ------------------- | ------------------------------ | ---------------------- |
-| Server runtime      | Внутренний backend URL         | `BACK_INTERNAL_URL`    |
-| Browser development | Относительный Next.js rewrite  | `NEXT_PUBLIC_BFF_PATH` |
-| Browser production  | Публичный backend URL напрямую | `NEXT_PUBLIC_BACK_URL` |
+## Короткий ответ
 
-## Development rewrite
+Активный Hey API client получает config из `client-config.ts` и выбирает base URL по месту
+выполнения:
 
-`next.config.ts` создаёт `beforeFiles` rewrite:
+| Откуда идёт запрос    | Куда он идёт                                        |
+| --------------------- | --------------------------------------------------- |
+| Server runtime        | На `BACK_INTERNAL_URL` напрямую                     |
+| Browser в development | На `NEXT_PUBLIC_BFF_PATH`, затем через Next rewrite |
+| Browser в production  | На `NEXT_PUBLIC_BACK_URL` напрямую                  |
+
+В локальном примере ниже `/bff-api/pets` проходит через Next.js, а Server Component сразу вызывает
+`http://localhost:8080/pets`.
+
+## Development: запрос проходит через rewrite
+
+Только в development `next.config.ts` создаёт `beforeFiles` rewrite:
 
 ```text
 ${NEXT_PUBLIC_BFF_PATH}/:path* → ${BACK_INTERNAL_URL}/:path*
 ```
 
-При типовых локальных значениях запрос браузера к `/bff-api/pets` принимается Next.js и
-проксируется на `http://localhost:8080/pets`. Server Components и другой server-side код сразу
-обращаются к `BACK_INTERNAL_URL`, не проходя через публичный origin приложения.
+Обе переменные обязательны. `NEXT_PUBLIC_BFF_PATH` начинается с `/` и не содержит пустых сегментов,
+завершающего `/`, query или fragment. API base URLs также не содержат завершающего `/`, query или
+fragment.
 
-Для работы rewrite обе переменные обязательны. Не хардкодьте `/bff-api` в application code.
+Не хардкодьте `/bff-api` в коде приложения.
 
-## Production
+## Production: браузер вызывает backend напрямую
 
-В production browser client обращается к `NEXT_PUBLIC_BACK_URL` напрямую. Это означает:
+В production `rewrites()` возвращает пустой массив. Запрос из браузера идёт на
+`NEXT_PUBLIC_BACK_URL`, поэтому:
 
-- Next.js не является production API gateway для browser-запросов;
-- backend должен разрешать фактический frontend origin в CORS;
-- при `credentials: 'include'` backend должен отвечать конкретным
-  `Access-Control-Allow-Origin`, а не `*`, и разрешать credentials;
-- cross-site cookies требуют корректных `Domain`, `SameSite` и `Secure` атрибутов.
+- backend должен разрешать реальный frontend origin в CORS;
+- при `credentials: 'include'` нельзя отвечать `Access-Control-Allow-Origin: *`; нужно указать
+  конкретный origin и разрешить credentials;
+- для cross-site cookies нужны правильные `Domain`, `SameSite` и `Secure`;
+- CSP `connect-src` должен разрешать backend origin.
 
-Если production должен скрывать backend, централизовать auth или работать только same-origin,
-нужно отдельно изменить архитектуру base URL/rewrite. Текущая реализация этого не обещает.
-
-Кроме CORS, учитывайте production CSP: текущий `connect-src` разрешает `self`, `data:`, `ws:` и
-`wss:`, но не произвольный HTTPS backend origin. Cross-origin `NEXT_PUBLIC_BACK_URL` потребует
-отдельного точечного изменения CSP либо same-origin deployment; иначе browser заблокирует запрос.
+Сейчас `connect-src` не разрешает произвольный HTTPS origin. Скрытый backend, централизованный auth
+или обязательный same-origin потребуют отдельного архитектурного изменения.
 
 ## Cookies и headers на сервере
 
-Transport по умолчанию задаёт `credentials: 'include'`. В браузере это управляет cookie policy,
-но server-side `fetch` не переносит cookies входящего Next.js request автоматически. Для
-authenticated server call вызывающая сторона должна явно передать нужные безопасные headers или
-создать server-only adapter. Не передавайте весь набор headers без фильтрации.
+Client config использует `credentials: 'include'`, но server-side `fetch` не переносит cookies
+входящего запроса Next.js. Для authenticated server call передайте только нужные headers или
+создайте server-only adapter; не копируйте все входящие headers.
 
-Transport:
+## Что ещё делает client
 
-- сериализует query object через `packages/api/search-params.ts`;
-- не задаёт `Content-Type` для `FormData`, чтобы boundary сформировал runtime;
-- задаёт `application/json` для остальных bodies;
-- на non-2xx бросает `Error`, помещая parsed response в `cause`;
-- для `204`, `205`, `304` или пустого body возвращает пустой объект на transport-уровне.
+- Hey API сериализует `path`, `query` и `body`; массивы query передаются повторяющимися ключами.
+- Runtime config по умолчанию задаёт `credentials: 'include'` и custom `apiFetch`.
+- `cache`, `signal`, headers и `next: { tags, revalidate }` доходят до native Fetch без потери.
+- Успешный JSON проходит generated Zod response validation; `204` возвращает `data: undefined`.
+- По умолчанию SDK возвращает discriminated result `{ data, error, response }`; при
+  `throwOnError: true` documented parsed error бросается.
+- При совпадении mock route `apiFetch` возвращает native `Response`, который разбирает тот же
+  generated client.
 
-## `proxy.ts` и `x-url`
+Основные SDK-вызовы импортируются из `@repo/api`, low-level client — из `@repo/api/client`.
+Request shape и result modes описаны в [справочнике API codegen](api-codegen.md).
 
-Корневой Next.js Proxy выполняет request logging и добавляет во внутренний request header `x-url`
-с исходным URL страницы. Runtime mock mode использует этот header для определения текущего route
-во время Server Component rendering.
+## `proxy.ts` и `x-url` — другой механизм
 
-Matcher исключает `/api`, Next.js static/image assets и metadata files. `x-url` — внутренний
-служебный header, а не доверенный auth signal. Не принимайте решения авторизации на его основе.
+Next.js Proxy логирует page request и добавляет header `x-url`. Runtime mock mode использует его,
+чтобы определить текущий route при рендеринге Server Component.
 
-Proxy pipeline и BFF rewrite — разные механизмы: первый обрабатывает page request и передаёт
-headers дальше в Next.js, второй проксирует browser API URL на backend в development.
+Matcher исключает `/api`, `/_next/static`, `/_next/image`, `favicon.ico`, `sitemap.xml` и
+`robots.txt`. Другие metadata routes, например `manifest.webmanifest`, сейчас явно не исключены и
+могут пройти через proxy. `x-url` — служебный header, а не сигнал авторизации.
 
-## Локальная конфигурация
+Proxy и BFF rewrite не заменяют друг друга:
+
+- proxy обрабатывает запрос страницы и передаёт headers в Next.js;
+- rewrite только в development перенаправляет browser API URL на backend.
+
+## Локальный пример
 
 ```env
 BACK_INTERNAL_URL=http://localhost:8080
@@ -77,5 +91,5 @@ NEXT_PUBLIC_BFF_PATH=/bff-api
 NEXT_PUBLIC_BACK_URL=http://localhost:8080
 ```
 
-После изменения env перезапустите dev server: публичные `NEXT_PUBLIC_*` значения могут быть
-встроены при сборке. Полная таблица — в [environment reference](environment.md).
+После изменения env перезапустите dev server: значения `NEXT_PUBLIC_*` могут быть встроены при
+сборке. Все переменные описаны в [справочнике окружения](environment.md).

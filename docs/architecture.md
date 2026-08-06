@@ -1,177 +1,170 @@
-# Архитектура
+# Как устроен проект
 
-> Тип: объяснение + правила · Статус: актуально · Источник истины: дерево репозитория,
-> `tsconfig.json`, `next.config.ts` и `AGENTS.md`
+> Тип: объяснение · Статус: актуально · Источники истины: дерево репозитория,
+> [`tsconfig.json`](../tsconfig.json), [`next.config.ts`](../next.config.ts) и
+> [`AGENTS.md`](../AGENTS.md)
 
-Проект — ESM-монорепозиторий на npm workspaces. Next.js приложение находится в корне, reusable
-packages — в `packages/`. Архитектура использует принцип «самая узкая подходящая область»: код
-поднимается выше только после появления реального второго потребителя.
+**Когда читать:** перед добавлением нового кода, переносом компонента или изменением импортов между
+слоями. Страница помогает выбрать каталог и не расширить Client Component дальше необходимого.
 
-## Слои и направление зависимостей
+## Главное
+
+Проект — ESM-монорепозиторий на npm workspaces. Приложение Next.js находится в корне, а общие
+пакеты — в `packages/`.
+
+Основное правило: начинайте с самой узкой области. Поднимайте код выше только тогда, когда появился
+второй реальный потребитель. Например, компонент одного маршрута остаётся рядом с этим маршрутом;
+не нужно сразу переносить его в общий пакет.
+
+## Слои и зависимости
+
+Верхний слой может импортировать нижние, но не наоборот:
 
 ```text
-app/                  routing и композиция страниц
+app/                  маршруты и сборка страниц
   ↓
-src/modules/          доменная логика для нескольких routes (создаётся по необходимости)
+src/modules/          доменная логика для нескольких маршрутов
   ↓
-shared src/*          общие компоненты и инфраструктура приложения
+общий код src/*       компоненты и инфраструктура приложения
   ↓
-packages/*            переиспользуемые package APIs
+packages/*            переиспользуемые пакеты
 ```
 
-| Слой           | Может зависеть от                                |
-| -------------- | ------------------------------------------------ |
-| `app/`         | `src/modules/`, shared `src/*`, `packages/*`     |
-| `src/modules/` | shared `src/*`, `packages/*`                     |
-| shared `src/*` | `packages/*`                                     |
-| `packages/*`   | других `packages/*`, внешних библиотек и runtime |
+| Слой           | Откуда можно импортировать                                 |
+| -------------- | ---------------------------------------------------------- |
+| `app/`         | `src/modules/`, общий `src/*`, `packages/*`                |
+| `src/modules/` | общий `src/*`, `packages/*`                                |
+| общий `src/*`  | `packages/*`                                               |
+| `packages/*`   | другие `packages/*`, внешние библиотеки и среда выполнения |
 
-`src/modules/` сейчас отсутствует: это предусмотренная точка роста, а не обязательный scaffold.
-Модуль создаётся, когда одна доменная возможность реально обслуживает два и более routes. Модули
-не импортируют друг друга напрямую; композиция выполняется в route/layout или через узкий shared
-contract.
+Каталога `src/modules/` сейчас нет: создавайте модуль, только когда одна доменная возможность нужна
+двум или более маршрутам. Модули не импортируют друг друга напрямую; их связывает маршрут или
+layout, общий контракт либо provider.
 
-### Известное нарушение границы
+### Известное исключение
 
-`packages/api/fetch.client.ts` сейчас импортирует root-level `src/env`, `src/constants` и
-`src/mock-mode`. Это связывает `@repo/api` с конкретным приложением и противоречит целевому правилу
-для packages. Нарушение оставлено как известный технический долг: не копируйте этот паттерн в
-другие packages. Исправление требует отдельного решения о dependency injection или переносе
-transport adapter в application layer.
+[`packages/api/client-config.ts`](../packages/api/client-config.ts) импортирует root-level `src/env`,
+`src/constants` и `src/mock-mode`. Это известный технический долг: не повторяйте такой импорт в
+других пакетах. Исправление потребует dependency injection или переноса runtime adapter в слой
+приложения. Oxlint пока не проверяет все границы, поэтому проверяйте их при review.
 
-Границы пока не полностью контролируются Oxlint, поэтому их нужно проверять на review.
-
-## Фактическая карта
+## Карта репозитория
 
 ```text
-app/
-├── (public)/                 публичные pages, loading/error states, route-local UI
-├── api/                      health, readiness и Prometheus Route Handlers
-├── layout.tsx                глобальные providers и document shell
-└── global-error.tsx          корневая error boundary
+app/                          маршруты, layouts и route-local UI
+├── (public)/                 публичные страницы
+└── api/                      служебные endpoints
 
 src/
-├── components/               shared составные компоненты и providers
-├── constants/                общие константы runtime
-├── env/                      server/client environment schemas
-├── fonts/                    локальные font assets и setup
-├── hooks/                    shared client hooks
-├── mock-mode/                runtime выбор generated mocks
+├── components/               общие составные компоненты и providers
+├── constants/, hooks/, types/, utils/ общий код приложения
+├── env/                      схемы переменных окружения
+├── fonts/, styles/           шрифты и глобальные стили
+├── mock-mode/                выбор generated mocks во время выполнения
 ├── observability/            Adze logger и Prometheus registry
-├── proxy/                    Next.js Proxy pipeline
-├── styles/                   глобальные Tailwind styles
-├── tests/                    test setup, browser aliases и Playwright E2E
-├── types/                    глобальные declarations
-└── utils/                    shared utilities
+├── proxy/                    pipeline Next.js Proxy
+└── tests/                    test setup и Playwright E2E
 
 packages/
-├── api/                      OpenAPI sources, Kubb, clients, schemas и mocks
-└── core/                     Base UI/shadcn-style primitives и typed forms
+├── api/                      OpenAPI, Hey API SDK, Query/Zod/Faker helpers
+└── core/                     UI-примитивы Base UI и типизированные формы
 ```
 
-Не выдавайте примеры будущих каталогов за существующую архитектуру. CASL, Socket.IO, Zustand и
-другие domain libraries в starter не установлены.
+Не описывайте будущие каталоги как уже существующие. CASL, Socket.IO, Zustand и другие доменные
+библиотеки в starter сейчас не установлены.
 
 ## Как выбрать место для кода
 
-| Область использования         | Размещение                                     |
-| ----------------------------- | ---------------------------------------------- |
-| Один компонент                | Рядом с компонентом                            |
-| Один route/segment            | `app/.../_components/` или файл в этом segment |
-| Одна доменная возможность     | Route-local, пока нет второго route            |
-| Два и более routes            | `src/modules/<name>/`                          |
-| Несколько модулей/общий infra | Подходящий shared каталог `src/*`              |
-| Независимый reusable UI       | `packages/core/`                               |
-| API contract/generated API    | `packages/api/`                                |
+| Где код используется                 | Куда его положить                           |
+| ------------------------------------ | ------------------------------------------- |
+| В одном компоненте                   | Рядом с компонентом                         |
+| В одном route или segment            | `app/.../_components/` или рядом с route    |
+| В одной доменной возможности         | Рядом с route, пока нет второго потребителя |
+| В двух и более routes                | `src/modules/<name>/`                       |
+| В нескольких модулях или общем infra | В подходящий общий каталог `src/*`          |
+| Это независимый UI-примитив          | `packages/core/`                            |
+| Это API-контракт или generated API   | `packages/api/`                             |
 
-Route-local private компоненты находятся в единственной директории `_components/` своего
-segment. Schema, constants или utilities, общие только для этого segment, остаются рядом с route.
-Не создавайте пустые `types.ts`, `hooks/`, `utils/` и `variants.ts` заранее.
+У segment должна быть одна приватная директория `_components/`. Схемы, константы и утилиты,
+которые нужны только этому segment, тоже остаются рядом с route. Не создавайте пустые `types.ts`,
+`hooks/`, `utils/` или `variants.ts` на будущее.
 
-`index.ts` определяет публичный API области. Внешний код должен импортировать через public export,
-а не deep import во внутреннюю реализацию, кроме generated API, где конкретные paths являются
-частью текущего output contract.
+`index.ts`, `index.tsx` или package `exports` задают публичный API области. За её пределами
+импортируйте public export, а не внутренний файл. Для `@repo/api` используйте только корневой
+export и facets `/client`, `/query`, `/schemas`, `/mocks`, `/cache-tags`; `codegen/` — внутренняя
+раскладка генератора.
 
-## Server и Client Components
+## Граница Server и Client Components
 
-Базовый режим — Server Component. `'use client'` добавляется на минимальном интерактивном листе,
-которому нужны state, effects, event handlers, browser API или client-only library.
+Начинайте с Server Component. Добавляйте `'use client'` только в самый нижний интерактивный
+компонент, которому нужны state, effects, обработчики событий, browser API или client-only
+библиотека.
 
-| Область                                   | Граница                                               |
-| ----------------------------------------- | ----------------------------------------------------- |
-| `app/` pages/layouts                      | Server по умолчанию                                   |
-| `packages/core/` interactive primitives   | Client API                                            |
-| Generated React Query hooks               | Client API                                            |
-| Generated models, Zod и fetch clients     | Universal, пока caller не добавил server-only context |
-| `src/env/server.ts`                       | Только server                                         |
-| `src/env/client.ts`                       | Допустим в client bundle                              |
-| `src/components/providers/query-provider` | Client boundary                                       |
-| Чистые `src/utils`                        | Universal                                             |
+| Код                                           | Где он выполняется                            |
+| --------------------------------------------- | --------------------------------------------- |
+| Pages и layouts в `app/`                      | На сервере по умолчанию                       |
+| Интерактивные примитивы `packages/core/`      | В клиенте                                     |
+| TanStack Query factories из `@repo/api/query` | В клиенте                                     |
+| Generated types, Zod и SDK/client             | Везде, пока caller не добавил server-only код |
+| Cache tags из `@repo/api/cache-tags`          | Только на сервере                             |
+| `src/env/server.ts`                           | Только на сервере                             |
+| `src/env/client.ts`                           | Может попасть в browser bundle                |
+| Query provider                                | Client boundary                               |
+| Чистые утилиты из `src/utils`                 | Везде                                         |
 
-Server Component может импортировать и рендерить Client Component. Обратный импорт server-only
-модуля из Client Component запрещён. Serializable data передаётся через props; secrets и server
-environment не пересекают client boundary.
+Server Component может отрендерить Client Component. Client Component не может импортировать
+server-only модуль. Передавайте через props только сериализуемые данные; секреты и server env не
+должны пересекать клиентскую границу.
 
-Для явных ограничений используйте суффиксы `.server.ts` и `.client.ts`. Universal-файлам суффикс
-не нужен.
+Для файлов с явным ограничением используйте суффиксы `.server.ts` и `.client.ts`. Универсальным
+файлам суффикс не нужен.
 
-## Packages
+## Общие пакеты
 
-### `@repo/core`
+| Пакет        | Что в нём находится                      | Подробности                         |
+| ------------ | ---------------------------------------- | ----------------------------------- |
+| `@repo/core` | UI-примитивы и формы без бизнес-логики   | [Публичный API](core-ui.md)         |
+| `@repo/api`  | OpenAPI, SDK, Query, Zod и Faker helpers | [Генерация клиента](api-codegen.md) |
 
-Здесь находятся reusable UI primitives без знания бизнес-сущностей. Base UI оборачивается тонко с
-сохранением accessibility semantics. Варианты оформляются через CVA, classes объединяются через
-`cn`. Stories и browser component tests располагаются рядом с компонентом.
-
-Typed forms экспортируются из `@repo/core/form`. `useAppForm` регистрирует общие field components и
-`SubmitButton`; Zod передаётся TanStack Form напрямую через Standard Schema. Составная форма с
-бизнес-правилами остаётся в route или domain module, а не переносится в `core`.
-
-### `@repo/api`
-
-`openapi/` — источник истины, `codegen/` — коммитимый generated output, `bundled.yaml` —
-игнорируемый промежуточный файл. Generated code не редактируется вручную. React Query hooks —
-client-facing слой; fetch clients/Zod/models могут использоваться на сервере. Подробнее — в
-[API codegen](api-codegen.md).
+Query factories из `@repo/api/query` работают в клиенте; types, SDK/client и Zod-схемы остаются
+универсальными, а `@repo/api/cache-tags` — server-only. Generated output меняйте только через
+контракт, конфиг или post-generator.
 
 ## Данные и состояние
 
-| Задача                          | Текущий инструмент                         |
+| Задача                          | Инструмент                                 |
 | ------------------------------- | ------------------------------------------ |
 | Server rendering и server cache | Async Server Components + Cache Components |
-| Client server-state             | TanStack Query                             |
-| URL filters/navigation state    | nuqs                                       |
-| Forms                           | TanStack Form + Zod                        |
-| Локальная интерактивность       | React state/reducer                        |
+| Server-state в браузере         | TanStack Query                             |
+| Фильтры и состояние в URL       | nuqs                                       |
+| Формы                           | TanStack Form + Zod                        |
+| Локальная интерактивность       | React state или reducer                    |
 
-Cache Components и React Query сосуществуют. Выбор зависит от места потребления и требований к
-интерактивности, а не от универсального запрета одного подхода. Правила — в
-[cache-and-streaming.md](cache-and-streaming.md).
+Cache Components и React Query решают разные задачи и могут использоваться вместе. Выбор зависит
+от места чтения данных и нужной интерактивности. Подробные правила — в
+[документе о кешировании](cache-and-streaming.md).
 
-## Cross-cutting инфраструктура
+## Общая инфраструктура
 
-- `src/env/` валидирует server и browser-visible environment; `next.config.ts` импортирует обе
-  схемы, поэтому ошибки могут возникнуть до компиляции.
-- `proxy.ts` собирает pipeline из `src/proxy/` и добавляет `x-url`, необходимый runtime mock mode.
-- `src/observability/` содержит единственные application logger и Prometheus registry.
-- `instrumentation.ts` регистрирует OTEL и server Sentry; client Sentry запускается только в
-  production.
-- Root layout содержит Nuqs adapter, Query provider, Toaster и development Form Devtools provider.
+- `src/env/` проверяет переменные; из-за импорта в `next.config.ts` ошибка возможна до компиляции.
+- `proxy.ts` добавляет `x-url` для runtime mock mode. Детали — в [описании proxy](bff-proxy.md).
+- `src/observability/` содержит общие logger и Prometheus registry; `instrumentation.ts`
+  регистрирует OpenTelemetry и server Sentry.
 
-## Именование и imports
+## Имена и импорты
 
-- Файлы и директории компонентов — kebab-case; React exports — PascalCase.
+- Файлы и каталоги компонентов называются в kebab-case, React exports — в PascalCase.
 - `~/*` указывает на корень, `@/*` — на `app/`, `#/*` — на `src/`.
-- Packages импортируются через `@repo/core` и `@repo/api`, не через `~/packages/...`.
-- Type-only imports отделяются через `import type`.
-- Server/client граница важнее удобства короткого import path.
+- Пакеты импортируются через `@repo/core` и `@repo/api`, а не через `~/packages/...`.
+- Type-only imports оформляются через `import type`.
+- Server/client граница важнее более короткого пути импорта.
 
-## Чеклист архитектурного review
+## Перед архитектурным review
 
-1. Код начинается в самой узкой реальной области?
-2. Новый shared/module/package имеет минимум два фактических потребителя?
-3. Зависимость направлена вниз и не создаёт новый cross-module import?
-4. Client boundary не поднята выше интерактивного листа без необходимости?
-5. Server secrets и `src/env/server.ts` не попали в client graph?
-6. Generated output изменён через source/config и повторный `gen`?
-7. Новое публичное поведение отражено в профильной документации?
+1. Код находится в самой узкой реальной области?
+2. У нового общего модуля или пакета есть минимум два потребителя?
+3. Новая зависимость направлена вниз и не связывает два доменных модуля напрямую?
+4. Client boundary не поднята выше интерактивного листа?
+5. Server secrets и `src/env/server.ts` не попали в клиентский граф?
+6. Generated output изменён через источник или конфиг и повторный `gen`?
+7. Новое публичное поведение описано в профильной документации?

@@ -85,14 +85,14 @@
             "ref": "canary",
             "sourceType": "github",
             "skillPath": "skills/next-cache-components-adoption/SKILL.md",
-            "computedHash": "3b755e6f21774dcd3fbf54736ed480c53d1c66e108c7a3f5e621f72ceee43ef8"
+            "computedHash": "28dbee9d2c2773fca3447de97f5b36b60be9398b7d4e914c79ca92b7d004ca21"
         },
         "next-cache-components-optimizer": {
             "source": "vercel/next.js",
             "ref": "canary",
             "sourceType": "github",
             "skillPath": "skills/next-cache-components-optimizer/SKILL.md",
-            "computedHash": "2310ed428a6d4e8fcf00dd915cd394f5c2789167acd1a009759293fc248307e1"
+            "computedHash": "f67b08843bfc4e9cde4ac4bfe8b14aa0d2d9d2694611be077fa333bad2605a65"
         },
         "next-dev-loop": {
             "source": "vercel/next.js",
@@ -106,7 +106,7 @@
             "ref": "canary",
             "sourceType": "github",
             "skillPath": "skills/next-partial-prefetching-adoption/SKILL.md",
-            "computedHash": "3f7f7460b09ce67fe98f3403b9b8e231de8551698d0e555d9046a37583e39a4e"
+            "computedHash": "4ed43c1f766872e8322821b5103176cf08d8cd26409ddd80c95af689d59ae74e"
         },
         "observability-and-instrumentation": {
             "source": "addyosmani/agent-skills",

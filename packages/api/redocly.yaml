@@ -1,5 +1,5 @@
 apis:
-    talentmind@v1:
+    petstore@v1:
         root: ./openapi/openapi.yaml
 
 extends:
