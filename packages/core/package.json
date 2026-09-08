@@ -10,15 +10,15 @@
         "add": "npx shadcn@latest add"
     },
     "dependencies": {
-        "@base-ui/react": "1.6.0",
-        "@maskito/core": "5.3.1",
-        "@maskito/kit": "5.3.1",
-        "@maskito/phone": "5.3.1",
-        "@maskito/react": "5.3.1",
-        "@tanstack/react-form": "1.33.2",
-        "isomorphic-dompurify": "3.21.0",
-        "libphonenumber-js": "1.13.10",
-        "zod": "4.4.3"
+        "@base-ui/react": "1.8.0",
+        "@maskito/core": "5.4.0",
+        "@maskito/kit": "5.4.0",
+        "@maskito/phone": "5.4.0",
+        "@maskito/react": "5.4.0",
+        "@tanstack/react-form": "1.33.5",
+        "isomorphic-dompurify": "4.2.0",
+        "libphonenumber-js": "1.13.12",
+        "zod": "4.5.4"
     },
     "peerDependencies": {
         "@vitest/browser": "*",
