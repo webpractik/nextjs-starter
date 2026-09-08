@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openai.com/schemas/figma-to-react/browser-evidence.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "implementationHash",
+    "captureContractHash",
+    "taskId",
+    "caseId",
+    "fileKey",
+    "fileVersion",
+    "nodeId",
+    "route",
+    "viewport",
+    "state",
+    "evidenceMode",
+    "actions",
+    "assertions",
+    "consoleErrors",
+    "pageErrors",
+    "status"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "implementationHash": { "$ref": "#/$defs/checksum" },
+    "captureContractHash": { "$ref": "#/$defs/checksum" },
+    "taskId": { "$ref": "#/$defs/filesystemId" },
+    "caseId": { "$ref": "#/$defs/filesystemId" },
+    "fileKey": { "$ref": "#/$defs/fileKey" },
+    "fileVersion": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "nodeId": { "$ref": "#/$defs/nodeId" },
+    "route": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^/(?!/)(?!.*[\\\\?#])[^\\r\\n\\u2028\\u2029\\u0000]*$"
+    },
+    "viewport": { "$ref": "#/$defs/viewport" },
+    "state": { "$ref": "#/$defs/filesystemId" },
+    "evidenceMode": { "enum": ["behavior-only", "responsive-only"] },
+    "actions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1, "pattern": "\\S" }
+    },
+    "assertions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/assertion" }
+    },
+    "consoleErrors": { "type": "array", "maxItems": 0, "items": { "type": "string" } },
+    "pageErrors": { "type": "array", "maxItems": 0, "items": { "type": "string" } },
+    "status": { "const": "passed" }
+  },
+  "$defs": {
+    "checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "filesystemId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "fileKey": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{6,}$"
+    },
+    "nodeId": {
+      "type": "string",
+      "pattern": "^[0-9]+:[0-9]+$"
+    },
+    "viewport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["width", "height", "dpr"],
+      "properties": {
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 },
+        "dpr": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "assertion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "selector", "expected", "actual", "status"],
+      "properties": {
+        "kind": {
+          "enum": [
+            "url",
+            "visibility",
+            "content",
+            "interaction",
+            "keyboard",
+            "focus",
+            "accessible-name",
+            "contrast",
+            "overflow",
+            "reading-order",
+            "reflow",
+            "zoom"
+          ]
+        },
+        "selector": { "type": ["string", "null"], "minLength": 1, "pattern": "\\S" },
+        "expected": { "type": "string", "minLength": 1, "pattern": "\\S" },
+        "actual": { "type": "string", "minLength": 1, "pattern": "\\S" },
+        "status": { "const": "passed" }
+      }
+    }
+  }
+}

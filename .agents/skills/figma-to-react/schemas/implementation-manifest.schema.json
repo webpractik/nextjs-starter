@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openai.com/schemas/figma-to-react/implementation-manifest.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "taskId", "taskContractHash", "files", "rootHash"],
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "taskId": { "$ref": "#/$defs/filesystemId" },
+    "taskContractHash": { "$ref": "#/$defs/checksum" },
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/file" }
+    },
+    "rootHash": { "$ref": "#/$defs/checksum" }
+  },
+  "$defs": {
+    "filesystemId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?![A-Za-z]:)(?!.*//)(?!\\s)(?!.*\\s$)(?!.*(?:^|/)\\.{1,2}(?:/|$))(?!.*\\\\)(?!.*\\u0000).+$"
+    },
+    "checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "kind", "mode", "hash"],
+      "properties": {
+        "path": { "$ref": "#/$defs/relativePath" },
+        "kind": { "enum": ["file", "deleted"] },
+        "mode": { "type": ["string", "null"], "pattern": "^100(?:644|755)$" },
+        "hash": {
+          "type": ["string", "null"],
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        }
+      }
+    }
+  }
+}

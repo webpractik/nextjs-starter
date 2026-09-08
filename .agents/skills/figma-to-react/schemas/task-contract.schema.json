@@ -1,0 +1,330 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openai.com/schemas/figma-to-react/task-contract.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "taskId",
+    "profile",
+    "source",
+    "baseline",
+    "target",
+    "scope",
+    "viewports",
+    "states",
+    "evidenceModes",
+    "data",
+    "provisioning",
+    "acceptance"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "taskId": { "$ref": "#/$defs/filesystemId" },
+    "profile": { "const": "strict-internal" },
+    "source": { "$ref": "#/$defs/source" },
+    "baseline": { "$ref": "#/$defs/baseline" },
+    "target": { "$ref": "#/$defs/target" },
+    "scope": { "$ref": "#/$defs/scope" },
+    "viewports": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/viewport" }
+    },
+    "states": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/state" }
+    },
+    "evidenceModes": { "$ref": "#/$defs/evidenceModes" },
+    "data": { "$ref": "#/$defs/data" },
+    "provisioning": { "$ref": "#/$defs/provisioning" },
+    "acceptance": { "$ref": "#/$defs/acceptance" }
+  },
+  "$defs": {
+    "filesystemId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!\\s)(?!.*\\s$)[^\\r\\n\\u2028\\u2029\\u0000]+$"
+    },
+    "projectRelativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?![A-Za-z]:)(?!.*//)(?!\\s)(?!.*\\s$)(?!.*\\\\)(?!.*\\u0000)(?!.*(?:^|/)\\.\\.?(?:/|$)).+$"
+    },
+    "fileKey": {
+      "type": "string",
+      "minLength": 6,
+      "pattern": "^[A-Za-z0-9_-]+$"
+    },
+    "fileVersion": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "pattern": "^(?!\\s)(?!.*\\s$)[^\\r\\n\\u2028\\u2029\\u0000]+$"
+    },
+    "baselineChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "kind", "mode", "hash"],
+      "properties": {
+        "path": { "$ref": "#/$defs/projectRelativePath" },
+        "kind": { "enum": ["file", "deleted"] },
+        "mode": { "type": ["string", "null"], "pattern": "^100(?:644|755)$" },
+        "hash": {
+          "type": ["string", "null"],
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        }
+      }
+    },
+    "baseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repositoryRoot", "profile", "revision", "preExistingChanges"],
+      "properties": {
+        "repositoryRoot": { "const": "." },
+        "profile": { "const": "git-visible-v1" },
+        "revision": {
+          "type": "string",
+          "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$"
+        },
+        "preExistingChanges": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/baselineChange" }
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["figmaUrl", "fileKey", "nodeId", "fileVersion"],
+      "properties": {
+        "figmaUrl": { "$ref": "#/$defs/nonEmptyString" },
+        "fileKey": { "$ref": "#/$defs/fileKey" },
+        "nodeId": {
+          "type": "string",
+          "pattern": "^[0-9]+:[0-9]+$"
+        },
+        "fileVersion": { "$ref": "#/$defs/fileVersion" }
+      }
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["origin", "route", "featureModule", "allowedImplementationRoots"],
+      "properties": {
+        "origin": { "$ref": "#/$defs/nonEmptyString" },
+        "route": {
+          "type": "string",
+          "pattern": "^/(?!/)(?!.*[\\\\?#])[^\\r\\n\\u2028\\u2029\\u0000]*$",
+          "minLength": 1
+        },
+        "featureModule": { "$ref": "#/$defs/projectRelativePath" },
+        "allowedImplementationRoots": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/projectRelativePath" }
+        }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["include", "exclude"],
+      "properties": {
+        "include": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "exclude": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        }
+      }
+    },
+    "viewport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "width", "height", "dpr"],
+      "properties": {
+        "id": { "$ref": "#/$defs/filesystemId" },
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 },
+        "dpr": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "applicability", "evidence"],
+      "properties": {
+        "id": { "$ref": "#/$defs/filesystemId" },
+        "applicability": {
+          "enum": ["required", "not-applicable"]
+        },
+        "evidence": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "pattern": "^(?!\\s)(?!.*\\s$)[^\\r\\n\\u2028\\u2029\\u0000]+$"
+        }
+      }
+    },
+    "modeRequirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["applicability", "evidence"],
+      "properties": {
+        "applicability": { "enum": ["required", "not-applicable"] },
+        "evidence": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "pattern": "^(?!\\s)(?!.*\\s$)[^\\r\\n\\u2028\\u2029\\u0000]+$"
+        }
+      }
+    },
+    "evidenceModes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["behaviorOnly", "responsiveOnly"],
+      "properties": {
+        "behaviorOnly": { "$ref": "#/$defs/modeRequirement" },
+        "responsiveOnly": { "$ref": "#/$defs/modeRequirement" }
+      }
+    },
+    "data": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fixture"],
+      "properties": {
+        "fixture": { "$ref": "#/$defs/projectRelativePath" }
+      }
+    },
+    "dependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packageName",
+        "purpose",
+        "status",
+        "specifier",
+        "packageJsonPath",
+        "lockfilePath",
+        "lockfileCheckId",
+        "lockfileCheckProfile"
+      ],
+      "properties": {
+        "packageName": { "$ref": "#/$defs/nonEmptyString" },
+        "purpose": { "$ref": "#/$defs/nonEmptyString" },
+        "status": { "enum": ["available", "approved-to-install"] },
+        "specifier": { "$ref": "#/$defs/nonEmptyString" },
+        "packageJsonPath": { "$ref": "#/$defs/projectRelativePath" },
+        "lockfilePath": { "$ref": "#/$defs/projectRelativePath" },
+        "lockfileCheckId": {
+          "type": ["string", "null"],
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "lockfileCheckProfile": {
+          "enum": [
+            null,
+            "npm-ci",
+            "pnpm-frozen",
+            "yarn-immutable",
+            "yarn-classic-frozen",
+            "bun-frozen"
+          ]
+        }
+      }
+    },
+    "provisioning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assetMaterialization",
+        "agentBrowser",
+        "visualCapture",
+        "visualCaptureCommand",
+        "visualCompare",
+        "visualCompareCommand",
+        "vitestBrowser",
+        "playwright",
+        "agentVerify",
+        "dependencies"
+      ],
+      "properties": {
+        "assetMaterialization": { "const": "available" },
+        "agentBrowser": { "const": "available" },
+        "visualCapture": { "const": "available" },
+        "visualCaptureCommand": { "$ref": "#/$defs/nonEmptyString" },
+        "visualCompare": { "const": "available" },
+        "visualCompareCommand": { "$ref": "#/$defs/nonEmptyString" },
+        "vitestBrowser": { "const": "available" },
+        "playwright": { "const": "available" },
+        "agentVerify": { "const": "available" },
+        "dependencies": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/dependency" }
+        }
+      }
+    },
+    "check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "command"],
+      "properties": {
+        "id": { "$ref": "#/$defs/filesystemId" },
+        "command": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "acceptance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "qualityGates",
+        "comparatorProfile",
+        "maxDifferenceRatio",
+        "requireEightCategoryAnalysis",
+        "requireProjectChecks",
+        "projectChecks",
+        "browserChecks"
+      ],
+      "properties": {
+        "qualityGates": {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 6,
+          "uniqueItems": true,
+          "items": {
+            "enum": ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6"]
+          }
+        },
+        "comparatorProfile": { "const": "rgba-exact-v1" },
+        "maxDifferenceRatio": { "const": 15 },
+        "requireEightCategoryAnalysis": { "const": true },
+        "requireProjectChecks": { "const": true },
+        "projectChecks": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/check" }
+        },
+        "browserChecks": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/check" }
+        }
+      }
+    }
+  }
+}

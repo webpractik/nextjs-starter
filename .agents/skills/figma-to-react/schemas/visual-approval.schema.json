@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openai.com/schemas/figma-to-react/visual-approval.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "taskId",
+    "implementationHash",
+    "captureContractHash",
+    "caseId",
+    "iteration",
+    "owner",
+    "reason",
+    "rawChecksum",
+    "analysisChecksum"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "taskId": { "$ref": "#/$defs/filesystemId" },
+    "implementationHash": { "$ref": "#/$defs/checksum" },
+    "captureContractHash": { "$ref": "#/$defs/checksum" },
+    "caseId": { "$ref": "#/$defs/filesystemId" },
+    "iteration": { "type": "integer", "minimum": 1 },
+    "owner": { "$ref": "#/$defs/nonEmptyString" },
+    "reason": { "$ref": "#/$defs/nonEmptyString" },
+    "rawChecksum": { "$ref": "#/$defs/checksum" },
+    "analysisChecksum": { "$ref": "#/$defs/checksum" }
+  },
+  "$defs": {
+    "filesystemId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!\\s)(?!.*\\s$)[^\\r\\n\\u2028\\u2029\\u0000]+$"
+    }
+  }
+}

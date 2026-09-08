@@ -1,0 +1,266 @@
+{
+  "schemaVersion": 2,
+  "cases": [
+    {
+      "caseId": "pricing-viewport-desktop-default-visual-reference",
+      "taskId": "pricing-dashboard",
+      "fileKey": "AbCdEfGhIjKlMnOpQrStUv",
+      "nodeId": "12:34",
+      "fileVersion": "1234567890123456789",
+      "route": "/pricing",
+      "captureRegion": {
+        "kind": "viewport",
+        "selector": null,
+        "logicalDimensions": null,
+        "pixelRounding": "round"
+      },
+      "viewport": { "width": 1440, "height": 900, "dpr": 1 },
+      "state": "default",
+      "fixture": "src/features/pricing/fixtures/visual.ts",
+      "locale": "en-US",
+      "timezone": "UTC",
+      "rendering": {
+        "colorScheme": "light",
+        "reducedMotion": "reduce",
+        "scrollbarPolicy": "stable"
+      },
+      "environment": {
+        "browser": { "name": "chromium", "version": "140.0.0" },
+        "os": { "name": "linux", "version": "ubuntu-24.04" },
+        "container": {
+          "image": "ghcr.io/example/visual-tests:1.0.0",
+          "digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+        },
+        "headless": true,
+        "fontHashes": [
+          {
+            "family": "Inter",
+            "style": "normal",
+            "weight": 400,
+            "hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+          }
+        ]
+      },
+      "comparatorProfile": "rgba-exact-v1",
+      "readiness": [
+        {
+          "kind": "url-equals",
+          "selector": null,
+          "expected": "http://localhost:3000/pricing"
+        },
+        { "kind": "fonts-ready", "selector": null, "expected": null },
+        { "kind": "images-ready", "selector": null, "expected": null },
+        {
+          "kind": "selector-visible",
+          "selector": "[data-testid='pricing-layout']",
+          "expected": null
+        }
+      ],
+      "reference": {
+        "sourceId": "pricing-node",
+        "path": "artifacts/visual/pricing-dashboard/pricing-viewport-desktop-default-visual-reference/reference.png",
+        "checksum": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+        "dimensions": { "width": 1440, "height": 900 }
+      },
+      "evidencePath": null,
+      "selectors": {
+        "primaryLayout": ["[data-testid='pricing-layout']"],
+        "dynamicText": ["[data-testid='pricing-card-description']"],
+        "visibility": ["[data-testid='pricing-card']"]
+      },
+      "evidenceMode": "visual-reference"
+    },
+    {
+      "caseId": "pricing-selector-desktop-default-behavior-only",
+      "taskId": "pricing-dashboard",
+      "fileKey": "AbCdEfGhIjKlMnOpQrStUv",
+      "nodeId": "12:34",
+      "fileVersion": "1234567890123456789",
+      "route": "/pricing",
+      "captureRegion": {
+        "kind": "selector",
+        "selector": "[data-testid='pricing-toggle']",
+        "logicalDimensions": null,
+        "pixelRounding": null
+      },
+      "viewport": { "width": 1440, "height": 900, "dpr": 1 },
+      "state": "default",
+      "fixture": "src/features/pricing/fixtures/visual.ts",
+      "locale": "en-US",
+      "timezone": "UTC",
+      "rendering": {
+        "colorScheme": "light",
+        "reducedMotion": "reduce",
+        "scrollbarPolicy": "stable"
+      },
+      "environment": {
+        "browser": { "name": "chromium", "version": "140.0.0" },
+        "os": { "name": "linux", "version": "ubuntu-24.04" },
+        "container": {
+          "image": "ghcr.io/example/visual-tests:1.0.0",
+          "digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+        },
+        "headless": true,
+        "fontHashes": [
+          {
+            "family": "Inter",
+            "style": "normal",
+            "weight": 400,
+            "hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+          }
+        ]
+      },
+      "comparatorProfile": "rgba-exact-v1",
+      "readiness": [
+        {
+          "kind": "url-equals",
+          "selector": null,
+          "expected": "http://localhost:3000/pricing"
+        },
+        { "kind": "fonts-ready", "selector": null, "expected": null },
+        { "kind": "images-ready", "selector": null, "expected": null },
+        {
+          "kind": "selector-visible",
+          "selector": "[data-testid='pricing-toggle']",
+          "expected": null
+        }
+      ],
+      "reference": null,
+      "evidencePath": "artifacts/visual/pricing-dashboard/pricing-selector-desktop-default-behavior-only/evidence.json",
+      "selectors": {
+        "primaryLayout": ["[data-testid='pricing-layout']"],
+        "dynamicText": ["[data-testid='pricing-card-description']"],
+        "visibility": ["[data-testid='pricing-toggle']"]
+      },
+      "evidenceMode": "behavior-only"
+    },
+    {
+      "caseId": "pricing-viewport-tablet-default-responsive-only",
+      "taskId": "pricing-dashboard",
+      "fileKey": "AbCdEfGhIjKlMnOpQrStUv",
+      "nodeId": "12:34",
+      "fileVersion": "1234567890123456789",
+      "route": "/pricing",
+      "captureRegion": {
+        "kind": "viewport",
+        "selector": null,
+        "logicalDimensions": null,
+        "pixelRounding": null
+      },
+      "viewport": { "width": 768, "height": 1024, "dpr": 1 },
+      "state": "default",
+      "fixture": "src/features/pricing/fixtures/visual.ts",
+      "locale": "en-US",
+      "timezone": "UTC",
+      "rendering": {
+        "colorScheme": "light",
+        "reducedMotion": "reduce",
+        "scrollbarPolicy": "stable"
+      },
+      "environment": {
+        "browser": { "name": "chromium", "version": "140.0.0" },
+        "os": { "name": "linux", "version": "ubuntu-24.04" },
+        "container": {
+          "image": "ghcr.io/example/visual-tests:1.0.0",
+          "digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+        },
+        "headless": true,
+        "fontHashes": [
+          {
+            "family": "Inter",
+            "style": "normal",
+            "weight": 400,
+            "hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+          }
+        ]
+      },
+      "comparatorProfile": "rgba-exact-v1",
+      "readiness": [
+        {
+          "kind": "url-equals",
+          "selector": null,
+          "expected": "http://localhost:3000/pricing"
+        },
+        { "kind": "fonts-ready", "selector": null, "expected": null },
+        { "kind": "images-ready", "selector": null, "expected": null },
+        {
+          "kind": "selector-visible",
+          "selector": "[data-testid='pricing-layout']",
+          "expected": null
+        }
+      ],
+      "reference": null,
+      "evidencePath": "artifacts/visual/pricing-dashboard/pricing-viewport-tablet-default-responsive-only/evidence.json",
+      "selectors": {
+        "primaryLayout": ["[data-testid='pricing-layout']"],
+        "dynamicText": ["[data-testid='pricing-card-description']"],
+        "visibility": ["[data-testid='pricing-card']"]
+      },
+      "evidenceMode": "responsive-only"
+    },
+    {
+      "caseId": "pricing-viewport-mobile-default-responsive-only",
+      "taskId": "pricing-dashboard",
+      "fileKey": "AbCdEfGhIjKlMnOpQrStUv",
+      "nodeId": "12:34",
+      "fileVersion": "1234567890123456789",
+      "route": "/pricing",
+      "captureRegion": {
+        "kind": "viewport",
+        "selector": null,
+        "logicalDimensions": null,
+        "pixelRounding": null
+      },
+      "viewport": { "width": 375, "height": 812, "dpr": 1 },
+      "state": "default",
+      "fixture": "src/features/pricing/fixtures/visual.ts",
+      "locale": "en-US",
+      "timezone": "UTC",
+      "rendering": {
+        "colorScheme": "light",
+        "reducedMotion": "reduce",
+        "scrollbarPolicy": "stable"
+      },
+      "environment": {
+        "browser": { "name": "chromium", "version": "140.0.0" },
+        "os": { "name": "linux", "version": "ubuntu-24.04" },
+        "container": {
+          "image": "ghcr.io/example/visual-tests:1.0.0",
+          "digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+        },
+        "headless": true,
+        "fontHashes": [
+          {
+            "family": "Inter",
+            "style": "normal",
+            "weight": 400,
+            "hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+          }
+        ]
+      },
+      "comparatorProfile": "rgba-exact-v1",
+      "readiness": [
+        {
+          "kind": "url-equals",
+          "selector": null,
+          "expected": "http://localhost:3000/pricing"
+        },
+        { "kind": "fonts-ready", "selector": null, "expected": null },
+        { "kind": "images-ready", "selector": null, "expected": null },
+        {
+          "kind": "selector-visible",
+          "selector": "[data-testid='pricing-layout']",
+          "expected": null
+        }
+      ],
+      "reference": null,
+      "evidencePath": "artifacts/visual/pricing-dashboard/pricing-viewport-mobile-default-responsive-only/evidence.json",
+      "selectors": {
+        "primaryLayout": ["[data-testid='pricing-layout']"],
+        "dynamicText": ["[data-testid='pricing-card-description']"],
+        "visibility": ["[data-testid='pricing-card']"]
+      },
+      "evidenceMode": "responsive-only"
+    }
+  ]
+}

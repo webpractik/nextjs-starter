@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openai.com/schemas/figma-to-react/comparator-conformance.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "taskId",
+    "implementationHash",
+    "profile",
+    "pixelThreshold",
+    "antialiasPolicy",
+    "fixtures",
+    "expected",
+    "actual",
+    "passed"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "taskId": { "$ref": "#/$defs/filesystemId" },
+    "implementationHash": { "$ref": "#/$defs/checksum" },
+    "profile": { "const": "rgba-exact-v1" },
+    "pixelThreshold": { "const": 0 },
+    "antialiasPolicy": { "const": "count" },
+    "fixtures": { "$ref": "#/$defs/fixtures" },
+    "expected": { "$ref": "#/$defs/metrics" },
+    "actual": { "$ref": "#/$defs/metrics" },
+    "passed": { "const": true }
+  },
+  "$defs": {
+    "filesystemId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?![A-Za-z]:)(?!.*//)(?!\\s)(?!.*\\s$)(?!.*(?:^|/)\\.{1,2}(?:/|$))(?!.*\\\\)(?!.*\\u0000).+$"
+    },
+    "fixtures": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reference", "actual", "raw", "diff", "overlay"],
+      "properties": {
+        "reference": { "$ref": "#/$defs/relativePath" },
+        "actual": { "$ref": "#/$defs/relativePath" },
+        "raw": { "$ref": "#/$defs/relativePath" },
+        "diff": { "$ref": "#/$defs/relativePath" },
+        "overlay": { "$ref": "#/$defs/relativePath" }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["differentPixels", "totalPixels", "differenceRatio"],
+      "properties": {
+        "differentPixels": { "type": "integer", "minimum": 0 },
+        "totalPixels": { "type": "integer", "minimum": 1 },
+        "differenceRatio": { "type": "number", "minimum": 0, "maximum": 100 }
+      }
+    }
+  }
+}

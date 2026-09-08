@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "taskId": "pricing-dashboard",
+  "implementationHash": "sha256:711704ec7186e0030e3acca62ee0b92dd316e404835bc7474111d63271ab5dff",
+  "captureContractHash": "sha256:c2082c7da07fafad21440daa61dde3a20e20dfd7f03e9dcf6af61c9042fe26f9",
+  "caseId": "pricing-viewport-desktop-default-visual-reference",
+  "iteration": 1,
+  "owner": "Владелец интерфейса",
+  "reason": "Оставшееся отличие вызвано растеризацией шрифта в закреплённой среде и не меняет геометрию или содержимое.",
+  "rawChecksum": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "analysisChecksum": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+}

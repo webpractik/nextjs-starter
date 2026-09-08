@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openai.com/schemas/figma-to-react/verification-record.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "taskId", "implementationHash", "qualityChecks", "projectChecks", "browserChecks"],
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "taskId": { "$ref": "#/$defs/filesystemId" },
+    "implementationHash": { "$ref": "#/$defs/checksum" },
+    "qualityChecks": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/qualityCheck" }
+    },
+    "projectChecks": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/executedCheck" }
+    },
+    "browserChecks": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/executedCheck" }
+    }
+  },
+  "$defs": {
+    "filesystemId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?![A-Za-z]:)(?!.*//)(?!\\s)(?!.*\\s$)(?!.*(?:^|/)\\.{1,2}(?:/|$))(?!.*\\\\)(?!.*\\u0000).+$"
+    },
+    "checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "qualityCheck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "status", "evidencePath", "evidenceHash"],
+      "properties": {
+        "id": { "enum": ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6"] },
+        "status": { "const": "passed" },
+        "evidencePath": { "$ref": "#/$defs/relativePath" },
+        "evidenceHash": { "$ref": "#/$defs/checksum" }
+      }
+    },
+    "executedCheck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "command", "status", "exitCode", "outputPath", "outputHash"],
+      "properties": {
+        "id": { "$ref": "#/$defs/filesystemId" },
+        "command": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?!\\s)(?!.*\\s$)[^\\r\\n\\u2028\\u2029\\u0000]+$"
+        },
+        "status": { "const": "passed" },
+        "exitCode": { "const": 0 },
+        "outputPath": { "$ref": "#/$defs/relativePath" },
+        "outputHash": { "$ref": "#/$defs/checksum" }
+      }
+    }
+  }
+}

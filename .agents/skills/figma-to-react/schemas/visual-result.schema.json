@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openai.com/schemas/figma-to-react/visual-result.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "implementationHash",
+    "captureContractHash",
+    "iteration",
+    "reference",
+    "actual",
+    "diff",
+    "overlay",
+    "raw",
+    "analysis",
+    "viewport",
+    "differenceRatio",
+    "dimensionMismatch",
+    "status",
+    "approval",
+    "issues"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "implementationHash": { "$ref": "#/$defs/checksum" },
+    "captureContractHash": { "$ref": "#/$defs/checksum" },
+    "iteration": { "type": "integer", "minimum": 1 },
+    "reference": { "$ref": "#/$defs/nonEmptyString" },
+    "actual": { "$ref": "#/$defs/nonEmptyString" },
+    "diff": { "$ref": "#/$defs/nonEmptyString" },
+    "overlay": { "$ref": "#/$defs/nonEmptyString" },
+    "raw": { "$ref": "#/$defs/nonEmptyString" },
+    "analysis": { "$ref": "#/$defs/nonEmptyString" },
+    "viewport": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]*x[1-9][0-9]*$"
+    },
+    "differenceRatio": { "type": "number", "minimum": 0, "maximum": 100 },
+    "dimensionMismatch": { "const": null },
+    "status": {
+      "enum": ["pixel-perfect", "strict-visual-accepted", "failed"]
+    },
+    "approval": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["path", "checksum"],
+      "properties": {
+        "path": { "$ref": "#/$defs/nonEmptyString" },
+        "checksum": { "$ref": "#/$defs/checksum" }
+      }
+    },
+    "issues": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/issue" }
+    }
+  },
+  "$defs": {
+    "checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "issue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["category", "selector", "expected", "actual"],
+      "properties": {
+        "category": {
+          "enum": [
+            "geometry",
+            "spacing",
+            "typography",
+            "colors",
+            "borders and shadows",
+            "assets",
+            "responsive behavior",
+            "missing or extra elements"
+          ]
+        },
+        "selector": { "$ref": "#/$defs/nonEmptyString" },
+        "expected": { "$ref": "#/$defs/nonEmptyString" },
+        "actual": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    }
+  }
+}

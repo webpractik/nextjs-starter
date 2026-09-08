@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 2,
+  "taskId": "pricing-dashboard",
+  "implementationHash": "sha256:711704ec7186e0030e3acca62ee0b92dd316e404835bc7474111d63271ab5dff",
+  "qualityChecks": [
+    {
+      "id": "Q1",
+      "status": "passed",
+      "evidencePath": "artifacts/visual/pricing-dashboard/implementations/711704ec7186e0030e3acca62ee0b92dd316e404835bc7474111d63271ab5dff/checks/q1.md",
+      "evidenceHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "id": "Q2",
+      "status": "passed",
+      "evidencePath": "artifacts/visual/pricing-dashboard/implementations/711704ec7186e0030e3acca62ee0b92dd316e404835bc7474111d63271ab5dff/checks/q2.md",
+      "evidenceHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "id": "Q3",
+      "status": "passed",
+      "evidencePath": "artifacts/visual/pricing-dashboard/implementations/711704ec7186e0030e3acca62ee0b92dd316e404835bc7474111d63271ab5dff/checks/q3.md",
+      "evidenceHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "id": "Q4",
+      "status": "passed",
+      "evidencePath": "artifacts/visual/pricing-dashboard/implementations/711704ec7186e0030e3acca62ee0b92dd316e404835bc7474111d63271ab5dff/checks/q4.md",
+      "evidenceHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "id": "Q5",
+      "status": "passed",
+      "evidencePath": "artifacts/visual/pricing-dashboard/implementations/711704ec7186e0030e3acca62ee0b92dd316e404835bc7474111d63271ab5dff/checks/q5.md",
+      "evidenceHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "id": "Q6",
+      "status": "passed",
+      "evidencePath": "artifacts/visual/pricing-dashboard/implementations/711704ec7186e0030e3acca62ee0b92dd316e404835bc7474111d63271ab5dff/checks/q6.md",
+      "evidenceHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ],
+  "projectChecks": [
+    {
+      "id": "format",
+      "command": "npm run format:check",
+      "status": "passed",
+      "exitCode": 0,
+      "outputPath": "artifacts/visual/pricing-dashboard/implementations/711704ec7186e0030e3acca62ee0b92dd316e404835bc7474111d63271ab5dff/checks/format.txt",
+      "outputHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "id": "lint",
+      "command": "npm run lint",
+      "status": "passed",
+      "exitCode": 0,
+      "outputPath": "artifacts/visual/pricing-dashboard/implementations/711704ec7186e0030e3acca62ee0b92dd316e404835bc7474111d63271ab5dff/checks/lint.txt",
+      "outputHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "id": "typecheck",
+      "command": "npm run typecheck",
+      "status": "passed",
+      "exitCode": 0,
+      "outputPath": "artifacts/visual/pricing-dashboard/implementations/711704ec7186e0030e3acca62ee0b92dd316e404835bc7474111d63271ab5dff/checks/typecheck.txt",
+      "outputHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "id": "unit",
+      "command": "npm run test:unit",
+      "status": "passed",
+      "exitCode": 0,
+      "outputPath": "artifacts/visual/pricing-dashboard/implementations/711704ec7186e0030e3acca62ee0b92dd316e404835bc7474111d63271ab5dff/checks/unit.txt",
+      "outputHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "id": "build",
+      "command": "npm run build",
+      "status": "passed",
+      "exitCode": 0,
+      "outputPath": "artifacts/visual/pricing-dashboard/implementations/711704ec7186e0030e3acca62ee0b92dd316e404835bc7474111d63271ab5dff/checks/build.txt",
+      "outputHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ],
+  "browserChecks": [
+    {
+      "id": "vitest-browser",
+      "command": "npm run test:browser",
+      "status": "passed",
+      "exitCode": 0,
+      "outputPath": "artifacts/visual/pricing-dashboard/implementations/711704ec7186e0030e3acca62ee0b92dd316e404835bc7474111d63271ab5dff/checks/vitest-browser.txt",
+      "outputHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "id": "playwright",
+      "command": "npm run test:e2e",
+      "status": "passed",
+      "exitCode": 0,
+      "outputPath": "artifacts/visual/pricing-dashboard/implementations/711704ec7186e0030e3acca62ee0b92dd316e404835bc7474111d63271ab5dff/checks/playwright.txt",
+      "outputHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "id": "agent-verify",
+      "command": "npm run agent:verify",
+      "status": "passed",
+      "exitCode": 0,
+      "outputPath": "artifacts/visual/pricing-dashboard/implementations/711704ec7186e0030e3acca62ee0b92dd316e404835bc7474111d63271ab5dff/checks/agent-verify.txt",
+      "outputHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ]
+}

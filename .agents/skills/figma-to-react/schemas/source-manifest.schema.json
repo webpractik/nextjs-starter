@@ -1,0 +1,180 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openai.com/schemas/figma-to-react/source-manifest.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "taskId", "fileKey", "fileVersion", "rootNodeId", "sources"],
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "taskId": { "$ref": "#/$defs/filesystemId" },
+    "fileKey": { "$ref": "#/$defs/fileKey" },
+    "fileVersion": { "type": ["string", "null"], "minLength": 1, "pattern": "\\S" },
+    "rootNodeId": { "$ref": "#/$defs/nodeId" },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/source" }
+    }
+  },
+  "$defs": {
+    "filesystemId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "fileKey": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{6,}$"
+    },
+    "nodeId": {
+      "type": "string",
+      "pattern": "^[0-9]+:[0-9]+$"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?![A-Za-z]:)(?!.*//)(?!\\s)(?!.*\\s$)(?!.*(?:^|/)\\.{1,2}(?:/|$))(?!.*\\\\)(?!.*\\u0000).+$"
+    },
+    "nullableRelativePath": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "pattern": "^(?!/)(?![A-Za-z]:)(?!.*//)(?!\\s)(?!.*\\s$)(?!.*(?:^|/)\\.{1,2}(?:/|$))(?!.*\\\\)(?!.*\\u0000).+$"
+    },
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "nullableChecksum": {
+      "type": ["string", "null"],
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "origin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "requestId",
+        "evidencePath",
+        "evidenceChecksum",
+        "exportSettings"
+      ],
+      "properties": {
+        "kind": { "enum": ["connector-request", "editor-export", "user-export"] },
+        "requestId": { "type": ["string", "null"], "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "evidencePath": { "$ref": "#/$defs/relativePath" },
+        "evidenceChecksum": { "$ref": "#/$defs/checksum" },
+        "exportSettings": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["format", "scale", "background"],
+          "properties": {
+            "format": { "enum": ["png", "svg"] },
+            "scale": { "type": ["number", "null"], "exclusiveMinimum": 0 },
+            "background": {
+              "type": ["string", "null"],
+              "pattern": "^(?:transparent|#[A-Fa-f0-9]{6}(?:[A-Fa-f0-9]{2})?)$"
+            }
+          }
+        }
+      }
+    },
+    "logicalDimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["width", "height"],
+      "properties": {
+        "width": { "type": "number", "exclusiveMinimum": 0 },
+        "height": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "pixelDimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["width", "height"],
+      "properties": {
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "derivation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tool",
+        "version",
+        "arguments",
+        "inputChecksum",
+        "outputPath",
+        "outputChecksum",
+        "pixelDimensions"
+      ],
+      "properties": {
+        "tool": { "$ref": "#/$defs/nonEmptyString" },
+        "version": { "$ref": "#/$defs/nonEmptyString" },
+        "arguments": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "inputChecksum": { "$ref": "#/$defs/checksum" },
+        "outputPath": { "$ref": "#/$defs/relativePath" },
+        "outputChecksum": { "$ref": "#/$defs/checksum" },
+        "pixelDimensions": { "$ref": "#/$defs/pixelDimensions" }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "fileKey",
+        "fileVersion",
+        "nodeId",
+        "purpose",
+        "caseId",
+        "mediaKind",
+        "path",
+        "checksum",
+        "logicalDimensions",
+        "pixelDimensions",
+        "derivations",
+        "origin",
+        "runtimePath",
+        "runtimeChecksum"
+      ],
+      "properties": {
+        "sourceId": { "$ref": "#/$defs/filesystemId" },
+        "fileKey": { "$ref": "#/$defs/fileKey" },
+        "fileVersion": { "type": ["string", "null"], "minLength": 1, "pattern": "\\S" },
+        "nodeId": { "$ref": "#/$defs/nodeId" },
+        "purpose": { "enum": ["visual-reference", "runtime-asset"] },
+        "caseId": { "type": ["string", "null"], "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "mediaKind": { "enum": ["png", "svg"] },
+        "path": { "$ref": "#/$defs/relativePath" },
+        "checksum": { "$ref": "#/$defs/checksum" },
+        "logicalDimensions": { "$ref": "#/$defs/logicalDimensions" },
+        "pixelDimensions": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["width", "height"],
+          "properties": {
+            "width": { "type": "integer", "minimum": 1 },
+            "height": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "derivations": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/derivation" }
+        },
+        "origin": { "$ref": "#/$defs/origin" },
+        "runtimePath": { "$ref": "#/$defs/nullableRelativePath" },
+        "runtimeChecksum": { "$ref": "#/$defs/nullableChecksum" }
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 2,
+  "taskId": "pricing-dashboard",
+  "taskContractHash": "sha256:76f767267c2211f13f29794fdd0b3c29a5d8eb44b220b8ad1b332967524ccf13",
+  "files": [
+    {
+      "path": "src/features/pricing/PricingDashboard.tsx",
+      "kind": "file",
+      "mode": "100644",
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "path": "src/features/pricing/fixtures/visual.ts",
+      "kind": "file",
+      "mode": "100644",
+      "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ],
+  "rootHash": "sha256:711704ec7186e0030e3acca62ee0b92dd316e404835bc7474111d63271ab5dff"
+}

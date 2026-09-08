@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 2,
+  "taskId": "pricing-dashboard",
+  "fileKey": "AbCdEfGhIjKlMnOpQrStUv",
+  "fileVersion": "1234567890123456789",
+  "rootNodeId": "12:34",
+  "sources": [
+    {
+      "sourceId": "pricing-node",
+      "fileKey": "AbCdEfGhIjKlMnOpQrStUv",
+      "fileVersion": "1234567890123456789",
+      "nodeId": "12:34",
+      "purpose": "visual-reference",
+      "caseId": "pricing-viewport-desktop-default-visual-reference",
+      "mediaKind": "png",
+      "path": "artifacts/visual/pricing-dashboard/sources/pricing-node.png",
+      "checksum": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "logicalDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "pixelDimensions": {
+        "width": 1440,
+        "height": 900
+      },
+      "derivations": [],
+      "origin": {
+        "kind": "connector-request",
+        "requestId": "root-screenshot",
+        "evidencePath": "artifacts/visual/pricing-dashboard/design-context/root-screenshot.png",
+        "evidenceChecksum": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+        "exportSettings": { "format": "png", "scale": 1, "background": null }
+      },
+      "runtimePath": null,
+      "runtimeChecksum": null
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openai.com/schemas/figma-to-react/visual-compare-raw.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "implementationHash",
+    "captureContractHash",
+    "success",
+    "error",
+    "comparator",
+    "pixelThreshold",
+    "antialiasPolicy",
+    "differentPixels",
+    "totalPixels",
+    "differenceRatio",
+    "dimensionMismatch",
+    "referenceDimensions",
+    "actualDimensions",
+    "referenceChecksum",
+    "actualChecksum",
+    "diff",
+    "diffChecksum",
+    "overlay",
+    "overlayChecksum"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "implementationHash": { "$ref": "#/$defs/checksum" },
+    "captureContractHash": { "$ref": "#/$defs/checksum" },
+    "success": { "const": true },
+    "error": { "const": null },
+    "comparator": { "const": "rgba-exact-v1" },
+    "pixelThreshold": { "const": 0 },
+    "antialiasPolicy": { "const": "count" },
+    "differentPixels": { "type": "integer", "minimum": 0 },
+    "totalPixels": { "type": "integer", "minimum": 1 },
+    "differenceRatio": { "type": "number", "minimum": 0, "maximum": 100 },
+    "dimensionMismatch": { "const": null },
+    "referenceDimensions": { "$ref": "#/$defs/dimensions" },
+    "actualDimensions": { "$ref": "#/$defs/dimensions" },
+    "referenceChecksum": { "$ref": "#/$defs/checksum" },
+    "actualChecksum": { "$ref": "#/$defs/checksum" },
+    "diff": { "$ref": "#/$defs/nonEmptyString" },
+    "diffChecksum": { "$ref": "#/$defs/checksum" },
+    "overlay": { "$ref": "#/$defs/nonEmptyString" },
+    "overlayChecksum": { "$ref": "#/$defs/checksum" }
+  },
+  "$defs": {
+    "checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "dimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["width", "height"],
+      "properties": {
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 }
+      }
+    }
+  }
+}

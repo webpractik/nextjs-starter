@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openai.com/schemas/figma-to-react/evidence-event.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "sequence",
+    "taskId",
+    "gateId",
+    "eventType",
+    "artifactHashes",
+    "implementationHash"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "sequence": { "type": "integer", "minimum": 1 },
+    "taskId": { "$ref": "#/$defs/filesystemId" },
+    "gateId": {
+      "enum": ["G0", "G1", "G2", "G3", "G4", "G5", "G6", "G7", "G8"]
+    },
+    "eventType": {
+      "enum": [
+        "gate-passed",
+        "gate-failed",
+        "failed-pre-diff",
+        "implementation-changed",
+        "iteration-completed"
+      ]
+    },
+    "artifactHashes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/artifactHash" }
+    },
+    "implementationHash": { "$ref": "#/$defs/hash" },
+    "caseId": { "$ref": "#/$defs/filesystemId" },
+    "iteration": { "type": "integer", "minimum": 1 },
+    "evidencePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    }
+  },
+  "$defs": {
+    "filesystemId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "artifactHash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "hash"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1, "pattern": "\\S" },
+        "hash": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

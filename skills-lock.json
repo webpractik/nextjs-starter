@@ -49,12 +49,26 @@
             "skillPath": "skills/documentation-and-adrs/SKILL.md",
             "computedHash": "7464fd2950b99fb00bbf65cab27653e0a049eef00c98927713ffdfe232a9daa9"
         },
-        "frontend-design": {
-            "source": "anthropics/skills",
-            "ref": "main",
-            "sourceType": "github",
-            "skillPath": "skills/frontend-design/SKILL.md",
-            "computedHash": "4eabc66183767153e404b39d1b839b1c37f2d82d86f0a0d7e880a579d8d62336"
+        "estimates": {
+            "source": "git@webpractik.gitlab.yandexcloud.net:webpractik/skills.git",
+            "sourceUrl": "git@webpractik.gitlab.yandexcloud.net:webpractik/skills.git",
+            "sourceType": "git",
+            "skillPath": "shared/estimates/SKILL.md",
+            "computedHash": "d7e141dee0c9eaff050e943370973428d578acb36035c1291346d2841fc026d5"
+        },
+        "figma-to-react": {
+            "source": "git@webpractik.gitlab.yandexcloud.net:webpractik/skills.git",
+            "sourceUrl": "git@webpractik.gitlab.yandexcloud.net:webpractik/skills.git",
+            "sourceType": "git",
+            "skillPath": "frontend/figma-to-react/SKILL.md",
+            "computedHash": "cf8a88703d7e03c62b365894fba75ee67df0221e548c5bdbb94abbcd39b117ca"
+        },
+        "frontend-testing": {
+            "source": "git@webpractik.gitlab.yandexcloud.net:webpractik/skills.git",
+            "sourceUrl": "git@webpractik.gitlab.yandexcloud.net:webpractik/skills.git",
+            "sourceType": "git",
+            "skillPath": "frontend/frontend-testing/SKILL.md",
+            "computedHash": "936b8abd9b17ecd433168d7b2c0439f9cc356512d75902370f9d1fedf3ca79c2"
         },
         "frontend-ui-engineering": {
             "source": "addyosmani/agent-skills",
@@ -80,33 +94,12 @@
             "skillPath": "skills/incremental-implementation/SKILL.md",
             "computedHash": "d83e705bd54b0a4b02a75cdda0a3f2a28b935286e31eb945e13aafe079c87b59"
         },
-        "next-cache-components-adoption": {
-            "source": "vercel/next.js",
-            "ref": "canary",
-            "sourceType": "github",
-            "skillPath": "skills/next-cache-components-adoption/SKILL.md",
-            "computedHash": "28dbee9d2c2773fca3447de97f5b36b60be9398b7d4e914c79ca92b7d004ca21"
-        },
-        "next-cache-components-optimizer": {
-            "source": "vercel/next.js",
-            "ref": "canary",
-            "sourceType": "github",
-            "skillPath": "skills/next-cache-components-optimizer/SKILL.md",
-            "computedHash": "f67b08843bfc4e9cde4ac4bfe8b14aa0d2d9d2694611be077fa333bad2605a65"
-        },
-        "next-dev-loop": {
-            "source": "vercel/next.js",
-            "ref": "canary",
-            "sourceType": "github",
-            "skillPath": "skills/next-dev-loop/SKILL.md",
-            "computedHash": "1fb1b47ed7186737df086aa198f86961f72691539f1c4507f60bbedf60a128be"
-        },
-        "next-partial-prefetching-adoption": {
-            "source": "vercel/next.js",
-            "ref": "canary",
-            "sourceType": "github",
-            "skillPath": "skills/next-partial-prefetching-adoption/SKILL.md",
-            "computedHash": "4ed43c1f766872e8322821b5103176cf08d8cd26409ddd80c95af689d59ae74e"
+        "modular-react": {
+            "source": "git@webpractik.gitlab.yandexcloud.net:webpractik/skills.git",
+            "sourceUrl": "git@webpractik.gitlab.yandexcloud.net:webpractik/skills.git",
+            "sourceType": "git",
+            "skillPath": "frontend/modular-react/SKILL.md",
+            "computedHash": "5ac42dc92eb9064f814a8503801297f1bf73f14e6ab95cec07645f26dd56371f"
         },
         "observability-and-instrumentation": {
             "source": "addyosmani/agent-skills",
@@ -114,17 +107,18 @@
             "skillPath": "skills/observability-and-instrumentation/SKILL.md",
             "computedHash": "9bfc314353e4a55d691faca5b1a894e38a9897d88aabff34ea2c6a039d86bf8d"
         },
+        "openapi": {
+            "source": "git@webpractik.gitlab.yandexcloud.net:webpractik/skills.git",
+            "sourceUrl": "git@webpractik.gitlab.yandexcloud.net:webpractik/skills.git",
+            "sourceType": "git",
+            "skillPath": "shared/openapi/SKILL.md",
+            "computedHash": "08e0c17d85a0c0099dc83833488d332b3acf1063bd2e9a0262ae735ad03088bf"
+        },
         "performance-optimization": {
             "source": "addyosmani/agent-skills",
             "sourceType": "github",
             "skillPath": "skills/performance-optimization/SKILL.md",
             "computedHash": "3881a49f910607b36f4fb1f9f17b4ef703293c6073986bcfa9f7839d44680aba"
-        },
-        "planning-and-task-breakdown": {
-            "source": "addyosmani/agent-skills",
-            "sourceType": "github",
-            "skillPath": "skills/planning-and-task-breakdown/SKILL.md",
-            "computedHash": "ecc29e854ff27b26a2e6b3e4f15ec5b9bd74f65c7e434515eb0e4ac23cc6cdee"
         },
         "playwright-best-practices": {
             "source": "currents-dev/playwright-best-practices-skill",
@@ -138,17 +132,18 @@
             "skillPath": "skills/security-and-hardening/SKILL.md",
             "computedHash": "a0246e67cf8f8a18687a7736442738318b1997715fbdf53dfcf767082c51cca5"
         },
-        "shadcn": {
-            "source": "shadcn/ui",
-            "sourceType": "github",
-            "skillPath": "skills/shadcn/SKILL.md",
-            "computedHash": "c1a68ee06a668aced9ab2b5fbdea5f989864123794eb2e056b339a072dbb7f10"
-        },
         "source-driven-development": {
             "source": "addyosmani/agent-skills",
             "sourceType": "github",
             "skillPath": "skills/source-driven-development/SKILL.md",
             "computedHash": "235fb43569e9b21ec5d209818ff1ad3da9682be33c4e464ffa89ed348e7094a0"
+        },
+        "tanstack-query": {
+            "source": "git@webpractik.gitlab.yandexcloud.net:webpractik/skills.git",
+            "sourceUrl": "git@webpractik.gitlab.yandexcloud.net:webpractik/skills.git",
+            "sourceType": "git",
+            "skillPath": "frontend/tanstack-query/SKILL.md",
+            "computedHash": "f0c656ac84ea95a9a3c665ae09650931dcffd1d27f15a392a4c86c48c779b055"
         },
         "test-driven-development": {
             "source": "addyosmani/agent-skills",
@@ -191,13 +186,6 @@
             "sourceType": "github",
             "skillPath": "skills/vitest/SKILL.md",
             "computedHash": "943d436114c677802426741980146c07560bf375297666b03062444f4b98a785"
-        },
-        "webapp-testing": {
-            "source": "anthropics/skills",
-            "ref": "main",
-            "sourceType": "github",
-            "skillPath": "skills/webapp-testing/SKILL.md",
-            "computedHash": "ad5b1fc52807e9afa4635e59218a026b164dc58b6c3f41b0f7c644dcd6ccf572"
         }
     }
 }

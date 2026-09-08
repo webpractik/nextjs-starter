@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openai.com/schemas/figma-to-react/visual-compare-raw.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "success",
+    "error",
+    "comparator",
+    "pixelThreshold",
+    "antialiasPolicy",
+    "differentPixels",
+    "totalPixels",
+    "differenceRatio",
+    "dimensionMismatch",
+    "referenceDimensions",
+    "actualDimensions",
+    "diff",
+    "overlay"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "success": { "const": true },
+    "error": { "const": null },
+    "comparator": { "const": "rgba-exact-v1" },
+    "pixelThreshold": { "const": 0 },
+    "antialiasPolicy": { "const": "count" },
+    "differentPixels": { "type": "integer", "minimum": 0 },
+    "totalPixels": { "type": "integer", "minimum": 1 },
+    "differenceRatio": { "type": "number", "minimum": 0, "maximum": 100 },
+    "dimensionMismatch": { "const": null },
+    "referenceDimensions": { "$ref": "#/$defs/dimensions" },
+    "actualDimensions": { "$ref": "#/$defs/dimensions" },
+    "diff": { "$ref": "#/$defs/nonEmptyString" },
+    "overlay": { "$ref": "#/$defs/nonEmptyString" }
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "dimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["width", "height"],
+      "properties": {
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 }
+      }
+    }
+  }
+}

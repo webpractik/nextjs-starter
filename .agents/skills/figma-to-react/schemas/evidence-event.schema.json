@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openai.com/schemas/figma-to-react/evidence-event.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "sequence",
+    "taskId",
+    "gateId",
+    "eventType",
+    "artifactHashes",
+    "implementationHash",
+    "qualityGates",
+    "checkIds"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "sequence": { "type": "integer", "minimum": 1 },
+    "taskId": { "$ref": "#/$defs/filesystemId" },
+    "gateId": {
+      "enum": ["G0", "G1", "G2", "G3", "G4", "G5", "G6", "G7", "G8"]
+    },
+    "eventType": {
+      "enum": [
+        "gate-passed",
+        "gate-failed",
+        "failed-pre-diff",
+        "implementation-changed",
+        "iteration-completed"
+      ]
+    },
+    "artifactHashes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/artifactHash" }
+    },
+    "implementationHash": {
+      "type": ["string", "null"],
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "qualityGates": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6"]
+      }
+    },
+    "checkIds": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/filesystemId" }
+    },
+    "caseId": { "$ref": "#/$defs/filesystemId" },
+    "iteration": { "type": "integer", "minimum": 1 },
+    "evidencePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?![A-Za-z]:)(?!.*//)(?!\\s)(?!.*\\s$)(?!.*(?:^|/)\\.{1,2}(?:/|$))(?!.*\\\\)(?!.*\\u0000).+$"
+    }
+  },
+  "$defs": {
+    "filesystemId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "artifactHash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "hash"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?!/)(?![A-Za-z]:)(?!.*//)(?!\\s)(?!.*\\s$)(?!.*(?:^|/)\\.{1,2}(?:/|$))(?!.*\\\\)(?!.*\\u0000).+$"
+        },
+        "hash": { "$ref": "#/$defs/hash" }
+      }
+    }
+  }
+}

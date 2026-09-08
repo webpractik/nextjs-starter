@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 2,
+  "taskId": "pricing-dashboard",
+  "fileKey": "AbCdEfGhIjKlMnOpQrStUv",
+  "fileVersion": "1234567890123456789",
+  "rootNodeId": "12:34",
+  "requests": [
+    {
+      "requestId": "root-context",
+      "operation": "get_design_context",
+      "responseFormat": "text",
+      "nodeId": "12:34",
+      "path": "artifacts/visual/pricing-dashboard/design-context/root-context.txt",
+      "checksum": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "requestId": "root-screenshot",
+      "operation": "get_screenshot",
+      "responseFormat": "png",
+      "nodeId": "12:34",
+      "path": "artifacts/visual/pricing-dashboard/design-context/root-screenshot.png",
+      "checksum": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+    }
+  ]
+}

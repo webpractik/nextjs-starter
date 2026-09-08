@@ -1,0 +1,194 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openai.com/schemas/figma-to-react/capture-contract.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "cases"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/case" }
+    }
+  },
+  "$defs": {
+    "filesystemId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "checksum": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "dimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["width", "height"],
+      "properties": {
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "viewport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["width", "height", "dpr"],
+      "properties": {
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 },
+        "dpr": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "captureRegion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "selector"],
+      "properties": {
+        "kind": { "enum": ["viewport", "full-page", "selector"] },
+        "selector": {
+          "type": ["string", "null"],
+          "minLength": 1
+        }
+      }
+    },
+    "rendering": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["colorScheme", "reducedMotion", "scrollbarPolicy"],
+      "properties": {
+        "colorScheme": { "enum": ["light", "dark"] },
+        "reducedMotion": { "enum": ["reduce", "no-preference"] },
+        "scrollbarPolicy": { "enum": ["visible", "hidden", "stable"] }
+      }
+    },
+    "fontHash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["family", "hash"],
+      "properties": {
+        "family": { "$ref": "#/$defs/nonEmptyString" },
+        "hash": { "$ref": "#/$defs/checksum" }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["browser", "os", "container", "headless", "fontHashes"],
+      "properties": {
+        "browser": { "$ref": "#/$defs/nonEmptyString" },
+        "os": { "$ref": "#/$defs/nonEmptyString" },
+        "container": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "pattern": "\\S"
+        },
+        "headless": { "type": "boolean" },
+        "fontHashes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/fontHash" }
+        }
+      }
+    },
+    "reference": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["sourceId", "path", "checksum", "dimensions"],
+      "properties": {
+        "sourceId": { "$ref": "#/$defs/filesystemId" },
+        "path": { "$ref": "#/$defs/nonEmptyString" },
+        "checksum": { "$ref": "#/$defs/checksum" },
+        "dimensions": { "$ref": "#/$defs/dimensions" }
+      }
+    },
+    "selectors": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primaryLayout", "dynamicText", "visibility"],
+      "properties": {
+        "primaryLayout": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "dynamicText": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "visibility": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        }
+      }
+    },
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "caseId",
+        "taskId",
+        "nodeId",
+        "route",
+        "captureRegion",
+        "viewport",
+        "state",
+        "fixture",
+        "locale",
+        "timezone",
+        "rendering",
+        "environment",
+        "comparatorProfile",
+        "readiness",
+        "reference",
+        "selectors",
+        "evidenceMode"
+      ],
+      "properties": {
+        "caseId": { "$ref": "#/$defs/filesystemId" },
+        "taskId": { "$ref": "#/$defs/filesystemId" },
+        "nodeId": {
+          "type": "string",
+          "pattern": "^[0-9]+(?::|-)[0-9]+$"
+        },
+        "route": {
+          "type": "string",
+          "pattern": "^/",
+          "minLength": 1
+        },
+        "captureRegion": { "$ref": "#/$defs/captureRegion" },
+        "viewport": { "$ref": "#/$defs/viewport" },
+        "state": { "$ref": "#/$defs/filesystemId" },
+        "fixture": { "$ref": "#/$defs/nonEmptyString" },
+        "locale": { "$ref": "#/$defs/nonEmptyString" },
+        "timezone": { "$ref": "#/$defs/nonEmptyString" },
+        "rendering": { "$ref": "#/$defs/rendering" },
+        "environment": { "$ref": "#/$defs/environment" },
+        "comparatorProfile": { "const": "rgba-exact-v1" },
+        "readiness": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        },
+        "reference": { "$ref": "#/$defs/reference" },
+        "evidencePath": { "$ref": "#/$defs/nonEmptyString" },
+        "selectors": { "$ref": "#/$defs/selectors" },
+        "evidenceMode": {
+          "enum": ["visual-reference", "behavior-only", "responsive-only"]
+        }
+      }
+    }
+  }
+}

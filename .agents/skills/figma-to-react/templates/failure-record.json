@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "sequence": 8,
+  "taskId": "pricing-dashboard",
+  "gateId": "G7",
+  "caseId": "pricing-viewport-desktop-default-visual-reference",
+  "implementationHash": "sha256:711704ec7186e0030e3acca62ee0b92dd316e404835bc7474111d63271ab5dff",
+  "code": "page-not-ready",
+  "message": "The expected pricing layout did not become visible before capture."
+}

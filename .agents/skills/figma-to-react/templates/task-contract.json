@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 2,
+  "taskId": "pricing-dashboard",
+  "profile": "strict-internal",
+  "source": {
+    "figmaUrl": "https://www.figma.com/design/AbCdEfGhIjKlMnOpQrStUv/Pricing-Dashboard?node-id=12-34",
+    "fileKey": "AbCdEfGhIjKlMnOpQrStUv",
+    "nodeId": "12:34",
+    "fileVersion": "1234567890123456789"
+  },
+  "baseline": {
+    "repositoryRoot": ".",
+    "profile": "git-visible-v1",
+    "revision": "1111111111111111111111111111111111111111",
+    "preExistingChanges": []
+  },
+  "target": {
+    "origin": "http://localhost:3000",
+    "route": "/pricing",
+    "featureModule": "src/features/pricing",
+    "allowedImplementationRoots": ["src/features/pricing"]
+  },
+  "scope": {
+    "include": ["pricing dashboard"],
+    "exclude": ["global navigation"]
+  },
+  "viewports": [
+    { "id": "desktop", "width": 1440, "height": 900, "dpr": 1 },
+    { "id": "tablet", "width": 768, "height": 1024, "dpr": 1 },
+    { "id": "mobile", "width": 375, "height": 812, "dpr": 1 }
+  ],
+  "states": [
+    { "id": "default", "applicability": "required", "evidence": null },
+    {
+      "id": "loading",
+      "applicability": "not-applicable",
+      "evidence": "The exact node and task scope contain no asynchronous state."
+    }
+  ],
+  "evidenceModes": {
+    "behaviorOnly": { "applicability": "required", "evidence": null },
+    "responsiveOnly": { "applicability": "required", "evidence": null }
+  },
+  "data": {
+    "fixture": "src/features/pricing/fixtures/visual.ts"
+  },
+  "provisioning": {
+    "assetMaterialization": "available",
+    "agentBrowser": "available",
+    "visualCapture": "available",
+    "visualCaptureCommand": "npm run visual:capture -- --contract=artifacts/visual/pricing-dashboard/capture-contract.json --case={caseId}",
+    "visualCompare": "available",
+    "visualCompareCommand": "npm run visual:compare -- --case={caseId} --iteration={iteration}",
+    "vitestBrowser": "available",
+    "playwright": "available",
+    "agentVerify": "available",
+    "dependencies": [
+      {
+        "packageName": "@fontsource/inter",
+        "purpose": "Provide the exact Inter font files used by the captured interface.",
+        "status": "available",
+        "specifier": "^5.1.1",
+        "packageJsonPath": "package.json",
+        "lockfilePath": "package-lock.json",
+        "lockfileCheckId": null,
+        "lockfileCheckProfile": null
+      }
+    ]
+  },
+  "acceptance": {
+    "qualityGates": ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6"],
+    "comparatorProfile": "rgba-exact-v1",
+    "maxDifferenceRatio": 15,
+    "requireEightCategoryAnalysis": true,
+    "requireProjectChecks": true,
+    "projectChecks": [
+      { "id": "format", "command": "npm run format:check" },
+      { "id": "lint", "command": "npm run lint" },
+      { "id": "typecheck", "command": "npm run typecheck" },
+      { "id": "unit", "command": "npm run test:unit" },
+      { "id": "build", "command": "npm run build" }
+    ],
+    "browserChecks": [
+      { "id": "vitest-browser", "command": "npm run test:browser" },
+      { "id": "playwright", "command": "npm run test:e2e" },
+      { "id": "agent-verify", "command": "npm run agent:verify" }
+    ]
+  }
+}

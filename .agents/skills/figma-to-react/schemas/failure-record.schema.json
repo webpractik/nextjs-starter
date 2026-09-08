@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openai.com/schemas/figma-to-react/failure-record.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "sequence",
+    "taskId",
+    "gateId",
+    "caseId",
+    "implementationHash",
+    "code",
+    "message"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "sequence": { "type": "integer", "minimum": 1 },
+    "taskId": { "$ref": "#/$defs/filesystemId" },
+    "gateId": { "enum": ["G0", "G1", "G2", "G3", "G4", "G5", "G6", "G7", "G8"] },
+    "caseId": {
+      "type": ["string", "null"],
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "implementationHash": {
+      "type": ["string", "null"],
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "code": { "$ref": "#/$defs/filesystemId" },
+    "message": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "pattern": "^(?!.*(?:https?://|figma://|mcp://|(?:token|secret|password|cookie|authorization)\\s*[:=])).+$"
+    }
+  },
+  "$defs": {
+    "filesystemId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    }
+  }
+}

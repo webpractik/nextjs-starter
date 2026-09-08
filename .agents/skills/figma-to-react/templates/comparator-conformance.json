@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 2,
+  "taskId": "pricing-dashboard",
+  "implementationHash": "sha256:711704ec7186e0030e3acca62ee0b92dd316e404835bc7474111d63271ab5dff",
+  "profile": "rgba-exact-v1",
+  "pixelThreshold": 0,
+  "antialiasPolicy": "count",
+  "fixtures": {
+    "reference": "artifacts/visual/pricing-dashboard/implementations/711704ec7186e0030e3acca62ee0b92dd316e404835bc7474111d63271ab5dff/conformance/reference.png",
+    "actual": "artifacts/visual/pricing-dashboard/implementations/711704ec7186e0030e3acca62ee0b92dd316e404835bc7474111d63271ab5dff/conformance/actual.png",
+    "raw": "artifacts/visual/pricing-dashboard/implementations/711704ec7186e0030e3acca62ee0b92dd316e404835bc7474111d63271ab5dff/conformance/raw.json",
+    "diff": "artifacts/visual/pricing-dashboard/implementations/711704ec7186e0030e3acca62ee0b92dd316e404835bc7474111d63271ab5dff/conformance/diff.png",
+    "overlay": "artifacts/visual/pricing-dashboard/implementations/711704ec7186e0030e3acca62ee0b92dd316e404835bc7474111d63271ab5dff/conformance/overlay.png"
+  },
+  "expected": {
+    "differentPixels": 1,
+    "totalPixels": 4,
+    "differenceRatio": 25
+  },
+  "actual": {
+    "differentPixels": 1,
+    "totalPixels": 4,
+    "differenceRatio": 25
+  },
+  "passed": true
+}
