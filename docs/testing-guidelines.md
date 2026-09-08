@@ -1,10 +1,13 @@
 # Тестирование
 
-В проекте есть два Vitest projects, Playwright E2E и Storybook. Главное правило: имя файла
-определяет, какой runner увидит тест. Используйте явные суффиксы `.unit.test` и
-`.component.test`, чтобы тест не потерялся.
+В проекте есть два проекта Vitest, Playwright E2E и Storybook. Имя файла определяет запуск:
+используйте суффиксы `.unit.test` и `.component.test`, чтобы тест не потерялся.
 
 > Источники истины: `vitest.config.ts`, `playwright.config.ts`, `.storybook/` и npm scripts.
+
+Vitest и пакеты `@vitest/*` зафиксированы на `4.1.11`: `@storybook/addon-vitest@10.6.0`
+объявляет совместимость только с Vitest 3 и 4. Переход на Vitest 5 требует поддержки аддона,
+синхронного обновления всех пакетов запуска и проверки генераторов отчётов, браузерных тестов и Storybook.
 
 ## Какой runner выбрать
 
@@ -15,13 +18,13 @@
 | E2E           | Chromium                    | `src/tests/e2e/**/*.@(spec\|test).?(c\|m)[jt]s?(x)`                                            |
 | Storybook     | Browser preview             | `app/**/*.stories.tsx`, `packages/core/**/*.stories.tsx`, `src/**/*.stories.*`, `src/**/*.mdx` |
 
-Обратите внимание на исключения:
+У выбора файлов есть исключения:
 
-- `src/example.test.ts` не входит ни в один Vitest project. Назовите файл
+- `src/example.test.ts` не входит ни в один проект Vitest. Назовите файл
   `example.unit.test.ts`.
-- `src/example.test.tsx` попадает в Component project даже без `.component.`.
-- `packages/example.test.ts` попадает в Unit project.
-- `packages/example.test.tsx` без `.component.` не попадает под общий package pattern.
+- `src/example.test.tsx` попадает в компонентный проект даже без `.component.`.
+- `packages/example.test.ts` попадает в модульный проект.
+- `packages/example.test.tsx` без `.component.` не соответствует общему шаблону файлов пакетов.
 
 Chromium устанавливается один раз после `npm ci`:
 
@@ -35,8 +38,8 @@ npx playwright install --with-deps chromium
 
 ## Unit-тесты
 
-Используйте Unit project для чистых функций, schemas, plugins, serialization, mock routing и
-логики, которая не зависит от браузера.
+Модульный проект проверяет чистые функции, схемы, плагины, сериализацию, маршрутизацию моков и
+другую логику без браузера.
 
 ```bash
 # Весь Unit project
@@ -49,16 +52,15 @@ npx vitest run src/mock-mode/runtime.unit.test.ts --project unit
 npm --workspace @repo/api run test
 ```
 
-Unit project работает в Node. Не добавляйте самодельный jsdom setup. Если тест зависит от layout,
-focus, pointer/keyboard events, Base UI или hydration, используйте Component project.
+Модульный проект работает в Node; не добавляйте самодельный jsdom. Макет, фокус, события указателя
+и клавиатуры, Base UI и гидратацию проверяйте компонентным тестом.
 
-`src/tests/setup-env.ts` подменяет `fetch`: любой незамоканный network request падает с ошибкой.
-Явно mock transport или `fetch`, либо используйте generated mock client. Unit test не должен
-случайно зависеть от запущенного backend.
+`src/tests/setup-env.ts` подменяет `fetch`: запросы без моков падают. Подменяйте транспорт или
+`fetch` либо используйте сгенерированный мок-клиент; модульным тестам не нужен запущенный бэкенд.
 
-Для `@repo/api` отдельно проверяйте transport, client config, mock scenarios и независимые
-post-generators. После изменения pipeline или OpenAPI запускайте полный `gen`: он завершается
-root TypeScript check, который включает generated output.
+Для `@repo/api` отдельно проверяйте транспорт, конфиг клиента, сценарии моков и независимые
+постгенераторы. После изменения этапов генерации или OpenAPI запускайте полный `gen`, включая
+корневую проверку TypeScript со сгенерированным кодом.
 
 ```bash
 npx vitest run packages/api/client-config.unit.test.ts packages/api/mock-client.test.ts packages/api/mock-scenarios.test.ts --project unit
@@ -68,9 +70,8 @@ npm --workspace @repo/api run gen
 
 ## Компонентные тесты
 
-Component project запускается через `@vitest/browser-playwright` в реальном headless Chromium.
-Компоненты рендерятся через `vitest-browser-react`, а взаимодействия проверяются browser
-locators.
+Компонентный проект использует `@vitest/browser-playwright` и реальный headless Chromium.
+`vitest-browser-react` рендерит компоненты, браузерные локаторы проверяют взаимодействия.
 
 ```bash
 # Весь Component project
@@ -93,17 +94,17 @@ test('отправляет форму с валидными значениями
 })
 ```
 
-Config подменяет `next/navigation`, `next/image` и `next/script` aliases из
-`src/tests/mocks`. Navigation mock сбрасывается после каждого browser test.
+Конфиг подменяет `next/navigation`, `next/image` и `next/script` алиасами из
+`src/tests/mocks`. Мок навигации сбрасывается после каждого браузерного теста.
 
-Не добавляйте глобальный mock Base UI только ради удобства: проверяйте реальное browser behavior.
-Для визуальных состояний reusable-компонента добавьте Storybook story. Story не заменяет
-interaction test, а Component test не заменяет visual review всех состояний.
+Проверяйте Base UI в браузере, не подменяя глобальным моком ради удобства. Состояния общего
+компонента опишите в Storybook: история не заменяет тест взаимодействий, а компонентный тест —
+визуальное ревью всех состояний.
 
 ## E2E-тесты в Playwright
 
-E2E проверяет приложение через Chromium. Tests открывают относительные URL, а
-`playwright.config.ts` формирует `baseURL` из `FRONT_PORT`, по умолчанию `3000`.
+E2E проверяет приложение в Chromium по относительным URL. `playwright.config.ts` задаёт
+`baseURL` через `FRONT_PORT`, по умолчанию `3000`.
 
 ### Локальная проверка на development server
 
@@ -115,14 +116,13 @@ npm run test:e2e
 npx playwright test src/tests/e2e/example.spec.ts
 ```
 
-В development mode Playwright переиспользует уже запущенный server.
+При разработке Playwright использует уже запущенный сервер, если он есть.
 
-GitLab pipeline сейчас не запускает E2E и не создаёт production build. Зелёный CI не означает,
-что production E2E прошёл.
+GitLab CI пока не запускает E2E и production-сборку; его успех не означает успешный production E2E.
 
 ## Storybook
 
-Storybook нужен для просмотра состояний reusable UI и ручной проверки accessibility.
+В Storybook просматривают состояния общих UI-компонентов и вручную проверяют доступность.
 
 ```bash
 # Локальный preview
@@ -132,13 +132,12 @@ npm run storybook
 npm run build-storybook
 ```
 
-Story располагайте рядом с reusable component. Интерактивное поведение всё равно покрывайте
-Component test.
+Размещайте историю рядом с общим компонентом. Поведение покрывайте компонентным тестом.
 
 ## Как называть тесты
 
-Человекочитаемые названия новых и изменяемых `test`/`it` пишите по-русски. Начинайте с глагола
-в настоящем времени и описывайте наблюдаемое поведение: `возвращает`, `показывает`,
+Новые и изменяемые `test`/`it` называйте по-русски, описывая поведение глаголом настоящего времени:
+`возвращает`, `показывает`,
 `блокирует`, `сохраняет`.
 
 | Хорошо                                     | Плохо                       | Почему                                   |
@@ -148,29 +147,25 @@ Component test.
 | `отправляет форму с валидными значениями`  | `проверяет submitForm`      | Описана реализация, а не поведение       |
 | `игнорирует cookie mock-mode в production` | `calls setState`            | Английский текст и implementation detail |
 
-`describe` тоже пишите по-русски: это название subject или context. Технические identifiers,
-например `mock-mode`, `NEXT_PUBLIC_BFF_PATH` и API methods, не переводите.
+`describe` тоже пишите по-русски, называя объект или контекст проверки. Идентификаторы вроде
+`mock-mode`, `NEXT_PUBLIC_BFF_PATH` и методов API не переводите.
 
-Имена файлов остаются английскими и следуют patterns из первой таблицы:
-`registration-form.component.test.tsx`. Существующее английское название теста переводите, когда
-меняете этот тест. Массовое переименование всей suite выполняйте отдельной задачей.
+Файлы называйте по-английски и шаблонам первой таблицы: `registration-form.component.test.tsx`.
+Переводите название теста при его изменении; массовое переименование делайте отдельно.
 
 ## Параллельное выполнение
 
-Runners уже используют параллелизм. Каждый тест должен сам создавать данные и очищать mutable
-state. Не делите между параллельными тестами один database record, account, queue, temporary path,
-cookie/storage или module singleton.
+Тесты уже запускаются параллельно: создавайте данные и очищайте состояние в каждом. Не делите
+запись БД, аккаунт, очередь, временный путь, cookie/storage или синглтон модуля.
 
 ### Vitest
 
-Vitest запускает файлы параллельно в workers, а tests внутри файла — последовательно.
-`test.concurrent` и `describe.concurrent` используйте только для независимых async-тестов,
-которые в основном ждут I/O или timers. Они выполняются через `Promise.all` в том же worker и не
-ускоряют синхронный CPU-bound код.
+Vitest запускает файлы параллельно в воркерах, тесты внутри файла — последовательно.
+`test.concurrent` и `describe.concurrent` подходят только независимым асинхронным тестам,
+ожидающим преимущественно I/O или таймеры: `Promise.all` в одном воркере не ускоряет синхронные вычисления.
 
-Не используйте concurrent mode вместе с общими `vi.stubEnv`, `vi.stubGlobal`, fake timers,
-module mocks или browser DOM. В concurrent test берите `expect` и `onTestFinished` из локального
-Test Context.
+Не совмещайте конкурентные тесты с общими `vi.stubEnv`, `vi.stubGlobal`, поддельными таймерами,
+моками модулей и DOM браузера. Берите `expect` и `onTestFinished` из локального контекста теста.
 
 ```bash
 # Ограничить workers на одной машине
@@ -182,13 +177,13 @@ npx vitest run --project unit --maxWorkers=1
 
 ### Playwright
 
-В config включён `fullyParallel: true`, поэтому параллельно могут выполняться и files, и отдельные
-tests. Используйте встроенные fixtures `page` и `context`: они изолированы для каждого теста.
-Не сохраняйте их в module variable и не создавайте один раз в `beforeAll`.
+Включённый `fullyParallel: true` разрешает параллельный запуск файлов и отдельных тестов. Встроенные фикстуры
+`page` и `context` изолированы для каждого теста: не храните их в переменной модуля и не создавайте
+однократно в `beforeAll`.
 
-Внешние данные делайте уникальными для test/worker. Дорогой ресурс можно оформить как worker-scoped
-fixture с отдельным namespace, например по `workerInfo.workerIndex`. `serial` допустим только для
-неизолируемой stateful sequence; обычно её лучше объединить в один E2E test или разделить данные.
+Делайте внешние данные уникальными для теста или воркера. Дорогой ресурс можно вынести в фикстуру
+воркера с пространством имён, например по `workerInfo.workerIndex`. `serial` допустим лишь для неизолируемой
+последовательности с общим состоянием; обычно лучше один E2E-тест или разделение данных.
 
 ```bash
 # Workers на одной машине
@@ -198,15 +193,15 @@ npx playwright test --workers=4
 npx playwright test --workers=1
 ```
 
-Workers делят suite на одной машине, shards — между CI jobs:
+Воркеры делят тесты на одной машине, шарды — между задачами CI:
 
 ```bash
 npx vitest run --project unit --shard=1/2
 npx playwright test --shard=1/2
 ```
 
-Для shards нужны отдельные artifact paths. Playwright reports объединяйте через blob reporter и
-`playwright merge-reports`. Текущий pipeline не настраивает sharding или merge reports.
+Шардам нужны отдельные пути артефактов. Объединяйте отчёты Playwright через blob reporter и
+`playwright merge-reports`. Текущий pipeline не настраивает шардинг и объединение отчётов.
 
 Подробнее: [Vitest parallelism](https://vitest.dev/guide/parallelism.html),
 [Playwright parallelism](https://playwright.dev/docs/test-parallel) и
@@ -214,15 +209,15 @@ npx playwright test --shard=1/2
 
 ## Среда тестов и артефакты
 
-Vitest берёт разрешённые env values сначала из `process.env`, затем из корневого `.env`, и
-передаёт их через `src/tests/setup-env.ts`. Не вызывайте dotenv в каждом test file и не коммитьте
-test credentials.
+Vitest берёт разрешённые переменные сначала из `process.env`, затем из корневого `.env` и
+передаёт через `src/tests/setup-env.ts`. Не вызывайте dotenv в каждом тестовом файле и не коммитьте
+тестовые учётные данные.
 
-Playwright не использует этот механизм: env передаётся через process или container. Различие между
+Playwright получает окружение через процесс или контейнер. Различие между
 `FRONT_PORT` и `PORT` описано в [справочнике env](environment.md).
 
-Reporters создают `test-results/`, `allure-results/` и Playwright report artifacts. Эти
-директории игнорируются Git и не должны попадать в implementation commit.
+Отчёты попадают в `test-results/`, `allure-results/` и артефакты Playwright. Эти каталоги
+игнорируются Git: не включайте их в коммит с кодом.
 
 ## Что запускать после изменения
 
@@ -238,7 +233,7 @@ Reporters создают `test-results/`, `allure-results/` и Playwright report
 | Документация                | Semantic review по коду и config                           |
 | Bug fix                     | Сначала минимальный regression test                        |
 
-Для всех Vitest projects, coverage и watch mode:
+Чтобы запустить все проекты Vitest, измерить покрытие или следить за изменениями:
 
 ```bash
 npm run test
@@ -246,20 +241,20 @@ npm run test:coverage
 npm run test:watch
 ```
 
-После узких тестов запустите `npm run verify:fast`: он проверяет formatting, lint и TypeScript.
-`npm run verify` дополнительно запускает Knip, JSCPD, оба Vitest projects, fresh build и standalone
+После узких тестов проверьте форматирование, lint и TypeScript через `npm run verify:fast`.
+`npm run verify` добавляет Knip, JSCPD, оба проекта Vitest, свежую сборку и standalone
 Playwright E2E.
 
 ## Качество теста
 
-- Проверяйте наблюдаемое поведение, а не внутренний state.
-- Используйте accessible roles и names вместо хрупких CSS selectors.
-- Не ставьте arbitrary timeout; ждите locator, state или event.
-- Явно контролируйте время, randomness и network.
-- Runtime mock client создаёт изолированный seeded Faker на каждый response. При прямом вызове
-  factory передавайте контролируемый Faker или overrides для значимых полей.
-- Для bug fix убедитесь, что тест падает на старом поведении и проходит после исправления.
-- Не обновляйте snapshots вслепую: сначала прочитайте semantic diff.
+- Проверяйте наблюдаемое поведение, а не внутреннее состояние.
+- Используйте роли и доступные имена вместо хрупких CSS-селекторов.
+- Ждите локатор, состояние или событие, а не произвольный тайм-аут.
+- Контролируйте время, случайность и сеть.
+- Мок-клиент создаёт изолированный Faker с заданным seed для каждого ответа. При прямом вызове
+  фабрики передавайте управляемый Faker или переопределяйте значимые поля.
+- При исправлении ошибки убедитесь, что тест падает на старом поведении и проходит на новом.
+- Перед обновлением снимков проверьте смысл изменений.
 
 ## Связанные документы
 

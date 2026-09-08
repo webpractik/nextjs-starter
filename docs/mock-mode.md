@@ -4,22 +4,18 @@
 > [`packages/api/client-config.ts`](../packages/api/client-config.ts),
 > [`packages/api/mock-client.ts`](../packages/api/mock-client.ts) и generated mock routes.
 
-**Когда читать:** чтобы запустить SDK без backend, выбрать mock scenario или проверить, почему
-запрос не дошёл до сети.
+Режим моков запускает сгенерированные API-клиенты без бэкенда: общий транспорт должен перехватить
+запрос и вернуть данные Faker без сетевого вызова.
 
-Mock mode предназначен для запуска generated API clients без backend. Общий transport
-перехватывает запрос и должен вернуть generated Faker data без сетевого вызова.
-
-Это удобно для локальной разработки, тестов и Storybook. Mock mode не заменяет backend: мутации не
-меняют последующие `GET`-ответы, а CORS, auth, cookies и реальную интеграцию он не проверяет.
+Режим удобен для локальной разработки, тестов и Storybook, но не заменяет бэкенд: мутации не
+меняют последующие `GET`-ответы; CORS, аутентификация, cookies и реальная интеграция не проверяются.
 
 ## Известное ограничение browser development
 
-Generated route ожидает OpenAPI path вроде `/pets`, а client передаёт в mock transport URL с
-`NEXT_PUBLIC_BFF_PATH`, например `/bff-api/pets`. `mock-client.ts` пока не снимает этот prefix,
-поэтому такой запрос завершится ошибкой `Mock response is not configured`. Server SDK с path
-`/pets` работает. Browser transport нужно исправить отдельно; base URL с собственным path prefix
-имеет то же ограничение.
+Маршрут ожидает путь OpenAPI вроде `/pets`, но клиент передаёт URL с `NEXT_PUBLIC_BFF_PATH`, например
+`/bff-api/pets`. `mock-client.ts` пока не удаляет префикс:
+запрос завершится ошибкой `Mock response is not configured`. Серверный SDK с `/pets` работает.
+Транспорт браузера нужно исправить отдельно; базовый URL с префиксом пути имеет ту же проблему.
 
 > Важно для production: cookie и page allowlist там игнорируются, но явные
 > `MOCK_MODE=true` или `NEXT_PUBLIC_MOCK_MODE=true` всё ещё включают mocks. В release оба флага
@@ -40,9 +36,8 @@ SDK из @repo/api
     → обычный Hey API parser и Zod response validation
 ```
 
-`apiFetch` перехватывает уже сформированный запрос до `globalThis.fetch`. Если URL совпал с
-generated route, native `Response` проходит тот же Hey API parser и validator, что и ответ backend,
-и сетевой backend не нужен.
+`apiFetch` перехватывает запрос до `globalThis.fetch`. Если URL совпал с маршрутом, нативный
+`Response` проходит парсер и валидатор Hey API как ответ бэкенда, без сети.
 
 ## Как включить mock mode
 
@@ -53,31 +48,30 @@ generated route, native `Response` проходит тот же Hey API parser �
 | Cookie `mock-mode=true`      | Да     | Да       | Только вне production                       |
 | `mockModePagePaths`          | Да     | Да       | Только для разрешённых pages вне production |
 
-Колонка Browser показывает, где читается переключатель. Она не отменяет описанное выше
-ограничение BFF-prefix при сопоставлении generated route.
+Колонка Browser указывает место чтения флага, не отменяя ограничения BFF-префикса при сопоставлении.
 
-Env-флаги проходят через `z.stringbool()`. Без учёта регистра значения `true`, `1`, `yes`, `on`,
-`y` и `enabled` включают mocks; `false`, `0`, `no`, `off`, `n` и `disabled` выключают. В release
-используйте явное `false`. Cookie строже: mock mode включает только точное значение `true`.
+Флаги окружения разбирает `z.stringbool()` без учёта регистра: `true`, `1`, `yes`, `on`,
+`y` и `enabled` включают моки; `false`, `0`, `no`, `off`, `n` и `disabled` выключают. В релизе
+задавайте `false`. Для cookie допустимо только точное `true`.
 
-После изменения env перезапустите dev server. Значения `NEXT_PUBLIC_*` могут быть встроены в build.
+После изменения окружения перезапустите сервер разработки: `NEXT_PUBLIC_*` могут быть встроены в сборку.
 
 ### Через `.env`
 
-Чтобы включить флаг mock mode и на сервере, и в браузере:
+Чтобы включить моки на сервере и в браузере:
 
 ```env
 MOCK_MODE=true
 NEXT_PUBLIC_MOCK_MODE=true
 ```
 
-Для рабочего server-only режима оставьте public flag равным `false`. Если
-`NEXT_PUBLIC_MOCK_MODE` вообще не задан, browser schema использует `MOCK_MODE` как fallback, но в
-development browser request всё равно сталкивается с текущим ограничением BFF-prefix.
+Для рабочего серверного режима оставьте публичный флаг `false`. Без `NEXT_PUBLIC_MOCK_MODE`
+браузерная схема использует `MOCK_MODE`, но при разработке запрос по-прежнему упирается в
+ограничение BFF-префикса.
 
 ### Через cookie
 
-В локальной browser console:
+В локальной консоли браузера:
 
 ```js
 document.cookie = 'mock-mode=true; Path=/; SameSite=Lax'
@@ -91,33 +85,31 @@ document.cookie = 'mock-mode=; Path=/; Max-Age=0; SameSite=Lax'
 document.cookie = 'mock-scenario=; Path=/; Max-Age=0; SameSite=Lax'
 ```
 
-Browser mechanism читает `document.cookie`, поэтому `HttpOnly` cookie для него не подходит.
-Query parameter `mock-scenario` намеренно игнорируется. В production cookie не включает mock
-mode.
+Браузер читает `document.cookie`, поэтому `HttpOnly` не подходит. Параметр запроса `mock-scenario`
+намеренно игнорируется. В production cookie не включает моки.
 
 ### Для отдельных pages
 
-По умолчанию оба массива в `src/mock-mode/config.ts` пусты: один только route ничего не включает.
+Оба массива в `src/mock-mode/config.ts` по умолчанию пусты: сам маршрут моки не включает.
 
 ```ts
 export const mockModePagePaths = ['/demo', /^\/preview(?:\/|$)/]
 export const mockModeExcludedPagePaths = ['/demo/live']
 ```
 
-Правила matching:
+При сопоставлении действуют правила:
 
-- строка совпадает с самим path и его descendants;
+- строка совпадает с самим путём и вложенными путями;
 - `RegExp` выполняется в том виде, в котором записан;
-- exclusion всегда имеет приоритет над allowlist.
+- исключение всегда приоритетнее разрешения.
 
-На сервере текущий page определяется по внутреннему header `x-url`, который добавляет корневой
-`proxy.ts`. Если меняете proxy pipeline, сохраните этот header или одновременно обновите mock
-mode.
+Сервер определяет страницу по служебному заголовку `x-url` из корневого `proxy.ts`. Меняя proxy,
+сохраните заголовок или одновременно обновите режим моков.
 
 ## Сгенерированные маршруты
 
 `npm --workspace @repo/api run gen` перезаписывает
-`packages/api/codegen/mock-client-routes.ts`. Текущий Petstore contract создаёт:
+`packages/api/codegen/mock-client-routes.ts`. Текущий контракт Petstore создаёт:
 
 | Метод    | Pattern         | Status по умолчанию |
 | -------- | --------------- | ------------------- |
@@ -127,58 +119,56 @@ mode.
 | `PATCH`  | `/pets/<petId>` | `200`               |
 | `DELETE` | `/pets/<petId>` | `204`               |
 
-Query string не участвует в route matching. Generated factory учитывает generated types, но сама
-по себе не моделирует фильтрацию, pagination или сохранение состояния.
+Строка запроса не участвует в сопоставлении маршрута. Сгенерированная фабрика учитывает типы,
+но не моделирует фильтрацию, пагинацию и сохранение состояния.
 
-`mock-client-routes.ts` — generated output. Чтобы добавить операцию, измените OpenAPI и
-перегенерируйте API:
+`mock-client-routes.ts` генерируется. Добавляйте операции через OpenAPI и повторную генерацию:
 
 ```bash
 npm --workspace @repo/api run gen
 ```
 
-Не редактируйте generated route table вручную.
+Не редактируйте сгенерированную таблицу маршрутов вручную.
 
 ## Сценарии ответов
 
-Scenario выбирается через cookie `mock-scenario`. На сервере cookie можно передать явно в
-`headers` SDK options. Имя проверяется по allowlist `BaseMockScenarioName`: неизвестное
-значение не ломает запрос, а оставляет обычный generated response.
+Сценарий задаёт cookie `mock-scenario`; на сервере её можно явно передать через `headers` SDK.
+Имя проверяется по `BaseMockScenarioName`: неизвестное сохраняет обычный сгенерированный ответ без ошибки запроса.
 
-Сейчас доступен только scenario `default`, и его override list пуст. Чтобы добавить новый:
+Пока доступен только `default` с пустым списком переопределений. Чтобы добавить сценарий:
 
-1. Расширьте union `BaseMockScenarioName` в `packages/api/mock-scenarios.ts`.
+1. Расширьте объединение `BaseMockScenarioName` в `packages/api/mock-scenarios.ts`.
 2. Добавьте массив `MockRoute[]` в `mockScenarios`.
-3. Используйте factories из `@repo/api/mocks` для response data.
-4. Добавьте тесты на precedence, status и data.
-5. Опишите scenario здесь, если он становится частью публичного workflow.
+3. Используйте фабрики из `@repo/api/mocks` для данных ответа.
+4. Проверьте тестами приоритет, статус и данные.
+5. Опишите сценарий здесь, если он становится частью публичного использования.
 
-Scenario routes проверяются раньше generated routes и могут переопределить конкретный
-`method/path`. Не помещайте в generated или ручные fixtures credentials, PII и production data.
+Маршруты сценария проверяются первыми и могут переопределить сгенерированный `method/path`.
+Не включайте учётные, персональные и production-данные в сгенерированные или ручные фикстуры.
 
-Cookie `mock-scenario` сама по себе не включает mocks. Но если environment flag случайно включил
-mock mode в production, разрешённая scenario cookie сможет выбрать override.
+Cookie `mock-scenario` не включает моки, но может выбрать разрешённое переопределение, если флаг окружения
+случайно включил их в production.
 
 ## Ограничения и безопасность
 
-- Production игнорирует `mock-mode` cookie и page allowlist на server и browser.
-- Явные env flags работают и в production, поэтому в release оба должны быть `false`.
-- Page allowlist пуст по умолчанию; вне production cookie включает browser flag, но API-вызов с
-  BFF-prefix всё равно попадает под текущее ограничение сопоставления route.
-- По умолчанию нет latency, network errors, persistence, pagination semantics и error scenarios.
-- Server и browser могут работать в разных режимах из-за разных flags или cookies.
-- Успешный mock response не доказывает совместимость с реальным backend.
+- Production игнорирует cookie `mock-mode` и список разрешённых страниц на сервере и в браузере.
+- Флаги окружения работают и в production: в релизе оба должны быть явно `false`.
+- Список страниц по умолчанию пуст. Вне production cookie включает браузерный флаг, но
+  BFF-префикс по-прежнему мешает сопоставлению API-маршрута.
+- По умолчанию не моделируются задержки, сетевые ошибки, хранение состояния, пагинация и сценарии ошибок.
+- Флаги и cookies могут задать разные режимы серверу и браузеру.
+- Успешный мок не доказывает совместимость с реальным бэкендом.
 
 ## Как проверить изменение
 
-Для runtime logic:
+Для логики выбора режима:
 
 ```bash
 npx vitest run src/mock-mode/runtime.unit.test.ts --project unit
 npx vitest run src/mock-mode/runtime.component.test.ts --project component
 ```
 
-Для transport, scenarios или generated routes:
+Для транспорта, сценариев или сгенерированных маршрутов:
 
 ```bash
 npm --workspace @repo/api run test
@@ -186,8 +176,8 @@ npm --workspace @repo/api run gen
 npm run tsc
 ```
 
-После изменения OpenAPI прочитайте diff generated routes. Реальную backend-интеграцию и E2E
-проверяйте отдельно: mock tests их не заменяют.
+После изменения OpenAPI прочитайте diff сгенерированных маршрутов. Мок-тесты не заменяют проверку
+реальной интеграции с бэкендом и E2E — запускайте их отдельно.
 
 ## Связанные документы
 

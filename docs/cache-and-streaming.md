@@ -3,10 +3,9 @@
 > Тип: объяснение + правила · Статус: включено · Источник истины: `next.config.ts`, generated cache
 > tags и официальная документация Next.js
 
-`next.config.ts` содержит `cacheComponents: true`. Это opt-in режим Next.js 16, который объединяет
-Cache Components, Partial Prerendering и dynamic I/O behavior. Проект при этом сохраняет TanStack
-Query provider: server caching и client server-state являются двумя доступными инструментами, а не
-взаимоисключающими архитектурами.
+В `next.config.ts` включён `cacheComponents: true` — опциональный режим Next.js 16, объединяющий
+Cache Components, Partial Prerendering и динамический I/O. Провайдер TanStack Query сохранён:
+серверный кеш и управление серверными данными в клиенте можно использовать вместе.
 
 ## Выбор data layer
 
@@ -19,13 +18,13 @@ Query provider: server caching и client server-state являются двум�
 | Сложный optimistic client workflow         | React Query mutation или Server Action по месту |
 | Мутация формы с server authorization       | Server Action с повторной auth/validation       |
 
-Не переносите data fetching на client только из-за наличия React Query. Но и не удаляйте client
-cache из интерактивного workflow только потому, что Cache Components включены.
+Не переносите загрузку в клиент ради React Query и не удаляйте интерактивный клиентский кеш
+ради Cache Components.
 
 ## Streaming
 
-Async Server Components можно разделять независимыми Suspense boundaries. Route-level
-`loading.tsx` даёт fallback для segment; локальный `<Suspense>` позволяет стримить блоки независимо.
+Асинхронные Server Components можно разделять границами Suspense. `loading.tsx` задаёт заглушку
+для сегмента, локальный `<Suspense>` позволяет выводить блоки независимо, по мере готовности.
 
 ```tsx
 import { Suspense } from 'react'
@@ -39,18 +38,17 @@ export default function PetPage() {
 }
 ```
 
-Не делайте последовательный waterfall без причины. Независимые Promises стартуйте до первого
-`await` либо разносите по соседним async components. Fallback должен сохранять приблизительный
-размер итогового блока, чтобы уменьшать layout shift.
+Запускайте независимые промисы до первого `await` или в соседних
+асинхронных компонентах. Сохраняйте примерный размер блока в заглушке, чтобы уменьшить сдвиг макета.
 
-Для ошибок route rendering используйте ближайший `error.tsx`; `global-error.tsx` — последняя
-граница. Компонентная Sentry `ErrorBoundary` полезна для client subtree, но не заменяет segment
-error handling и не ловит произвольные ошибки event handlers.
+Ошибки рендеринга маршрута обрабатывает ближайший `error.tsx`, последняя граница — `global-error.tsx`.
+Sentry `ErrorBoundary` полезна в клиентском поддереве, но не заменяет обработку ошибок сегмента
+и не ловит произвольные ошибки событийных обработчиков.
 
 ## `'use cache'`
 
-Директива может применяться к async function, component или всему файлу. Serializable arguments и
-captured values становятся частью cache key.
+Директива применяется к асинхронной функции, компоненту или файлу. Сериализуемые аргументы и
+захваченные значения входят в ключ кеша.
 
 ```tsx
 import { getPetById } from '@repo/api/codegen/clients/petsController/getPetById'
@@ -68,34 +66,32 @@ export async function loadPet(petId: string) {
 
 Правила:
 
-- явно выбирайте cache lifetime, соответствующий допустимой stale-границе;
-- оценивайте cardinality arguments: каждый набор значений создаёт отдельный ключ;
-- не передавайте secrets и session tokens как ключ shared cache;
-- не кешируйте personalized result в общей области только ради производительности;
-- измеряйте hit rate и память, особенно при self-hosting и нескольких replicas.
+- выбирайте срок кеширования по допустимой давности данных;
+- оценивайте число комбинаций аргументов: каждая создаёт отдельный ключ;
+- не используйте секреты и токены сессии в ключах общего кеша;
+- не помещайте персонализированный результат в общий кеш ради производительности;
+- измеряйте долю попаданий и память, особенно на собственной инфраструктуре с несколькими репликами.
 
-`cacheLife` применяется только внутри cache scope. Точные built-in profiles и значения могут
-меняться между версиями Next.js; не копируйте числовые предположения из старых гайдов — сверяйте
-[актуальную API reference](https://nextjs.org/docs/app/api-reference/functions/cacheLife).
+`cacheLife` работает только в области кеширования. Профили и значения могут меняться между версиями
+Next.js — проверяйте не старые руководства, а
+[актуальный справочник API](https://nextjs.org/docs/app/api-reference/functions/cacheLife).
 
 ## Runtime APIs и `'use cache: private'`
 
-Обычный `'use cache'` не может напрямую читать `cookies()`, `headers()` или `searchParams`. Читайте
-их снаружи и передавайте только минимальное безопасное значение аргументом либо оставляйте
-компонент dynamic.
+Обычный `'use cache'` не читает напрямую `cookies()`, `headers()` и `searchParams`. Читайте их
+снаружи и передавайте минимум безопасных данных аргументом либо оставьте компонент динамическим.
 
-`'use cache: private'` — экспериментальная возможность. В актуальном Next.js результат не
-хранится в server cache: scope выполняется при каждом server render, а результат кешируется только
-в памяти browser и не переживает reload. Она разрешает request APIs, но недоступна в Route
-Handlers. Это не «приватный server cache на пользователя» и не production default.
+`'use cache: private'` экспериментальна. В актуальном Next.js она выполняется при каждом серверном
+рендеринге, кешируя результат лишь в памяти браузера до перезагрузки.
+API запроса разрешены, Route Handlers не поддерживаются. Это не «приватный server cache на пользователя»;
+не включайте директиву по умолчанию в production.
 
-Перед применением обязательно сверяйтесь с
-[официальным описанием](https://nextjs.org/docs/app/api-reference/directives/use-cache-private) и
-проверяйте конкретную версию Next.js.
+Перед применением проверьте версию Next.js и
+[официальное описание](https://nextjs.org/docs/app/api-reference/directives/use-cache-private).
 
 ## Cache tags
 
-Локальный Kubb plugin генерирует namespace по OpenAPI tag. Текущий контракт создаёт:
+Локальный плагин Kubb генерирует пространство имён по тегу OpenAPI. Текущий контракт создаёт:
 
 ```ts
 import { pets } from '@repo/api/codegen/tags'
@@ -104,8 +100,8 @@ pets.petsTag // 'pets'
 pets.petTag({ petId: 'pet_123' }) // 'pets:petId:pet_123'
 ```
 
-Используйте эти helpers и на read-, и на write-стороне. Строковые литералы легко расходятся после
-изменения contract parameters.
+Используйте эти функции при чтении и записи: строковые литералы могут разойтись после изменения
+параметров контракта.
 
 ### `updateTag` и `revalidateTag`
 
@@ -115,8 +111,8 @@ pets.petTag({ petId: 'pet_123' }) // 'pets:petId:pet_123'
 | `revalidateTag(tag, 'max')`      | Server Function и Route Handler | Stale-while-revalidate при следующем visit |
 | `revalidateTag(tag)` без profile | Не использовать                 | Deprecated blocking behavior               |
 
-Generated functions `pets.revalidatePet()` и `pets.revalidatePets()` внутри вызывают `updateTag`.
-Несмотря на имя `revalidate*`, они допустимы только из Server Action.
+Сгенерированные `pets.revalidatePet()` и `pets.revalidatePets()` вызывают `updateTag`:
+несмотря на имя `revalidate*`, они разрешены только в Server Action.
 
 ```ts
 'use server'
@@ -132,16 +128,17 @@ export async function markPetSold(petId: string) {
 }
 ```
 
-Для webhook/Route Handler используйте `revalidateTag(pets.petsTag, 'max')` напрямую: generated
-wrapper на `updateTag` в этом контексте вызовет runtime error.
+В webhook/Route Handler вызывайте `revalidateTag(pets.petsTag, 'max')` напрямую: сгенерированная
+обёртка над `updateTag` вызовет ошибку выполнения.
 
-Server Actions доступны по network request и должны рассматриваться как публичные mutation
-endpoints: проверяйте auth и permissions внутри каждой action, даже если UI скрывает кнопку.
+Server Actions — публичные обработчики мутаций, доступные по сети. Проверяйте аутентификацию и
+права внутри каждой, даже если кнопка скрыта.
 
 ## React Query остаётся поддержанным
 
-Root layout подключает `QueryProvider` и `ReactQueryStreamedHydration`. Generated hooks подходят
-для client-only данных, polling, realtime-driven refetch и сложных optimistic workflows.
+Корневой layout подключает `QueryProvider` и `ReactQueryStreamedHydration`. Сгенерированные хуки
+подходят для данных, нужных только клиенту, опроса, обновлений по событиям в реальном времени и сложных
+оптимистичных обновлений.
 
 ```tsx
 'use client'
@@ -154,26 +151,25 @@ export function PetStatus({ petId }: { petId: string }) {
 }
 ```
 
-Для данных, уже полностью отрендеренных Server Component и не требующих client refetch, не
-создавайте второй источник истины в Query cache без необходимости.
+Не дублируйте в кеше Query полностью отрендеренные данные Server Component без необходимости,
+если клиент не перезапрашивает их.
 
 ## Self-hosting и несколько replicas
 
-Обычный runtime cache по умолчанию находится в памяти процесса. В standalone/Docker deployment
-каждая replica имеет собственный cache; рестарты очищают его. Проект не настраивает общий
-`cacheHandlers` backend. Не обещайте cross-replica consistency без отдельного shared cache design.
+Кеш по умолчанию хранится в памяти процесса: у реплик standalone/Docker он свой и очищается перезапуском.
+Общий бэкенд `cacheHandlers` не настроен; согласованность реплик требует проектирования общего кеша.
 
 ## Чеклист
 
-1. Определите, нужен ли data результат на client после hydration.
-2. Для dynamic блока добавьте осмысленный Suspense/loading fallback.
-3. Для `'use cache'` задайте lifetime и проверьте cardinality/чувствительность ключа.
-4. Используйте generated tags на обеих сторонах.
+1. Определите, нужны ли данные клиенту после гидратации.
+2. Добавьте подходящую заглушку Suspense/loading для динамического блока.
+3. Для `'use cache'` задайте срок хранения, проверьте число ключей и наличие чувствительных данных.
+4. Используйте сгенерированные теги при чтении и записи.
 5. `updateTag` вызывайте только из Server Action; для Route Handler используйте
    `revalidateTag(tag, 'max')`.
-6. Проверяйте auth/authorization/validation внутри каждой Server Action.
-7. Тестируйте production build: cache и streaming behavior в dev отличаются.
-8. Для нескольких replicas отдельно решите вопрос shared cache и invalidation.
+6. Проверяйте аутентификацию, права и входные данные внутри каждой Server Action.
+7. Тестируйте production-сборку: кеширование и потоковый рендеринг в разработке отличаются.
+8. Для нескольких реплик отдельно решите вопрос общего кеша и инвалидации.
 
 ## Официальные источники
 

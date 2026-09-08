@@ -3,13 +3,12 @@
 > Тип: справочник · Статус: актуально · Источник истины: public index files в
 > [`packages/core/`](../packages/core/)
 
-**Когда читать:** когда нужен готовый UI-примитив, поле формы или правильный import path. Для
-решения, должен ли новый компонент попасть в `core`, сначала откройте
-[архитектуру](architecture.md#как-выбрать-место-для-кода).
+Прежде чем добавлять компонент в `core`, сверьтесь с
+[архитектурой](architecture.md#как-выбрать-место-для-кода).
 
 ## Главное правило импорта
 
-У пакета нет общего root barrel. Импортируйте из публичного subpath:
+У пакета нет общего корневого экспорта. Используйте публичный путь:
 
 ```tsx
 import { Button } from '@repo/core/button'
@@ -17,8 +16,8 @@ import { useAppForm } from '@repo/core/form'
 import { toast } from '@repo/core/toast'
 ```
 
-Публичный API subpath задаёт его `index.ts` или `index.tsx`. Не импортируйте внутренние файлы вроде
-`@repo/core/button/button` и не используйте `~/packages/core/...`: такие пути усложняют рефакторинг.
+Публичный API задаётся в `index.ts` или `index.tsx`. Импорты внутренних файлов вроде
+`@repo/core/button/button` и пути `~/packages/core/...` запрещены: они усложняют рефакторинг.
 
 ## Доступные subpaths
 
@@ -31,28 +30,27 @@ import { toast } from '@repo/core/toast'
 | Content     | `sanitized-html`                                                             |
 | Forms       | `form` и зарегистрированные field components                                 |
 
-Имена props и exports проверяйте в public index и TypeScript, визуальные состояния — в соседних
-Storybook stories. Эта таблица помогает найти компонент, но не фиксирует весь его API.
+Таблица помогает найти компонент. Полный API проверяйте в публичном индексе и TypeScript,
+состояния — в соседних историях Storybook.
 
 ## Типизированные формы
 
-`@repo/core/form` экспортирует `useAppForm`, form/context helpers, `SubmitButton` и поля:
+`@repo/core/form` экспортирует `useAppForm`, помощники формы и контекста, `SubmitButton` и поля:
 
 - `TextField`, `TextareaField`, `NumberField`, `DateField`, `PhoneField`;
 - `CheckboxField`, `SwitchField`, `SelectField`, `RadioGroupField`, `SliderField`.
 
-Используйте нативный `<form>`, отмените browser submit и вызовите `void form.handleSubmit()`.
-Поля рендерятся через `form.AppField`, form-level components — внутри `form.AppForm`. Zod-схема
-передаётся TanStack validators напрямую через Standard Schema.
+В нативном `<form>` отмените браузерную отправку и вызовите `void form.handleSubmit()`.
+Рендерите поля через `form.AppField`, компоненты уровня формы — внутри `form.AppForm`.
+Передавайте Zod-схему валидаторам TanStack напрямую через Standard Schema.
 
-Полный рабочий пример есть в разделе [«Формы» корневого README](../README.md#формы), а контракт
-экспортов — в [`packages/core/form/index.ts`](../packages/core/form/index.ts).
+Рабочий пример — в [разделе «Формы»](../README.md#формы), экспорты — в
+[`packages/core/form/index.ts`](../packages/core/form/index.ts).
 
 ## Недоверенный HTML
 
-Для HTML-строк из API, CMS или другого недоверенного источника используйте
-`SanitizedHtml`. Компонент санитизирует строку одинаково в Node.js и браузере до
-передачи её в React HTML insertion API:
+`SanitizedHtml` очищает HTML из API, CMS и других недоверенных источников перед вставкой через
+React, одинаково в Node.js и браузере:
 
 ```tsx
 import { SanitizedHtml } from '@repo/core/sanitized-html'
@@ -62,26 +60,24 @@ export function Article({ html }: { html: string }) {
 }
 ```
 
-`html` обязателен; `children` и consumer-provided `dangerouslySetInnerHTML` не входят в public
-props. Остальные `div` props, включая `className`, `aria-*`, `data-*` и `ref`, прокидываются
-в корневой контейнер.
+`html` обязателен; `children` и переданный потребителем `dangerouslySetInnerHTML` не поддерживаются.
+Остальные props `div`, включая `className`, `aria-*`, `data-*` и `ref`, передаются корневому контейнеру.
 
-Санитизация снижает XSS-риск, но не подтверждает достоверность текста и не защищает
-от phishing, обманных ссылок или нежелательного, но технически допустимого контента.
-Размер HTML ограничивайте на API/CMS-границе: синхронная санитизация не заменяет input size
-limit и может стать дорогой для чрезмерно большой строки.
+Очистка снижает риск XSS, но не защищает от недостоверного текста, фишинга, обманных ссылок и
+нежелательного допустимого контента. Ограничивайте размер HTML на границе API/CMS: синхронная
+очистка больших строк может быть затратной и не заменяет лимит.
 
 ## Если нужно добавить или изменить примитив
 
 1. Убедитесь, что компонент не содержит бизнес-типов и нужен минимум двум областям приложения.
 2. Для интерактивного компонента используйте Base UI; не заменяйте его Radix без отдельного
    решения.
-3. Сохраните accessibility semantics и forwarded props. Варианты оформите через CVA, классы
+3. Сохраните семантику доступности и передачу props. Варианты оформите через CVA, классы
    объедините через `cn`.
-4. Экспортируйте поддерживаемый контракт из локального index.
-5. Добавьте Storybook story для состояний и browser component test для поведения.
-6. Проверьте клавиатуру, focus, состояния disabled/invalid и accessible name.
-7. При breaking change обновите consumers и этот справочник.
+4. Экспортируйте поддерживаемый контракт из локального индекса.
+5. Добавьте историю Storybook для состояний и браузерный компонентный тест для поведения.
+6. Проверьте клавиатуру, фокус, состояния disabled/invalid и доступное имя.
+7. При несовместимом изменении обновите потребителей и этот справочник.
 
 ## Проверка
 
@@ -92,8 +88,8 @@ npm run tsc
 npm run lint
 ```
 
-`@repo/core` используется как source workspace внутри монорепозитория. Публикация в registry и
-semantic-version compatibility для внешних consumers сейчас не настроены.
+`@repo/core` используется из исходников внутри монорепозитория. Публикация в реестр и совместимость
+по семантическим версиям для внешних потребителей пока не настроены.
 
 ## Связанные документы
 

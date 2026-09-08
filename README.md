@@ -1,11 +1,11 @@
 # Next.js Starter
 
-Production-ориентированный стартовый монорепозиторий на Next.js с общей библиотекой компонентов,
-типизированным API-клиентом, наблюдаемостью и browser-тестами.
+Стартовый монорепозиторий на Next.js для production: общие компоненты, типизированный API-клиент,
+наблюдаемость и браузерные тесты.
 
 ## Быстрый старт
 
-Требования: Node.js 24 и поставляемая вместе с ним версия npm.
+Требования: Node.js 24.15.0 или новее в ветке 24.x и npm 11.x.
 
 ```bash
 npm ci
@@ -14,46 +14,43 @@ npx lefthook install
 npm run dev
 ```
 
-Откройте <http://nextjs-starter.127.0.0.1.nip.io:3000>. Имя разрешается через nip.io в
-`127.0.0.1`, поэтому изменять системный `hosts` не нужно.
+Откройте <http://nextjs-starter.127.0.0.1.nip.io:3000>. nip.io направляет имя на
+`127.0.0.1` без изменений в системном `hosts`.
 
-Команда не перезаписывает существующий `.env`. Приложение проверяет переменные окружения во время
-загрузки Next.js config. Если файл был создан раньше, сравните его с актуальным `.env.example`:
-новые обязательные переменные автоматически в него не попадут. Перед заменой локальных
-placeholder-значений прочитайте
-[справочник переменных окружения](docs/environment.md).
+Существующий `.env` не перезаписывается и не дополняется: сверьте его с `.env.example`.
+Next.js проверяет переменные при загрузке конфига. Заменяя локальные заглушки, следуйте
+[справочнику переменных окружения](docs/environment.md).
 
 ## Возможности
 
 - Next.js 16 App Router, React 19, TypeScript 7 и Tailwind CSS 4.
-- Включённые Cache Components; React Compiler работает только в production-сборках.
+- Cache Components включены; React Compiler работает только в production-сборках.
 - npm workspaces для `@repo/core` и `@repo/api`.
-- UI-примитивы в стиле Base UI/shadcn, безопасный HTML rendering и типизированная композиция
+- UI-примитивы в стиле Base UI/shadcn, безопасный вывод HTML и типизированная композиция
   TanStack Form в `@repo/core`.
-- Исходный OpenAPI 3.2 contract, Redocly validation и сгенерированные Hey API TypeScript types,
-  Next.js client, flat SDK, Zod schemas, TanStack Query options, Faker factories и cache tags.
-  Facets экспортируются через `@repo/api`, `/client`, `/query`, `/schemas`, `/mocks` и
+- Контракт OpenAPI 3.2, проверка Redocly и генерация Hey API: типы TypeScript, клиент Next.js,
+  плоский SDK, схемы Zod, опции TanStack Query, фабрики Faker и теги кеша.
+  Публичные точки входа: `@repo/api`, `/client`, `/query`, `/schemas`, `/mocks` и
   `/cache-tags`.
-- Server runtime mock mode на внутренних generated routes для работы без доступного backend;
-  [browser development пока ограничен BFF-prefix](docs/mock-mode.md#известное-ограничение-browser-development).
-- Sentry, OpenTelemetry, Adze logging и Prometheus metrics.
-- Vitest unit- и browser component projects, Playwright E2E и Storybook.
+- Серверные моки работают без бэкенда на внутренних сгенерированных маршрутах;
+  [в браузере при разработке мешает BFF-префикс](docs/mock-mode.md#известное-ограничение-browser-development).
+- Sentry, OpenTelemetry, логи Adze и метрики Prometheus.
+- Модульные и браузерные компонентные тесты Vitest, Playwright E2E и Storybook.
 - Oxfmt, Oxlint, Knip, JSCPD, Lefthook и Commitizen.
 
-Petstore contract в `packages/api/openapi/` служит примером code generation. Он не добавляет
-Petstore backend или Next.js Route Handlers. Генератор закреплён на
-`@hey-api/openapi-ts@0.99.0`; его процесс использует изолированный TypeScript 6.0.3 compatibility
-alias, тогда как проверки приложения остаются на TypeScript 7. Pipeline и условие удаления этого
-shim описаны в [руководстве по генерации API-клиента](docs/api-codegen.md).
+Контракт Petstore в `packages/api/openapi/` демонстрирует кодогенерацию, без бэкенда и обработчиков
+Next.js. `@hey-api/openapi-ts@0.99.0` совместим через изолированный алиас TypeScript 6.0.3;
+приложение проверяется TypeScript 7. Этапы генерации и условия удаления алиаса — в
+[руководстве по генерации API-клиента](docs/api-codegen.md).
 
 ## Формы
 
-Переиспользуемые формы экспортируются из `@repo/core/form` через единую типизированную фабрику
-`useAppForm`. Она регистрирует поля text, textarea, number, date, phone, checkbox, switch, select,
-radio-group и slider вместе с `SubmitButton`.
+`@repo/core/form` экспортирует общую типизированную фабрику форм `useAppForm`. Она регистрирует
+поля text, textarea, number, date, phone, checkbox, switch, select, radio-group и slider вместе с
+`SubmitButton`.
 
-Используйте нативный элемент `<form>` и передавайте его submit event экземпляру TanStack Form.
-Zod 4 schemas реализуют Standard Schema и могут передаваться напрямую, без resolver:
+Передавайте событие отправки нативной `<form>` экземпляру TanStack Form. Схемы Zod 4 поддерживают
+Standard Schema и передаются напрямую, без адаптера:
 
 ```tsx
 'use client'
@@ -90,8 +87,8 @@ export function ProjectForm() {
 }
 ```
 
-TanStack Form Devtools монтируются только в development и не попадают в production и test
-application paths. Поддерживаемые public subpaths и component workflow описаны в
+TanStack Form Devtools подключаются только при разработке, не в production и тестах. Импорты и
+работа с компонентами — в
 [справочнике `@repo/core`](docs/core-ui.md).
 
 ## Проверка
@@ -103,16 +100,14 @@ npm run test:e2e    # Playwright E2E с development server
 npm run verify      # полный локальный набор проверок
 ```
 
-Полная команда `verify` запускает `verify:fast`, Knip, JSCPD, все Vitest projects, а затем
-Playwright E2E.
-Lefthook форматирует staged files и использует `verify:fast` для pre-commit checks.
+`verify` запускает `verify:fast`, Knip, JSCPD, все проекты Vitest, затем Playwright E2E.
+Перед коммитом Lefthook форматирует файлы в индексе Git и запускает `verify:fast`.
 
-GitLab CI запускает `verify:fast` и Vitest на отдельных stages. Pipeline не выполняет standalone
-Playwright E2E и не создаёт готовую к deployment Next.js-сборку. `.gitlab/deploy.yaml` содержит
-только закомментированный template, поэтому pipeline не публикует release artifact и ничего не
-развёртывает. Будущий deploy job должен самостоятельно собрать или получить immutable bundle.
-Подробности находятся в [правилах тестирования](docs/testing-guidelines.md) и
-[руководстве по развёртыванию](docs/deployment.md).
+GitLab CI разделяет `verify:fast` и Vitest на этапы, не запускает standalone Playwright E2E и не
+собирает Next.js для развёртывания. `.gitlab/deploy.yaml` закомментирован: публикации и
+развёртывания нет. Будущей задаче нужна собственная сборка или готовый неизменяемый артефакт — см.
+[правила тестирования](docs/testing-guidelines.md) и
+[руководство по развёртыванию](docs/deployment.md).
 
 ## Служебные endpoints
 
@@ -120,19 +115,19 @@ Playwright E2E и не создаёт готовую к deployment Next.js-сб�
 - Readiness: `/api/ready`
 - Prometheus metrics: `/api/metrics`
 
-Health и readiness сейчас всегда возвращают `200`; readiness не проверяет upstream dependencies.
+Health и readiness сейчас всегда возвращают `200`; readiness не проверяет внешние зависимости.
 Для локальной production-проверки выполните `npm run build`, затем `npm run prod`.
 
 ## Документация
 
-Начните с [индекса документации](docs/README.md). Основные документы:
+Начните с [индекса документации](docs/README.md):
 
 - [Архитектура](docs/architecture.md)
 - [Переменные окружения](docs/environment.md)
 - [Генерация API-клиента](docs/api-codegen.md)
 - [BFF proxy](docs/bff-proxy.md)
 - [Режим моков](docs/mock-mode.md)
-- [Кеширование и streaming](docs/cache-and-streaming.md)
+- [Кеширование и потоковый рендеринг](docs/cache-and-streaming.md)
 - [Компоненты `@repo/core`](docs/core-ui.md)
 - [Правила тестирования](docs/testing-guidelines.md)
 - [Конфигурация Oxlint](docs/oxlint-rules.md)

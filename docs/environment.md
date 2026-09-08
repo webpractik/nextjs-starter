@@ -3,9 +3,8 @@
 > Тип: справочник · Статус: актуально · Источник истины: `src/env/server.ts`, `src/env/client.ts`,
 > `next.config.ts` и `.env.example`
 
-Приложение валидирует environment через `@t3-oss/env-nextjs` и Zod. `next.config.ts` импортирует
-обе схемы, поэтому отсутствующая обязательная переменная может остановить `dev` или `build` ещё до
-компиляции.
+Переменные проверяются через `@t3-oss/env-nextjs` и Zod. `next.config.ts` импортирует обе схемы:
+без обязательной переменной `dev` или `build` может остановиться до компиляции.
 
 ## Локальный старт
 
@@ -14,8 +13,8 @@ cp .env.example .env
 npm run dev
 ```
 
-`.env` игнорируется Git и не должен коммититься. Значения `.env.example` безопасны только как
-локальные placeholders; замените URLs и credentials для реального окружения.
+`.env` игнорируется Git: не коммитьте его. `.env.example` содержит локальные заглушки; замените
+URL и учётные данные для реального окружения.
 
 ## Server variables
 
@@ -35,11 +34,11 @@ npm run dev
 | `SENTRY_ORG`        | Обязательная строка             | Sentry build plugin                                  | `example`                          |
 | `SENTRY_URL`        | Обязательный URL                | Self-hosted/hosted Sentry endpoint                   | `https://sentry.example.invalid`   |
 
-`FRONT_HOST` и `HTTP_AUTH_*` сохраняются ради deployment contract, но application code сейчас их
-не использует. Не считайте наличие переменных доказательством включённой HTTP auth.
+`FRONT_HOST` и `HTTP_AUTH_*` нужны для совместимости развёртывания, но пока не используются
+приложением и не означают включённую HTTP-аутентификацию.
 
-Хотя Sentry подключается условно, server schema сейчас требует все четыре server Sentry values.
-Пустая строка преобразуется в `undefined` и не пройдёт обязательную schema.
+Серверная схема сейчас требует все четыре значения Sentry даже при условном подключении;
+пустая строка станет `undefined` и не пройдёт проверку.
 
 ## Browser-visible variables
 
@@ -52,12 +51,11 @@ npm run dev
 | `NEXT_PUBLIC_MOCK_MODE`  | String boolean, default `false` | Browser mock mode                        | `false`                            |
 | `NEXT_PUBLIC_SENTRY_DSN` | Обязательный URL                | Client Sentry и build-time Sentry switch | `https://public@example.invalid/1` |
 
-Всё с префиксом `NEXT_PUBLIC_` доступно browser bundle и не может содержать secrets. Эти значения
-обычно встраиваются во время `next build`; изменение только runtime environment готового image не
-гарантирует изменения client behavior.
+`NEXT_PUBLIC_` доступны браузеру и не должны содержать секреты. Обычно они встраиваются при
+`next build`: окружение готового образа не гарантирует изменения клиентского поведения.
 
-`NEXT_PUBLIC_MOCK_MODE` получает fallback из `MOCK_MODE`, если собственное значение не задано.
-Для явного и проверяемого deployment лучше задавать оба флага отдельно.
+Если `NEXT_PUBLIC_MOCK_MODE` не задан, используется `MOCK_MODE`. Лучше задавать оба флага явно,
+чтобы упростить проверку развёртывания.
 
 ## Test-only и framework variables
 
@@ -67,11 +65,11 @@ npm run dev
 | `NODE_ENV`     | Next   | Управляется scripts/framework; вручную обычно не задаётся   |
 | `NEXT_RUNTIME` | Next   | Используется для runtime branching; не является user config |
 
-`FRONT_PORT` не равен `PORT`: первый настраивает Playwright client, второй — Next.js server. Если
-меняете один при E2E, обеспечьте совпадение фактически слушающего адреса.
+`FRONT_PORT` настраивает Playwright, `PORT` — сервер Next.js. Меняя любой для E2E, сверьте адрес
+клиента с адресом слушающего сервера.
 
-Vitest config передаёт только allowlist env keys: сначала уже заданные `process.env`, затем значения
-из корневого `.env`. Test setup не должен самостоятельно перечитывать `.env` в каждом файле.
+Vitest передаёт только разрешённые переменные: сначала из `process.env`, затем из корневого `.env`.
+Не перечитывайте `.env` в каждом тестовом файле.
 
 ## Build-time и runtime
 
@@ -83,20 +81,20 @@ Vitest config передаёт только allowlist env keys: сначала �
 | `PORT`                     | Да по текущей schema         | Да                               | Next process слушает runtime port   |
 | Mock flags                 | Да по текущей schema/default | По необходимости                 | Build и runtime могут различаться   |
 
-Текущая schema делает многие логически runtime variables обязательными уже при build. Это важно
-для чистых CI/Docker builds, где локального `.env` нет.
+Текущая схема требует многие переменные среды выполнения уже при сборке, включая чистый
+CI/Docker без `.env`.
 
 ## Добавление переменной
 
-1. Определите, действительно ли значение нужно browser. Secrets всегда остаются server-only.
-2. Добавьте server value в `src/env/server.ts`; browser value — в `src/env/client.ts` с
+1. Проверьте, нужно ли значение браузеру. Секреты всегда остаются на сервере.
+2. Добавьте серверное значение в `src/env/server.ts`, браузерное — в `src/env/client.ts` с
    `NEXT_PUBLIC_`.
-3. Добавьте безопасный placeholder в `.env.example`.
-4. Обновите Docker/CI deployment contract, если значение нужно там.
-5. Добавьте ключ в Vitest allowlist только если tests импортируют consumer.
+3. Добавьте безопасную заглушку в `.env.example`.
+4. Обновите настройки развёртывания Docker/CI, если им нужно значение.
+5. Разрешите ключ в Vitest, только если тесты импортируют его потребителя.
 6. Обновите эту таблицу и профильный документ.
 
-Не логируйте полный env, authorization headers, cookies, DSN auth tokens или credentials.
+Не логируйте всё окружение, заголовки авторизации, cookies, токены DSN и учётные данные.
 
 ## Связанные документы
 

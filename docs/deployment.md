@@ -3,9 +3,8 @@
 > Тип: how-to + ограничения · Статус: локальный standalone flow работает; Docker/CI deploy требуют
 > доработки · Источник истины: `next.config.ts`, `Dockerfile`, `.gitlab-ci.yml` и Route Handlers
 
-Next.js настроен с `output: 'standalone'` и рассчитан на Node.js 24. Репозиторий умеет собрать
-production output локально, но текущий Dockerfile и GitLab pipeline не образуют готовый end-to-end
-deployment.
+Next.js настроен с `output: 'standalone'` и рассчитан на Node.js 24.15.0+ в ветке 24.x.
+Локальная production-сборка работает, но полного развёртывания через Dockerfile и GitLab CI пока нет.
 
 ## Локальная production-проверка
 
@@ -24,64 +23,60 @@ curl --fail http://localhost:3000/api/ready
 curl --fail http://localhost:3000/api/metrics
 ```
 
-`npm run prod` использует `next start`. Container runtime запускает минимальный
-`.next/standalone/server.js`; это разные entrypoints одного build output.
+`npm run prod` использует `next start`, контейнер — минимальный `.next/standalone/server.js`.
+Это разные точки запуска одной сборки.
 
 ## Dockerfile
 
-Задуманный multi-stage flow:
+Сборка задумана в три этапа:
 
-1. `deps` на `node:24-alpine` выполняет `npm ci` по workspace manifests.
-2. `builder` копирует source, получает build args и выполняет `npm run build`.
-3. `runner` копирует standalone server, static assets и `public/`, затем работает непривилегированным
+1. `deps` на `node:24-alpine` выполняет `npm ci` по манифестам workspaces.
+2. `builder` копирует исходники, получает аргументы сборки и выполняет `npm run build`.
+3. `runner` копирует standalone-сервер, статику и `public/`, затем работает непривилегированным
    пользователем `nextjs` на порту `3000`.
 
 ### Текущие блокеры
 
-Docker image сейчас нельзя считать воспроизводимо собираемым:
+Docker-образ сейчас нельзя считать воспроизводимо собираемым:
 
 - `deps` выполняет `COPY packages/design-tokens/package.json`, но workspace удалён;
-- builder передаёт только часть variables, обязательных для импортируемых env schemas;
+- builder передаёт не все переменные, обязательные для импортируемых схем окружения;
 - `NEXT_PUBLIC_BFF_PATH`, `BACK_INTERNAL_URL`, `APP_ENV`, `FRONT_HOST`, `PORT`, `CI` и server
-  `SENTRY_DSN` среди прочего не объявлены как build args;
-- `.dockerignore` отсутствует, поэтому локальные `.env`, build/test artifacts и другие лишние файлы
-  могут попасть в build context; случайно скопированный `.env` способен скрыть проблему и раскрыть
-  secrets в layers/context.
+  `SENTRY_DSN`, среди прочих, не объявлены аргументами сборки;
+- без `.dockerignore` в контекст сборки могут попасть локальные `.env`, артефакты сборки и тестов,
+  прочие лишние файлы; `.env` может скрыть проблему и раскрыть секреты в слоях или контексте.
 
-Исправление Dockerfile/.dockerignore является отдельной infrastructure задачей. Не обходите
-валидацию копированием реального `.env` в image и не передавайте secrets как публичные build args.
+Исправляйте Dockerfile/.dockerignore отдельной задачей. Не обходите проверку реальным `.env` в
+образе и не передавайте секреты публичными аргументами сборки.
 
 ### Build и runtime variables
 
-Public `NEXT_PUBLIC_*` значения должны быть корректны на этапе build. Server variables нужны
-builder из-за текущей config validation и повторно задаются контейнеру на runtime для
-instrumentation/API calls.
+`NEXT_PUBLIC_*` должны быть корректны при сборке. Серверные переменные нужны builder для проверки
+конфига, а затем контейнеру — для инструментирования и API-вызовов.
 
-После исправления Dockerfile runtime запуск должен передавать как минимум полный server schema
-contract из [environment.md](environment.md). Не полагайтесь на builder `ENV`: final stage их не
-наследует.
+После исправления Dockerfile передавайте при запуске как минимум все серверные переменные из
+[environment.md](environment.md). Финальный этап не наследует `ENV` builder.
 
-Sentry auth token нужен для source map upload во время production build и не должен оставаться в
-final image. Предпочтителен BuildKit secret или CI secret mount, а не persisted `ARG`/`ENV` layer.
+Токен Sentry нужен для загрузки карт исходников при production-сборке, но не должен оставаться
+в образе. Предпочтительны BuildKit secret или монтирование секрета CI, а не сохранение в `ARG`/`ENV`.
 
 ## GitLab CI
 
-Текущий pipeline содержит stages:
+Текущий pipeline состоит из этапов:
 
 ```text
 codequality → test → deploy
 ```
 
 - `codequality` выполняет `npm run verify:fast`.
-- `test` устанавливает Chromium prerequisites и выполняет `npm run test`, то есть оба Vitest
-  projects.
+- `test` устанавливает зависимости Chromium и запускает `npm run test` — оба проекта Vitest.
 - Standalone Playwright E2E не запускается.
-- Next.js production build не выполняется, `.next` artifacts не создаются.
-- `.gitlab/deploy.yaml` содержит только закомментированный extension point; deploy job отсутствует.
+- Production-сборка Next.js не выполняется, артефакты `.next` не создаются.
+- В `.gitlab/deploy.yaml` лишь закомментированный шаблон; задачи развёртывания нет.
 
-Следовательно, deploy job нельзя просто подключить к существующему artifact: он должен отдельно
-построить image/bundle или получить его из нового build stage. Проверяйте также project-level и
-remote GitLab includes — они не видны из репозитория и могут ожидать удалённый `build` job.
+Задаче развёртывания нужно собрать образ/артефакт либо получить его с нового этапа сборки.
+Проверьте невидимые в репозитории подключения GitLab — проектные и удалённые: они могут ожидать
+удалённую задачу `build`.
 
 ## Health, readiness и metrics
 
@@ -91,44 +86,40 @@ remote GitLab includes — они не видны из репозитория и
 | `/api/ready`   | Всегда JSON `{ "message": "OK" }`, status 200 | Готовность зависимостей и прогрев cache  |
 | `/api/metrics` | Возвращает текущий Prometheus registry        | Authentication и network-level isolation |
 
-Используйте health как process/liveness probe. Readiness пока семантически эквивалентна liveness;
-не настраивайте на неё traffic gating с ожиданием upstream checks. Metrics endpoint нужно закрыть
-на ingress/network уровне, если он не должен быть публичным.
+Используйте health для проверки жизнеспособности процесса. Readiness пока эквивалентна ей:
+не управляйте трафиком в расчёте на проверку зависимостей. Непубличные метрики закройте на ingress или в сети.
 
 ## Reverse proxy и browser API
 
-В production приложение отправляет `X-Accel-Buffering: no`, чтобы reverse proxy не буферизовал
-streaming responses. Ingress всё равно нужно проверять отдельно: он может переопределить header,
-timeouts или compression.
+В production приложение передаёт `X-Accel-Buffering: no` для отключения буферизации потоковых ответов прокси.
+Проверяйте ingress отдельно: он может переопределить заголовок, тайм-ауты и сжатие.
 
-Browser API transport в production использует `NEXT_PUBLIC_BACK_URL` напрямую. Текущий CSP имеет
-`connect-src 'self' data: wss: ws:` и не добавляет произвольный HTTPS backend/Sentry origin.
-Cross-origin backend может быть заблокирован CSP даже при правильном CORS. До production launch
-нужно либо использовать same-origin URL, либо отдельно согласованно расширить CSP и протестировать
-CORS/cookies. Не ослабляйте CSP до `*`.
+В production браузер обращается к `NEXT_PUBLIC_BACK_URL` напрямую. CSP
+`connect-src 'self' data: wss: ws:` не разрешает произвольные HTTPS-origin бэкенда и Sentry даже
+при правильном CORS. До запуска выберите same-origin URL либо согласованно расширьте CSP и
+проверьте CORS/cookies. Не ослабляйте CSP до `*`.
 
 ## Observability и privacy
 
-- Server runtime регистрирует OTEL и Sentry; client Sentry запускается только в production.
-- `tracesSampleRate` сейчас равен `1` на server и client.
-- Client Sentry настроен с `sendDefaultPii: true`.
-- Prometheus registry process-local; несколько replicas отдают разные snapshots.
+- Сервер регистрирует OTEL и Sentry; клиентский Sentry запускается только в production.
+- `tracesSampleRate` сейчас равен `1` на сервере и клиенте.
+- Клиентский Sentry использует `sendDefaultPii: true`.
+- Реестр Prometheus локален для процесса: реплики отдают разные снимки.
 
-Перед production проверьте стоимость sampling, data retention, consent/PII policy и фактическую
-доставку Sentry через CSP. Не утверждайте, что observability готова к требованиям конкретного
-проекта без этой проверки.
+Перед production проверьте стоимость семплирования, сроки хранения, согласия, правила обработки
+персональных данных и доставку Sentry через CSP. Без проверки нельзя заявлять соответствие требованиям проекта.
 
 ## Release checklist
 
-1. Выполнить `npm ci`, полный verification и production build в чистом environment.
-2. Устранить Docker blockers или определить другой поддерживаемый artifact flow.
-3. Зафиксировать build-time public URLs и runtime server secrets/URLs.
-4. Проверить CORS, cookie attributes и CSP для production backend/Sentry origins.
+1. Выполнить `npm ci`, полную проверку и production-сборку в чистом окружении.
+2. Устранить блокеры Docker или выбрать другой поддерживаемый способ получения артефакта.
+3. Зафиксировать публичные URL при сборке, серверные секреты и URL при запуске.
+4. Проверить CORS, атрибуты cookies и CSP для production-origin бэкенда и Sentry.
 5. Проверить streaming через реальный ingress.
-6. Решить semantics readiness и доступ к metrics.
-7. Проверить Sentry PII/sampling и source map upload без утечки token.
-8. Добавить настоящий deploy job с rollout/rollback и artifact provenance.
-9. Выполнить smoke tests `/api/health`, `/api/ready`, `/api/metrics` и ключевого page/API flow.
+6. Определить смысл readiness и доступ к метрикам.
+7. Проверить персональные данные и семплирование Sentry, загрузку карт исходников без утечки токена.
+8. Добавить задачу развёртывания с откатом и отслеживанием происхождения артефакта.
+9. Выполнить smoke-тесты `/api/health`, `/api/ready`, `/api/metrics` и ключевого сценария страницы/API.
 
 ## Связанные документы
 
