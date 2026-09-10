@@ -11,7 +11,7 @@ import {
     CardTitle,
 } from './card'
 
-const meta: Meta<typeof Card> = {
+const meta = {
     component: Card,
     title: 'core/Card',
     argTypes: {
@@ -20,7 +20,7 @@ const meta: Meta<typeof Card> = {
             options: ['default', 'sm'],
         },
     },
-}
+} satisfies Meta<typeof Card>
 
 export default meta
 

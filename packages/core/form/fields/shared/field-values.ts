@@ -11,20 +11,14 @@ export function fieldValueAsString(value: unknown) {
 }
 
 export function defaultNumberFormat(value: unknown) {
-    if (value === null || value === undefined) {
-        return ''
-    }
-
     if (typeof value === 'number' && Number.isNaN(value)) {
         return ''
     }
 
-    return String(value)
+    return fieldValueAsString(value)
 }
 
-export function defaultNumberParse(value: string) {
-    return Number(value)
-}
+export const defaultNumberParse: (_value: string) => number = Number
 
 export function asSliderValue(value: unknown): number | readonly number[] {
     if (typeof value === 'number') {

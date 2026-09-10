@@ -39,8 +39,8 @@ function CompositeFieldsDemo({ onSelectOpenChange, onSliderCommit }: CompositeFi
                         <SelectField
                             description="Choose the primary library."
                             label="Stack"
-                            onOpenChange={onSelectOpenChange}
                             options={stackOptions}
+                            onOpenChange={onSelectOpenChange}
                         />
                     </fieldContext.Provider>
                 )}
@@ -171,7 +171,9 @@ it('оставляет выступающие края ползунка види
     const slider = screen.getByRole('slider', { exact: true, name: 'Confidence' })
     const thumb = slider.element().closest<HTMLElement>('[data-slot="slider-thumb"]')
 
-    if (!thumb) throw new Error('Визуальный ползунок не найден')
+    if (!thumb) {
+        throw new Error('Визуальный ползунок не найден')
+    }
 
     const bounds = thumb.getBoundingClientRect()
     const upperEdgeTarget = document.elementFromPoint(

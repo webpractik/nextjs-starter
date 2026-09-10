@@ -16,14 +16,14 @@ const featureByPath = [
     { feature: 'UI components', includes: ['/packages/core/'] },
     { feature: 'Utilities', includes: ['/src/utils/'] },
     { feature: 'Test infrastructure', includes: ['/src/tests/'] },
-] as const satisfies ReadonlyArray<{
+] as const satisfies readonly {
     feature: string
     includes: readonly string[]
-}>
+}[]
 
 function getNormalizedPathVariants(testPath: string) {
     const normalizedPath = `/${testPath.replaceAll('\\', '/')}`
-    const pathWithoutRouteGroups = normalizedPath.replace(/\/\([^)]+\)/g, '')
+    const pathWithoutRouteGroups = normalizedPath.replaceAll(/\/\([^)]+\)/g, '')
 
     return [normalizedPath, pathWithoutRouteGroups]
 }

@@ -18,12 +18,12 @@ export interface MockFactoryOptions {
 }
 
 export interface MockRoute {
-    create?: (_options: MockFactoryOptions) => unknown
     method: RequestMethod
     operationId?: string
     pattern: RegExp
     status?: number
     tag?: string
+    create?: (_options: MockFactoryOptions) => unknown
 }
 
 const statusTexts: Record<number, string> = {
@@ -40,7 +40,8 @@ function normalizeMethod(method: MockRequestConfig['method']): RequestMethod {
 }
 
 function normalizePath(url: MockRequestConfig['url']) {
-    let pathname = '/'
+    let pathname: string
+
     try {
         pathname = new URL(url ?? '/', 'http://localhost').pathname
     } catch {
@@ -72,6 +73,7 @@ export async function getMockResponse(config: MockRequestConfig, scenario?: Base
     const status = route.status ?? 200
     const hasBody = status !== 204 && route.create !== undefined
     const headers = new Headers({ 'x-mock-mode': 'true' })
+
     if (hasBody) {
         headers.set('content-type', 'application/json')
     }

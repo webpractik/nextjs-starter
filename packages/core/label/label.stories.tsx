@@ -4,10 +4,10 @@ import { Checkbox } from '../checkbox'
 import { Input } from '../input'
 import { Label } from './label'
 
-const meta: Meta<typeof Label> = {
+const meta = {
     component: Label,
     title: 'core/Label',
-}
+} satisfies Meta<typeof Label>
 
 export default meta
 

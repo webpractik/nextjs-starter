@@ -117,7 +117,7 @@ function FormShowcase() {
                 </form.AppForm>
             </form>
 
-            {submittedValues ? (
+            {submittedValues !== null && submittedValues !== '' ? (
                 <pre className="overflow-auto rounded-md bg-muted p-4 text-xs">
                     {submittedValues}
                 </pre>
@@ -126,10 +126,10 @@ function FormShowcase() {
     )
 }
 
-const meta: Meta<typeof FormShowcase> = {
+const meta = {
     component: FormShowcase,
     title: 'core/Form',
-}
+} satisfies Meta<typeof FormShowcase>
 
 export default meta
 

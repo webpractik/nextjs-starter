@@ -4,7 +4,7 @@ import { Slider as SliderPrimitive } from '@base-ui/react/slider'
 
 import { cn } from '../cn'
 
-type SliderClassName<State> = string | ((_state: State) => string | undefined) | undefined
+type SliderClassName<State> = ((_state: State) => string | undefined) | string | undefined
 
 function mergeClassName<State>(baseClassName: string, className: SliderClassName<State>) {
     return typeof className === 'function'

@@ -25,10 +25,10 @@ const workspacePreview = `data:image/svg+xml,${encodeURIComponent(`
 </svg>
 `)}`
 
-const meta: Meta<typeof Attachment> = {
+const meta = {
     component: Attachment,
     title: 'core/Attachment',
-}
+} satisfies Meta<typeof Attachment>
 
 export default meta
 
@@ -57,7 +57,7 @@ export const ImagePreview: Story = {
     render: () => (
         <Attachment orientation="vertical">
             <AttachmentMedia variant="image">
-                {/* oxlint-disable-next-line next/no-img-element -- Attachment previews are caller-owned content. */}
+                {/* oxlint-disable-next-line nextjs/no-img-element -- Attachment previews are caller-owned content. */}
                 <img alt="Предпросмотр рабочей панели" src={workspacePreview} />
             </AttachmentMedia>
             <AttachmentContent>

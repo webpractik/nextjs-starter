@@ -12,13 +12,14 @@ function runNpmScript(script, environment = process.env) {
         throw result.error
     }
 
-    if (result.status !== 0) {
-        process.exit(result.status ?? 1)
-    }
+    return result.status ?? 1
 }
 
-runNpmScript('build')
-runNpmScript('test:e2e', {
-    ...process.env,
-    PLAYWRIGHT_SERVER_MODE: 'standalone',
-})
+process.exitCode = runNpmScript('build')
+
+if (process.exitCode === 0) {
+    process.exitCode = runNpmScript('test:e2e', {
+        ...process.env,
+        PLAYWRIGHT_SERVER_MODE: 'standalone',
+    })
+}

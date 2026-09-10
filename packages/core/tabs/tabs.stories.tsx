@@ -4,7 +4,7 @@ import { BellIcon, SettingsIcon, UserIcon } from 'lucide-react'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs'
 
-const meta: Meta<typeof Tabs> = {
+const meta = {
     component: Tabs,
     title: 'core/Tabs',
     argTypes: {
@@ -13,7 +13,7 @@ const meta: Meta<typeof Tabs> = {
             options: ['horizontal', 'vertical'],
         },
     },
-}
+} satisfies Meta<typeof Tabs>
 
 export default meta
 

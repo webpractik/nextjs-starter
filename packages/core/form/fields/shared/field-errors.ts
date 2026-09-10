@@ -1,7 +1,13 @@
-import type { AnyFieldApi } from '@tanstack/react-form'
+interface FieldWithErrors {
+    state: {
+        meta: {
+            errors: readonly unknown[]
+        }
+    }
+}
 
-export function fieldErrorMessages(field: AnyFieldApi) {
-    return field.state.meta.errors.flatMap(formatError)
+export function fieldErrorMessages(field: FieldWithErrors) {
+    return field.state.meta.errors.flatMap((error) => formatError(error))
 }
 
 function formatError(error: unknown): string[] {
@@ -10,7 +16,7 @@ function formatError(error: unknown): string[] {
     }
 
     if (Array.isArray(error)) {
-        return error.flatMap(formatError)
+        return error.flatMap((nestedError) => formatError(nestedError))
     }
 
     if (typeof error === 'string') {
@@ -26,7 +32,7 @@ function formatError(error: unknown): string[] {
     }
 
     if (typeof error === 'object' && 'message' in error) {
-        const message = error.message
+        const { message } = error
 
         if (typeof message === 'string' && message) {
             return [message]

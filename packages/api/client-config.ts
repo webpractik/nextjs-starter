@@ -25,12 +25,16 @@ interface SelectApiBaseUrlOptions {
 }
 
 export function selectApiBaseUrl({ browser, development, urls }: SelectApiBaseUrlOptions) {
-    if (!browser) return urls.server
+    if (!browser) {
+        return urls.server
+    }
     return development ? urls.browserDevelopment : urls.browserProduction
 }
 
 function getApiBaseUrl() {
-    if (typeof window === 'undefined') return serverEnvironment.BACK_INTERNAL_URL
+    if (globalThis.window === undefined) {
+        return serverEnvironment.BACK_INTERNAL_URL
+    }
     return isDev ? clientEnvironment.NEXT_PUBLIC_BFF_PATH : clientEnvironment.NEXT_PUBLIC_BACK_URL
 }
 
@@ -39,7 +43,7 @@ function isEnvironmentFlagEnabled(value: boolean | string | undefined) {
 }
 
 async function isMockModeEnabled(headers: Headers) {
-    if (typeof window === 'undefined') {
+    if (globalThis.window === undefined) {
         if (
             isEnvironmentFlagEnabled(process.env.MOCK_MODE) ||
             isEnvironmentFlagEnabled(serverEnvironment.MOCK_MODE) ||
@@ -70,10 +74,15 @@ async function isMockModeEnabled(headers: Headers) {
 
 async function getRawMockScenario(headers: Headers) {
     const requestScenario = getRequestMockScenario(headers)
-    if (requestScenario != null) return requestScenario
 
-    if (typeof window === 'undefined') {
-        if (process.env.NEXT_RUNTIME !== 'nodejs' && process.env.NEXT_RUNTIME !== 'edge') return
+    if (requestScenario != null) {
+        return requestScenario
+    }
+
+    if (globalThis.window === undefined) {
+        if (process.env.NEXT_RUNTIME !== 'nodejs' && process.env.NEXT_RUNTIME !== 'edge') {
+            return
+        }
 
         try {
             const { headers: getHeaders } = await import('next/headers')
@@ -88,7 +97,10 @@ async function getRawMockScenario(headers: Headers) {
 
 async function getMockScenario(headers: Headers) {
     const rawScenario = await getRawMockScenario(headers)
-    if (rawScenario == null) return
+
+    if (rawScenario == null) {
+        return
+    }
 
     const { isBaseMockScenarioName } = await import('./mock-scenarios')
     return isBaseMockScenarioName(rawScenario) ? rawScenario : undefined
@@ -96,7 +108,10 @@ async function getMockScenario(headers: Headers) {
 
 function mergeRequestHeaders(input: RequestInfo | URL, init?: RequestInit) {
     const headers = new Headers(input instanceof Request ? input.headers : undefined)
-    new Headers(init?.headers).forEach((value, key) => headers.set(key, value))
+
+    for (const [key, value] of new Headers(init?.headers)) {
+        headers.set(key, value)
+    }
     return headers
 }
 
@@ -105,10 +120,12 @@ function createMockRequestConfig(
     init: RequestInit | undefined,
     headers: Headers,
 ): MockRequestConfig {
+    const url = input instanceof URL ? input.href : input
+
     return {
         headers,
         method: init?.method ?? (input instanceof Request ? input.method : undefined),
-        url: typeof input === 'string' ? input : input instanceof URL ? input.href : input.url,
+        url: typeof url === 'string' ? url : url.url,
     }
 }
 

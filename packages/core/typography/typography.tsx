@@ -2,14 +2,14 @@ import type { ComponentProps, JSX, ReactNode, Ref } from 'react'
 
 import { typographyVariants } from './variants'
 
-type TypographyProps = {
+type TypographyProps = ComponentProps<'p'> & {
     center?: boolean
     children: ReactNode
     className?: string
     color?: 'primary'
     ref?: Ref<HTMLParagraphElement>
     variant?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span'
-} & ComponentProps<'p'>
+}
 
 export function Typography({
     center,

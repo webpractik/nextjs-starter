@@ -36,10 +36,10 @@ function PhoneFieldStory({
     )
 }
 
-const meta: Meta<typeof PhoneFieldStory> = {
+const meta = {
     component: PhoneFieldStory,
     title: 'core/Form/PhoneField',
-}
+} satisfies Meta<typeof PhoneFieldStory>
 
 export default meta
 

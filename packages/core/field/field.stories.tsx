@@ -16,7 +16,7 @@ import {
     FieldTitle,
 } from './field'
 
-const meta: Meta<typeof Field> = {
+const meta = {
     component: Field,
     title: 'core/Field',
     argTypes: {
@@ -25,7 +25,7 @@ const meta: Meta<typeof Field> = {
             options: ['vertical', 'horizontal', 'responsive'],
         },
     },
-}
+} satisfies Meta<typeof Field>
 
 export default meta
 

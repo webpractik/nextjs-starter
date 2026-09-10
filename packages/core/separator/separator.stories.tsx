@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 
 import { Separator } from './separator'
 
-const meta: Meta<typeof Separator> = {
+const meta = {
     component: Separator,
     title: 'core/Separator',
     argTypes: {
@@ -11,7 +11,7 @@ const meta: Meta<typeof Separator> = {
             options: ['horizontal', 'vertical'],
         },
     },
-}
+} satisfies Meta<typeof Separator>
 
 export default meta
 

@@ -24,8 +24,8 @@ export interface FieldControlProps {
 }
 
 interface FieldShellAdapterProps extends FieldShellProps {
-    children: (_controlProps: FieldControlProps) => ReactNode
     field: AnyFieldApi
+    children: (_controlProps: FieldControlProps) => ReactNode
 }
 
 interface FieldIds {
@@ -37,7 +37,7 @@ interface FieldIds {
 
 function useFieldIds(field: AnyFieldApi, hasDescription: boolean, hasErrors: boolean): FieldIds {
     const reactId = useId().replaceAll(':', '')
-    const controlId = `${field.name}-${reactId}`
+    const controlId = `${String(field.name)}-${reactId}`
 
     return {
         controlId,
@@ -76,9 +76,11 @@ function FieldFeedback({
     errorId: string | undefined
     messages: string[]
 }) {
+    const hasDescription = Boolean(description)
+
     return (
         <>
-            {description ? (
+            {hasDescription ? (
                 <FieldDescription id={descriptionId}>{description}</FieldDescription>
             ) : null}
             {messages.length > 0 ? (

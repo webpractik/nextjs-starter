@@ -13,10 +13,10 @@ import {
     DialogTrigger,
 } from './dialog'
 
-const meta: Meta<typeof Dialog> = {
+const meta = {
     component: Dialog,
     title: 'core/Dialog',
-}
+} satisfies Meta<typeof Dialog>
 
 export default meta
 
@@ -122,9 +122,9 @@ export const LongContent: Story = {
         <Dialog>
             <DialogTrigger render={<Button />}>Открыть длинный диалог</DialogTrigger>
             <DialogContent className={`
-     max-h-[80vh] overflow-y-auto
-     sm:max-w-lg
-   `}>
+                max-h-[80vh] overflow-y-auto
+                sm:max-w-lg
+            `}>
                 <DialogHeader>
                     <DialogTitle>Условия использования</DialogTitle>
                     <DialogDescription>Прочитайте и примите наши условия.</DialogDescription>

@@ -17,6 +17,6 @@ it('вызывает пользовательский onBlur до пометки
     handleFieldBlur(field, onBlur, event)
 
     expect(onBlur).toHaveBeenCalledWith(event)
-    expect(field.handleBlur).toHaveBeenCalledOnce()
-    expect(calls).toEqual(['consumer', 'field'])
+    expect(field.handleBlur).toHaveBeenCalledTimes(1)
+    expect(calls).toStrictEqual(['consumer', 'field'])
 })

@@ -1,4 +1,5 @@
 'use client'
+
 import * as Sentry from '@sentry/nextjs'
 import { useEffect } from 'react'
 
@@ -6,7 +7,7 @@ import { ErrorFallback } from '#/components/utilities/error-boundary'
 import logger from '#/observability/logger'
 
 interface GlobalErrorProps {
-    error: { digest?: string } & Error
+    error: Error & { digest?: string }
     reset: () => void
 }
 

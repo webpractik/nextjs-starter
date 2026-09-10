@@ -17,7 +17,6 @@
 | Изменить API или использовать facets | [Генерация API-клиента](api-codegen.md) |
 | Добавить UI-компонент или форму      | [Компоненты `@repo/core`](core-ui.md)   |
 | Написать или запустить тест          | [Тестирование](testing-guidelines.md)   |
-| Проверить или понять правила Oxlint  | [Oxlint в проекте](oxlint-rules.md)     |
 
 ## Данные и runtime
 

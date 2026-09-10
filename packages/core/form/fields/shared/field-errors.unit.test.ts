@@ -9,7 +9,7 @@ function fieldWithErrors(errors: unknown[]) {
                 errors,
             },
         },
-    } as Parameters<typeof fieldErrorMessages>[0]
+    }
 }
 
 it('собирает пользовательские сообщения из всех поддерживаемых вложенных форм ошибок', () => {
@@ -22,7 +22,7 @@ it('собирает пользовательские сообщения из в
                 ['Nested', true, false, 0, 404, [{ message: 'Deep issue' }]],
             ]),
         ),
-    ).toEqual([
+    ).toStrictEqual([
         'Required',
         'Invalid email',
         'Already used',
@@ -41,5 +41,5 @@ it('игнорирует пустые значения и объекты без 
 
     expect(
         fieldErrorMessages(fieldWithErrors([undefined, null, '', {}, { message: 42 }, emptyError])),
-    ).toEqual([])
+    ).toStrictEqual([])
 })

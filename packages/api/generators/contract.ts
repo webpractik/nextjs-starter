@@ -61,7 +61,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
     return typeof value === 'object' && value !== null && !Array.isArray(value)
 }
 
-function mappingEntries(value: unknown): Array<[string, unknown]> {
+function mappingEntries(value: unknown): [string, unknown][] {
     if (value instanceof Map) {
         return [...value.entries()].map(([key, entry]) => [String(key), entry])
     }
@@ -87,22 +87,26 @@ function resolveLocalReference(root: Mapping, value: unknown): unknown {
 
     while (isMapping(resolved)) {
         const reference = mappingGet(resolved, '$ref')
+
         if (typeof reference !== 'string') {
             return resolved
         }
+
         if (!reference.startsWith('#/')) {
             throw new Error(`External OpenAPI reference is not supported: ${reference}`)
         }
+
         if (seen.has(reference)) {
             throw new Error(`Circular OpenAPI reference: ${reference}`)
         }
+
         seen.add(reference)
 
-        resolved = reference
-            .slice(2)
-            .split('/')
-            .map(decodeJsonPointerSegment)
-            .reduce<unknown>((current, segment) => mappingGet(current, segment), root)
+        resolved = root
+
+        for (const segment of reference.slice(2).split('/')) {
+            resolved = mappingGet(resolved, decodeJsonPointerSegment(segment))
+        }
 
         if (resolved === undefined) {
             throw new Error(`OpenAPI reference cannot be resolved: ${reference}`)
@@ -116,14 +120,21 @@ function schemaType(root: Mapping, parameter: unknown): ContractSchemaType {
     const schema = resolveLocalReference(root, mappingGet(parameter, 'schema'))
     const type = mappingGet(schema, 'type')
 
-    if (type === 'integer' || type === 'number') return 'number'
-    if (type === 'string') return 'string'
+    if (type === 'integer' || type === 'number') {
+        return 'number'
+    }
+
+    if (type === 'string') {
+        return 'string'
+    }
     return 'string | number'
 }
 
 function resolveParameters(root: Mapping, value: unknown) {
     return Array.isArray(value)
-        ? value.map((parameter) => resolveLocalReference(root, parameter)).filter(isMapping)
+        ? value
+              .map((parameter) => resolveLocalReference(root, parameter))
+              .filter((parameter) => isMapping(parameter))
         : []
 }
 
@@ -173,7 +184,9 @@ function responseHasBody(root: Mapping, response: unknown) {
 
 function operationResponses(root: Mapping, operation: Mapping): ContractResponse[] {
     return mappingEntries(mappingGet(operation, 'responses')).flatMap(([status, response]) => {
-        if (!responseStatusPattern.test(status)) return []
+        if (!responseStatusPattern.test(status)) {
+            return []
+        }
 
         return [
             {
@@ -193,12 +206,52 @@ function isContractHttpMethod(value: string): value is ContractHttpMethod {
     return httpMethods.has(value as ContractHttpMethod)
 }
 
+function pathOperations(root: Mapping, path: string, rawPathItem: unknown): ContractOperation[] {
+    const pathItem = resolveLocalReference(root, rawPathItem)
+
+    if (!isMapping(pathItem)) {
+        return []
+    }
+
+    const operations: ContractOperation[] = []
+
+    for (const [method, rawOperation] of mappingEntries(pathItem)) {
+        if (!isContractHttpMethod(method)) {
+            continue
+        }
+
+        const operation = resolveLocalReference(root, rawOperation)
+
+        if (!isMapping(operation)) {
+            continue
+        }
+
+        const operationId = mappingGet(operation, 'operationId')
+
+        if (typeof operationId !== 'string' || operationId === '') {
+            throw new Error(`${method.toUpperCase()} ${path} must declare an operationId`)
+        }
+
+        operations.push({
+            method,
+            operationId,
+            path,
+            pathParameters: operationPathParameters(root, path, pathItem, operation),
+            responses: operationResponses(root, operation),
+            tags: operationTags(operation),
+        })
+    }
+
+    return operations
+}
+
 export function parseContractDocument(document: unknown): ContractModel {
     if (!isMapping(document)) {
         throw new Error('OpenAPI bundle must be an object')
     }
 
     const openapi = mappingGet(document, 'openapi')
+
     if (typeof openapi !== 'string' || !openapi.startsWith('3.')) {
         throw new Error('OpenAPI bundle must declare a supported 3.x version')
     }
@@ -207,32 +260,13 @@ export function parseContractDocument(document: unknown): ContractModel {
     const operationIds = new Set<string>()
 
     for (const [path, rawPathItem] of mappingEntries(mappingGet(document, 'paths'))) {
-        const pathItem = resolveLocalReference(document, rawPathItem)
-        if (!isMapping(pathItem)) continue
-
-        for (const [method, rawOperation] of mappingEntries(pathItem)) {
-            if (!isContractHttpMethod(method)) continue
-
-            const operation = resolveLocalReference(document, rawOperation)
-            if (!isMapping(operation)) continue
-
-            const operationId = mappingGet(operation, 'operationId')
-            if (typeof operationId !== 'string' || operationId === '') {
-                throw new Error(`${method.toUpperCase()} ${path} must declare an operationId`)
+        for (const operation of pathOperations(document, path, rawPathItem)) {
+            if (operationIds.has(operation.operationId)) {
+                throw new Error(`Duplicate OpenAPI operationId: ${operation.operationId}`)
             }
-            if (operationIds.has(operationId)) {
-                throw new Error(`Duplicate OpenAPI operationId: ${operationId}`)
-            }
-            operationIds.add(operationId)
 
-            operations.push({
-                method,
-                operationId,
-                path,
-                pathParameters: operationPathParameters(document, path, pathItem, operation),
-                responses: operationResponses(document, operation),
-                tags: operationTags(operation),
-            })
+            operationIds.add(operation.operationId)
+            operations.push(operation)
         }
     }
 
@@ -243,8 +277,10 @@ export async function readContractBundle(filePath: string) {
     const source = await readFile(filePath, 'utf8')
     const document = parseDocument(source)
 
-    if (document.errors.length > 0) {
-        throw new Error(`Invalid bundled OpenAPI YAML: ${document.errors[0]?.message}`)
+    const [error] = document.errors
+
+    if (error !== undefined) {
+        throw new Error(`Invalid bundled OpenAPI YAML: ${error.message}`)
     }
 
     return parseContractDocument(document.toJS({ mapAsMap: true }))

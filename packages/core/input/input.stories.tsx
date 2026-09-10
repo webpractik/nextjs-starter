@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { Label } from '../label'
 import { Input } from './input'
 
-const meta: Meta<typeof Input> = {
+const meta = {
     component: Input,
     title: 'core/Input',
     argTypes: {
@@ -18,7 +18,7 @@ const meta: Meta<typeof Input> = {
             control: 'text',
         },
     },
-}
+} satisfies Meta<typeof Input>
 
 export default meta
 

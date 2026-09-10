@@ -10,10 +10,10 @@ import {
     SliderValue,
 } from '.'
 
-const meta: Meta<typeof Slider> = {
+const meta = {
     component: Slider,
     title: 'core/Slider',
-}
+} satisfies Meta<typeof Slider>
 
 export default meta
 
@@ -56,7 +56,7 @@ export const Range: Story = {
 
 export const Disabled: Story = {
     render: () => (
-        <Slider disabled defaultValue={65}>
+        <Slider defaultValue={65} disabled>
             <SliderLabel>Зафиксированная уверенность</SliderLabel>
             <SliderControl>
                 <SliderTrack>

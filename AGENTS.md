@@ -151,6 +151,8 @@
 
 ## Форматирование и lint
 
+- Oxlint использует корпоративный `@webpractik/oxlint-config` через `oxlint.config.ts`.
+  Общие правила не копируются в проект. Type-aware проверки включены через `oxlint-tsgolint`.
 - Единственный formatter — Oxfmt: 4 пробела, single quotes, без semicolon, ширина 100.
 - Oxfmt сортирует импорты, scripts в `package.json` и Tailwind-классы в `cva`/`cn`. Не боритесь с
   его результатом ручной перестановкой.

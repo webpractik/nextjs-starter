@@ -2,10 +2,10 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 
 import { Typography } from './typography'
 
-const meta: Meta<typeof Typography> = {
+const meta = {
     component: Typography,
     title: 'core/Typography',
-}
+} satisfies Meta<typeof Typography>
 
 export default meta
 

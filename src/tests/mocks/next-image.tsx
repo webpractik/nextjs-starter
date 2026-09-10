@@ -1,24 +1,24 @@
 import type { ComponentProps } from 'react'
 
 export default function Image({
-    src,
     alt,
+    blurDataURL: _blurDataURL,
     fill: _fill,
-    sizes: _sizes,
+    onError: _onError,
+    onLoad: _onLoad,
+    placeholder: _placeholder,
     priority: _priority,
     quality: _quality,
-    placeholder: _placeholder,
-    blurDataURL: _blurDataURL,
-    onLoad: _onLoad,
-    onError: _onError,
+    sizes: _sizes,
+    src,
     ...props
 }: ComponentProps<'img'> & {
+    blurDataURL?: string
     fill?: boolean
-    sizes?: string
+    placeholder?: string
     priority?: boolean
     quality?: number
-    placeholder?: string
-    blurDataURL?: string
+    sizes?: string
 }) {
     // eslint-disable-next-line next/no-img-element
     return <img src={src} alt={alt} {...props} />

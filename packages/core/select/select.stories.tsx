@@ -6,10 +6,10 @@ import { CircleIcon, SquareIcon, TriangleIcon } from 'lucide-react'
 import { Label } from '../label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select'
 
-const meta: Meta<typeof Select> = {
+const meta = {
     component: Select,
     title: 'core/Select',
-}
+} satisfies Meta<typeof Select>
 
 export default meta
 
@@ -75,7 +75,7 @@ export const WithLabel: Story = {
 
 export const Disabled: Story = {
     render: () => (
-        <Select disabled defaultValue="second" items={neutralOptions}>
+        <Select defaultValue="second" items={neutralOptions} disabled>
             <SelectTrigger className="w-48">
                 <SelectValue />
             </SelectTrigger>

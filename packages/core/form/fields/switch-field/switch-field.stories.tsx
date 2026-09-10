@@ -30,10 +30,10 @@ function SwitchFieldStory({
     )
 }
 
-const meta: Meta<typeof SwitchFieldStory> = {
+const meta = {
     component: SwitchFieldStory,
     title: 'core/Form/SwitchField',
-}
+} satisfies Meta<typeof SwitchFieldStory>
 
 export default meta
 

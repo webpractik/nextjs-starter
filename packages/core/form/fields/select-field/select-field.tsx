@@ -62,6 +62,7 @@ export function SelectField({
                     disabled={disabled}
                     items={options}
                     name={field.name}
+                    value={value}
                     onOpenChange={(open, eventDetails) => {
                         onOpenChange?.(open, eventDetails)
 
@@ -70,7 +71,6 @@ export function SelectField({
                         }
                     }}
                     onValueChange={(nextValue) => field.handleChange(nextValue)}
-                    value={value}
                 >
                     <SelectTrigger {...controlProps} className={cn('w-full', triggerClassName)}>
                         <SelectValue placeholder={placeholder} />
@@ -79,8 +79,8 @@ export function SelectField({
                         <SelectGroup>
                             {options.map((option) => (
                                 <SelectItem
-                                    disabled={option.disabled}
                                     key={option.value}
+                                    disabled={option.disabled}
                                     value={option.value}
                                 >
                                     {option.label}

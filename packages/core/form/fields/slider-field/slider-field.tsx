@@ -27,9 +27,9 @@ export type SliderFieldProps = FieldShellProps &
         'children' | 'className' | 'defaultValue' | 'id' | 'name' | 'onValueChange' | 'value'
     > & {
         formatValue?: SliderValueLabel
-        getThumbLabel?: (_index: number) => string
         showValue?: boolean
         sliderClassName?: string
+        getThumbLabel?: (_index: number) => string
     }
 
 export function SliderField({
@@ -67,20 +67,26 @@ export function SliderField({
                     disabled={disabled}
                     id={controlProps.id}
                     name={field.name}
+                    value={value}
                     onValueChange={(nextValue) => field.handleChange(nextValue)}
                     onValueCommitted={(nextValue, eventDetails) => {
                         onValueCommitted?.(nextValue, eventDetails)
                         field.handleBlur()
                     }}
-                    value={value}
                 >
-                    {showValue ? <SliderValue>{() => formatValue(value)}</SliderValue> : null}
+                    {showValue ? (
+                        <SliderValue>
+                            {/* oxlint-disable-next-line typescript/promise-function-async -- ReactNode includes Promise; the render callback forwards the formatter result synchronously. */}
+                            {() => formatValue(value)}
+                        </SliderValue>
+                    ) : null}
                     <SliderControl>
                         <SliderTrack>
                             <SliderIndicator />
                         </SliderTrack>
                         {thumbs.map((thumb) => (
                             <SliderThumb
+                                key={thumb.key}
                                 aria-describedby={controlProps['aria-describedby']}
                                 aria-invalid={controlProps['aria-invalid']}
                                 aria-labelledby={
@@ -88,7 +94,6 @@ export function SliderField({
                                 }
                                 getAriaLabel={getThumbLabel}
                                 index={thumb.index}
-                                key={thumb.key}
                             />
                         ))}
                     </SliderControl>

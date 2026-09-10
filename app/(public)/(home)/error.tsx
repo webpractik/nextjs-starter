@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 import { ErrorFallback } from '#/components/utilities/error-boundary'
 
 interface ErrorProps {
-    error: { digest?: string } & Error
+    error: Error & { digest?: string }
     reset: () => void
 }
 

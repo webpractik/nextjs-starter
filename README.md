@@ -130,5 +130,4 @@ Health и readiness сейчас всегда возвращают `200`; readin
 - [Кеширование и потоковый рендеринг](docs/cache-and-streaming.md)
 - [Компоненты `@repo/core`](docs/core-ui.md)
 - [Правила тестирования](docs/testing-guidelines.md)
-- [Конфигурация Oxlint](docs/oxlint-rules.md)
 - [Развёртывание](docs/deployment.md)

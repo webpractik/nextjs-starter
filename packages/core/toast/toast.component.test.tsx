@@ -34,19 +34,21 @@ it('показывает несколько toast, выполняет дейст
     await expect.element(screen.getByText('Second notification')).toBeVisible()
 
     await screen.getByRole('button', { name: 'Undo' }).click()
-    expect(action).toHaveBeenCalledOnce()
+    expect(action).toHaveBeenCalledTimes(1)
 
     manager.update(toastId, { description: 'The updated description' })
 
     await expect.element(screen.getByText('The updated description')).toBeVisible()
     await expect.element(screen.getByText('The original description')).not.toBeInTheDocument()
 
-    const closeButtons = await screen.getByRole('button', { name: 'Close toast' }).all()
+    const closeButtons = screen.getByRole('button', { name: 'Close toast' }).all()
     const closeButton = closeButtons.find((button) =>
         button.element().parentElement?.textContent?.includes('Changes saved'),
     )
 
-    if (!closeButton) throw new Error('Кнопка закрытия toast Changes saved не найдена')
+    if (!closeButton) {
+        throw new Error('Кнопка закрытия toast Changes saved не найдена')
+    }
 
     await closeButton.click()
     await expect.element(screen.getByText('Changes saved')).not.toBeInTheDocument()

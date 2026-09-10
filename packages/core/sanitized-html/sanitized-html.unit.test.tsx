@@ -11,7 +11,8 @@ type HasChildrenProp = 'children' extends keyof SanitizedHtmlProps ? true : fals
 type HasDangerouslySetInnerHtmlProp = 'dangerouslySetInnerHTML' extends keyof SanitizedHtmlProps
     ? true
     : false
-type IsHtmlOptional = object extends Pick<SanitizedHtmlProps, 'html'> ? true : false
+type IsHtmlOptional =
+    Record<string, unknown> extends Pick<SanitizedHtmlProps, 'html'> ? true : false
 
 expectTypeOf<HasChildrenProp>().toEqualTypeOf<false>()
 expectTypeOf<HasDangerouslySetInnerHtmlProp>().toEqualTypeOf<false>()

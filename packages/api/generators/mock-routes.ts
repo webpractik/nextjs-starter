@@ -45,7 +45,9 @@ function compareRoutes(left: MockRouteDefinition, right: MockRouteDefinition) {
 
 export function collectMockRoutes(contract: ContractModel, fakerExports: ReadonlySet<string>) {
     const routes = contract.operations.flatMap<MockRouteDefinition>((operation) => {
-        if (!isMockMethod(operation.method)) return []
+        if (!isMockMethod(operation.method)) {
+            return []
+        }
 
         const response = preferredResponse(operation.responses)
         const expectedFactory = response.hasBody
@@ -74,7 +76,7 @@ export function collectMockRoutes(contract: ContractModel, fakerExports: Readonl
 }
 
 function escapeRegexLiteral(value: string) {
-    return value.replaceAll(/[\\^$.*+?()[\]{}|/]/g, '\\$&')
+    return value.replaceAll(/[\\^$.*+?()[\]{}|/]/g, String.raw`\$&`)
 }
 
 function routePattern(pathname: string) {

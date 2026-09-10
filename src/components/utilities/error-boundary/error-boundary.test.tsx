@@ -34,7 +34,7 @@ describe('граница ошибок', () => {
     }
 
     it('перехватывает ошибку дочернего компонента и показывает штатный резервный интерфейс', async () => {
-        vi.spyOn(console, 'error').mockImplementation(() => undefined)
+        vi.spyOn(console, 'error').mockReturnValue(undefined)
         const onError = vi.fn()
         const view = await render(
             <ErrorBoundary onError={onError}>
@@ -48,11 +48,11 @@ describe('граница ошибок', () => {
             .toBeVisible()
         await expect.element(view.getByText(errorMessage)).toBeVisible()
         await expect.element(view.getByRole('button', { name: 'Попробовать еще' })).toBeVisible()
-        expect(onError).toHaveBeenCalledOnce()
+        expect(onError).toHaveBeenCalledTimes(1)
     })
 
     it('после повторной попытки сбрасывает ошибку и снова показывает дочернее содержимое', async () => {
-        vi.spyOn(console, 'error').mockImplementation(() => undefined)
+        vi.spyOn(console, 'error').mockReturnValue(undefined)
         const onError = vi.fn()
         const onReset = vi.fn()
         const view = await render(<RecoverableContent onError={onError} onReset={onReset} />)
@@ -61,7 +61,7 @@ describe('граница ошибок', () => {
         await view.getByRole('button', { name: 'Попробовать еще' }).click()
 
         await expect.element(view.getByText('Содержимое восстановлено')).toBeVisible()
-        expect(onError).toHaveBeenCalledOnce()
-        expect(onReset).toHaveBeenCalledOnce()
+        expect(onError).toHaveBeenCalledTimes(1)
+        expect(onReset).toHaveBeenCalledTimes(1)
     })
 })

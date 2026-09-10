@@ -11,29 +11,31 @@ import { headers } from '~/headers'
 const frontendDevHostname = new URL(clientEnvironment.NEXT_PUBLIC_FRONT_URL).hostname
 
 const nextConfig: NextConfig = {
-    output: 'standalone',
-    reactStrictMode: true,
-    reactCompiler: isProd,
-    cacheComponents: true,
-    typedRoutes: true,
-    reactProductionProfiling: false,
-    poweredByHeader: false,
-    cleanDistDir: true,
-    turbopack: {},
     allowedDevOrigins: ['localhost', frontendDevHostname],
-    experimental: {
-        serverSourceMaps: true,
-        optimizePackageImports: ['react-use', 'lodash-es', 'lucide-react'],
-        useTypeScriptCli: true,
-    },
-    generateBuildId: () => `${nanoid()}-${new Date().toISOString()}`,
+    cacheComponents: true,
+    cleanDistDir: true,
     devIndicators: {
         position: 'top-right',
     },
-    images: {
-        disableStaticImages: true,
-        dangerouslyAllowSVG: true,
+    experimental: {
+        optimizePackageImports: ['react-use', 'lodash-es', 'lucide-react'],
+        serverSourceMaps: true,
+        useTypeScriptCli: true,
     },
+    generateBuildId: () => `${nanoid()}-${new Date().toISOString()}`,
+    headers,
+    images: {
+        dangerouslyAllowSVG: true,
+        disableStaticImages: true,
+    },
+    logging: isDev
+        ? { browserToTerminal: false, fetches: { fullUrl: true }, serverFunctions: true }
+        : false,
+    output: 'standalone',
+    poweredByHeader: false,
+    reactCompiler: isProd,
+    reactProductionProfiling: false,
+    reactStrictMode: true,
     async rewrites() {
         if (!isDev) {
             return []
@@ -46,34 +48,32 @@ const nextConfig: NextConfig = {
         return {
             beforeFiles: [
                 {
-                    source: `${clientEnvironment.NEXT_PUBLIC_BFF_PATH}/:path*`,
                     destination: `${serverEnvironment.BACK_INTERNAL_URL}/:path*`,
+                    source: `${clientEnvironment.NEXT_PUBLIC_BFF_PATH}/:path*`,
                 },
             ],
         }
     },
-    headers,
-    logging: isDev
-        ? { browserToTerminal: false, serverFunctions: true, fetches: { fullUrl: true } }
-        : false,
+    turbopack: {},
+    typedRoutes: true,
 }
 
 function withSentry() {
-    if (process.env.NEXT_PUBLIC_SENTRY_DSN && process.env.NEXT_PUBLIC_SENTRY_DSN?.length > 0) {
+    if ((process.env.NEXT_PUBLIC_SENTRY_DSN?.length ?? 0) > 0) {
         return withSentryConfig(nextConfig, {
-            org: process.env.SENTRY_ORG,
-            project: process.env.APP_NAME,
             authToken: process.env.SENTRY_AUTH_TOKEN,
-            sentryUrl: process.env.SENTRY_URL,
-            silent: true,
-            widenClientFileUpload: true,
-            sourcemaps: { deleteSourcemapsAfterUpload: true },
-            telemetry: false,
             bundleSizeOptimizations: {
                 excludeDebugStatements: true,
-                excludeReplayShadowDom: true,
                 excludeReplayIframe: true,
+                excludeReplayShadowDom: true,
             },
+            org: process.env.SENTRY_ORG,
+            project: process.env.APP_NAME,
+            sentryUrl: process.env.SENTRY_URL,
+            silent: true,
+            sourcemaps: { deleteSourcemapsAfterUpload: true },
+            telemetry: false,
+            widenClientFileUpload: true,
         })
     }
 

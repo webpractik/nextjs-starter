@@ -3,10 +3,10 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { Label } from '../label'
 import { RadioGroup, RadioGroupItem } from './radio-group'
 
-const meta: Meta<typeof RadioGroup> = {
+const meta = {
     component: RadioGroup,
     title: 'core/RadioGroup',
-}
+} satisfies Meta<typeof RadioGroup>
 
 export default meta
 

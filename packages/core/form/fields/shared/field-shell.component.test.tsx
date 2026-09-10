@@ -53,7 +53,7 @@ it('связывает текстовое поле с label, описанием 
     expect(initialControlId).not.toBe('')
     expect(label.element()).toHaveAttribute('for', initialControlId)
     expect(control.element()).toHaveAttribute('aria-labelledby', label.element().id)
-    expect(control.element().getAttribute('aria-describedby')?.split(' ')).toEqual([
+    expect(control.element().getAttribute('aria-describedby')?.split(' ')).toStrictEqual([
         description.element().id,
         alert.element().id,
     ])

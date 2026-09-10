@@ -9,11 +9,11 @@ import svgr from 'vite-plugin-svgr'
 import { defineConfig } from 'vitest/config'
 
 const nextNavigationMock = fileURLToPath(
-    new URL('./src/tests/mocks/next-navigation.ts', import.meta.url),
+    new URL('src/tests/mocks/next-navigation.ts', import.meta.url),
 )
-const nextScriptMock = fileURLToPath(new URL('./src/tests/mocks/next-script.tsx', import.meta.url))
-const nextImageMock = fileURLToPath(new URL('./src/tests/mocks/next-image.tsx', import.meta.url))
-const dotEnvPath = new URL('./.env', import.meta.url)
+const nextScriptMock = fileURLToPath(new URL('src/tests/mocks/next-script.tsx', import.meta.url))
+const nextImageMock = fileURLToPath(new URL('src/tests/mocks/next-image.tsx', import.meta.url))
+const dotEnvPath = new URL('.env', import.meta.url)
 
 const testExclude = [
     '**/.next/**',
@@ -64,39 +64,12 @@ const testProcessEnvironment: Partial<NodeJS.ProcessEnv> = {
 }
 
 export default defineConfig({
-    define: {
-        __NEXTJS_STARTER_TEST_ENV__: JSON.stringify(testProcessEnvironment),
-    },
-    optimizeDeps: {
-        exclude: ['undici'],
-        include: [
-            '@sentry/nextjs',
-            'class-variance-authority',
-            'clsx',
-            'lodash-es',
-            'next/headers',
-            'next/link',
-            'next/link.js',
-            'nuqs',
-            'nuqs/server',
-            'tailwind-merge',
-            'vitest-browser-react',
-        ],
-    },
     plugins: [
         react(),
         svgr({
             include: '**/*.svg',
         }),
     ],
-    resolve: {
-        alias: [
-            { find: /^next\/navigation$/, replacement: nextNavigationMock },
-            { find: /^next\/script$/, replacement: nextScriptMock },
-            { find: /^next\/image$/, replacement: nextImageMock },
-        ],
-        tsconfigPaths: true,
-    },
     test: {
         clearMocks: true,
         coverage: {
@@ -151,29 +124,29 @@ export default defineConfig({
             {
                 extends: true,
                 test: {
-                    environment: 'node',
-                    exclude: testExclude,
-                    include: ['**/*.unit.test.{ts,tsx}', 'packages/**/*.test.ts'],
                     name: 'unit',
+                    exclude: testExclude,
+                    environment: 'node',
+                    include: ['**/*.unit.test.{ts,tsx}', 'packages/**/*.test.ts'],
                     setupFiles: ['./src/tests/setup-env.ts', './src/tests/setup-allure-unit.ts'],
                 },
             },
             {
                 extends: true,
                 test: {
+                    name: 'component',
+                    exclude: testExclude,
                     browser: {
                         enabled: true,
                         headless: true,
                         instances: [{ browser: 'chromium' }],
                         provider: playwright(),
                     },
-                    exclude: testExclude,
                     include: [
                         '**/*.component.test.{ts,tsx}',
                         'app/**/*.test.tsx',
                         'src/**/*.test.tsx',
                     ],
-                    name: 'component',
                     setupFiles: [
                         './src/tests/setup-env.ts',
                         './src/tests/setup-browser.ts',
@@ -190,5 +163,32 @@ export default defineConfig({
         ],
         restoreMocks: true,
         unstubGlobals: true,
+    },
+    define: {
+        __NEXTJS_STARTER_TEST_ENV__: JSON.stringify(testProcessEnvironment),
+    },
+    optimizeDeps: {
+        exclude: ['undici'],
+        include: [
+            '@sentry/nextjs',
+            'class-variance-authority',
+            'clsx',
+            'lodash-es',
+            'next/headers',
+            'next/link',
+            'next/link.js',
+            'nuqs',
+            'nuqs/server',
+            'tailwind-merge',
+            'vitest-browser-react',
+        ],
+    },
+    resolve: {
+        alias: [
+            { find: /^next\/navigation$/, replacement: nextNavigationMock },
+            { find: /^next\/script$/, replacement: nextScriptMock },
+            { find: /^next\/image$/, replacement: nextImageMock },
+        ],
+        tsconfigPaths: true,
     },
 })

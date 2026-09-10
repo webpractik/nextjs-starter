@@ -42,7 +42,7 @@ function ChoiceFieldsDemo() {
             <form.Field name="archived">
                 {(field) => (
                     <fieldContext.Provider value={field}>
-                        <CheckboxField disabled label="Archived" />
+                        <CheckboxField label="Archived" disabled />
                     </fieldContext.Provider>
                 )}
             </form.Field>

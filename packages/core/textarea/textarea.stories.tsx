@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { Label } from '../label'
 import { Textarea } from './textarea'
 
-const meta: Meta<typeof Textarea> = {
+const meta = {
     component: Textarea,
     title: 'core/Textarea',
     argTypes: {
@@ -17,7 +17,7 @@ const meta: Meta<typeof Textarea> = {
             control: { type: 'number', min: 1, max: 20 },
         },
     },
-}
+} satisfies Meta<typeof Textarea>
 
 export default meta
 

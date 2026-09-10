@@ -42,10 +42,10 @@ function RadioGroupFieldStory({
     )
 }
 
-const meta: Meta<typeof RadioGroupFieldStory> = {
+const meta = {
     component: RadioGroupFieldStory,
     title: 'core/Form/RadioGroupField',
-}
+} satisfies Meta<typeof RadioGroupFieldStory>
 
 export default meta
 

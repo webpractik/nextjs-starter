@@ -4,7 +4,7 @@ import { MailIcon, PlusIcon } from 'lucide-react'
 
 import { Button } from './button'
 
-const meta: Meta<typeof Button> = {
+const meta = {
     component: Button,
     title: 'core/Button',
     argTypes: {
@@ -20,7 +20,7 @@ const meta: Meta<typeof Button> = {
             control: 'boolean',
         },
     },
-}
+} satisfies Meta<typeof Button>
 
 export default meta
 

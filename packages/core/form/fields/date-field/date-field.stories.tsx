@@ -36,10 +36,10 @@ function DateFieldStory({
     )
 }
 
-const meta: Meta<typeof DateFieldStory> = {
+const meta = {
     component: DateFieldStory,
     title: 'core/Form/DateField',
-}
+} satisfies Meta<typeof DateFieldStory>
 
 export default meta
 

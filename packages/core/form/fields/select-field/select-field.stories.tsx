@@ -38,10 +38,10 @@ function SelectFieldStory({
     )
 }
 
-const meta: Meta<typeof SelectFieldStory> = {
+const meta = {
     component: SelectFieldStory,
     title: 'core/Form/SelectField',
-}
+} satisfies Meta<typeof SelectFieldStory>
 
 export default meta
 

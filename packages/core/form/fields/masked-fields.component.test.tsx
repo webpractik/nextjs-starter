@@ -76,7 +76,7 @@ function DateFieldsDemo({
             <form.Field name="disabledDate">
                 {(field) => (
                     <fieldContext.Provider value={field}>
-                        <DateField disabled label="Disabled date" />
+                        <DateField label="Disabled date" disabled />
                     </fieldContext.Provider>
                 )}
             </form.Field>
@@ -119,6 +119,7 @@ it('форматирует вставленные восемь цифр и со�
     const clipboardSource = screen.getByRole('textbox', { name: 'Date clipboard source' })
 
     const clipboardInput = clipboardSource.element()
+
     if (!(clipboardInput instanceof HTMLInputElement)) {
         throw new Error('Источник содержимого буфера обмена не является input')
     }
@@ -157,7 +158,7 @@ it('после потери фокуса помечает поле даты и �
     await requiredDate.click()
     await userEvent.tab()
 
-    expect(onRequiredDateBlur).toHaveBeenCalledOnce()
+    expect(onRequiredDateBlur).toHaveBeenCalledTimes(1)
     expect(touchedDuringBlur).toBe('false')
 
     const requiredField = requiredDate.element().closest('[data-slot="field"]')
@@ -247,7 +248,7 @@ function PhoneFieldsDemo({
             <form.Field name="disabledPhone">
                 {(field) => (
                     <fieldContext.Provider value={field}>
-                        <PhoneField disabled label="Disabled phone" />
+                        <PhoneField label="Disabled phone" disabled />
                     </fieldContext.Provider>
                 )}
             </form.Field>
@@ -303,7 +304,7 @@ it('после потери фокуса помечает поле телефо�
     await requiredPhone.click()
     await userEvent.tab()
 
-    expect(onRequiredPhoneBlur).toHaveBeenCalledOnce()
+    expect(onRequiredPhoneBlur).toHaveBeenCalledTimes(1)
     expect(touchedDuringBlur).toBe('false')
 
     const requiredField = requiredPhone.element().closest('[data-slot="field"]')

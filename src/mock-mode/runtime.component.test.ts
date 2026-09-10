@@ -2,19 +2,24 @@ import { afterEach, describe, expect, it } from 'vitest'
 
 import { getBrowserMockScenario, isBrowserRuntimeMockModeEnabled } from './runtime'
 
-function clearMockCookies() {
-    document.cookie = 'mock-mode=; Path=/; Max-Age=0; SameSite=Lax'
-    document.cookie = 'mock-scenario=; Path=/; Max-Age=0; SameSite=Lax'
+async function clearMockCookies() {
+    await cookieStore.delete({ name: 'mock-mode', path: '/' })
+    await cookieStore.delete({ name: 'mock-scenario', path: '/' })
 }
 
-afterEach(() => {
-    clearMockCookies()
+afterEach(async () => {
+    await clearMockCookies()
 })
 
 describe('браузерный runtime-режим моков', () => {
-    it('включается по cookie mock-mode и читает выбранный сценарий', () => {
-        document.cookie = 'mock-mode=true; Path=/; SameSite=Lax'
-        document.cookie = 'mock-scenario=default; Path=/; SameSite=Lax'
+    it('включается по cookie mock-mode и читает выбранный сценарий', async () => {
+        await cookieStore.set({ name: 'mock-mode', path: '/', sameSite: 'lax', value: 'true' })
+        await cookieStore.set({
+            name: 'mock-scenario',
+            path: '/',
+            sameSite: 'lax',
+            value: 'default',
+        })
 
         expect(isBrowserRuntimeMockModeEnabled()).toBe(true)
         expect(getBrowserMockScenario()).toBe('default')

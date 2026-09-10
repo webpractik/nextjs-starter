@@ -9,8 +9,8 @@ import { cn } from '~/src/utils/cn'
 interface ErrorFallbackProps {
     description?: string
     error: unknown
-    resetError: () => void
     title?: string
+    resetError: () => void
 }
 
 const DEFAULT_ERROR_TITLE = 'Техническая ошибка'
@@ -22,9 +22,8 @@ const DEFAULT_ERROR_TEXT = `Извините, возникла неожидан�
 export function ErrorFallback({ description, error, resetError, title }: ErrorFallbackProps) {
     return (
         <div className={`
-     flex max-h-80 max-w-(--breakpoint-sm) flex-col gap-4 rounded-2xl border
-     border-solid p-4
-   `} data-testid="error-boundary">
+            flex max-h-80 max-w-(--breakpoint-sm) flex-col gap-4 rounded-2xl border border-solid p-4
+        `} data-testid="error-boundary">
             <Typography className={cn('')} variant="h3">
                 {title ?? DEFAULT_ERROR_TITLE}
             </Typography>
@@ -33,7 +32,7 @@ export function ErrorFallback({ description, error, resetError, title }: ErrorFa
 
             <pre className={cn('')}>{error instanceof Error ? error.message : String(error)}</pre>
 
-            <Button onClick={resetError} type="button" variant="outline">
+            <Button type="button" variant="outline" onClick={resetError}>
                 Попробовать еще
             </Button>
         </div>

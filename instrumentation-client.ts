@@ -15,7 +15,24 @@ if (isProd && clientEnvironment.NEXT_PUBLIC_SENTRY_DSN) {
         // ],
         replaysOnErrorSampleRate: 1,
         replaysSessionSampleRate: 0.1,
-        sendDefaultPii: true,
+        // Сохраняет параметры сбора данных прежнего sendDefaultPii: true.
+        dataCollection: {
+            cookies: true,
+            databaseQueryData: true,
+            frameContextLines: 7,
+            genAI: { inputs: true, outputs: true },
+            graphQL: { document: true, variables: true },
+            httpBodies: [
+                'incomingRequest',
+                'outgoingRequest',
+                'incomingResponse',
+                'outgoingResponse',
+            ],
+            httpHeaders: { request: true, response: true },
+            stackFrameVariables: true,
+            urlQueryParams: true,
+            userInfo: true,
+        },
         tracesSampleRate: 1,
     })
 }

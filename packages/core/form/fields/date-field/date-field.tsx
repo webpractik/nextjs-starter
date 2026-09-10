@@ -53,10 +53,10 @@ export function DateField({
                     disabled={disabled}
                     inputMode={inputMode}
                     name={field.name}
-                    onBlur={(event) => handleFieldBlur(field, onBlur, event)}
-                    onInput={(event) => field.handleChange(event.currentTarget.value)}
                     type="text"
                     value={fieldValueAsString(field.state.value)}
+                    onBlur={(event) => handleFieldBlur(field, onBlur, event)}
+                    onInput={(event) => field.handleChange(event.currentTarget.value)}
                 />
             )}
         </FieldShell>

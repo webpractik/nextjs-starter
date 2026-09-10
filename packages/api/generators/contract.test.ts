@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 
 import { parseContractDocument, readContractBundle } from './contract'
 
-const fixturePath = fileURLToPath(new URL('./__fixtures__/contract.yaml', import.meta.url))
+const fixturePath = fileURLToPath(new URL('__fixtures__/contract.yaml', import.meta.url))
 
 describe('модель API-контракта', () => {
     it('читает из OpenAPI 3.2 операции, ссылки, tags, статусы и наличие тела ответа', async () => {
@@ -22,10 +22,10 @@ describe('модель API-контракта', () => {
         )
         expect(
             contract.operations.find((item) => item.operationId === 'deletePet')?.responses,
-        ).toEqual([{ status: 204, hasBody: false }])
+        ).toStrictEqual([{ status: 204, hasBody: false }])
         expect(
             contract.operations.find((item) => item.operationId === 'findPetsByStatus')?.responses,
-        ).toEqual([{ status: 200, hasBody: true }])
+        ).toStrictEqual([{ status: 200, hasBody: true }])
     })
 
     it('предпочитает path-параметры операции параметрам уровня пути', () => {
@@ -57,7 +57,7 @@ describe('модель API-контракта', () => {
             },
         })
 
-        expect(contract.operations[0]?.pathParameters).toEqual([
+        expect(contract.operations[0]?.pathParameters).toStrictEqual([
             { name: 'productId', schemaType: 'string' },
         ])
     })

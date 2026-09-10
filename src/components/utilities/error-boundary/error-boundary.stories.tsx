@@ -4,10 +4,10 @@ import { noop } from 'lodash-es'
 
 import { ErrorBoundary, ErrorFallback } from './error-boundary'
 
-const meta: Meta<typeof ErrorBoundary> = {
+const meta = {
     component: ErrorBoundary,
     title: 'shared/utilities/ErrorBoundary',
-}
+} satisfies Meta<typeof ErrorBoundary>
 
 export default meta
 

@@ -33,14 +33,14 @@ export function NumberField({
                     {...controlProps}
                     className={controlClassName}
                     name={field.name}
+                    type="number"
+                    value={format(field.state.value)}
                     onBlur={(event) => handleFieldBlur(field, onBlur, event)}
                     onChange={(event) => {
-                        const value = event.currentTarget.value
+                        const { value } = event.currentTarget
 
                         field.handleChange(value === '' ? emptyValue : parse(value))
                     }}
-                    type="number"
-                    value={format(field.state.value)}
                 />
             )}
         </FieldShell>

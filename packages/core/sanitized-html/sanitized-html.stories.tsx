@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 
 import { SanitizedHtml } from './sanitized-html'
 
-const meta: Meta<typeof SanitizedHtml> = {
+const meta = {
     component: SanitizedHtml,
     title: 'core/SanitizedHtml',
     argTypes: {
@@ -10,7 +10,7 @@ const meta: Meta<typeof SanitizedHtml> = {
             control: false,
         },
     },
-}
+} satisfies Meta<typeof SanitizedHtml>
 
 export default meta
 

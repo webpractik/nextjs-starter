@@ -25,8 +25,8 @@ interface DemoFormValues {
     channel: string
     confidence: number
     enabled: boolean
-    projectName: string
     phone: string
+    projectName: string
     seats: number
     stack: string
     summary: string

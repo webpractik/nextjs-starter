@@ -39,11 +39,11 @@ it('показывает данные вложения и не запускае�
     await expect.element(screen.getByText('PDF', { exact: true })).toBeVisible()
     await expect.element(trigger).toHaveAttribute('type', 'button')
     await screen.getByRole('button', { name: 'Remove contract.pdf' }).click()
-    expect(onAction).toHaveBeenCalledOnce()
+    expect(onAction).toHaveBeenCalledTimes(1)
     expect(onOpen).not.toHaveBeenCalled()
 
     await trigger.click()
-    expect(onOpen).toHaveBeenCalledOnce()
+    expect(onOpen).toHaveBeenCalledTimes(1)
 })
 
 it('показывает изображение и ошибку, сохраняет пользовательскую ссылку и прокрутку группы', async () => {
@@ -51,7 +51,7 @@ it('показывает изображение и ошибку, сохраня�
         <AttachmentGroup aria-label="Project files" role="list" style={{ width: 180 }}>
             <Attachment state="done">
                 <AttachmentMedia variant="image">
-                    {/* oxlint-disable-next-line next/no-img-element -- This verifies caller-owned native image media. */}
+                    {/* oxlint-disable-next-line nextjs/no-img-element -- This verifies caller-owned native image media. */}
                     <img alt="Workspace preview" src="/workspace.png" />
                 </AttachmentMedia>
                 <AttachmentContent>

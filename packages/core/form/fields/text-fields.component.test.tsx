@@ -11,7 +11,7 @@ function TextFieldsDemo({ onNameBlur }: { onNameBlur: () => void }) {
         defaultValues: {
             budgetInCents: 125,
             projectName: 'Initial project',
-            seats: 2 as number | undefined,
+            seats: 2,
             summary: 'Initial summary',
         },
     })
@@ -105,7 +105,7 @@ it('синхронизирует текстовое поле с внешним �
     await input.fill('')
     await userEvent.tab()
 
-    expect(onNameBlur).toHaveBeenCalledOnce()
+    expect(onNameBlur).toHaveBeenCalledTimes(1)
     await expect
         .element(screen.getByRole('alert'))
         .toHaveTextContent('Use at least three characters')

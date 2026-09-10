@@ -4,13 +4,6 @@ import { createRequire, registerHooks } from 'node:module'
 import { pathToFileURL } from 'node:url'
 
 const config = {
-    input: './bundled.yaml',
-    output: {
-        clean: true,
-        entryFile: true,
-        path: './codegen',
-        postProcess: [],
-    },
     plugins: [
         {
             name: '@hey-api/typescript',
@@ -66,6 +59,13 @@ const config = {
             responses: true,
         },
     ],
+    input: './bundled.yaml',
+    output: {
+        clean: true,
+        entryFile: true,
+        path: './codegen',
+        postProcess: [],
+    },
 } satisfies UserConfig
 
 export default config

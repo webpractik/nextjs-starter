@@ -4,7 +4,7 @@ import { CheckIcon, XIcon } from 'lucide-react'
 
 import { Badge } from './badge'
 
-const meta: Meta<typeof Badge> = {
+const meta = {
     component: Badge,
     title: 'core/Badge',
     argTypes: {
@@ -13,7 +13,7 @@ const meta: Meta<typeof Badge> = {
             options: ['default', 'outline', 'secondary', 'ghost', 'destructive', 'link'],
         },
     },
-}
+} satisfies Meta<typeof Badge>
 
 export default meta
 

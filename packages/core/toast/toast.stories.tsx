@@ -4,7 +4,7 @@ import { Button } from '../button'
 import { Toaster } from './toast'
 import { toast } from './toast-manager'
 
-const meta: Meta<typeof Toaster> = {
+const meta = {
     component: Toaster,
     decorators: [
         (Story) => (
@@ -15,7 +15,7 @@ const meta: Meta<typeof Toaster> = {
         ),
     ],
     title: 'core/Toast',
-}
+} satisfies Meta<typeof Toaster>
 
 export default meta
 
@@ -23,7 +23,11 @@ type Story = StoryObj<typeof Toaster>
 
 export const Default: Story = {
     render: () => (
-        <Button onClick={() => toast.add({ title: 'Рабочее пространство сохранено' })}>
+        <Button
+            onClick={() => {
+                toast.add({ title: 'Рабочее пространство сохранено' })
+            }}
+        >
             Показать уведомление
         </Button>
     ),
@@ -32,29 +36,41 @@ export const Default: Story = {
 export const Statuses: Story = {
     render: () => (
         <div className="flex flex-wrap gap-2">
-            <Button onClick={() => toast.add({ title: 'Изменения сохранены', type: 'success' })}>
+            <Button
+                onClick={() => {
+                    toast.add({ title: 'Изменения сохранены', type: 'success' })
+                }}
+            >
                 Успех
             </Button>
-            <Button onClick={() => toast.add({ title: 'Доступна новая версия', type: 'info' })}>
+            <Button
+                onClick={() => {
+                    toast.add({ title: 'Доступна новая версия', type: 'info' })
+                }}
+            >
                 Информация
             </Button>
             <Button
-                onClick={() =>
-                    toast.add({ title: 'Проверьте импортированные значения', type: 'warning' })
-                }
                 variant="outline"
+                onClick={() => {
+                    toast.add({ title: 'Проверьте импортированные значения', type: 'warning' })
+                }}
             >
                 Предупреждение
             </Button>
             <Button
-                onClick={() =>
-                    toast.add({ title: 'Не удалось сохранить изменения', type: 'error' })
-                }
                 variant="destructive"
+                onClick={() => {
+                    toast.add({ title: 'Не удалось сохранить изменения', type: 'error' })
+                }}
             >
                 Ошибка
             </Button>
-            <Button onClick={() => toast.add({ title: 'Отчёт загружается', type: 'loading' })}>
+            <Button
+                onClick={() => {
+                    toast.add({ title: 'Отчёт загружается', type: 'loading' })
+                }}
+            >
                 Загрузка
             </Button>
         </div>
@@ -64,12 +80,12 @@ export const Statuses: Story = {
 export const WithDescription: Story = {
     render: () => (
         <Button
-            onClick={() =>
+            onClick={() => {
                 toast.add({
                     description: 'Проверка назначена на понедельник, 10:00.',
                     title: 'Событие создано',
                 })
-            }
+            }}
         >
             Показать подробности
         </Button>
@@ -79,17 +95,19 @@ export const WithDescription: Story = {
 export const WithAction: Story = {
     render: () => (
         <Button
-            onClick={() =>
+            variant="outline"
+            onClick={() => {
                 toast.add({
                     actionProps: {
                         children: 'Отменить',
-                        onClick: () => toast.add({ title: 'Файл восстановлен', type: 'success' }),
+                        onClick: () => {
+                            toast.add({ title: 'Файл восстановлен', type: 'success' })
+                        },
                     },
                     description: 'квартальный-отчёт.pdf',
                     title: 'Файл удалён',
                 })
-            }
-            variant="outline"
+            }}
         >
             Удалить файл
         </Button>
@@ -119,13 +137,13 @@ export const PromiseLifecycle: Story = {
 export const Persistent: Story = {
     render: () => (
         <Button
-            onClick={() =>
+            onClick={() => {
                 toast.add({
                     description: 'Закройте это уведомление вручную.',
                     timeout: 0,
                     title: 'Постоянное уведомление',
                 })
-            }
+            }}
         >
             Показать постоянное уведомление
         </Button>

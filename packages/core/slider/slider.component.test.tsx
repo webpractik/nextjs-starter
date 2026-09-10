@@ -82,7 +82,7 @@ it('стрелкой обновляет только выбранную гран
 it('не фокусирует и не изменяет ползунок в отключённом состоянии', async () => {
     const onValueChange = vi.fn()
     const screen = await render(
-        <Slider disabled value={25} onValueChange={onValueChange}>
+        <Slider value={25} disabled onValueChange={onValueChange}>
             <SliderControl>
                 <SliderTrack>
                     <SliderIndicator />

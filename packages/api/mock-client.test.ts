@@ -32,7 +32,7 @@ describe('клиент сгенерированных моков', () => {
         })
 
         expect(response).toBeInstanceOf(Response)
-        await expect(response.json()).resolves.toEqual([{ id: 1, name: 'Rex' }])
+        await expect(response.json()).resolves.toStrictEqual([{ id: 1, name: 'Rex' }])
         expect(response.status).toBe(200)
         expect(response.statusText).toBe('OK')
         expect(response.headers.get('x-mock-mode')).toBe('true')
@@ -67,7 +67,7 @@ describe('клиент сгенерированных моков', () => {
             'default',
         )
 
-        await expect(response.json()).resolves.toEqual([{ id: 2, name: 'Scenario pet' }])
+        await expect(response.json()).resolves.toStrictEqual([{ id: 2, name: 'Scenario pet' }])
         expect(response.status).toBe(202)
         expect(response.statusText).toBe('Accepted')
     })

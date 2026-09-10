@@ -57,25 +57,23 @@ export function RadioGroupField({
                     className={cn('items-stretch gap-2', groupClassName)}
                     disabled={disabled}
                     name={field.name}
+                    value={value}
                     onValueChange={(nextValue) => {
                         field.handleChange(nextValue)
                         field.handleBlur()
                     }}
-                    value={value}
                 >
                     {options.map((option, index) => {
                         const optionId = `${controlProps.id}-option-${index}`
-                        const descriptionId = option.description
-                            ? `${optionId}-description`
-                            : undefined
+                        const hasDescription = Boolean(option.description)
+                        const descriptionId = hasDescription ? `${optionId}-description` : undefined
 
                         return (
-                            <div className={cn(`
-                                      flex items-start gap-3 rounded-md border border-input p-3
-                                      has-data-checked:border-primary
-                                      has-data-disabled:cursor-not-allowed
-                                      has-data-disabled:opacity-50
-                                    `, optionClassName)} key={option.value}>
+                            <div key={option.value} className={cn(`
+                                flex items-start gap-3 rounded-md border border-input p-3
+                                has-data-checked:border-primary
+                                has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50
+                            `, optionClassName)}>
                                 <RadioGroupItem
                                     aria-describedby={descriptionId}
                                     disabled={option.disabled}
@@ -84,7 +82,7 @@ export function RadioGroupField({
                                 />
                                 <div className="flex min-w-0 flex-col gap-1">
                                     <Label htmlFor={optionId}>{option.label}</Label>
-                                    {option.description ? (
+                                    {hasDescription ? (
                                         <span
                                             className="text-sm text-muted-foreground"
                                             id={descriptionId}

@@ -47,10 +47,10 @@ function NumberFieldStory({
     )
 }
 
-const meta: Meta<typeof NumberFieldStory> = {
+const meta = {
     component: NumberFieldStory,
     title: 'core/Form/NumberField',
-}
+} satisfies Meta<typeof NumberFieldStory>
 
 export default meta
 
@@ -67,7 +67,7 @@ export const Default: Story = {
 
 export const ParsedValue: Story = {
     args: {
-        defaultValue: 12500,
+        defaultValue: 12_500,
         description: 'В форме значение хранится в копейках, а поле показывает рубли.',
         format: (value) => (typeof value === 'number' ? String(value / 100) : ''),
         label: 'Месячный бюджет, ₽',

@@ -26,10 +26,10 @@ function CheckboxFieldStory({
     )
 }
 
-const meta: Meta<typeof CheckboxFieldStory> = {
+const meta = {
     component: CheckboxFieldStory,
     title: 'core/Form/CheckboxField',
-}
+} satisfies Meta<typeof CheckboxFieldStory>
 
 export default meta
 

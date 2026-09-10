@@ -26,7 +26,11 @@ function displayFieldValue(value: unknown) {
         return 'не задано'
     }
 
-    return JSON.stringify(value) ?? String(value)
+    if (typeof value === 'symbol' || typeof value === 'function') {
+        return String(value)
+    }
+
+    return JSON.stringify(value)
 }
 
 function FieldStoryState({

@@ -5,10 +5,10 @@ import { HelpCircleIcon, InfoIcon, PlusIcon } from 'lucide-react'
 import { Button } from '../button'
 import { Tooltip, TooltipContent, TooltipTrigger } from './tooltip'
 
-const meta: Meta<typeof Tooltip> = {
+const meta = {
     component: Tooltip,
     title: 'core/Tooltip',
-}
+} satisfies Meta<typeof Tooltip>
 
 export default meta
 

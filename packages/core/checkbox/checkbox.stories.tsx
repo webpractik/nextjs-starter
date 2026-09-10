@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { Label } from '../label'
 import { Checkbox } from './checkbox'
 
-const meta: Meta<typeof Checkbox> = {
+const meta = {
     component: Checkbox,
     title: 'core/Checkbox',
     argTypes: {
@@ -14,7 +14,7 @@ const meta: Meta<typeof Checkbox> = {
             control: 'boolean',
         },
     },
-}
+} satisfies Meta<typeof Checkbox>
 
 export default meta
 

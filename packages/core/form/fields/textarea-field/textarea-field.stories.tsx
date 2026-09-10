@@ -38,10 +38,10 @@ function TextareaFieldStory({
     )
 }
 
-const meta: Meta<typeof TextareaFieldStory> = {
+const meta = {
     component: TextareaFieldStory,
     title: 'core/Form/TextareaField',
-}
+} satisfies Meta<typeof TextareaFieldStory>
 
 export default meta
 

@@ -1,7 +1,5 @@
 import { vi } from 'vitest'
 
-/* eslint-disable react/no-unnecessary-use-prefix -- Next.js navigation exports are hook-compatible mocks. */
-
 type MockFunction<Args extends unknown[] = unknown[], Result = unknown> = ((
     ..._args: Args
 ) => Result) & {
@@ -30,8 +28,14 @@ export const nextRouterMock: NextRouterMock = {
     replace: createMockFunction(),
 }
 
-export const nextNavigationMock = {
-    params: {} as Record<string, string | string[]>,
+interface NextNavigationMock {
+    params: Record<string, string | string[]>
+    pathname: string
+    searchParams: URLSearchParams
+}
+
+export const nextNavigationMock: NextNavigationMock = {
+    params: {},
     pathname: '/',
     searchParams: new URLSearchParams(),
 }

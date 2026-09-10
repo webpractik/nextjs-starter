@@ -25,9 +25,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
                 <NuqsAdapter>
                     <QueryProvider>
                         <main className={`
-        relative flex size-full flex-col items-center justify-center
-        overflow-hidden bg-background antialiased
-      `}>
+                            relative flex size-full flex-col items-center justify-center
+                            overflow-hidden bg-background antialiased
+                        `}>
                             {children}
                             <Toaster />
                         </main>

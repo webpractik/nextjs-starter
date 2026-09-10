@@ -54,10 +54,10 @@ describe('runtime-конфигурация Hey API', () => {
         const { apiFetch, createClientConfig } = await import('./client-config')
         const config = createClientConfig()
         const next = { revalidate: 60, tags: ['pets'] }
-        const requestInit = {
+        const requestInit: RequestInit = {
             cache: 'force-cache',
             next,
-        } as RequestInit
+        }
 
         expect(config.credentials).toBe('include')
         expect(config.baseUrl).toBe('https://internal.example.test')
@@ -73,9 +73,12 @@ describe('runtime-конфигурация Hey API', () => {
 
     it('возвращает мок-ответ для текущего запроса без обращения к backend', async () => {
         const getMockResponse = vi.fn<MockResponseMock>().mockResolvedValue(
-            new Response(JSON.stringify({ mocked: true }), {
-                headers: { 'content-type': 'application/json', 'x-mock-mode': 'true' },
-            }),
+            Response.json(
+                { mocked: true },
+                {
+                    headers: { 'content-type': 'application/json', 'x-mock-mode': 'true' },
+                },
+            ),
         )
         vi.doMock('./mock-client', () => ({ getMockResponse }))
         const fetchMock = vi.fn<FetchMock>().mockRejectedValue(new Error('fetch should not run'))
@@ -90,7 +93,7 @@ describe('runtime-конфигурация Hey API', () => {
             method: 'GET',
         })
 
-        await expect(response.json()).resolves.toEqual({ mocked: true })
+        await expect(response.json()).resolves.toStrictEqual({ mocked: true })
         expect(getMockResponse).toHaveBeenCalledWith(
             expect.objectContaining({
                 method: 'GET',

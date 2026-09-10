@@ -54,10 +54,10 @@ function SliderFieldStory({
     )
 }
 
-const meta: Meta<typeof SliderFieldStory> = {
+const meta = {
     component: SliderFieldStory,
     title: 'core/Form/SliderField',
-}
+} satisfies Meta<typeof SliderFieldStory>
 
 export default meta
 
@@ -67,7 +67,7 @@ export const Default: Story = {
     args: {
         defaultValue: 60,
         description: 'Оцените вероятность завершения работы в срок.',
-        formatValue: (value) => `${value}%`,
+        formatValue: (value) => `${String(value)}%`,
         label: 'Уверенность в сроках',
     },
 }
@@ -77,7 +77,7 @@ export const Range: Story = {
         defaultValue: [20, 80],
         description: 'Задайте ожидаемый диапазон уверенности.',
         formatValue: (value) =>
-            typeof value === 'number' ? `${value}%` : `${value[0]}–${value[1]}%`,
+            typeof value === 'number' ? `${value}%` : `${String(value[0])}–${String(value[1])}%`,
         getThumbLabel: (index) =>
             index === 0 ? 'Минимальная уверенность' : 'Максимальная уверенность',
         label: 'Диапазон уверенности',
@@ -89,7 +89,7 @@ export const Validation: Story = {
     args: {
         defaultValue: 20,
         description: 'Для запуска в продакшен требуется уверенность не менее 50%.',
-        formatValue: (value) => `${value}%`,
+        formatValue: (value) => `${String(value)}%`,
         label: 'Уверенность в запуске',
         validate: (value) =>
             typeof value === 'number' && value >= 50
@@ -110,7 +110,7 @@ export const Disabled: Story = {
     args: {
         defaultValue: 75,
         disabled: true,
-        formatValue: (value) => `${value}%`,
+        formatValue: (value) => `${String(value)}%`,
         label: 'Зафиксированная уверенность',
     },
 }

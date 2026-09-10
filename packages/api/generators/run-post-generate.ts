@@ -2,11 +2,7 @@ import path from 'node:path'
 
 import { runPostGeneration } from './post-generate'
 
-async function main() {
-    const outputDirectory = path.resolve(process.cwd(), process.argv[2] ?? 'codegen')
-    const bundlePath = path.resolve(process.cwd(), 'bundled.yaml')
+const outputDirectory = path.resolve(process.cwd(), process.argv[2] ?? 'codegen')
+const bundlePath = path.resolve(process.cwd(), 'bundled.yaml')
 
-    await runPostGeneration(bundlePath, outputDirectory)
-}
-
-void main()
+await runPostGeneration(bundlePath, outputDirectory)

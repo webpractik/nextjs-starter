@@ -11,6 +11,7 @@ describe('цепочка прокси', () => {
             response.headers.set('x-proxy-stages', 'first')
             return response
         }
+
         const appendSecondStage: ProxyFn = (_request, response) => {
             response.headers.append('x-proxy-stages', 'second')
             return response
@@ -30,6 +31,7 @@ describe('цепочка прокси', () => {
                 headers: { location: 'https://frontend.example.test/login' },
                 status: 307,
             })
+
         const appendLateHeader: ProxyFn = (_request, response) => {
             response.headers.set('x-late-stage', 'applied')
             return response

@@ -9,7 +9,7 @@ function TabsDemo() {
         <Tabs defaultValue="profile">
             <TabsList aria-label="Настройки">
                 <TabsTrigger value="profile">Профиль</TabsTrigger>
-                <TabsTrigger disabled value="security">
+                <TabsTrigger value="security" disabled>
                     Безопасность
                 </TabsTrigger>
                 <TabsTrigger value="notifications">Уведомления</TabsTrigger>

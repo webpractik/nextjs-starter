@@ -67,6 +67,7 @@ function validateModels(models: CacheTagModel[]) {
         ) {
             throw new Error(`OpenAPI tag cannot produce stable cache identifiers: ${model.tagName}`)
         }
+
         if (fileNames.has(model.fileName) || identifiers.has(model.varPrefix)) {
             throw new Error(`OpenAPI cache tag name collision: ${model.tagName}`)
         }
@@ -83,6 +84,7 @@ export function collectCacheTags(contract: ContractModel) {
         for (const tag of operation.tags) {
             const bucket = buckets.get(tag) ?? new Map<string, ContractPathParameter>()
             buckets.set(tag, bucket)
+
             for (const parameter of operation.pathParameters) {
                 upsertParameter(bucket, parameter)
             }
@@ -186,7 +188,7 @@ export async function generateCacheTags(contract: ContractModel, outputDirectory
     const models = [...collectCacheTags(contract).values()]
     await mkdir(outputDirectory, { recursive: true })
     await Promise.all([
-        ...models.map((model) =>
+        ...models.map(async (model) =>
             writeFile(
                 path.join(outputDirectory, `${model.fileName}.ts`),
                 renderCacheTagModule(model),

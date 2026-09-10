@@ -36,9 +36,9 @@ export function TextareaField({
                     {...controlProps}
                     className={controlClassName}
                     name={field.name}
+                    value={fieldValueAsString(field.state.value)}
                     onBlur={(event) => handleFieldBlur(field, onBlur, event)}
                     onChange={(event) => field.handleChange(event.currentTarget.value)}
-                    value={fieldValueAsString(field.state.value)}
                 />
             )}
         </FieldShell>

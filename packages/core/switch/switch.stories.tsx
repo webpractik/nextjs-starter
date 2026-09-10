@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { Label } from '../label'
 import { Switch } from './switch'
 
-const meta: Meta<typeof Switch> = {
+const meta = {
     component: Switch,
     title: 'core/Switch',
     argTypes: {
@@ -15,7 +15,7 @@ const meta: Meta<typeof Switch> = {
             control: 'boolean',
         },
     },
-}
+} satisfies Meta<typeof Switch>
 
 export default meta
 

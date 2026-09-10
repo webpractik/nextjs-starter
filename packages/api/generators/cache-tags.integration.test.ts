@@ -8,7 +8,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { generateCacheTags } from './cache-tags'
 import { readContractBundle } from './contract'
 
-const fixturePath = fileURLToPath(new URL('./__fixtures__/cache-tags.yaml', import.meta.url))
+const fixturePath = fileURLToPath(new URL('__fixtures__/cache-tags.yaml', import.meta.url))
 
 let temporaryRoot: string
 let outputDirectory: string

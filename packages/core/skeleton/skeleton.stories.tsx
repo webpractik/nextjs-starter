@@ -2,10 +2,10 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 
 import { Skeleton } from './skeleton'
 
-const meta: Meta<typeof Skeleton> = {
+const meta = {
     component: Skeleton,
     title: 'core/Skeleton',
-}
+} satisfies Meta<typeof Skeleton>
 
 export default meta
 

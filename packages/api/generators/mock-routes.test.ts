@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest'
 import { readContractBundle } from './contract'
 import { collectMockRoutes, renderMockRoutes } from './mock-routes'
 
-const fixturePath = fileURLToPath(new URL('./__fixtures__/contract.yaml', import.meta.url))
+const fixturePath = fileURLToPath(new URL('__fixtures__/contract.yaml', import.meta.url))
 
 const factories = new Set([
     'fakeSearchPetsResponse200',
@@ -18,7 +18,7 @@ describe('генератор мок-маршрутов', () => {
     it('связывает Faker-фабрики, оставляет 204 без фабрики и ставит статические маршруты раньше динамических', async () => {
         const routes = collectMockRoutes(await readContractBundle(fixturePath), factories)
 
-        expect(routes.map((route) => route.operationId)).toEqual([
+        expect(routes.map((route) => route.operationId)).toStrictEqual([
             'searchPets',
             'findPetsByStatus',
             'createPet',
@@ -39,7 +39,7 @@ describe('генератор мок-маршрутов', () => {
         })
 
         const source = renderMockRoutes(routes)
-        expect(source).toContain('pattern: /^\\/pets\\/[^/]+$/')
+        expect(source).toContain(String.raw`pattern: /^\/pets\/[^/]+$/`)
         expect(source).toContain("method: 'DELETE'")
         expect(source).not.toContain('fakeDeletePetResponse204')
     })
