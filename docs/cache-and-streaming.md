@@ -180,3 +180,6 @@ export function PetStatus({ petId }: { petId: string }) {
 - [`updateTag`](https://nextjs.org/docs/app/api-reference/functions/updateTag)
 - [`revalidateTag`](https://nextjs.org/docs/app/api-reference/functions/revalidateTag)
 - [Mutating data and Server Actions](https://nextjs.org/docs/app/getting-started/mutating-data)
+
+В Next.js 16.4 явно задано `partialPrefetching: false`: обновление сохраняет поведение
+существующего Cache Components приложения. Включение Partial Prefetching требует отдельной проверки.

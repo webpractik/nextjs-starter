@@ -19,9 +19,13 @@ const generatedWarning =
     '// ВНИМАНИЕ: файл сгенерирован generate-mock-routes. Не редактируйте вручную.'
 const pathParameterPattern = /\{[^}]+\}/g
 
-function isMockMethod(method: ContractOperation['method']): method is MockHttpMethod {
-    return ['delete', 'get', 'patch', 'post', 'put'].includes(method)
-}
+const mockMethods = new Map<ContractOperation['method'], MockHttpMethod>([
+    ['delete', 'delete'],
+    ['get', 'get'],
+    ['patch', 'patch'],
+    ['post', 'post'],
+    ['put', 'put'],
+])
 
 function preferredResponse(responses: ContractResponse[]): ContractResponse {
     return (
@@ -45,7 +49,9 @@ function compareRoutes(left: MockRouteDefinition, right: MockRouteDefinition) {
 
 export function collectMockRoutes(contract: ContractModel, fakerExports: ReadonlySet<string>) {
     const routes = contract.operations.flatMap<MockRouteDefinition>((operation) => {
-        if (!isMockMethod(operation.method)) {
+        const method = mockMethods.get(operation.method)
+
+        if (method === undefined) {
             return []
         }
 
@@ -63,7 +69,7 @@ export function collectMockRoutes(contract: ContractModel, fakerExports: Readonl
         return [
             {
                 factoryName: expectedFactory,
-                method: operation.method,
+                method,
                 operationId: operation.operationId,
                 path: operation.path,
                 status: response.status,
@@ -110,9 +116,7 @@ function renderRoute(route: MockRouteDefinition) {
 export function renderMockRoutes(routes: MockRouteDefinition[]) {
     const imports = [...new Set(routes.flatMap((route) => route.factoryName ?? []))].sort()
     const fakerImport =
-        imports.length === 0
-            ? []
-            : [`import { ${imports.join(', ')} } from './@faker-js/faker.gen'`, ``]
+        imports.length === 0 ? [] : [`import { ${imports.join(', ')} } from './mocks'`, ``]
 
     return `${[
         generatedWarning,
@@ -127,7 +131,9 @@ export function renderMockRoutes(routes: MockRouteDefinition[]) {
 
 export async function readFakerExportManifest(filePath: string) {
     const source = await readFile(filePath, 'utf8')
-    return new Set([...source.matchAll(/export const (\w+)/g)].map((match) => match[1]!))
+    return new Set(
+        [...source.matchAll(/(?:export (?:const|function) | as )(\w+)/g)].map((match) => match[1]!),
+    )
 }
 
 export async function generateMockRoutes(

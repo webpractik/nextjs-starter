@@ -31,12 +31,13 @@
   отдельной оценки.
 - React Compiler включается только в production через `reactCompiler: isProd`, а не во всех
   режимах.
-- Канонический контракт использует OpenAPI 3.2. Redocly bundle передаётся Hey API без понижения и
-  скрытой 3.1-копии; доказательство совместимости — полный `gen` и root `tsc`, включающий
-  generated output.
-- `@hey-api/openapi-ts@0.99.0` пока не запускается с project TypeScript 7.0.2. При прямом запуске
-  `openapi-ts.config.ts` направляет импорт `typescript` на локальный compiler workspace версии
-  6.0.3; удаляйте hook лишь после успешного native TypeScript 7 probe и полного parity suite.
+- Канонический контракт использует OpenAPI 3.2. Redocly lint и bundle передают контракт Kubb без
+  понижения и скрытой 3.1-копии. Встроенная Kubb validation выключена из-за ограничения валидатора
+  версиями 2.0/3.0/3.1; текущий поднабор проверяют AST parity, полный `gen`, API tests и root TS7.
+  Новые конструкции OpenAPI 3.2 требуют отдельного доказательства генерации и runtime.
+- Kubb 5.5.6 использует plugin-ts, plugin-zod, plugin-client и plugin-faker. Query factories и
+  публичные facets создаёт project post-generator. Прямого TypeScript 6 workspace и compiler hook
+  нет; конфиг и output проверяются корневым TypeScript 7.0.2.
 - Контейнерный контур задан в `Dockerfile`, `.dockerignore`, `compose*.yaml` и `Makefile`: dev
   использует target `development`, production — non-root standalone runner, а builder получает
   `SENTRY_AUTH_TOKEN` через BuildKit secret. Конфигурационного блокера больше нет; development
@@ -72,7 +73,7 @@
 - `src/observability/` и `instrumentation*.ts` — логирование, метрики, Sentry и OTEL.
 - `src/tests/` — общая тестовая инфраструктура и Playwright E2E.
 - `packages/core/` (`@repo/core`) — дизайн-система и UI-примитивы.
-- `packages/api/` (`@repo/api`) — OpenAPI-контракт, Redocly/Hey API pipeline и публичные facets для
+- `packages/api/` (`@repo/api`) — OpenAPI-контракт, Redocly/Kubb pipeline и публичные facets для
   SDK, client, Query, Zod, Faker, mocks и cache tags.
 - `docs/README.md` — индекс документации и её статусов.
 - `docs/architecture.md` — подробная модель слоёв и размещения кода.
@@ -207,11 +208,11 @@
   `components/`; каноническая версия контракта — OpenAPI 3.2.0.
 - Каждая операция должна иметь уникальный `operationId`, обязательный `summary` и корректный
   `tags`; tags входят в query keys, mock metadata и generated cache helpers.
-- Порядок pipeline: Redocly bundle → `bundled.yaml` → Hey API → post-generation helpers → Oxfmt →
+- Порядок pipeline: Redocly bundle → `bundled.yaml` → Kubb → AST parity и post-generation helpers → Oxfmt →
   root `tsc`, включающий generated output.
 - `bundled.yaml` — игнорируемый промежуточный артефакт. `openapi/` и `codegen/` коммитятся.
 - `packages/api/codegen/`, включая types, SDK, client, Query options, Zod, Faker, cache tags и mock
-  routes, вручную не редактируется. Hey API запускается с `output.clean: true`, поэтому ручные
+  routes, вручную не редактируется. Kubb запускается с `output.clean: true`, поэтому ручные
   изменения будут удалены.
 - После изменения OpenAPI выполните `npm --workspace @repo/api run gen` и связанные tests.
 - Публичные импорты идут только через `@repo/api`, `/client`, `/query`, `/schemas`, `/mocks` и
@@ -256,7 +257,7 @@
   дублируйте env setup в каждом test file.
 - Playwright E2E лежат в `src/tests/e2e` и выполняются в Chromium. По умолчанию config поднимает
   `npm run dev`; `PLAYWRIGHT_SERVER_MODE=standalone` или `CI=true` переключает его на уже собранный
-  `npm run prod`. Самодостаточный `npm run test:e2e:standalone` сначала создаёт свежую сборку.
+  `npm run prod`. Перед standalone E2E отдельно выполните свежий `npm run build`.
 - Текущий GitLab pipeline запускает Vitest, но не Playwright E2E и не production build.
 - Playwright использует `FRONT_PORT` с default `3000`; это отдельная переменная от server `PORT`.
 - При исправлении bug сначала добавьте или обновите минимальный regression test, затем проверьте,
@@ -297,7 +298,7 @@ npm run test:unit
 npm run test:component
 npm run test:coverage
 npm run test:e2e
-npm run test:e2e:standalone
+PLAYWRIGHT_SERVER_MODE=standalone npm run test:e2e
 npx vitest run src/mock-mode/runtime.unit.test.ts --project unit
 npx vitest run src/components/utilities/error-boundary/error-boundary.test.tsx --project component
 npx playwright test src/tests/e2e/example.spec.ts

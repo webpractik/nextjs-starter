@@ -56,6 +56,7 @@ function normalizePath(url: MockRequestConfig['url']) {
 function createRequestFaker() {
     const faker = new Faker({ locale: [en] })
     faker.seed(100)
+    faker.setDefaultRefDate('2026-01-01T00:00:00Z')
     return faker
 }
 

@@ -1,4 +1,5 @@
 import { useForm } from '@tanstack/react-form'
+import * as allure from 'allure-js-commons'
 import { expect, it, vi } from 'vitest'
 import { render } from 'vitest-browser-react'
 import { userEvent } from 'vitest/browser'
@@ -92,6 +93,12 @@ function CompositeFieldsDemo({ onSelectOpenChange, onSliderCommit }: CompositeFi
 }
 
 it('обновляет select и radio, сохраняет callback закрытия и помечает поля затронутыми', async () => {
+    await allure.labels(
+        { name: 'layer', value: 'Component-front' },
+        { name: 'feature', value: 'UI components' },
+        { name: 'story', value: 'Совместимость компонентов с Vitest 5' },
+        { name: 'severity', value: 'normal' },
+    )
     const onSelectOpenChange = vi.fn<(_open: boolean) => void>()
     const screen = await render(
         <CompositeFieldsDemo
@@ -117,13 +124,19 @@ it('обновляет select и radio, сохраняет callback закрыт
     )
     await expect
         .element(screen.getByRole('status', { name: 'Composite values' }))
-        .toHaveTextContent('"stack":"query"')
+        .toMatchTextContent('"stack":"query"')
     await expect
         .element(screen.getByRole('status', { name: 'Composite values' }))
-        .toHaveTextContent('"channel":"sms"')
+        .toMatchTextContent('"channel":"sms"')
 })
 
 it('обновляет scalar и range ползунки, подписи и состояние формы после commit', async () => {
+    await allure.labels(
+        { name: 'layer', value: 'Component-front' },
+        { name: 'feature', value: 'UI components' },
+        { name: 'story', value: 'Совместимость компонентов с Vitest 5' },
+        { name: 'severity', value: 'normal' },
+    )
     const onSliderCommit = vi.fn<(_value: number | readonly number[]) => void>()
     const screen = await render(
         <CompositeFieldsDemo
@@ -155,13 +168,19 @@ it('обновляет scalar и range ползунки, подписи и со�
     await expect.element(screen.getByText('20 to 81')).toBeVisible()
     await expect
         .element(screen.getByRole('status', { name: 'Composite values' }))
-        .toHaveTextContent('"confidence":41')
+        .toMatchTextContent('"confidence":41')
     await expect
         .element(screen.getByRole('status', { name: 'Composite values' }))
-        .toHaveTextContent('"confidenceRange":[20,81]')
+        .toMatchTextContent('"confidenceRange":[20,81]')
 })
 
 it('оставляет выступающие края ползунка видимыми и доступными для указателя', async () => {
+    await allure.labels(
+        { name: 'layer', value: 'Component-front' },
+        { name: 'feature', value: 'UI components' },
+        { name: 'story', value: 'Совместимость компонентов с Vitest 5' },
+        { name: 'severity', value: 'normal' },
+    )
     const screen = await render(
         <CompositeFieldsDemo
             onSelectOpenChange={() => undefined}

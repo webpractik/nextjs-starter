@@ -13,6 +13,7 @@ codequality:
     extends: .node-verification
     stage: codequality
     script:
+        - npm --workspace @repo/api run gen:check
         - npm run verify:fast
 
 test:

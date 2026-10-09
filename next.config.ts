@@ -32,6 +32,7 @@ const nextConfig: NextConfig = {
         ? { browserToTerminal: false, fetches: { fullUrl: true }, serverFunctions: true }
         : false,
     output: 'standalone',
+    partialPrefetching: false,
     poweredByHeader: false,
     reactCompiler: isProd,
     reactProductionProfiling: false,

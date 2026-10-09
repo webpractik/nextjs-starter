@@ -1,5 +1,5 @@
-import type { AnyFieldApi } from '@tanstack/react-form'
-
+import { FieldApi, FormApi } from '@tanstack/react-form'
+import * as allure from 'allure-js-commons'
 import { useState } from 'react'
 import { expect, it } from 'vitest'
 import { render } from 'vitest-browser-react'
@@ -13,12 +13,15 @@ interface FieldMeta {
 }
 
 function fieldWithMeta(meta: FieldMeta, name = 'projectName') {
-    return {
-        name,
-        state: {
-            meta,
-        },
-    } as unknown as AnyFieldApi
+    const form = new FormApi({ defaultValues: { [name]: '' }, onSubmitMeta: undefined })
+    const field = new FieldApi({ form, name, validators: { onChange: () => meta.errors } })
+    field.setMeta((previous) => ({
+        ...previous,
+        errorMap: { onChange: meta.errors },
+        isDirty: meta.isDirty,
+        isTouched: meta.isTouched,
+    }))
+    return field
 }
 
 function TextFieldShellDemo() {
@@ -42,6 +45,12 @@ function TextFieldShellDemo() {
 }
 
 it('связывает текстовое поле с label, описанием и общей ошибкой, сохраняя id после обновления', async () => {
+    await allure.labels(
+        { name: 'layer', value: 'Component-front' },
+        { name: 'feature', value: 'UI components' },
+        { name: 'story', value: 'Контракт общих полей формы' },
+        { name: 'severity', value: 'normal' },
+    )
     const screen = await render(<TextFieldShellDemo />)
     const control = screen.getByRole('textbox', { name: 'Project name' })
     const label = screen.getByText('Project name')
@@ -57,8 +66,8 @@ it('связывает текстовое поле с label, описанием 
         description.element().id,
         alert.element().id,
     ])
-    await expect.element(alert).toHaveTextContent('Required')
-    await expect.element(alert).toHaveTextContent('Use at least three characters')
+    await expect.element(alert).toMatchTextContent('Required')
+    await expect.element(alert).toMatchTextContent('Use at least three characters')
     await expect.element(field).toHaveAttribute('data-invalid', 'true')
     await expect.element(field).toHaveAttribute('data-touched', 'true')
     await expect.element(field).toHaveAttribute('data-dirty', 'true')
@@ -72,6 +81,12 @@ it('связывает текстовое поле с label, описанием 
 })
 
 it('связывает поле выбора с label и описанием и отражает его meta-состояние', async () => {
+    await allure.labels(
+        { name: 'layer', value: 'Component-front' },
+        { name: 'feature', value: 'UI components' },
+        { name: 'story', value: 'Контракт общих полей формы' },
+        { name: 'severity', value: 'normal' },
+    )
     const fieldApi = fieldWithMeta(
         {
             errors: [],

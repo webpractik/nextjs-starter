@@ -13,6 +13,9 @@ const nextNavigationMock = fileURLToPath(
 )
 const nextScriptMock = fileURLToPath(new URL('src/tests/mocks/next-script.tsx', import.meta.url))
 const nextImageMock = fileURLToPath(new URL('src/tests/mocks/next-image.tsx', import.meta.url))
+const vitestRunnerCompatibility = fileURLToPath(
+    new URL('src/tests/mocks/vitest-runner.ts', import.meta.url),
+)
 const dotEnvPath = new URL('.env', import.meta.url)
 
 const testExclude = [
@@ -185,6 +188,7 @@ export default defineConfig({
     },
     resolve: {
         alias: [
+            { find: /^@vitest\/runner$/, replacement: vitestRunnerCompatibility },
             { find: /^next\/navigation$/, replacement: nextNavigationMock },
             { find: /^next\/script$/, replacement: nextScriptMock },
             { find: /^next\/image$/, replacement: nextImageMock },

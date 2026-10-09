@@ -63,7 +63,7 @@ src/
 └── tests/                    test setup и Playwright E2E
 
 packages/
-├── api/                      OpenAPI, Hey API SDK, Query/Zod/Faker helpers
+├── api/                      OpenAPI, Kubb SDK, Query/Zod/Faker helpers
 └── core/                     UI-примитивы Base UI и типизированные формы
 ```
 

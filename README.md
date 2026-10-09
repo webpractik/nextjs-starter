@@ -28,7 +28,7 @@ Next.js проверяет переменные при загрузке конф
 - npm workspaces для `@repo/core` и `@repo/api`.
 - UI-примитивы в стиле Base UI/shadcn, безопасный вывод HTML и типизированная композиция
   TanStack Form в `@repo/core`.
-- Контракт OpenAPI 3.2, проверка Redocly и генерация Hey API: типы TypeScript, клиент Next.js,
+- Контракт OpenAPI 3.2, проверка Redocly и генерация Kubb 5: типы TypeScript, Fetch SDK,
   плоский SDK, схемы Zod, опции TanStack Query, фабрики Faker и теги кеша.
   Публичные точки входа: `@repo/api`, `/client`, `/query`, `/schemas`, `/mocks` и
   `/cache-tags`.
@@ -39,9 +39,8 @@ Next.js проверяет переменные при загрузке конф
 - Oxfmt, Oxlint, Knip, JSCPD, Lefthook и Commitizen.
 
 Контракт Petstore в `packages/api/openapi/` демонстрирует кодогенерацию, без бэкенда и обработчиков
-Next.js. `@hey-api/openapi-ts@0.99.0` совместим через изолированный алиас TypeScript 6.0.3;
-приложение проверяется TypeScript 7. Этапы генерации и условия удаления алиаса — в
-[руководстве по генерации API-клиента](docs/api-codegen.md).
+Next.js. Kubb использует TypeScript 7 проекта без compiler hook; ограничения поддержки
+OpenAPI 3.2 и проверки совместимости описаны в [API codegen](docs/api-codegen.md).
 
 ## Формы
 
@@ -103,7 +102,7 @@ npm run verify      # полный локальный набор проверо�
 `verify` запускает `verify:fast`, Knip, JSCPD, все проекты Vitest, затем Playwright E2E.
 Перед коммитом Lefthook форматирует файлы в индексе Git и запускает `verify:fast`.
 
-GitLab CI разделяет `verify:fast` и Vitest на этапы, не запускает standalone Playwright E2E и не
+GitLab CI проверяет воспроизводимость API codegen, затем разделяет `verify:fast` и Vitest на этапы, не запускает standalone Playwright E2E и не
 собирает Next.js для развёртывания. `.gitlab/deploy.yaml` закомментирован: публикации и
 развёртывания нет. Будущей задаче нужна собственная сборка или готовый неизменяемый артефакт — см.
 [правила тестирования](docs/testing-guidelines.md) и

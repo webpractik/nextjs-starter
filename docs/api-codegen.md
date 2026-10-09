@@ -3,7 +3,7 @@
 > Тип: справочник · Статус: актуально · Источники истины:
 > [`packages/api/openapi/`](../packages/api/openapi/),
 > [`packages/api/redocly.yaml`](../packages/api/redocly.yaml),
-> [`packages/api/openapi-ts.config.ts`](../packages/api/openapi-ts.config.ts)
+> [`packages/api/kubb.config.ts`](../packages/api/kubb.config.ts)
 
 ## Главное
 
@@ -58,9 +58,9 @@ npm run tsc
 
 ```text
 openapi/openapi.yaml и $ref-файлы
-    → Redocly bundle → bundled.yaml
-    → Hey API → очищенный codegen/
-    → post-generation cache tags, mock routes и guarded client normalization
+    → Redocly lint → Redocly bundle → bundled.yaml
+    → Kubb 5: TypeScript, Zod, plugin-client и Faker → очищенный codegen/
+    → проверка AST и project helpers: facets, Query, cache tags, mock routes
     → Oxfmt только для codegen/
     → root TypeScript check, включающий codegen/
 ```
@@ -68,79 +68,72 @@ openapi/openapi.yaml и $ref-файлы
 Команды `bundle`, `generate:client`, `generate:helpers` и `format:generated` позволяют
 диагностировать отдельные этапы. Изменения контракта проверяйте полным `gen`.
 
-`format:generated` дважды запускает Oxfmt только для `codegen/`: текущие вложенные типы клиента
-требуют ещё трёх правок после первого прохода. Удаляйте второй проход, когда
-`oxfmt --check codegen` проходит после одного на закреплённой версии Oxfmt.
+`gen:check` сохраняет имена и SHA-256 всех файлов `codegen/`, запускает полный `gen` и
+сравнивает результат, включая новые, удалённые и скрытые файлы. GitLab CI выполняет эту проверку
+перед `verify:fast`. После изменения контракта сначала выполните `gen` и включите output в diff.
 
-Постгенератор читает операции, теги, пути, параметры и успешные ответы из того же Redocly bundle,
-независимо от внутреннего API Hey API. Для маршрутов моков с телом он проверяет наличие фабрики
-Faker; `204` возвращает нативный `Response` без тела и фабрики.
+```bash
+npm --workspace @repo/api run gen:check
+```
 
-Без тегов или ответов текущий парсер может создать запасной маршрут без тела со статусом `200`.
-Полноту контракта проверяйте через OpenAPI lint и ревью, а не успех постгенерации.
+`format:generated` выполняет два прохода Oxfmt только по generated output. Постгенератор
+проверяет наличие response-фабрик для всех операций с телом; при изменении ожидаемой формы
+Kubb output генерация останавливается.
 
-## Зафиксированный toolchain и TypeScript генератора
+## Toolchain и границы совместимости
 
-- среда выполнения: Node.js 24;
-- компилятор приложения: `typescript@7.0.2`;
-- генератор: `@hey-api/openapi-ts@0.99.0`;
-- локальный компилятор workspace `@repo/api`: `typescript@6.0.3`.
+- Node.js 24, npm 11, компилятор приложения TypeScript 7.0.2;
+- Kubb 5.5.6 и adapter-oas 5.5.6;
+- plugin-ts 5.0.5, plugin-zod 5.4.3, plugin-client 5.5.4, plugin-faker 5.1.0;
+- Zod 4.6.5, TanStack Query 5.104.1, Faker 10.6.0.
 
-Hey API 0.99.0 падает при загрузке с TypeScript 7.0.2, до генерации. При прямом запуске
-`openapi-ts.config.ts` регистрирует хук разрешения модулей Node: только в процессе генерации импорт
-`typescript` направляется на локальную 6.0.3. Обычный импорт конфига не имеет побочных эффектов.
-Корневой `tsc`, Next.js и тесты используют TypeScript 7; `tsconfig.json` включает сгенерированный код.
+Версии плагинов Kubb выпускаются независимо. Прямого compiler workspace TypeScript 6 и Node
+resolution hook больше нет; корневой TypeScript 7 проверяет конфиг и весь generated output.
 
-`@hey-api/json-schema-ref-parser@1.4.4` фиксирует `js-yaml@4.2.0`, уязвимый к
-[CVE-2026-59869](https://github.com/advisories/GHSA-52cp-r559-cp3m). Корневой `overrides` заменяет его
-на `4.3.1`, которая также исправляет квадратичную обработку `!!omap`
-([GHSA-5p4m-2wfm-xmqj](https://github.com/advisories/GHSA-5p4m-2wfm-xmqj)). Проверяйте установленную
-версию через `npm ls js-yaml` и полный `npm audit`. Удаляйте переопределение, когда Hey API перестанет
-требовать уязвимую точную версию и аудит останется чистым без него.
+Канонический контракт остаётся **OpenAPI 3.2.0**. Встроенный валидатор Kubb пока объявляет
+поддержку только 2.0/3.0/3.1, поэтому `adapterOas.validate` выключен. Обязательная валидация
+выполняется Redocly перед генерацией. Дополнительная проверка сравнивает версию, операции,
+методы, пути, path-параметры, теги и response statuses адаптера с тем же bundle.
 
-Точная версия Hey API дублируется в корневых `devDependencies`: npm 11.16.0 теряет транзитивное
-переопределение через ссылку workspace
-([npm/cli#9659](https://github.com/npm/cli/issues/9659)). Прямая зависимость применяет его к общему
-экземпляру генератора. Удаляйте дубликат после проверки исправленного npm:
-чистой установки, `npm ls js-yaml`, полного `npm audit` и `gen`.
+Это подтверждает используемый Petstore-поднабор контракта, а не произвольные возможности 3.2.
+При добавлении новых конструкций OpenAPI отдельно проверяйте их AST, generated types и runtime.
+Bundle не понижается и скрытая 3.1-копия не создаётся. Для bodyless responses Kubb создаёт
+synthetic unknown schema; guarded post-generation заменяет её на `undefined` в types и Zod.
 
-Удаляйте локальную 6.0.3 и хук, только когда новая точная версия Hey API:
+`plugin-client` генерирует операции поверх проектного Fetch-клиента `client.ts`. Он сохраняет
+SDK options, native `Response`, настройки Next.js и runtime mock mode. Официальный Query-плагин
+пока ориентирован на plugin-fetch/plugin-axios, поэтому options factories создаёт небольшой
+проектный генератор из Kubb operation types. Готовые React hooks не генерируются.
 
-1. запускается напрямую с TypeScript 7 проекта;
-2. принимает текущий Redocly bundle OpenAPI 3.2;
-3. проходит полный `gen`, тесты совместимости генератора и корневой `tsc`;
-4. даёт чистый diff после второго последовательного `gen`.
-
-Нормализация после генерации сохраняет `data: undefined` для ошибки без исключения и успешного
-`204`. При изменении ожидаемой структуры ветвей клиента `gen` остановится, защищая публичное поведение.
-После обновления изучите diff: удалите ненужный обходной механизм либо обновите его и регрессионные тесты.
+Фабрики Faker адаптируются генератором для передачи `options.faker` каждому вложенному вызову.
+Глобальный экземпляр не перенастраивается. Для mock request фиксируются seed и reference date.
+Zod object schemas сохраняют прежнюю политику: дополнительные поля удаляются при parse.
 
 ## Какие файлы можно менять
 
-| Путь                                   | Коммитить | Менять вручную | Назначение                         |
-| -------------------------------------- | --------- | -------------- | ---------------------------------- |
-| `openapi/`                             | Да        | Да             | Источник истины                    |
-| `redocly.yaml`, `openapi-ts.config.ts` | Да        | Да             | Конфигурация pipeline              |
-| `openapi-ts.config.ts`, `generators/`  | Да        | Да             | Generation и post-generation       |
-| Public facets и `client-config.ts`     | Да        | Да             | Стабильный API и runtime transport |
-| `bundled.yaml`                         | Нет       | Нет            | Временный bundle Redocly           |
-| `codegen/`                             | Да        | Нет            | Generated implementation           |
+| Путь                               | Коммитить | Менять вручную | Назначение                         |
+| ---------------------------------- | --------- | -------------- | ---------------------------------- |
+| `openapi/`                         | Да        | Да             | Источник истины                    |
+| `redocly.yaml`                     | Да        | Да             | Валидация и bundle                 |
+| `kubb.config.ts`, `generators/`    | Да        | Да             | Generation и post-generation       |
+| Public facets и `client-config.ts` | Да        | Да             | Стабильный API и runtime transport |
+| `bundled.yaml`                     | Нет       | Нет            | Временный bundle Redocly           |
+| `codegen/`                         | Да        | Нет            | Generated implementation           |
 
-Hey API использует `output.clean: true`: следующий `gen` удалит ручные и устаревшие файлы из
+Kubb использует `output.clean: true`: следующий `gen` удалит ручные и устаревшие файлы из
 `codegen/`. Меняйте источник, конфиг или постгенератор и повторяйте генерацию.
 
 ## Что появляется в `codegen/`
 
-| Путь                           | Содержимое                                    |
-| ------------------------------ | --------------------------------------------- |
-| `types.gen.ts`                 | OpenAPI types и `as const` enum objects       |
-| `sdk.gen.ts`                   | Flat SDK с `path`/`query`/`body` options      |
-| `client/`, `client.gen.ts`     | Next.js Fetch client и настроенный instance   |
-| `zod.gen.ts`                   | Zod 4 request/response schemas                |
-| `@tanstack/react-query.gen.ts` | Query/mutation/infinite options и tagged keys |
-| `@faker-js/faker.gen.ts`       | Typed Faker factories                         |
-| `cache-tags/`                  | Server-only cache tag namespaces              |
-| `mock-client-routes.ts`        | Method/path/status → Faker factory            |
+| Путь                           | Содержимое                                                       |
+| ------------------------------ | ---------------------------------------------------------------- |
+| `types/`                       | OpenAPI types и `as const` enum objects                          |
+| `clients/`                     | SDK с `path`/`query`/`body` options поверх проектного транспорта |
+| `schemas/`, `schema-facade.ts` | Zod 4 schemas и публичные `z...` aliases                         |
+| `query.ts`                     | Query/mutation/infinite options и tagged keys                    |
+| `faker/`, `mocks.ts`           | Faker factories и публичные request/response aliases             |
+| `cache-tags/`                  | Server-only cache tag namespaces                                 |
+| `mock-client-routes.ts`        | Method/path/status → Faker factory                               |
 
 Числовые алиасы вроде `Pet2`, порядок файлов и пути плагинов не входят в контракт приложения.
 
@@ -150,15 +143,15 @@ Hey API использует `output.clean: true`: следующий `gen` уд
 import type { Pet } from '@repo/api'
 
 import { getPetById, PetStatus } from '@repo/api'
-import { client, createClient } from '@repo/api/client'
 import { pets } from '@repo/api/cache-tags' // только server
+import { client, createClient } from '@repo/api/client'
 import { fakePet } from '@repo/api/mocks'
 import { getPetByIdOptions } from '@repo/api/query'
 import { zPet } from '@repo/api/schemas'
 ```
 
 Доступны ровно шесть точек входа: `@repo/api`, `/client`, `/query`, `/schemas`, `/mocks` и
-`/cache-tags`. `exports` направляет их на сгенерированные точки входа и два рукописных адаптера.
+`/cache-tags`. `exports` направляет их на сгенерированные точки входа и рукописные runtime-адаптеры.
 Внутренности `codegen/` и числовые алиасы зависят от версии генератора: не импортируйте их.
 
 ## SDK options и result model
@@ -189,7 +182,7 @@ const { data, response } = await getPetById({
 })
 ```
 
-Успешный JSON-ответ проверяется сгенерированной схемой Zod; невалидный отклоняется с `ZodError`.
+Успешный JSON-ответ проверяется сгенерированной схемой Zod; невалидный возвращает `ZodError` в `error` по умолчанию и бросает его при `throwOnError: true`.
 `DELETE` с описанным статусом `204` возвращает `data: undefined` и исходный `Response`.
 Нативные опции Fetch/Next.js передаются вместе с опциями SDK:
 

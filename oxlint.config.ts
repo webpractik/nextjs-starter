@@ -1,6 +1,6 @@
 import { defineOxlintConfig } from '@webpractik/oxlint-config'
 
-// https://github.com/webpractik/oxlint-config#использование
+/** https://github.com/webpractik/oxlint-config#использование */
 export default defineOxlintConfig({
     ignores: [
         '**/.vscode',

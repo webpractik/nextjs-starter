@@ -1,4 +1,4 @@
-import type { CreateClientConfig } from './codegen/client.gen'
+import type { Config } from './client'
 import type { MockRequestConfig } from './mock-client'
 
 import { isDev } from '#/constants/env'
@@ -120,12 +120,18 @@ function createMockRequestConfig(
     init: RequestInit | undefined,
     headers: Headers,
 ): MockRequestConfig {
-    const url = input instanceof URL ? input.href : input
+    const rawUrl = input instanceof Request ? input.url : String(input)
+    const url = new URL(rawUrl, 'http://localhost')
+    const basePath = new URL(getApiBaseUrl(), 'http://localhost').pathname.replace(/\/$/, '')
+
+    if (basePath !== '' && (url.pathname === basePath || url.pathname.startsWith(`${basePath}/`))) {
+        url.pathname = url.pathname.slice(basePath.length) || '/'
+    }
 
     return {
         headers,
         method: init?.method ?? (input instanceof Request ? input.method : undefined),
-        url: typeof url === 'string' ? url : url.url,
+        url: url.href,
     }
 }
 
@@ -143,7 +149,7 @@ export async function apiFetch(input: RequestInfo | URL, init?: RequestInit) {
     return globalThis.fetch(input, init)
 }
 
-export const createClientConfig: CreateClientConfig = (override) => ({
+export const createClientConfig = (override: Config = {}): Config => ({
     ...override,
     baseUrl: getApiBaseUrl(),
     credentials: override?.credentials ?? 'include',

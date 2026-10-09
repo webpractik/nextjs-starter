@@ -1,19 +1,16 @@
-import { beforeEach, expect, it, vi } from 'vitest'
+import * as allure from 'allure-js-commons'
+import { expect, it, vi } from 'vitest'
 import { render } from 'vitest-browser-react'
 
 import { createToastManager, Toaster } from '.'
 
-class ResizeObserverStub {
-    disconnect() {}
-    observe() {}
-    unobserve() {}
-}
-
-beforeEach(() => {
-    vi.stubGlobal('ResizeObserver', ResizeObserverStub)
-})
-
 it('показывает несколько toast, выполняет действие, обновляет содержимое и закрывает выбранный toast', async () => {
+    await allure.labels(
+        { name: 'layer', value: 'Component-front' },
+        { name: 'feature', value: 'UI components' },
+        { name: 'story', value: 'Действия и обновление нескольких уведомлений' },
+        { name: 'severity', value: 'normal' },
+    )
     const action = vi.fn()
     const manager = createToastManager()
     const screen = await render(<Toaster toastManager={manager} timeout={0} />)
@@ -32,6 +29,8 @@ it('показывает несколько toast, выполняет дейст
     await expect.element(screen.getByText('Changes saved')).toBeVisible()
     await expect.element(screen.getByText('The original description')).toBeVisible()
     await expect.element(screen.getByText('Second notification')).toBeVisible()
+
+    await screen.getByRole('dialog', { name: 'Second notification' }).hover()
 
     await screen.getByRole('button', { name: 'Undo' }).click()
     expect(action).toHaveBeenCalledTimes(1)
@@ -56,6 +55,12 @@ it('показывает несколько toast, выполняет дейст
 })
 
 it('переводит promise-toast из загрузки в успех или ошибку по результату Promise', async () => {
+    await allure.labels(
+        { name: 'layer', value: 'Component-front' },
+        { name: 'feature', value: 'UI components' },
+        { name: 'story', value: 'Исход асинхронного уведомления' },
+        { name: 'severity', value: 'normal' },
+    )
     const manager = createToastManager()
     const screen = await render(<Toaster toastManager={manager} timeout={0} />)
 

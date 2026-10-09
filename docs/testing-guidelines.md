@@ -5,9 +5,13 @@
 
 > Источники истины: `vitest.config.ts`, `playwright.config.ts`, `.storybook/` и npm scripts.
 
-Vitest и пакеты `@vitest/*` зафиксированы на `4.1.11`: `@storybook/addon-vitest@10.6.0`
-объявляет совместимость только с Vitest 3 и 4. Переход на Vitest 5 требует поддержки аддона,
-синхронного обновления всех пакетов запуска и проверки генераторов отчётов, браузерных тестов и Storybook.
+Vitest и browser/coverage packages зафиксированы на 5.0.3. Storybook addon-vitest 10.6.1
+объявляет поддержку Vitest 5. Allure 3.13.0 требует явного peer `@vitest/runner@4.1.11` для
+Node reporter; браузерный alias `src/tests/mocks/vitest-runner.ts` направляет чтение текущего
+теста на bundled `TestRunner` Vitest 5. Это сохраняет runtime labels в emitted reports.
+
+В Vitest 5 `toHaveTextContent` проверяет точное совпадение строки. Для прежней проверки
+подстроки или регулярного выражения используйте `toMatchTextContent`.
 
 ## Какой runner выбрать
 
@@ -242,8 +246,8 @@ npm run test:watch
 ```
 
 После узких тестов проверьте форматирование, lint и TypeScript через `npm run verify:fast`.
-`npm run verify` добавляет Knip, JSCPD, оба проекта Vitest, свежую сборку и standalone
-Playwright E2E.
+`npm run verify` добавляет Knip, JSCPD, оба проекта Vitest и Playwright E2E в development.
+Для production E2E отдельно выполните свежую сборку и установите `PLAYWRIGHT_SERVER_MODE=standalone`.
 
 ## Качество теста
 

@@ -25,7 +25,7 @@
 
 ```text
 SDK из @repo/api
-    → generated Next.js client
+    → Kubb SDK и проектный Fetch client
     → packages/api/client-config.ts → apiFetch
     → проверка env, cookie и page allowlist
     → packages/api/mock-client.ts
@@ -33,11 +33,11 @@ SDK из @repo/api
     → generated mock route
     → generated Faker factory
     → нативный Response с x-mock-mode: true
-    → обычный Hey API parser и Zod response validation
+    → обычный Fetch parser и Zod response validation
 ```
 
 `apiFetch` перехватывает запрос до `globalThis.fetch`. Если URL совпал с маршрутом, нативный
-`Response` проходит парсер и валидатор Hey API как ответ бэкенда, без сети.
+`Response` проходит парсер и generated Zod validator как ответ бэкенда, без сети.
 
 ## Как включить mock mode
 

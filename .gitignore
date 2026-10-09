@@ -21,6 +21,7 @@ report
 docs/superpowers
 .remember
 .vitest-attachments
+.vitest
 next-env.d.ts
 .playwright-mcp
 

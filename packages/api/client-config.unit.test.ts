@@ -1,5 +1,6 @@
 import type { MockRequestConfig } from './mock-client'
 
+import * as allure from 'allure-js-commons'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 type FetchMock = (_input: RequestInfo | URL, _init?: RequestInit) => Promise<Response>
@@ -11,7 +12,7 @@ interface BrowserRuntimeCase {
     runtimeName: string
 }
 
-describe('runtime-конфигурация Hey API', () => {
+describe('runtime-конфигурация Fetch-клиента', () => {
     beforeEach(() => {
         vi.resetModules()
         vi.stubEnv('BACK_INTERNAL_URL', 'https://internal.example.test')
@@ -31,6 +32,12 @@ describe('runtime-конфигурация Hey API', () => {
     })
 
     it('выбирает внутренний URL на сервере, BFF в development и публичный backend в production', async () => {
+        await allure.labels(
+            { name: 'layer', value: 'Unit-front' },
+            { name: 'feature', value: 'API codegen' },
+            { name: 'story', value: 'Совместимость публичного API при миграции Kubb' },
+            { name: 'severity', value: 'normal' },
+        )
         const { selectApiBaseUrl } = await import('./client-config')
         const urls = {
             browserDevelopment: '/bff-api',
@@ -48,6 +55,12 @@ describe('runtime-конфигурация Hey API', () => {
     })
 
     it('по умолчанию отправляет credentials и сохраняет нативные Fetch-опции и настройки Next.js', async () => {
+        await allure.labels(
+            { name: 'layer', value: 'Unit-front' },
+            { name: 'feature', value: 'API codegen' },
+            { name: 'story', value: 'Совместимость публичного API при миграции Kubb' },
+            { name: 'severity', value: 'normal' },
+        )
         const fetchMock = vi.fn<FetchMock>().mockResolvedValue(new Response(null, { status: 204 }))
         vi.stubGlobal('fetch', fetchMock)
 
@@ -72,6 +85,12 @@ describe('runtime-конфигурация Hey API', () => {
     })
 
     it('возвращает мок-ответ для текущего запроса без обращения к backend', async () => {
+        await allure.labels(
+            { name: 'layer', value: 'Unit-front' },
+            { name: 'feature', value: 'API codegen' },
+            { name: 'story', value: 'Совместимость публичного API при миграции Kubb' },
+            { name: 'severity', value: 'normal' },
+        )
         const getMockResponse = vi.fn<MockResponseMock>().mockResolvedValue(
             Response.json(
                 { mocked: true },
@@ -116,6 +135,12 @@ describe('runtime-конфигурация Hey API', () => {
             runtimeName: 'production',
         },
     ])('использует browser base URL в $runtimeName', async ({ development, expectedBaseUrl }) => {
+        await allure.labels(
+            { name: 'layer', value: 'Unit-front' },
+            { name: 'feature', value: 'API codegen' },
+            { name: 'story', value: 'Совместимость публичного API при миграции Kubb' },
+            { name: 'severity', value: 'normal' },
+        )
         vi.doMock('#/constants/env', () => ({ isDev: development }))
         vi.stubGlobal('window', { location: { pathname: '/' } })
         const fetchMock = vi.fn<FetchMock>().mockResolvedValue(Response.json({ ok: true }))

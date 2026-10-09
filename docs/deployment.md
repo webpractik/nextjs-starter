@@ -68,7 +68,7 @@ Docker-образ сейчас нельзя считать воспроизво�
 codequality → test → deploy
 ```
 
-- `codequality` выполняет `npm run verify:fast`.
+- `codequality` выполняет `npm --workspace @repo/api run gen:check`, затем `npm run verify:fast`.
 - `test` устанавливает зависимости Chromium и запускает `npm run test` — оба проекта Vitest.
 - Standalone Playwright E2E не запускается.
 - Production-сборка Next.js не выполняется, артефакты `.next` не создаются.

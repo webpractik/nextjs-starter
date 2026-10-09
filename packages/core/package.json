@@ -10,15 +10,15 @@
         "add": "npx shadcn@latest add"
     },
     "dependencies": {
-        "@base-ui/react": "1.8.0",
-        "@maskito/core": "5.4.0",
-        "@maskito/kit": "5.4.0",
-        "@maskito/phone": "5.4.0",
-        "@maskito/react": "5.4.0",
+        "@base-ui/react": "1.9.0",
+        "@maskito/core": "5.6.0",
+        "@maskito/kit": "5.6.0",
+        "@maskito/phone": "5.6.0",
+        "@maskito/react": "5.6.0",
         "@tanstack/react-form": "1.33.5",
-        "isomorphic-dompurify": "4.2.0",
-        "libphonenumber-js": "1.13.12",
-        "zod": "4.5.4"
+        "isomorphic-dompurify": "4.5.0",
+        "libphonenumber-js": "1.13.15",
+        "zod": "4.6.5"
     },
     "peerDependencies": {
         "@vitest/browser": "*",
@@ -29,7 +29,7 @@
         "react": "^19",
         "react-dom": "^19",
         "tailwind-merge": "^3",
-        "vitest": "^4",
+        "vitest": "^5",
         "vitest-browser-react": "^2"
     }
 }

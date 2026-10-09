@@ -1,40 +1,34 @@
+import * as allure from 'allure-js-commons'
 import { describe, expect, it } from 'vitest'
 
-import { normalizeErrorResult, normalizeNoContentResult } from './post-generate'
+import { normalizeFaker } from './kubb-helpers'
 
-describe('совместимость после генерации Hey API', () => {
-    it('преобразует нативный ответ 204 в void без разбора JSON', () => {
-        const source = `if (response.status === 204 || response.headers.get('Content-Length') === '0') {
-          let emptyData: any;
-        }`
-
-        const result = normalizeNoContentResult(source)
-
-        expect(result).toContain('if (response.status === 204)')
-        expect(result).toContain('data: undefined')
-        expect(result).toContain("if (response.headers.get('Content-Length') === '0')")
-    })
-
-    it('явно сообщает об ошибке при изменении ожидаемой формы generated-клиента', () => {
-        expect(() => normalizeNoContentResult('unrecognized client source')).toThrow(
-            '204 response branch',
+describe('адаптация Kubb Faker', () => {
+    it('передаёт request-local Faker вложенным фабрикам без изменения глобального instance', async () => {
+        await allure.labels(
+            { name: 'layer', value: 'Unit-front' },
+            { name: 'feature', value: 'API codegen' },
+            { name: 'story', value: 'Совместимость публичного API при миграции Kubb' },
+            { name: 'severity', value: 'normal' },
         )
+        const source = `import { fakerEN as faker } from '@faker-js/faker'
+export function fakePet(data?: Partial<Pet>) {
+    return { name: faker.string.alpha(), status: fakeStatus(), ...data }
+}`
+        const result = normalizeFaker(source)
+        expect(result).toContain('options: FactoryOptions = {}')
+        expect(result).toContain('(options.faker ?? defaultFaker).string.alpha()')
+        expect(result).toContain('fakeStatus(options)')
+        expect(result).not.toContain('fakerEN as faker')
     })
 
-    it('сохраняет discriminant data: undefined в non-throwing error result', () => {
-        const source = `return {
-                error: finalError,
-                response,
-            }`
-
-        expect(normalizeErrorResult(source)).toContain(`return {
-                data: undefined,
-                error: finalError,`)
-    })
-
-    it('останавливается, если форма error result изменилась в новой версии Hey API', () => {
-        expect(() => normalizeErrorResult('unrecognized client source')).toThrow(
-            'error result branch',
+    it('останавливает генерацию, если upstream изменил ожидаемую структуру', async () => {
+        await allure.labels(
+            { name: 'layer', value: 'Unit-front' },
+            { name: 'feature', value: 'API codegen' },
+            { name: 'story', value: 'Совместимость публичного API при миграции Kubb' },
+            { name: 'severity', value: 'normal' },
         )
+        expect(() => normalizeFaker('unrecognized factory')).toThrow('pinned generator shape')
     })
 })

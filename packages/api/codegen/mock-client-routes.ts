@@ -6,7 +6,7 @@ import {
     fakeFindPetsByStatusResponse200,
     fakeGetPetByIdResponse200,
     fakeUpdatePetResponse200,
-} from './@faker-js/faker.gen'
+} from './mocks'
 
 export const mockRoutes = [
     {
