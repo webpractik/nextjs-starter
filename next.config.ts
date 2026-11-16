@@ -25,14 +25,13 @@ const nextConfig: NextConfig = {
     generateBuildId: () => `${nanoid()}-${new Date().toISOString()}`,
     headers,
     images: {
-        dangerouslyAllowSVG: true,
         disableStaticImages: true,
     },
     logging: isDev
         ? { browserToTerminal: false, fetches: { fullUrl: true }, serverFunctions: true }
         : false,
     output: 'standalone',
-    partialPrefetching: false,
+    partialPrefetching: true,
     poweredByHeader: false,
     reactCompiler: isProd,
     reactProductionProfiling: false,

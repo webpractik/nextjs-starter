@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test'
 
-const port = process.env.FRONT_PORT ?? '3000'
+const port = process.env.FRONT_PORT ?? '3108'
 
 const baseURL = `http://localhost:${port}`
 
@@ -34,8 +34,11 @@ export default defineConfig({
         trace: 'on-first-retry',
     },
     webServer: {
-        command: usesStandaloneServer ? 'npm run prod' : 'npm run dev',
-        reuseExistingServer: !usesStandaloneServer,
+        command: usesStandaloneServer
+            ? 'node --env-file-if-exists=.env tools/start-standalone.mjs'
+            : 'npm run dev',
+        env: { HOSTNAME: '127.0.0.1', PORT: port },
+        reuseExistingServer: false,
         timeout: 2 * 60 * 1000,
         url: baseURL,
     },

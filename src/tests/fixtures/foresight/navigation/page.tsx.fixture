@@ -1,0 +1,14 @@
+import { ForesightLink } from '#/components/utilities/foresight-link'
+
+export default function Page() {
+    return (
+        <main className="flex flex-col items-start gap-20 p-20">
+            <h1>Проверка предзагрузки</h1>
+            <ForesightLink href="/e2e-foresight/first">Первая страница</ForesightLink>
+            <ForesightLink href="/e2e-foresight/second">Вторая страница</ForesightLink>
+            <ForesightLink href="/e2e-foresight/disabled" prefetch={false}>
+                Без предзагрузки
+            </ForesightLink>
+        </main>
+    )
+}

@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react'
+
 import { vi } from 'vitest'
 
 type MockFunction<Args extends unknown[] = unknown[], Result = unknown> = ((
@@ -79,3 +81,5 @@ export function resetNextNavigationMock() {
     nextNavigationMock.pathname = '/'
     nextNavigationMock.searchParams = new URLSearchParams()
 }
+
+export const useServerInsertedHTML = vi.fn<(_callback: () => ReactNode) => void>()
