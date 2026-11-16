@@ -1,6 +1,6 @@
 {
     "$schema": "./node_modules/oxfmt/configuration_schema.json",
-    "ignorePatterns": ["openwiki/**"],
+    "ignorePatterns": ["openwiki/**", ".agents/skills/**"],
     "singleQuote": true,
     "useTabs": false,
     "printWidth": 100,

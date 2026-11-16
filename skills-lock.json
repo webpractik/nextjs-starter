@@ -1,0 +1,83 @@
+{
+    "version": 2,
+    "skills": {
+        "fixing-accessibility": {
+            "source": "../../.agents/skills",
+            "sourceType": "local",
+            "computedHash": "50fe52aae0661c5aef2d1ed868bbfcda877ce96a6ec16ffa1c8a77dc83ea9695",
+            "installMode": "copy"
+        },
+        "modern-web-guidance": {
+            "source": "../../.agents/skills",
+            "sourceType": "local",
+            "computedHash": "9e69ce00dc314b64f6664031b70295ea46c7de93ac682c624808df6e48e08b66",
+            "installMode": "copy"
+        },
+        "modular-react": {
+            "source": "../../.agents/skills",
+            "sourceType": "local",
+            "computedHash": "fba0a150167b2951384a160a007728742cd215aa79324c9e6ace1d40899fd49a",
+            "installMode": "copy"
+        },
+        "next-cache-components-adoption": {
+            "source": "../../.agents/skills",
+            "sourceType": "local",
+            "computedHash": "2bf109a8693bb67ba45e05a531021bda876fafe048e764ffffe1bb1c460ec286",
+            "installMode": "copy"
+        },
+        "next-cache-components-optimizer": {
+            "source": "../../.agents/skills",
+            "sourceType": "local",
+            "computedHash": "88f1a9480dbb67bca44060e50fc45559d1bd70c2e7e766a44d015568634a9868",
+            "installMode": "copy"
+        },
+        "next-dev-loop": {
+            "source": "../../.agents/skills",
+            "sourceType": "local",
+            "computedHash": "abe7b5e77b26f95ab21304b10ce1003a41e4e75b601505d76c8a0294e33a450d",
+            "installMode": "copy"
+        },
+        "next-partial-prefetching-adoption": {
+            "source": "../../.agents/skills",
+            "sourceType": "local",
+            "computedHash": "a9ac6534a71de4bc7a43b84fbaa42e1ddeb091fe8db71c9c97038d949df22e0f",
+            "installMode": "copy"
+        },
+        "next-partial-prefetching-optimizer": {
+            "source": "../../.agents/skills",
+            "sourceType": "local",
+            "computedHash": "6f8bc71150496e962da7bd0615640e8c866e50a913d0c801294dc46e38f5fae1",
+            "installMode": "copy"
+        },
+        "tanstack-query": {
+            "source": "../../.agents/skills",
+            "sourceType": "local",
+            "computedHash": "294dffb72c9859928bb23531b234ec81c212066be091887ccf446e263b679171",
+            "installMode": "copy"
+        },
+        "typescript-magician": {
+            "source": "../../.agents/skills",
+            "sourceType": "local",
+            "computedHash": "61c5ae79e5591227fa87a34e7866d3ba9080414ca0f518054e7803b5914790b9",
+            "installMode": "copy"
+        },
+        "vercel-composition-patterns": {
+            "source": "../../.agents/skills",
+            "sourceType": "local",
+            "computedHash": "c89c3437575fa66085858a37999ba8bfdc599d62c84fd97aa97e85cf37b7ac71",
+            "installMode": "copy"
+        },
+        "vercel-react-best-practices": {
+            "source": "../../.agents/skills",
+            "sourceType": "local",
+            "computedHash": "7991ed4fbecdac23f47c1a40c243e00a212a9e7f3604db93959b3ae11dffe299",
+            "installMode": "copy"
+        },
+        "vitest": {
+            "source": "../../.agents/skills",
+            "sourceType": "local",
+            "computedHash": "bd95e41d66d76da9008893c9bc48c30f0a68f352cd2b00017767f5e4c129501d",
+            "installMode": "copy"
+        }
+    }
+}
