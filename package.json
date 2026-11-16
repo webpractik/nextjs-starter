@@ -109,6 +109,7 @@
         "commitizen": "4.3.2",
         "cssnano": "9.9.0",
         "cz-conventional-changelog": "3.3.0",
+        "deepmerge": "npm:@shivammathur/deepmerge@4.3.2",
         "eslint": "10.15.0",
         "eslint-plugin-better-tailwindcss": "4.11.0",
         "eslint-plugin-react-rsc": "5.30.3",
@@ -137,6 +138,12 @@
         "yaml": "2.9.1"
     },
     "overrides": {
+        "adze": {
+            "@ungap/structured-clone": "1.4.0"
+        },
+        "deepmerge": "$deepmerge",
+        "glob@>=9.0.0 <=14.0.1": "14.0.6",
+        "minimatch@>=7.0.0 <11.0.1": "11.0.8",
         "postcss-selector-parser": "7.2.1",
         "sharp": "0.35.5",
         "storybook": "$storybook"
