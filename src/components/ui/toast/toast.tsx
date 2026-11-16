@@ -105,7 +105,7 @@ function ToastDescription({ className, ...props }: ToastPrimitive.Description.Pr
 }
 
 const defaultActionRender = <Button variant="outline" size="sm" />
-const defaultCloseRender = <Button variant="ghost" size="icon-sm" />
+const defaultCloseRender = <Button aria-label="Close toast" variant="ghost" size="icon-sm" />
 
 function ToastAction({
     className,
@@ -165,7 +165,7 @@ function ToastIcon({ type }: { type: string | undefined }) {
     }
 
     if (type === 'loading') {
-        icon = <Loader2Icon aria-hidden="true" className="animate-spin" />
+        icon = <Loader2Icon aria-hidden="true" className="motion-safe:animate-spin" />
     }
 
     if (!icon) {
