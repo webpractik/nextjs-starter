@@ -12,12 +12,12 @@ sources:
     resource: repo://src/api/generators/post-generate.ts
   - id: openwiki-source-9a060d5ac87acfe866b60f95
     resource: repo://src/api/openapi/components/schemas/update-pet.yaml
-  - id: openwiki-source-ce7f77c99e4eeaf6bd1d8f05
-    resource: repo://src/api/schemas.test.ts
-generated: { by: "codex", at: "2026-11-16T14:41:28.183Z" }
+  - id: openwiki-source-8c1c6fe3dc524dd1d72fbfb7
+    resource: repo://tests/unit/src/api/schemas.test.ts
+generated: { by: "codex", at: "2026-11-16T15:55:30.306Z" }
 verified:
   - by: openwiki/0.7.2
-    at: 2026-11-16T14:41:28.183Z
+    at: 2026-11-16T15:41:39.256Z
 ---
 
 # Генерация API-клиента
@@ -31,10 +31,10 @@ verified:
 
 - Меняйте контракт в `src/api/openapi/`, а не файлы в `src/api/codegen/`.
 - После изменения запускайте полный `gen`, тесты `#/api` и корневой `tsc`.
-- Каноническая версия контракта — OpenAPI 3.2.0. Не понижайте её и не создавайте скрытую 3.1-копию.
-- Импортируйте только публичные точки входа API; `#/api/codegen/*` — внутренний код.
+- Контракт использует OpenAPI 3.2.0. Не понижайте версию и не создавайте скрытую 3.1-копию.
+- Импортируйте только публичные точки входа API. `#/api/codegen/*` содержит внутренний код.
 
-Petstore-контракт — пример для проверки генератора, без бэкенда: Next.js не обслуживает `/pets`.
+Petstore-контракт нужен для проверки генератора и не имеет бэкенда. Next.js не обслуживает `/pets`.
 
 ## Где лежит контракт
 
@@ -63,7 +63,7 @@ src/api/openapi/
 | `PATCH`  | `/pets/{petId}` | `updatePet`        | `200 Pet`      |
 | `DELETE` | `/pets/{petId}` | `deletePet`        | `204`          |
 
-`findPetsByStatus` принимает массив `status`; `offset` задаёт страницу для Infinite Query.
+`findPetsByStatus` принимает массив `status`. Параметр `offset` задаёт страницу для Infinite Query.
 
 ## Как запустить генерацию
 
@@ -75,6 +75,9 @@ npm run api:gen
 npm run api:test
 npm run tsc
 ```
+
+`api:test` запускает unit-тесты из `tests/unit/src/api/`. Тесты больше не размещаются
+рядом с контрактом и транспортом в `src/api/`.
 
 `gen` выполняет этапы по порядку:
 
@@ -91,15 +94,17 @@ openapi/openapi.yaml и $ref-файлы
 диагностировать отдельные этапы. Изменения контракта проверяйте полным `npm run api:gen`.
 
 `gen:check` сохраняет имена и SHA-256 всех файлов `codegen/`, запускает полный `gen` и
-сравнивает результат, включая новые, удалённые и скрытые файлы. Выполняйте эту проверку локально перед `verify:fast`; конфигурации CI удалены. После изменения контракта сначала выполните `gen` и включите output в diff.
+сравнивает результат, включая новые, удалённые и скрытые файлы. Выполняйте проверку локально
+перед `verify:fast`. Конфигурации CI удалены. После изменения контракта сначала выполните
+`gen` и включите сгенерированные файлы в diff.
 
 ```bash
 npm run api:gen:check
 ```
 
-`npm run api:gen` включает два прохода Oxfmt только по generated output. Постгенератор
-проверяет наличие response-фабрик для всех операций с телом; при изменении ожидаемой формы
-Kubb output генерация останавливается.
+`npm run api:gen` запускает Oxfmt дважды и только для сгенерированных файлов. Постгенератор
+проверяет наличие фабрик ответов для всех операций с телом. Если структура результата Kubb
+не соответствует ожидаемой, генерация останавливается.
 
 ## Toolchain и границы совместимости
 
@@ -108,32 +113,33 @@ Kubb output генерация останавливается.
 - plugin-ts 5.5.4, plugin-zod 5.9.4, plugin-client 6.0.4, plugin-faker 5.4.5;
 - Zod 4.6.7, TanStack Query 5.107.1, Faker 10.6.0.
 
-Версии плагинов Kubb выпускаются независимо. Прямого compiler workspace TypeScript 6 и Node
-resolution hook больше нет; корневой TypeScript 7 проверяет конфиг и весь generated output.
+Версии плагинов Kubb выпускаются независимо. Отдельного compiler workspace с TypeScript 6
+и Node resolution hook больше нет. Корневой TypeScript 7 проверяет конфиг и весь сгенерированный код.
 
-Канонический контракт остаётся **OpenAPI 3.2.0**. Встроенный валидатор Kubb пока объявляет
-поддержку только 2.0/3.0/3.1, поэтому `adapterOas.validate` выключен. Обязательная валидация
-выполняется Redocly перед генерацией. Дополнительная проверка сравнивает версию, операции,
-методы, пути, path-параметры, теги и response statuses адаптера с тем же bundle.
+Контракт использует OpenAPI 3.2.0. Встроенный валидатор Kubb пока объявляет поддержку
+только 2.0, 3.0 и 3.1, поэтому `adapterOas.validate` выключен. Redocly выполняет обязательную
+валидацию перед генерацией. Дополнительная проверка сравнивает данные адаптера с тем же bundle.
+Она проверяет версию, операции, методы, пути, параметры пути, теги и статусы ответов.
 
-Это подтверждает используемый Petstore-поднабор контракта, а не произвольные возможности 3.2.
-При добавлении новых конструкций OpenAPI отдельно проверяйте их AST, generated types и runtime.
-Bundle не понижается и скрытая 3.1-копия не создаётся. Для bodyless responses Kubb создаёт
-synthetic unknown schema; guarded post-generation заменяет её на `undefined` в types и Zod.
+Проверка подтверждает только тот набор возможностей контракта, который использует Petstore.
+Она не подтверждает произвольные возможности OpenAPI 3.2. При добавлении новых конструкций OpenAPI отдельно проверяйте их AST, сгенерированные типы
+и поведение при выполнении. Версия bundle не понижается, скрытой 3.1-копии нет. Для ответов
+без тела Kubb создаёт synthetic unknown schema. Постгенератор с проверками заменяет её
+на `undefined` в типах и Zod.
 
-`plugin-client` генерирует операции поверх проектного Fetch-клиента `client.ts`. Он сохраняет
-SDK options, native `Response`, настройки Next.js и runtime mock mode. Официальный Query-плагин
-пока ориентирован на plugin-fetch/plugin-axios, поэтому options factories создаёт небольшой
-проектный генератор из Kubb operation types. Готовые React hooks не генерируются.
+`plugin-client` генерирует операции поверх проектного Fetch-клиента `client.ts`. Клиент сохраняет
+опции SDK, нативный `Response`, настройки Next.js и runtime mock mode. Официальный Query-плагин
+пока ориентирован на plugin-fetch и plugin-axios. Поэтому проектный генератор создаёт фабрики
+опций из типов операций Kubb. Готовые React hooks не генерируются.
 
-Фабрики Faker адаптируются генератором для передачи `options.faker` каждому вложенному вызову.
+Генератор адаптирует фабрики Faker, чтобы они передавали `options.faker` каждому вложенному вызову.
 Глобальный экземпляр не перенастраивается. Для mock request фиксируются seed и reference date.
-Zod object schemas сохраняют прежнюю политику: дополнительные поля удаляются при parse.
+Объектные схемы Zod по-прежнему удаляют дополнительные поля при parse.
 
 После обновления генератора Zod-схема `UpdatePet` проверяет существующее в контракте
-`minProperties: 1`: при валидации через публичную схему пустой объект `{}` отклоняется.
-Прежняя версия плагина пропускала это ограничение. Сам OpenAPI-контракт не менялся;
-не используйте пустой patch в формах и фикстурах, которые проверяются этой схемой.
+`minProperties: 1`. При валидации через публичную схему пустой объект `{}` отклоняется.
+Прежняя версия плагина пропускала это ограничение. Сам OpenAPI-контракт не менялся.
+Не используйте пустой patch в формах и фикстурах, которые проверяются этой схемой.
 
 ## Какие файлы можно менять
 
@@ -141,25 +147,25 @@ Zod object schemas сохраняют прежнюю политику: допо�
 | ---------------------------------- | --------- | -------------- | ---------------------------------- |
 | `openapi/`                         | Да        | Да             | Источник истины                    |
 | `redocly.yaml`                     | Да        | Да             | Валидация и bundle                 |
-| `kubb.config.ts`, `generators/`    | Да        | Да             | Generation и post-generation       |
-| Public facets и `client-config.ts` | Да        | Да             | Стабильный API и runtime transport |
+| `kubb.config.ts`, `generators/`    | Да        | Да             | Генерация и обработка результата       |
+| Public facets и `client-config.ts` | Да        | Да             | Стабильный API и транспорт |
 | `bundled.yaml`                     | Нет       | Нет            | Временный bundle Redocly           |
-| `codegen/`                         | Да        | Нет            | Generated implementation           |
+| `codegen/`                         | Да        | Нет            | Сгенерированная реализация           |
 
-Kubb использует `output.clean: true`: следующий `gen` удалит ручные и устаревшие файлы из
+Kubb использует `output.clean: true`. Следующий `gen` удалит ручные и устаревшие файлы из
 `codegen/`. Меняйте источник, конфиг или постгенератор и повторяйте генерацию.
 
 ## Что появляется в `codegen/`
 
 | Путь                           | Содержимое                                                       |
 | ------------------------------ | ---------------------------------------------------------------- |
-| `types/`                       | OpenAPI types и `as const` enum objects                          |
-| `clients/`                     | SDK с `path`/`query`/`body` options поверх проектного транспорта |
-| `schemas/`, `schema-facade.ts` | Zod 4 schemas и публичные `z...` aliases                         |
-| `query.ts`                     | Query/mutation/infinite options и tagged keys                    |
-| `faker/`, `mocks.ts`           | Faker factories и публичные request/response aliases             |
-| `cache-tags/`                  | Server-only cache tag namespaces                                 |
-| `mock-client-routes.ts`        | Method/path/status → Faker factory                               |
+| `types/`                       | Типы OpenAPI и объекты enum с `as const`                          |
+| `clients/`                     | SDK с опциями `path`/`query`/`body` поверх проектного транспорта |
+| `schemas/`, `schema-facade.ts` | Схемы Zod 4 и публичные алиасы `z...`                         |
+| `query.ts`                     | Опции Query, mutation и infinite, ключи с тегами                    |
+| `faker/`, `mocks.ts`           | Фабрики Faker и публичные алиасы запросов и ответов             |
+| `cache-tags/`                  | Серверные пространства имён тегов кеша                                 |
+| `mock-client-routes.ts`        | Соответствие метода, пути и статуса фабрике Faker                               |
 
 Числовые алиасы вроде `Pet2`, порядок файлов и пути плагинов не входят в контракт приложения.
 
@@ -178,13 +184,13 @@ import { zPet } from '#/api/schemas'
 
 Доступны ровно шесть точек входа: `#/api`, `/client`, `/query`, `/schemas`, `/mocks` и
 `/cache-tags`. Файлы `src/api/index.ts`, `query.ts`, `schemas.ts` и `cache-tags.ts`
-реэкспортируют generated API; `client.ts` и `mocks.ts` задают runtime API. Отдельного npm-манифеста
-с `exports` больше нет; пути разрешает корневой алиас `#/*`.
-Внутренности `codegen/` и числовые алиасы зависят от версии генератора: не импортируйте их.
+реэкспортируют сгенерированный API. `client.ts` и `mocks.ts` задают runtime API. Отдельного
+npm-манифеста с `exports` больше нет. Пути разрешает корневой алиас `#/*`.
+Внутренние файлы `codegen/` и числовые алиасы зависят от версии генератора. Не импортируйте их.
 
 ## SDK options и result model
 
-Параметры пути передаются в `path`, строки запроса — в `query`, тело JSON — в `body`:
+Передавайте параметры пути в `path`, параметры строки запроса в `query`, тело JSON в `body`:
 
 ```ts
 const result = await getPetById({
@@ -210,9 +216,10 @@ const { data, response } = await getPetById({
 })
 ```
 
-Успешный JSON-ответ проверяется сгенерированной схемой Zod; невалидный возвращает `ZodError` в `error` по умолчанию и бросает его при `throwOnError: true`.
+SDK проверяет успешный JSON-ответ сгенерированной схемой Zod. Если ответ невалиден, SDK
+по умолчанию возвращает `ZodError` в `error`, а при `throwOnError: true` бросает исключение.
 `DELETE` с описанным статусом `204` возвращает `data: undefined` и исходный `Response`.
-Нативные опции Fetch/Next.js передаются вместе с опциями SDK:
+Передавайте нативные опции Fetch и Next.js вместе с опциями SDK:
 
 ```ts
 await getPetById({
@@ -224,7 +231,7 @@ await getPetById({
 
 ## TanStack Query composition
 
-Генератор создаёт фабрики опций, а не готовые хуки `use...`:
+Генератор создаёт фабрики опций. Готовые хуки `use...` не генерируются:
 
 ```tsx
 'use client'
@@ -278,3 +285,7 @@ const pets = useInfiniteQuery({
 - [Как работает режим моков](mock-mode.md)
 - [Кеширование и сгенерированные теги](../architecture/cache-and-streaming.md)
 - [Как тестировать проект](../testing/testing.md)
+
+Для интеграции сгенерированных опций с Cache Components, гидратацией и Partial Prefetching
+используйте [руководство по кешированию](../architecture/cache-and-streaming.md).
+Пример формы с публичным SDK находится в [руководстве форм](../ui/forms.md).

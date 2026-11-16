@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:999132cc1cc05a31f61eb011a4bfb996a55fe542bf8e11764fed33c5e91241f5",
+  "claims": [
+    {
+      "id": "claim_361ad0e9d15448f592c51d9440386a29",
+      "statement": "Проект использует Next.js 16.4.6 с включёнными Cache Components и Partial Prefetching.",
+      "evidence": [
+        {
+          "resource": "repo://next.config.ts",
+          "version": "repo-file-v1:sha256:e2a14ed51741f10b34748290f05ecfe730dbc92cbd956a28c23a87a5579984e3"
+        },
+        {
+          "resource": "repo://package.json",
+          "version": "repo-file-v1:sha256:81b1b625cddfa7f91097b440e88ead198b4461610aa9aa72ab7e147d53350919"
+        }
+      ]
+    },
+    {
+      "id": "claim_8865674359b34198af23051b75828529",
+      "statement": "ForesightLink вызывает router.prefetch по сигналу ForesightJS и всегда передаёт native Next.js Link prefetch=false; prop обёртки управляет ForesightJS.",
+      "evidence": [
+        {
+          "resource": "repo://src/components/utilities/foresight-link/index.tsx",
+          "version": "repo-file-v1:sha256:fade00e7612aefaddde35ca415f122426c3b14b32ffba0d49ceb0ef21293e04a"
+        }
+      ]
+    },
+    {
+      "id": "claim_435b0af0a2ea42ca94e79558bef36383",
+      "statement": "Отдельная команда test:e2e:production выполняет build и E2E с временными fixtures, затем удаляет fixtures и пересобирает приложение; Foresight suite активируется через FORESIGHT_E2E, а локальные E2E по умолчанию используют dev.",
+      "evidence": [
+        {
+          "resource": "repo://playwright.config.ts",
+          "version": "repo-file-v1:sha256:d11b7b9f7fbb5efd3a9790ee0483ec8c13d7ecab987b9328b7cd89793790b3d6"
+        },
+        {
+          "resource": "repo://src/tests/e2e/foresight.spec.ts",
+          "version": "repo-file-v1:sha256:219aff977d901d23dfc913ebbef01edb47f9480297bd3a51b43f8bf440d4bab8"
+        },
+        {
+          "resource": "repo://tools/test-production-prefetch.mjs",
+          "version": "repo-file-v1:sha256:a3b81e5256b38855d95595ec06b8adc44a752090fb70adff6ca3f2acdc90bafb"
+        }
+      ]
+    },
+    {
+      "id": "claim_dad8443a2a84401e94bea8f2e4f2e681",
+      "statement": "В проекте не установлен @next/playwright и не включён exposeTestingApiInProductionBuild.",
+      "evidence": [
+        {
+          "resource": "repo://next.config.ts",
+          "version": "repo-file-v1:sha256:e2a14ed51741f10b34748290f05ecfe730dbc92cbd956a28c23a87a5579984e3"
+        },
+        {
+          "resource": "repo://package.json",
+          "version": "repo-file-v1:sha256:81b1b625cddfa7f91097b440e88ead198b4461610aa9aa72ab7e147d53350919"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.2",
+    "at": "2026-11-16T15:55:30.306Z"
+  }
+}

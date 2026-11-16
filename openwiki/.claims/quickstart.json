@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:4f55a9c06410aec6eded6f15fee2fc728b71bb4604286a40771f6e0f69ba9bca",
+  "pageVersion": "sha256:bf2aff881ba60d9abd114223055fa4edac4603b742b7aedb36f90e0f703381df",
   "claims": [
     {
       "id": "claim_1f68b26247c846e8be994820b73c382e",
@@ -8,13 +8,45 @@
       "evidence": [
         {
           "resource": "repo://package.json",
-          "version": "repo-file-v1:sha256:376995b6d4aa1cbde81ce9232c4fa13fb84d23e7576d5e6048567137cba44e33"
+          "version": "repo-file-v1:sha256:81b1b625cddfa7f91097b440e88ead198b4461610aa9aa72ab7e147d53350919"
+        }
+      ]
+    },
+    {
+      "id": "claim_5dba41ace2df4242980c9abaa2ad55c4",
+      "statement": "Перед UI-изменениями AGENTS.md направляет к COMPONENTS.md и DESIGN.md; документы задают карту общих компонентов и визуальные правила.",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md",
+          "version": "repo-file-v1:sha256:677fc49431378957bd081b4c53c57da558a97603c9d5e1aa77e0a5d27e15ee02"
+        },
+        {
+          "resource": "repo://COMPONENTS.md",
+          "version": "repo-file-v1:sha256:e2cf05104591b7a612939ead32be5b18f7903fc9c567de8526915477942a3f67"
+        },
+        {
+          "resource": "repo://DESIGN.md",
+          "version": "repo-file-v1:sha256:7b211036525926bcabe86735926cdf6a40b50c983e2886cdd3fed70fb5f517f5"
+        }
+      ]
+    },
+    {
+      "id": "claim_ac5c5ad83a85442a8a80087b11aab706",
+      "statement": "ARCHITECTURE.md закрепляет vertical slice и clean architecture, а AGENTS.md направляет к контракту и OpenWiki при работе с архитектурой.",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md#L17-L21",
+          "version": "repo-lines-v1:sha256:6aab12dac771cbcc919f979389d2b5d93155e3581cff9f8c522d33d387890cc3:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTQ1MzZiNDZhYTYyOTBjMGUyMmE2MGYwYjkxZWNmMGJmZDAwZmRlNmZjYzRkNTZiYTA0N2Q0OGVhMDhiNjFlNiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMDljOWRmNGVjOTZhNTdmMGQwOTgwNjA0YWQxOGUyZDJjYzU0NTYwZDA0YTViZTRkMmFlNjQ2MTVkZWFiMTI1YSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMGJkYzdiYzc2OWUwYjMzOGM5ODcxNmNmMTZlYzIxMThhZTljMDg3ZjVhZTRlOWIyNjYyZTk0YjI1ZTcwMGNlZiJ9"
+        },
+        {
+          "resource": "repo://ARCHITECTURE.md#L1-L30",
+          "version": "repo-lines-v1:sha256:ceef24c113d197a1947c55373d4ee990c380b5b54bfb106dd3c535d060d11c88:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBhMWUyYzRiNTI4ZjM4NTMyZDZlOTJmYjA2MTNkYTRhMTMxMzA1YmI2Y2MzYjYyY2UwMWM0OTJjMjJhYjkzMDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE2ODhiODdmYTE1ZTgxYzk5ZGYwMWYxNzcwNGM0ODFkYzY0MWNjZmVmMjBjYjY5ODRjYzU5MTFkNmVhOWQwY2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImNlMjVlMTk4ZjcwOTUxNTNhOWQzZDU3NWY4NTIxNzYwYzgyY2Y4Mjg2NzY0OTdhZjVhNWE0Zjc4MDdhNzYyNWYifQ"
         }
       ]
     }
   ],
   "verification": {
     "by": "openwiki/0.7.2",
-    "at": "2026-11-16T14:30:17.316Z"
+    "at": "2026-11-16T15:55:30.306Z"
   }
 }

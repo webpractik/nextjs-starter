@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:98eb86f6893ebae4f00e2ee5a95bf281ba14dc22b2746f6380a5d253c01b9392",
+  "pageVersion": "sha256:1597dd7cf8333c7cd304f704c598a0c20fda9614d9d3b0dd6efb9b8b4909b19e",
   "claims": [
     {
       "id": "claim_b1c7bdbf0a30492690cb55a05f802748",
@@ -8,21 +8,21 @@
       "evidence": [
         {
           "resource": "repo://vitest.config.ts",
-          "version": "repo-file-v1:sha256:179e6e755beb5f2abe7a4967dfa8ad8db6ddd10a845265c47b63a31c478d133f"
+          "version": "repo-file-v1:sha256:4f759e07ae99f4530d1ec4ff0cc32ad2360c3c3fce58171c7356ba67cf2d3986"
         }
       ]
     },
     {
       "id": "claim_ccc548fac4384267b9b50e8ab323f0c3",
-      "statement": "Playwright поднимает npm run dev или npm run prod по PLAYWRIGHT_SERVER_MODE/CI; fresh production build выполняется отдельно.",
+      "statement": "Playwright запускает npm run dev либо tools/start-standalone.mjs по PLAYWRIGHT_SERVER_MODE/CI; fresh production build выполняется отдельно.",
       "evidence": [
         {
-          "resource": "repo://package.json",
-          "version": "repo-file-v1:sha256:376995b6d4aa1cbde81ce9232c4fa13fb84d23e7576d5e6048567137cba44e33"
+          "resource": "repo://playwright.config.ts",
+          "version": "repo-file-v1:sha256:d11b7b9f7fbb5efd3a9790ee0483ec8c13d7ecab987b9328b7cd89793790b3d6"
         },
         {
-          "resource": "repo://playwright.config.ts",
-          "version": "repo-file-v1:sha256:af1994533efc5d4ece994ae3f8e7b3271e7e2b2a59f4281cb7813adc86d103b0"
+          "resource": "repo://tools/start-standalone.mjs",
+          "version": "repo-file-v1:sha256:954c3c698b4917674c1e64e96d797e28c71408d8b3ba5969bc088bb2b2e989f9"
         }
       ]
     },
@@ -41,10 +41,6 @@
       "statement": "Общие Allure setup hooks назначают layer, feature и severity, а тесты задают индивидуальные story.",
       "evidence": [
         {
-          "resource": "repo://src/api/schemas.test.ts",
-          "version": "repo-file-v1:sha256:e03540a30db414f51c429b69cb592f24bca56b59b9e5432fa034aefc0ae30b6d"
-        },
-        {
           "resource": "repo://src/tests/allure-labels.ts",
           "version": "repo-file-v1:sha256:a8774fce7abf26ee9efbad8c8e61b3937d6034f19e42bd2b8f02345c22b47172"
         },
@@ -55,12 +51,88 @@
         {
           "resource": "repo://src/tests/setup-allure-unit.ts",
           "version": "repo-file-v1:sha256:592fd480c38e6d72e958d2e2a7fd229a76f227fa1223114d97659b9cf47ed237"
+        },
+        {
+          "resource": "repo://tests/unit/src/api/schemas.test.ts",
+          "version": "repo-file-v1:sha256:e03540a30db414f51c429b69cb592f24bca56b59b9e5432fa034aefc0ae30b6d"
+        }
+      ]
+    },
+    {
+      "id": "claim_82abe71ff1d244ecb17d900603617710",
+      "statement": "Vitest выбирает unit тесты только в tests/unit и component тесты в tests/component; Storybook читает stories дерево.",
+      "evidence": [
+        {
+          "resource": "repo://.storybook/main.ts#L10-L15",
+          "version": "repo-lines-v1:sha256:c71c9e3c6fb92b9bfcb48a7662c4c2ee2d2e7977146c55c642451d18dfac7f9e:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODYzNTVjOTE3YzA5M2IzNjk2OGEwYTZiOWUyYzIxYzIxOGIzNDgyZjYzMTYyMDgzNTI4Njc1MzUxYTU4Y2I0MCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDYxMDcyMDYyYjFhMGU1MTAxNWZjYzIyN2ZmYmQxZTgwZjE4Mjc0MGUxYzkwZmViZDQ2N2RiYjQzY2Q5ZWNlNyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjVmNmRmZDBmM2YyNDMyOTgzYzdiN2YwOWJmNjUyMTQ3YzgzZGE5OWVmZTQwYjQ2ZTFmNjMyZDRjMjI0OTk0YiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiN2JmZjEyMDI3N2Y2ZWVmMTQ5MTBmZmYyZGNiNzQ0OTE3OWE1NTE1YTVkMDUzMTE3YzNjYTUyYzNkYjFhZjNkZSJ9"
+        },
+        {
+          "resource": "repo://vitest.config.ts#L126-L155",
+          "version": "repo-lines-v1:sha256:008b7f4cc09a952dc62002b7c1efb38f620a16f18c6eb4da1219605bbd7d8e90:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYxNzQ5MmE3Mjg2YjY1N2QyZTNjNWU1NGU0MjZiY2JjNzJjODRhZjA2MDlkNzJjMGNhMjZjOGE4ZWQxYmNlNzEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTdjZDI5ZTM4MmM4MzhmY2E1NWU1YTlmMzE2MWJiNzliZjA4MDI1ZTk0OTkyYzRhOTI2ZmUwNjRhYzI2YzIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjVkOTIzNTY0MWE3OGIzMGY3Y2FmMTQ2Yjk2NzFhMGNmMDhmYmM0ZjU0ZDdjZDY1ZDIwYWVjN2U1ODEyMWRkMDYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJhMTJiYTFmOGNjNTlkYjk5NzhjNmQxY2Y4NGI2NzM0YWQ3YmYzZWU5NjY5M2ZlZmNlODVmNGFhMWFlYzliNDgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_28d397d42d594d26ad9420ec4125d099",
+      "statement": "check:structure проверяет директории тестов, stories только для src/components с зеркальным путём, обязательные тесты компонентов src/components и app/**/_components, обязательные stories компонентов src/components и CSS Modules только в src/styles; он включён в verify:fast и pre-commit.",
+      "evidence": [
+        {
+          "resource": "repo://lefthook.yml#L4-L11",
+          "version": "repo-lines-v1:sha256:be57f622f122611a4f87b02a6afa9514234c61d9b6e4a4a126ae7294839ae0d3:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTY0YmY0N2E0M2MzMTczODEzZjY3N2Y3NGRmMjNkNzcyN2YxMzVjMjUxNTJjNzFkYzkyOThmYWFkZmJlMDQ1NyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTk0NDI5YjhlMjA2ZTc4MTZmNTEwMGJjMzUwMDRiN2JhMWUyNzdiNjMwNTVjOGIyNGNiNzVlNDFjNzM1MDI5OSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMDAyZTE5ZTIzNWNjOTRiMzgyOWFmN2JiZDc3ZmEzNzZmODgyNmM4YjY4ODNmMDZhYzg4MjEzM2Q2NzRjMzA3OCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTIyMTJiMzZiZTQzYWNhOTdmZDcyNjgwNWY3Yjc2Mzk1OTk3YjM3OTBhMTU4YWY3MTE1NDc5MWEzYTJkMWMyOSJ9"
+        },
+        {
+          "resource": "repo://package.json#L17-L37",
+          "version": "repo-lines-v1:sha256:e49dac0c9ce98292dcf622dd2a72742b57cc9315c826eb35234fce1ce1729992:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRiM2MyYzk2MjhjMjA3ZTU1YTFhNzdhZGQ3ZjY3YzE1ODUzZDAxMTQzZmJjODA2MjYyZmYxZWQ3MmI5OTYzZjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY0MzBkYjQ3MTc5MGMyYzZiMjE5NTAwM2Y3MWJhNGU4YTQ1YjBmOTFjNzc2MjA3ZjgwZWI0N2E4Y2VhODM3ODQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhiYmIzZmE3NjBjM2NlM2ZjYWM1NTA1NjdiYTBhNjY4ZDA1ZTU0YzMwMjQ5YjE0YWM5N2MwNmU4NThlZDg2OTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI4YjRjNWM0NjA3OTEyOTgxNzIwNjQyYzU3OGYwYThjODQzNGU4ODUwOTA3MmJhMmQyZDFkNTE5MjRhNzRlYWUifQ"
+        },
+        {
+          "resource": "repo://tools/check-structure.mjs",
+          "version": "repo-file-v1:sha256:8be2cd64864fe2258572e490ee4b559c5ef7b0b9af47dfc60e9d423db3b9cdbe"
+        }
+      ]
+    },
+    {
+      "id": "claim_b5c2221c9c634a06ad4fa22f5cea53d5",
+      "statement": "check:imports проверяет прямые публичные входы и транзитивные границы слоёв, учитывая type-only импорты и маркеры domain/application; он анализирует зависимости, но не runtime-поведение, авторизацию, секреты и RSC-сериализацию.",
+      "evidence": [
+        {
+          "resource": "repo://ARCHITECTURE.md#L198-L221",
+          "version": "repo-lines-v1:sha256:14c0413daab21d30ec18e9aa00dd8dbc3c43916907b816847b9b9bb7119cf457:eyJzZWxlY3RlZExpbmVDb3VudCI6MjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRiMTA5MThlMmM4NWM0ZWFhMGM3NDAxYmNmYzQyZjNjYmQzNmQzOWE2ZDAxNTAwZTAyODJiZjM2NWQzYTk1OTkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJkMjE5MDVkYzNjYmJjZTQ0OTg4MmE3ZjE1OWMzNDM2OTdjMGQ3Nzc0YmVlZmMyNDY1YjYyM2E2YTEwM2VhMDAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjljNGExMzQzODhhYTRiMjBiNTdiZWE5OGYzODIyYjc4MThmMjY5NjFhZmJjOGVkNTE5M2I4ODQwNTk0ZjYxZGMifQ"
+        },
+        {
+          "resource": "repo://tools/check-imports.mjs#L242-L303",
+          "version": "repo-lines-v1:sha256:3f9bc6033aa01d2ccd8126999fc29d11d1e21f6050931ec75ff4bed3e002d3b6:eyJzZWxlY3RlZExpbmVDb3VudCI6NjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwYWNiMjk4NWYzNTkwOGJjZGIxMmI0MDAwZGZmMTU4NjE3MDJjNzgxMjAwOTVkMTExMGI4N2ZkMTY1ZjIyZTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJiZDRjYTJlZTMyYjBkMWJkYjllYTU2OGZhMzYzNjUwZmNmYmIyMjhlNGNhMGMyYjk2MTdkZGYzZTU1YmFiNGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJiZDdkMmJkM2Y5ZWI2OGFjZTYyNzQyYjE4NTA3ZTA3NzY4YTMzYjg1YjBkYWUyNmJiMzZhZjg0OTUwNDY1MTUifQ"
+        },
+        {
+          "resource": "repo://tools/check-imports.mjs#L7-L95",
+          "version": "repo-lines-v1:sha256:fda78deea369f81ebd86271288dde95b8f109386008456e33ac33bfbc5b0f43d:eyJzZWxlY3RlZExpbmVDb3VudCI6ODksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhkNjk4ZTliMTcwYjY5ZjVkYTcxNDBkZmMwY2M3NWUxZmI5MjYxODRlOGNmMmZiODEwM2U0ZDkxZjc0ZmJkMjMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcwYzhlZWJkNDgxMDdlOTU1MTBjMWQxYWYxOWZkOGY4OTRkNjJjZGYwMmNlMzJlNmYwODczYjkzNGM5MWNlNDkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImI2NmU0OTBjOTg1MWI0YTZlNjAzMjkxYmYwM2QwZWJkNDMyOTM2NDdiNjFjYTg0ZDk4YWUyNzhlNzNiNGY3NTQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_bd5d7e50ea6d472880d76adc121f33b8",
+      "statement": "verify:fast выполняет check:structure, check:imports, fmt:check, lint, tsc по порядку; Lefthook pre-commit вызывает этот набор, а регрессионные тесты check:imports запускаются отдельно в unit project и проверяют границы, маркеры, публичные входы, динамические импорты и обходы через локальные helpers и barrels.",
+      "evidence": [
+        {
+          "resource": "repo://lefthook.yml#L4-L11",
+          "version": "repo-lines-v1:sha256:be57f622f122611a4f87b02a6afa9514234c61d9b6e4a4a126ae7294839ae0d3:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTY0YmY0N2E0M2MzMTczODEzZjY3N2Y3NGRmMjNkNzcyN2YxMzVjMjUxNTJjNzFkYzkyOThmYWFkZmJlMDQ1NyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTk0NDI5YjhlMjA2ZTc4MTZmNTEwMGJjMzUwMDRiN2JhMWUyNzdiNjMwNTVjOGIyNGNiNzVlNDFjNzM1MDI5OSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMDAyZTE5ZTIzNWNjOTRiMzgyOWFmN2JiZDc3ZmEzNzZmODgyNmM4YjY4ODNmMDZhYzg4MjEzM2Q2NzRjMzA3OCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTIyMTJiMzZiZTQzYWNhOTdmZDcyNjgwNWY3Yjc2Mzk1OTk3YjM3OTBhMTU4YWY3MTE1NDc5MWEzYTJkMWMyOSJ9"
+        },
+        {
+          "resource": "repo://package.json#L17-L37",
+          "version": "repo-lines-v1:sha256:e49dac0c9ce98292dcf622dd2a72742b57cc9315c826eb35234fce1ce1729992:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRiM2MyYzk2MjhjMjA3ZTU1YTFhNzdhZGQ3ZjY3YzE1ODUzZDAxMTQzZmJjODA2MjYyZmYxZWQ3MmI5OTYzZjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY0MzBkYjQ3MTc5MGMyYzZiMjE5NTAwM2Y3MWJhNGU4YTQ1YjBmOTFjNzc2MjA3ZjgwZWI0N2E4Y2VhODM3ODQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhiYmIzZmE3NjBjM2NlM2ZjYWM1NTA1NjdiYTBhNjY4ZDA1ZTU0YzMwMjQ5YjE0YWM5N2MwNmU4NThlZDg2OTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI4YjRjNWM0NjA3OTEyOTgxNzIwNjQyYzU3OGYwYThjODQzNGU4ODUwOTA3MmJhMmQyZDFkNTE5MjRhNzRlYWUifQ"
+        },
+        {
+          "resource": "repo://tests/unit/tools/check-imports.unit.test.ts",
+          "version": "repo-file-v1:sha256:ab7db381ab3af13cb7b835fb9f92d991f1452afc528ea38df6c4bed12eaf25bd"
+        },
+        {
+          "resource": "repo://vitest.config.ts",
+          "version": "repo-file-v1:sha256:4f759e07ae99f4530d1ec4ff0cc32ad2360c3c3fce58171c7356ba67cf2d3986"
         }
       ]
     }
   ],
   "verification": {
     "by": "openwiki/0.7.2",
-    "at": "2026-11-16T14:41:28.183Z"
+    "at": "2026-11-16T15:52:45.490Z"
   }
 }

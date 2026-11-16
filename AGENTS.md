@@ -8,11 +8,16 @@
 - Начните с `git status --short`. Сохраняйте чужие изменения; diff ограничивайте задачей.
 - Идентификаторы пишите на английском. Документацию, комментарии и пользовательский текст
   оформляйте на языке окружающего файла; основная документация русская.
+- Документацию проекта ведите только в OpenWiki (`openwiki/`). Новые руководства и описания
+  поведения размещайте в соответствующем разделе OpenWiki, обновляя навигацию и ссылки.
+  Не создавайте отдельный каталог `docs/` и копии страниц вне OpenWiki. При переносе страниц
+  заменяйте все ссылки на прежние пути.
 
 ## Навигация
 
 - [Быстрый старт](openwiki/quickstart.md) — установка и запуск.
-- [Архитектура](openwiki/architecture/overview.md) — слои, импорты и размещение кода.
+- [Архитектурный контракт](ARCHITECTURE.md) — принятые правила vertical slice и clean architecture.
+- [Архитектура в OpenWiki](openwiki/architecture/overview.md) — границы и применение правил в Next.js.
 - [Карта компонентов](COMPONENTS.md) — UI, формы, providers и utilities. Проверьте её перед
   добавлением компонента; обновляйте при изменении структуры `src/components/`.
 - [Дизайн интерфейса](DESIGN.md) — токены и правила оформления в формате
@@ -34,22 +39,36 @@
 - Прямые dependencies фиксируются exact versions. Сохраняйте `save-exact`, `engine-strict` и
   `legacy-peer-deps` в `.npmrc`; обновляйте `package-lock.json` вместе с манифестом.
 - Установленные библиотеки и существующие helpers предпочтительнее новой зависимости.
-- Проектные skills, OpenSpec и каталог tasks удалены. Не восстанавливайте их без запроса.
+- Проектные skills находятся в `.agents/skills/`; устанавливайте их через `npx skills`.
+  OpenSpec и каталог tasks удалены. Не восстанавливайте их без запроса.
 
 ## Архитектура и импорты
 
+- Следуйте [ARCHITECTURE.md](ARCHITECTURE.md): vertical slice по пользовательскому сценарию,
+  clean architecture внутри сценария. Это правило развития; пустые слои не создавайте.
 - Зависимости направлены от `app/` к `src/modules/` и общему `src/*`. Общий код не импортирует
   маршруты и доменные модули. UI-примитивы не зависят от API, env и бизнес-сущностей.
 - `src/modules/` создаётся только для логики минимум двух маршрутов. Модули не импортируют друг
   друга; взаимодействие организуется композицией route/layout или dependency injection.
 - Начинайте в узкой области: компонент → маршрут → модуль → shared. Route-local UI хранится в
   единственной `app/.../_components/`; локальные schemas/constants/utils — рядом с маршрутом.
+- В модуле группируйте код по сценариям. Domain и application не импортируют React, Next.js,
+  TanStack Query, env или SDK; необходимые IO-порты принадлежат сценарию. Конкретные адаптеры
+  передаются обычными аргументами из композиции маршрута или модуля.
+- Простой экран может использовать публичный SDK или Query options напрямую. Выделяйте use case
+  при появлении бизнес-правил или последовательности операций; не оборачивайте каждый SDK-вызов.
 - Не создавайте пустые каталоги или файлы «на будущее». Компоненты и каталоги — kebab-case,
   React-экспорты — PascalCase.
 - Алиасы: `~/*` — корень, `@/*` — `app/`, `#/*` — `src/`. UI импортируется через
   `#/components/ui/<component>`, API — через `#/api` и публичные facets.
 - `index.ts`/`index.tsx` определяет публичный API. Не используйте generated deep imports и
   внутренние файлы компонентов вне их области.
+- Серверные и клиентские экспорты модуля разделяйте через `server.ts` и `client.ts` по необходимости;
+  общий index оставляйте универсальным. Суффикс `.server.ts` не заменяет `import 'server-only'`
+  в новых адаптерах с секретами. Направление слоёв и runtime-границу проверяйте отдельно.
+- `npm run check:imports` в `verify:fast` проверяет границы импортов. Чистые файлы вне
+  `domain/` и `application/` начинайте с `/** @architecture domain */` или
+  `/** @architecture application */`; детали и ограничения описаны в ARCHITECTURE.md.
 - Type-only импорты отделяйте через `import type`. Не подавляйте ошибки через `any`,
   `@ts-ignore` или широкие assertions. Для object shapes используйте `interface`; unions,
   mapped/conditional types остаются `type`. Вместо runtime `enum` используйте unions или `as const`.
@@ -61,8 +80,9 @@
   `npx --yes --package=@google/design.md@0.4.0 designmd lint DESIGN.md`.
 - Server Components по умолчанию; `'use client'` только для интерактивных листьев с state,
   effects, browser API или client-only библиотекой. Не поднимайте boundary без необходимости.
-- `src/env/server.ts` — server-only. Не передавайте секреты клиенту. SDK, типы и Zod сохраняйте
-  universal; для явно ограниченных файлов используйте `.server.ts`/`.client.ts`.
+- Значения из `src/env/server.ts` читайте только на сервере; в текущем файле нет маркера
+  `import 'server-only'`, доступ защищает env-библиотека. Не передавайте секреты клиенту.
+  SDK, типы и Zod сохраняйте universal; для ограниченных файлов используйте `.server.ts`/`.client.ts`.
 - Переиспользуйте UI из карты компонентов. Base UI оборачивайте тонко, сохраняя accessibility
   semantics и props. Не заменяйте Base UI на Radix без требования.
 - Варианты оформляйте через CVA, объединяйте classes существующим `cn`. Отдельный `variants.ts`
@@ -70,11 +90,14 @@
 - Формы создавайте через `useAppForm` из `#/components/ui/form`: нативный `<form>`,
   `event.preventDefault()`, `void form.handleSubmit()`, поля через `form.AppField`, компоненты
   уровня формы внутри `form.AppForm`. Zod передаётся напрямую через Standard Schema.
-- Для reusable UI добавляйте соседние stories; интерактивность проверяйте browser component test.
+- Для reusable UI из `src/components/` добавляйте stories в `stories/src/components/` с зеркальным путём; интерактивность проверяйте browser component test.
   Сохраняйте клавиатурную навигацию, фокус, accessible names и состояния disabled/invalid.
 
 ## Next.js, env и BFF
 
+- Для внутренних переходов по умолчанию используйте `ForesightLink` из
+  `#/components/utilities/foresight-link`. Прямой импорт `next/link` разрешён только внутри
+  этой обёртки; правило контролирует lint. Для внешних URL используйте `<a>`.
 - App Router и typed routes; Pages Router не добавляйте. Сохраняйте `output: 'standalone'`.
 - `cacheComponents: true`; React Compiler включается только в production. Перед изменением cache
   directives сверяйтесь с актуальными Next.js docs. `use cache: private` остаётся экспериментом.
@@ -118,10 +141,10 @@
 ## Проверки и готовность
 
 - Для bug fix сначала добавьте минимальный regression test и подтвердите падение до исправления.
-- Vitest unit работает в Node и выбирает `*.unit.test.ts(x)` и `src/api/**/*.test.ts`.
+- Vitest unit работает в Node и выбирает `tests/unit/**/*.test.ts(x)`.
   Component project работает в реальном Chromium через `vitest-browser-react`; выбирает
-  `*.component.test.ts(x)`, `app/**/*.test.tsx`, `src/**/*.test.tsx`.
-- Обычный `src/**/*.test.ts` вне API не запускается. Не используйте jsdom assumptions и
+  `tests/component/**/*.test.ts(x)`.
+- Тесты рядом с исходниками запрещены. Не используйте jsdom assumptions и
   самодельные mocks там, где уже есть fixtures/aliases в `src/tests/`.
 - После изменений запускайте formatter check и узкие tests. Для TS/React обязательны
   `npm run tsc` и `npm run lint`; для route/config/env/proxy — `npm run build`.
@@ -162,6 +185,24 @@ This repository has a generated `openwiki/` evidence index. It is optional just-
 - Treat source code and tests as authoritative. A brief's unknowns and review items are verification gaps, not automatic requirements.
 - Prefer the narrowest quiet validation that proves the changed behavior. Preserve complete failure output.
 
-OpenWiki is refreshed manually. GitHub Actions and GitLab CI are intentionally absent; do not recreate their workflows without an explicit request.
+The scheduled OpenWiki GitHub Actions workflow refreshes the repository wiki. Do not hand-edit generated OpenWiki pages unless explicitly asked; prefer updating source code/docs and letting OpenWiki regenerate.
 
 <!-- OPENWIKI:END -->
+
+## Структура тестов, stories и стилей
+
+- Unit-тесты находятся только в `tests/unit/`, компонентные только в `tests/component/`.
+  После префикса путь повторяет путь исходника от корня, включая `app/` или `src/`.
+  Например, `src/components/ui/button/button.tsx` соответствует
+  `tests/component/src/components/ui/button/button.component.test.tsx`.
+- Stories создаются только для `src/components/`, находятся в `stories/src/components/` и зеркалируют исходник. Для `app/` stories запрещены. Например,
+  `stories/src/components/ui/button/button.stories.tsx`.
+- Для каждого нового файла компонента `.tsx` в `src/components/` и `app/**/_components/`
+  обязателен тест (unit или component) с тем же базовым именем. Story обязательна только для `src/components/`. `index.tsx` с реализацией также проверяется; чистые re-export файлы исключены. Интерактивность проверяется component test.
+- `npm run check:structure` контролирует размещение, зеркальность директорий тестов,
+  соответствие stories исходникам, наличие тестов и stories у компонентов и CSS Modules.
+  Проверка входит в `verify:fast` и pre-commit. Исключений для существующих компонентов нет.
+- Приоритет оформления — Tailwind classes и существующие tokens. CSS Modules
+  (`*.module.css`, `*.module.scss`, `*.module.sass`, `*.module.less`) допустимы только
+  в `src/styles/`; рядом с компонентами и маршрутами они запрещены.
+- `src/tests/` содержит только общую инфраструктуру, fixtures, mocks и Playwright E2E.

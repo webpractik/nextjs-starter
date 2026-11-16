@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:70f11cf1282b5f355856b91a921c9fe715bc291991d2e003473d5a506c8ec8a4",
+  "claims": [
+    {
+      "id": "claim_e9481abf78174ea498cdc851996f2f81",
+      "statement": "Проект использует Next.js 16.4.6 и включает Cache Components, Partial Prefetching и standalone output без пользовательских cacheLife и cacheHandlers в next.config.ts.",
+      "evidence": [
+        {
+          "resource": "repo://next.config.ts",
+          "version": "repo-file-v1:sha256:e2a14ed51741f10b34748290f05ecfe730dbc92cbd956a28c23a87a5579984e3"
+        },
+        {
+          "resource": "repo://package.json",
+          "version": "repo-file-v1:sha256:81b1b625cddfa7f91097b440e88ead198b4461610aa9aa72ab7e147d53350919"
+        }
+      ]
+    },
+    {
+      "id": "claim_ba37af6858464f6581ae21665905dcca",
+      "statement": "Сгенерированные revalidatePet и revalidatePets вызывают updateTag из server-only файла.",
+      "evidence": [
+        {
+          "resource": "repo://src/api/codegen/cache-tags/pets.ts",
+          "version": "repo-file-v1:sha256:2c57876ea9a24d3698f965ea23acf67b6e748c23fc6f143817b89502b2d255e0"
+        }
+      ]
+    },
+    {
+      "id": "claim_5337777ffbce4d3c8de2668af38c54b3",
+      "statement": "Стандартный apiFetch на сервере может читать next/headers для runtime mocks, а Config допускает подмену fetch.",
+      "evidence": [
+        {
+          "resource": "repo://src/api/client-config.ts",
+          "version": "repo-file-v1:sha256:041d8247d261d484660f67b6dab3c61b125fa9c1a3165951191496301a441141"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.2",
+    "at": "2026-11-16T15:55:30.306Z"
+  }
+}

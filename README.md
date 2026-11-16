@@ -1,14 +1,15 @@
 # Next.js Starter
 
-Стартовый проект на Next.js для production: общие компоненты, типизированный API-клиент,
-наблюдаемость и браузерные тесты.
+Шаблон веб-приложения на Next.js 16 App Router, React 19, TypeScript 7 и Tailwind CSS 4.
+В проекте есть компоненты Base UI, типизированные формы, API-клиент из OpenAPI 3.2,
+моки, Sentry, OpenTelemetry, метрики, Vitest, Playwright и Storybook.
 
 ## Быстрый старт
 
-Требования: Node.js 26.13.1 или новее в ветке 26.x и npm 11.x.
+Нужны Node.js 26.13.1+ в ветке 26.x и npm 11.x. Создайте проект на основе шаблона:
 
 ```bash
-npx create-next-app@latest my-app --example https://github.com/webpractik/nextjs-starter --use-npm
+npx create-next-app@latest my-app --example https://github.com/webpractik/nextjs-starter --use-npm --skip-install
 cd my-app
 npm ci
 test -e .env || cp .env.example .env
@@ -16,116 +17,95 @@ npx lefthook install
 npm run dev
 ```
 
-Откройте <http://localhost:3000>, как задано в `.env.example`.
+Откройте [localhost:3000](http://localhost:3000).
+Если репозиторий уже склонирован, начните с `npm ci` в его корне.
+Существующий `.env` сверьте с `.env.example`. Next.js проверяет переменные до компиляции.
+Для работы SDK без бэкенда задайте `MOCK_MODE=true` и `NEXT_PUBLIC_MOCK_MODE=true`.
+Petstore в контракте показывает структуру API. Самого бэкенда в проекте нет.
 
-Существующий `.env` не перезаписывается и не дополняется: сверьте его с `.env.example`.
-Next.js проверяет переменные при загрузке конфига. Заменяя локальные заглушки, следуйте
-[справочнику переменных окружения](openwiki/operations/environment.md).
+Адрес API на сервере задаёт `BACK_INTERNAL_URL`. Браузер при разработке отправляет запросы
+через `NEXT_PUBLIC_BFF_PATH`, по умолчанию `/bff-api`. В production он использует
+`NEXT_PUBLIC_BACK_URL`.
+Перед развёртыванием замените локальные значения и заглушки Sentry по
+[справочнику окружения](openwiki/operations/environment.md). `.env` не коммитьте.
 
-## Возможности
+## Основные команды
 
-- Next.js 16 App Router, React 19, TypeScript 7 и Tailwind CSS 4.
-- Cache Components включены; React Compiler работает только в production-сборках.
-- UI и API находятся в `src/components/ui` и `src/api`; зависимости устанавливаются из корня.
-- UI-примитивы в стиле Base UI/shadcn, безопасный вывод HTML и типизированная композиция
-  TanStack Form в `#/components/ui`.
-- Контракт OpenAPI 3.2, проверка Redocly и генерация Kubb 5: типы TypeScript, Fetch SDK,
-  плоский SDK, схемы Zod, опции TanStack Query, фабрики Faker и теги кеша.
-  Публичные точки входа: `#/api`, `/client`, `/query`, `/schemas`, `/mocks` и
-  `/cache-tags`.
-- [Режим моков](openwiki/development/mock-mode.md) работает на сервере и в браузере без бэкенда;
-  транспорт удаляет префикс API перед сопоставлением сгенерированного маршрута.
-- Sentry, OpenTelemetry, логи Adze и метрики Prometheus.
-- Модульные и браузерные компонентные тесты Vitest, Playwright E2E и Storybook.
-- Oxfmt, Oxlint, Knip, JSCPD, Lefthook и Commitizen.
+| Команда                       | Назначение                                                                               |
+| ----------------------------- | ---------------------------------------------------------------------------------------- |
+| `npm run dev`                 | Разработка с Turbopack                                                                   |
+| `npm run build`               | Production-сборка с `output: 'standalone'`                                               |
+| `npm run verify:fast`         | Структура файлов, границы импортов, форматирование, lint и TypeScript                    |
+| `npm run test`                | Все проекты Vitest. По отдельности их запускают `test:unit` и `test:component`           |
+| `npm run test:e2e`            | Playwright со своим сервером разработки. Порт `3108`, переопределение через `FRONT_PORT` |
+| `npm run test:e2e:production` | Свежая standalone-сборка, E2E и проверка предзагрузки ссылок                             |
+| `npm run verify`              | `verify:fast`, Knip, JSCPD, Vitest и E2E с сервером разработки                           |
+| `npm run storybook`           | Storybook на [localhost:6006](http://localhost:6006)                                     |
+| `npm run api:gen`             | Проверка OpenAPI и генерация SDK, схем, моков и функций кеширования                      |
 
-Контракт Petstore в `src/api/openapi/` демонстрирует кодогенерацию, без бэкенда и обработчиков
-Next.js. Kubb использует TypeScript 7 проекта без compiler hook; ограничения поддержки
-OpenAPI 3.2 и проверки совместимости описаны в [API codegen](openwiki/development/api-codegen.md).
-
-## Формы
-
-`#/components/ui/form` экспортирует общую типизированную фабрику форм `useAppForm`. Она регистрирует
-поля text, textarea, number, date, phone, checkbox, switch, select, radio-group и slider вместе с
-`SubmitButton`.
-
-Передавайте событие отправки нативной `<form>` экземпляру TanStack Form. Схемы Zod 4 поддерживают
-Standard Schema и передаются напрямую, без адаптера:
-
-```tsx
-'use client'
-
-import { z } from 'zod'
-
-import { useAppForm } from '#/components/ui/form'
-
-const projectSchema = z.object({ name: z.string().min(3) })
-
-export function ProjectForm() {
-    const form = useAppForm({
-        defaultValues: { name: '' },
-        validators: { onChange: projectSchema },
-        onSubmit: ({ value }) => {
-            // Отправьте типизированное значение на границу приложения.
-        },
-    })
-
-    return (
-        <form
-            onSubmit={(event) => {
-                event.preventDefault()
-                void form.handleSubmit()
-            }}
-        >
-            <form.AppField name="name">
-                {(field) => <field.TextField label="Название проекта" />}
-            </form.AppField>
-            <form.AppForm>
-                <form.SubmitButton>Сохранить</form.SubmitButton>
-            </form.AppForm>
-        </form>
-    )
-}
-```
-
-TanStack Form Devtools подключаются только при разработке, не в production и тестах. Импорты и
-работа с компонентами — в
-[справочнике `#/components/ui`](openwiki/ui/core.md).
-
-## Проверка
+Перед первым запуском браузерных тестов установите Chromium командой
+`npx playwright install chromium`. На Linux для установки системных зависимостей используйте
+`npx playwright install --with-deps chromium`.
+Для локального запуска production-сборки:
 
 ```bash
-npm run verify:fast # форматирование, lint и TypeScript
-npm run test        # все Vitest projects
-npm run test:e2e    # Playwright E2E с development server
-npm run verify      # полный локальный набор проверок
+npm run build
+node --env-file=.env tools/start-standalone.mjs
 ```
 
-`verify` запускает `verify:fast`, Knip, JSCPD, все проекты Vitest, затем Playwright E2E.
-Перед коммитом Lefthook форматирует файлы в индексе Git и запускает `verify:fast`.
+## Роутинг
 
-GitHub Actions и GitLab CI не настроены. Проверки и сборка запускаются локально командами выше.
+| URL                     | Файл и назначение                                                              |
+| ----------------------- | ------------------------------------------------------------------------------ |
+| `/`                     | Главная страница, `app/(public)/(home)/page.tsx`                               |
+| `/api/health`           | Проверка работы приложения, `app/api/health/route.ts`                          |
+| `/api/ready`            | Readiness без проверки внешних зависимостей, `app/api/ready/route.ts`          |
+| `/api/metrics`          | Метрики Prometheus, `app/api/metrics/route.ts`                                 |
+| `/robots.txt`           | Правила индексации, `app/robots.ts`. Сейчас индексация запрещена               |
+| `/sitemap.xml`          | Главная из `NEXT_PUBLIC_FRONT_URL`, `app/sitemap.ts`                           |
+| `/manifest.webmanifest` | Веб-манифест, `app/manifest.ts`                                                |
+| `/favicon.ico`          | Иконка сайта, `app/favicon.ico`                                                |
+| `/bff-api/:path*`       | В разработке `next.config.ts` проксирует запросы на `BACK_INTERNAL_URL/:path*` |
 
-## Служебные endpoints
+Группы `(public)` и `(home)` не входят в URL. Общий layout находится в `app/layout.tsx`.
+Для загрузки используйте `loading.tsx`, для ошибок `error.tsx` и `global-error.tsx`,
+для 404 `not-found.tsx`.
 
-- Health: `/api/health`
-- Readiness: `/api/ready`
-- Prometheus metrics: `/api/metrics`
+Новую страницу добавляйте в `app/<путь>/page.tsx`.
+HTTP-обработчик добавляйте в `app/<путь>/route.ts`.
+Локальный UI храните в `_components/` рядом с маршрутом.
+Для внутренних переходов используйте `ForesightLink` из
+`#/components/utilities/foresight-link`. Для внешних ссылок используйте `<a>`.
+Typed routes проверяют пути при компиляции.
 
-Health и readiness сейчас всегда возвращают `200`; readiness не проверяет внешние зависимости.
-Для локальной production-проверки выполните `npm run build`, затем `npm run prod`.
+## Структура и правила
+
+| Путь                                          | Содержимое                                            |
+| --------------------------------------------- | ----------------------------------------------------- |
+| `app/`                                        | Маршруты, layouts, страницы и HTTP-обработчики        |
+| `src/components/`                             | Общие UI-компоненты, формы, провайдеры и утилиты      |
+| `src/api/`                                    | OpenAPI-контракт, транспорт, генератор и SDK          |
+| `src/env/`, `src/mock-mode/`                  | Типизированное окружение и режим моков                |
+| `src/proxy/`, `src/observability/`            | Цепочка proxy, логи, метрики и телеметрия             |
+| `tests/unit/`, `tests/component/`, `stories/` | Тесты и stories с зеркальным путём исходника от корня |
+| `src/tests/`                                  | Общая тестовая инфраструктура, fixtures, mocks и E2E  |
+
+Алиас `@/*` указывает на `app/`, `#/*` на `src/`, `~/*` на корень проекта.
+Начинайте сценарий рядом с маршрутом. Переносите бизнес-логику в `src/modules/`,
+когда её используют минимум два маршрута.
+Общий UI импортируйте через `#/components/ui/<component>`, формы создавайте через `useAppForm`.
+API используйте через `#/api` и публичные точки входа. `src/api/codegen/` вручную не меняйте.
+
+Для компонентов в `src/components/` обязательны тест и story. Для `app/**/_components/`
+обязателен только тест, stories для `app/` запрещены. Unit-тесты храните в `tests/unit/`,
+компонентные тесты в `tests/component/`, а stories только в `stories/src/components/`.
+Размещение контролирует `npm run check:structure`, входящий в `verify:fast` и pre-commit.
+Используйте Tailwind и существующие токены. CSS Modules допустимы только в `src/styles/`.
 
 ## Документация
 
-Начните с [индекса документации](openwiki/quickstart.md):
-
-- [Архитектура](openwiki/architecture/overview.md)
-- [Переменные окружения](openwiki/operations/environment.md)
-- [Генерация API-клиента](openwiki/development/api-codegen.md)
-- [BFF proxy](openwiki/architecture/bff-proxy.md)
-- [Режим моков](openwiki/development/mock-mode.md)
-- [Кеширование и потоковый рендеринг](openwiki/architecture/cache-and-streaming.md)
-- [Карта компонентов](COMPONENTS.md)
-- [UI-примитивы и формы](openwiki/ui/core.md)
-- [Правила тестирования](openwiki/testing/testing.md)
-- [Развёртывание](openwiki/operations/deployment.md)
+- [Правила работы](AGENTS.md) · [Архитектурный контракт](ARCHITECTURE.md)
+- [Карта компонентов](COMPONENTS.md) · [Дизайн и токены](DESIGN.md)
+- [Быстрый старт и навигация по OpenWiki](openwiki/quickstart.md)
+- [API и генерация](openwiki/development/api-codegen.md) · [Моки](openwiki/development/mock-mode.md)
+- [Тестирование](openwiki/testing/testing.md) · [Развёртывание](openwiki/operations/deployment.md)

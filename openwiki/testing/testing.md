@@ -6,37 +6,52 @@ tags: [nextjs, starter, workflow]
 sources:
   - id: openwiki-source-8a8b78afd6e03e85194289b4
     resource: repo://.jscpd.json
+  - id: openwiki-source-808b9ff10fba3d7819aa09ab
+    resource: repo://.storybook/main.ts
+  - id: openwiki-source-362e06c30ccfdafd87339cb0
+    resource: repo://ARCHITECTURE.md
+  - id: openwiki-source-72b816a72bb5f72d95b334ea
+    resource: repo://lefthook.yml
   - id: openwiki-source-5b54a58d1b51cd490b0e7162
     resource: repo://package.json
   - id: openwiki-source-5e753d9d77984cb67aae1517
     resource: repo://playwright.config.ts
-  - id: openwiki-source-ce7f77c99e4eeaf6bd1d8f05
-    resource: repo://src/api/schemas.test.ts
   - id: openwiki-source-213b041a521bfb74f76bc155
     resource: repo://src/tests/allure-labels.ts
   - id: openwiki-source-22df64ef67f337cc601445d9
     resource: repo://src/tests/setup-allure-component.ts
   - id: openwiki-source-b333c6e46143ea4db8da3227
     resource: repo://src/tests/setup-allure-unit.ts
+  - id: openwiki-source-8c1c6fe3dc524dd1d72fbfb7
+    resource: repo://tests/unit/src/api/schemas.test.ts
+  - id: openwiki-source-13445c2f1001b83805761c34
+    resource: repo://tests/unit/tools/check-imports.unit.test.ts
+  - id: openwiki-source-5a9de896f4709eefddfc5d99
+    resource: repo://tools/check-imports.mjs
+  - id: openwiki-source-af56594a1a698e5b1e7a2049
+    resource: repo://tools/check-structure.mjs
+  - id: openwiki-source-cf45045e1d79371a26328263
+    resource: repo://tools/start-standalone.mjs
   - id: openwiki-source-fbadcd8591b65031efaaedce
     resource: repo://vitest.config.ts
-generated: { by: "codex", at: "2026-11-16T14:41:28.183Z" }
+generated: { by: "codex", at: "2026-11-16T15:55:30.306Z" }
 verified:
   - by: openwiki/0.7.2
-    at: 2026-11-16T14:41:28.183Z
+    at: 2026-11-16T15:52:45.490Z
 ---
 
 # Тестирование
 
-В проекте есть два проекта Vitest, Playwright E2E и Storybook. Имя файла определяет запуск:
-используйте суффиксы `.unit.test` и `.component.test`, чтобы тест не потерялся.
+В репозитории настроены два проекта Vitest, Playwright E2E и Storybook. Проект Vitest определяется
+по каталогу `tests/unit/` или `tests/component/`. Имя файла должно соответствовать `*.test.ts(x)`.
+Суффиксы `.unit.test` и `.component.test` дополнительно обозначают назначение теста.
 
 > Источники истины: `vitest.config.ts`, `playwright.config.ts`, `.storybook/` и npm scripts.
 
-Vitest и browser/coverage packages зафиксированы на 5.1.0. Storybook addon-vitest 10.6.7
+Vitest и пакеты для браузерных тестов и покрытия зафиксированы на 5.1.0. Storybook addon-vitest 10.6.7
 объявляет поддержку Vitest 5. Allure 3.14.0 требует явного peer `@vitest/runner@4.1.11` для
-Node reporter; браузерный alias `src/tests/mocks/vitest-runner.ts` направляет чтение текущего
-теста на bundled `TestRunner` Vitest 5. Это сохраняет runtime labels в emitted reports.
+Node reporter. Браузерный alias `src/tests/mocks/vitest-runner.ts` направляет чтение текущего
+теста на встроенный `TestRunner` Vitest 5. Благодаря этому метки, заданные во время теста, сохраняются в отчётах.
 
 В Vitest 5 `toHaveTextContent` проверяет точное совпадение строки. Для прежней проверки
 подстроки или регулярного выражения используйте `toMatchTextContent`.
@@ -45,19 +60,22 @@ Node reporter; браузерный alias `src/tests/mocks/vitest-runner.ts` н�
 
 | Что проверяем | Среда                       | Какие файлы запускаются                                               |
 | ------------- | --------------------------- | --------------------------------------------------------------------- |
-| Unit          | Node                        | `**/*.unit.test.ts(x)`, `src/api/**/*.test.ts`                        |
-| Component     | Headless Chromium, real DOM | `**/*.component.test.ts(x)`, `app/**/*.test.tsx`, `src/**/*.test.tsx` (кроме `*.unit.test.tsx`) |
+| Unit          | Node                        | `tests/unit/**/*.test.{ts,tsx}` |
+| Component     | Headless Chromium, реальный DOM | `tests/component/**/*.test.{ts,tsx}` (кроме `*.unit.test.{ts,tsx}`) |
 | E2E           | Chromium                    | `src/tests/e2e/**/*.@(spec\|test).?(c\|m)[jt]s?(x)`                   |
-| Storybook     | Browser preview             | `app/**/*.stories.tsx`, `src/**/*.stories.*`, `src/**/*.mdx`          |
+| Storybook     | Браузерный preview             | `stories/**/*.stories.@(js\|jsx\|mjs\|ts\|tsx)`, `stories/**/*.mdx` |
 
-У выбора файлов есть исключения:
+После префикса `tests/unit/` или `tests/component/` повторяется путь
+исходника от корня, включая `src/` или `app/`. Stories разрешены только для `src/components/`
+и зеркалируют исходники в `stories/src/components/`. Тесты и stories рядом с исходниками
+запрещены. Например, тест `src/components/ui/button/button.tsx` находится в
+`tests/component/src/components/ui/button/button.component.test.tsx`, а story в
+`stories/src/components/ui/button/button.stories.tsx`.
 
-- `src/example.test.ts` не входит ни в один проект Vitest. Назовите файл
-  `example.unit.test.ts`.
-- `src/example.test.tsx` попадает в компонентный проект даже без `.component.`.
-- `src/api/example.test.ts` попадает в модульный проект.
+`src/tests/` содержит общие setup, фикстуры, моки и Playwright E2E. Вне `tests/`
+модульные и компонентные тесты больше не запускаются, включая прежние `src/api/**/*.test.ts`.
 
-Chromium устанавливается один раз после `npm ci`:
+Установите Chromium один раз после `npm ci`:
 
 ```bash
 # macOS
@@ -77,25 +95,25 @@ npx playwright install --with-deps chromium
 npm run test:unit
 
 # Один файл
-npx vitest run src/mock-mode/runtime.unit.test.ts --project unit
+npx vitest run tests/unit/src/mock-mode/runtime.unit.test.ts --project unit
 
 # Тесты API
 npm run api:test
 ```
 
-Модульный проект работает в Node; не добавляйте самодельный jsdom. Макет, фокус, события указателя
+Модульный проект работает в Node. Не добавляйте самодельный jsdom. Макет, фокус, события указателя
 и клавиатуры, Base UI и гидратацию проверяйте компонентным тестом.
 
-`src/tests/setup-env.ts` подменяет `fetch`: запросы без моков падают. Подменяйте транспорт или
-`fetch` либо используйте сгенерированный мок-клиент; модульным тестам не нужен запущенный бэкенд.
+`src/tests/setup-env.ts` подменяет `fetch`. Запросы без моков падают. Подменяйте транспорт или
+`fetch` либо используйте сгенерированный мок-клиент. Модульным тестам не нужен запущенный бэкенд.
 
 Для `#/api` отдельно проверяйте транспорт, конфиг клиента, сценарии моков и независимые
 постгенераторы. После изменения этапов генерации или OpenAPI запускайте полный `gen`, включая
 корневую проверку TypeScript со сгенерированным кодом.
 
 ```bash
-npx vitest run src/api/client-config.unit.test.ts src/api/mock-client.test.ts src/api/mock-scenarios.test.ts --project unit
-npx vitest run src/api/generators --project unit
+npx vitest run tests/unit/src/api/client-config.unit.test.ts tests/unit/src/api/mock-client.test.ts tests/unit/src/api/mock-scenarios.test.ts --project unit
+npx vitest run tests/unit/src/api/generators --project unit
 npm run api:gen
 ```
 
@@ -109,7 +127,7 @@ npm run api:gen
 npm run test:component
 
 # Один файл
-npx vitest run src/components/utilities/error-boundary/error-boundary.test.tsx --project component
+npx vitest run tests/component/src/components/utilities/error-boundary/error-boundary.test.tsx --project component
 ```
 
 Минимальный пример:
@@ -128,9 +146,9 @@ test('отправляет форму с валидными значениями
 Конфиг подменяет `next/navigation`, `next/image` и `next/script` алиасами из
 `src/tests/mocks`. Мок навигации сбрасывается после каждого браузерного теста.
 
-Проверяйте Base UI в браузере, не подменяя глобальным моком ради удобства. Состояния общего
-компонента опишите в Storybook: история не заменяет тест взаимодействий, а компонентный тест —
-визуальное ревью всех состояний.
+Проверяйте Base UI в браузере. Не подменяйте его глобальным моком ради удобства. Состояния общего
+компонента опишите в Storybook. История не заменяет тест взаимодействий, а компонентный тест
+не заменяет визуальное ревью всех состояний.
 
 ## E2E-тесты в Playwright
 
@@ -149,6 +167,18 @@ npx playwright test src/tests/e2e/example.spec.ts
 
 При разработке Playwright использует уже запущенный сервер, если он есть.
 
+### Production-проверка
+
+```bash
+npm run build
+PLAYWRIGHT_SERVER_MODE=standalone npm run test:e2e
+```
+
+В режиме `standalone` Playwright запускает `tools/start-standalone.mjs`, который готовит
+static/public assets и запускает `.next/standalone/server.js`. Этот режим не использует
+`npm run prod` и не переиспользует development server. Сам E2E не создаёт свежую сборку.
+Без явного `PLAYWRIGHT_SERVER_MODE` значение `CI=true` также выбирает standalone.
+
 Конфигурации GitHub Actions и GitLab CI удалены. E2E и production-сборка запускаются локально.
 
 ## Storybook
@@ -163,37 +193,91 @@ npm run storybook
 npm run build-storybook
 ```
 
-Размещайте историю рядом с общим компонентом. Поведение покрывайте компонентным тестом.
+Размещайте историю общего компонента в `stories/src/components/` с зеркальным путём
+исходника. Для `app/` stories запрещены. Поведение покрывайте
+компонентным тестом из `tests/component/`.
+
+## Проверка структуры
+
+`npm run check:structure` входит в `verify:fast` и pre-commit. Скрипт контролирует
+размещение тестов, существование соответствующей директории исходников, зеркальный
+путь story и одноимённые тесты компонентов `.tsx` в `src/components/`
+и `app/**/_components/`. Story требуется и разрешена только для `src/components/`.
+Чистые re-export `index.tsx` исключаются; наличие реализации
+определяется по `return` или `=>`, без AST-анализа.
+
+CSS Modules с расширениями css, scss, sass и less разрешены только в `src/styles/`.
+Для оформления используйте прежде всего классы Tailwind и общие токены.
+
+Скрипт не проверяет качество assertions. Обязательность файлов пока не распространяется
+на будущий `src/modules/`. Проверка зеркальности не охватывает MDX и `.spec.*`.
+Для произвольного теста проверяется соответствующая директория, а не одноимённый исходник.
+Точное совпадение имени нужно для обязательного теста компонента.
+
+## Проверка импортов
+
+`npm run check:imports` проверяет зависимости по [архитектурному контракту](../../ARCHITECTURE.md):
+границы shared/app/modules, независимость UI от API и env, публичные входы API,
+модулей и компонентов, доступ к route-local UI и независимость чистых слоёв.
+Запреты слоёв учитывают транзитивные локальные импорты и реэкспорты;
+публичный вход проверяется на каждом отдельном импорте.
+
+Domain/application распознаются по каталогу слоя или начальному маркеру
+`/** @architecture domain */` / `/** @architecture application */` в плоском файле.
+Проверка учитывает type-only импорты. Неотмеченные бизнес-правила автоматически
+не классифицируются. Полный список границ, примеры и ограничения описаны
+в [справочнике check:imports](../architecture/import-boundaries.md).
+
+```bash
+# Текущий граф импортов приложения
+npm run check:imports
+
+# Регрессии самого проверяющего скрипта
+npx vitest run tests/unit/tools/check-imports.unit.test.ts --project unit
+
+# Все быстрые проверки перед коммитом
+npm run verify:fast
+```
+
+`verify:fast` выполняет `check:structure` → `check:imports` → `fmt:check` → `lint` → `tsc`.
+Та же команда подключена к pre-commit в `lefthook.yml`; для автоматического запуска
+Git hook должен быть установлен. Unit-тесты скрипта запускаются отдельно и входят
+в unit project. Они проверяют разрешённые зависимости, запрещённые границы, маркеры,
+публичные входы, динамические импорты и обходы через локальные helpers и barrels.
+
+`check:structure` проверяет размещение файлов. `check:imports` проверяет зависимости.
+Успешная проверка импортов не доказывает runtime-поведение, авторизацию, безопасность
+секретов и RSC-сериализацию; Next build и проверки поведения остаются отдельными шагами.
 
 ## Как называть тесты
 
-Новые и изменяемые `test`/`it` называйте по-русски, описывая поведение глаголом настоящего времени:
+Новые и изменяемые `test`/`it` называйте по-русски. Описывайте поведение глаголом настоящего времени:
 `возвращает`, `показывает`,
 `блокирует`, `сохраняет`.
 
 | Хорошо                                     | Плохо                       | Почему                                   |
 | ------------------------------------------ | --------------------------- | ---------------------------------------- |
-| `возвращает пустое тело для ответа 204`    | `обработка ответа 204`      | Нет действия и результата                |
+| `возвращает пустое тело для ответа 204`    | `обработка ответа 204`      | Не указаны действие и результат                |
 | `показывает ошибку после потери фокуса`    | `должен работать корректно` | Неясно, что ожидается                    |
 | `отправляет форму с валидными значениями`  | `проверяет submitForm`      | Описана реализация, а не поведение       |
-| `игнорирует cookie mock-mode в production` | `calls setState`            | Английский текст и implementation detail |
+| `игнорирует cookie mock-mode в production` | `calls setState`            | Английский текст и детали реализации |
 
 `describe` тоже пишите по-русски, называя объект или контекст проверки. Идентификаторы вроде
 `mock-mode`, `NEXT_PUBLIC_BFF_PATH` и методов API не переводите.
 
-Файлы называйте по-английски и шаблонам первой таблицы: `registration-form.component.test.tsx`.
-Переводите название теста при его изменении; массовое переименование делайте отдельно.
+Файлы называйте по-английски, по шаблонам первой таблицы: `registration-form.component.test.tsx`.
+Переводите название теста при его изменении. Массовое переименование делайте отдельно.
 
 ## Параллельное выполнение
 
-Тесты уже запускаются параллельно: создавайте данные и очищайте состояние в каждом. Не делите
-запись БД, аккаунт, очередь, временный путь, cookie/storage или синглтон модуля.
+Тесты уже запускаются параллельно. Создавайте данные и очищайте состояние в каждом тесте.
+Не разделяйте между тестами запись БД, аккаунт, очередь, временный путь, cookie/storage или синглтон модуля.
 
 ### Vitest
 
-Vitest запускает файлы параллельно в воркерах, тесты внутри файла — последовательно.
+Vitest запускает файлы параллельно в воркерах, а тесты внутри файла последовательно.
 `test.concurrent` и `describe.concurrent` подходят только независимым асинхронным тестам,
-ожидающим преимущественно I/O или таймеры: `Promise.all` в одном воркере не ускоряет синхронные вычисления.
+ожидающим преимущественно I/O или таймеры. `Promise.all` в одном воркере не ускоряет синхронные вычисления.
 
 Не совмещайте конкурентные тесты с общими `vi.stubEnv`, `vi.stubGlobal`, поддельными таймерами,
 моками модулей и DOM браузера. Берите `expect` и `onTestFinished` из локального контекста теста.
@@ -209,12 +293,12 @@ npx vitest run --project unit --maxWorkers=1
 ### Playwright
 
 Включённый `fullyParallel: true` разрешает параллельный запуск файлов и отдельных тестов. Встроенные фикстуры
-`page` и `context` изолированы для каждого теста: не храните их в переменной модуля и не создавайте
+`page` и `context` изолированы для каждого теста. Не храните их в переменной модуля и не создавайте
 однократно в `beforeAll`.
 
 Делайте внешние данные уникальными для теста или воркера. Дорогой ресурс можно вынести в фикстуру
 воркера с пространством имён, например по `workerInfo.workerIndex`. `serial` допустим лишь для неизолируемой
-последовательности с общим состоянием; обычно лучше один E2E-тест или разделение данных.
+последовательности с общим состоянием. Обычно лучше написать один E2E-тест или разделить данные.
 
 ```bash
 # Workers на одной машине
@@ -224,7 +308,7 @@ npx playwright test --workers=4
 npx playwright test --workers=1
 ```
 
-Воркеры делят тесты на одной машине, шарды — между задачами CI:
+Воркеры делят тесты на одной машине, а шарды распределяют их между задачами CI:
 
 ```bash
 npx vitest run --project unit --shard=1/2
@@ -248,21 +332,21 @@ Playwright получает окружение через процесс или 
 `FRONT_PORT` и `PORT` описано в [справочнике env](../operations/environment.md).
 
 Отчёты попадают в `test-results/`, `allure-results/` и артефакты Playwright. Эти каталоги
-игнорируются Git: не включайте их в коммит с кодом.
+игнорируются Git. Не включайте их в коммит с кодом.
 
 ## Что запускать после изменения
 
 | Изменение                   | Минимальная проверка                                       |
 | --------------------------- | ---------------------------------------------------------- |
-| Pure utility или schema     | Узкий Unit test + `npm run tsc`                            |
-| React или Base UI component | Component test; story для reusable visual states           |
-| Route или navigation        | Component test и/или узкий Playwright E2E                  |
-| OpenAPI contract/codegen    | `lint:openapi`, два `gen`, API tests, generated/root `tsc` |
-| Cache handler или cache env | Unit + cache integration + нужная dev/prod matrix          |
-| Env, config или proxy       | Unit tests, где возможно, + `npm run build`                |
-| Deployment или headers      | Production build + smoke через реальный proxy/ingress      |
-| Документация                | Semantic review по коду и config                           |
-| Bug fix                     | Сначала минимальный regression test                        |
+| Чистая функция или схема     | Узкий unit-тест и `npm run tsc`                            |
+| Компонент React или Base UI | Компонентный тест и story для переиспользуемых визуальных состояний           |
+| Маршрут или навигация        | Компонентный тест, узкий Playwright E2E или оба                  |
+| Контракт или генерация OpenAPI    | `lint:openapi`, два `gen`, API-тесты, `tsc` для сгенерированного кода и корня проекта |
+| Обработчик кеша или его переменные окружения | Unit-тесты, интеграционные тесты кеша и нужные сочетания development и production          |
+| Окружение, конфигурация или proxy       | Unit-тесты, где возможно, и `npm run build`                |
+| Развёртывание или заголовки      | Production-сборка и smoke через реальный proxy или ingress      |
+| Документация                | Проверка смысла по коду и конфигурации                           |
+| Исправление ошибки                     | Сначала минимальный регрессионный тест                        |
 
 Чтобы запустить все проекты Vitest, измерить покрытие или следить за изменениями:
 
@@ -272,7 +356,8 @@ npm run test:coverage
 npm run test:watch
 ```
 
-После узких тестов проверьте форматирование, lint и TypeScript через `npm run verify:fast`.
+После узких тестов проверьте структуру, импорты, форматирование, lint и TypeScript
+через `npm run verify:fast`.
 `npm run verify` добавляет Knip, JSCPD, оба проекта Vitest и Playwright E2E в development.
 Для production E2E отдельно выполните свежую сборку и установите `PLAYWRIGHT_SERVER_MODE=standalone`.
 
@@ -294,14 +379,17 @@ npm run test:watch
 - [Deployment](../operations/deployment.md)
 - [Переменные окружения](../operations/environment.md)
 
-## Проверки после обновления 16 ноября 2026
+## Исторические проверки обновления 16 ноября 2026
 
-Прошли 130 тестов в 42 Vitest файлах, пять E2E в development и пять в production, root TypeScript, lint, Storybook и Next build. Knip анализирует runtime и development вместе и читает локальный .env, если он существует. Generated exports исключены из анализа unused exports, потому что их поверхность определяется OpenAPI. JSCPD проходит с 1,13% дублирования рукописного кода при неизменном пороге 2%. Машинные артефакты package-lock.json, src/api/codegen/** и src/api/bundled.yaml исключены; приложение, тесты и stories проверяются. Число рассчитано на этом наборе файлов и напрямую не сравнивается с прежними 3,2%, включавшими generated output.
+Результаты ниже относятся к предыдущему обновлению зависимостей, до переноса тестов и stories.
+Они не доказывают работоспособность текущего рабочего дерева. После изменений проверки нужно повторить.
 
-Для E2E при занятом порте задайте оба значения, например FRONT_PORT=3117 PORT=3117. Development config может переиспользовать уже запущенный сервер, поэтому убедитесь, что на выбранном порту работает этот проект.
+Прошли 130 тестов в 42 файлах Vitest, пять E2E в development и пять в production. Также прошли корневая проверка TypeScript, lint, сборки Storybook и Next.js. Knip анализирует runtime и development вместе и читает локальный .env, если он существует. Сгенерированные экспорты исключены из проверки неиспользуемых экспортов, потому что их состав определяет OpenAPI. JSCPD проходит с 1,13% дублирования рукописного кода при неизменном пороге 2%. Машинные артефакты package-lock.json, src/api/codegen/** и src/api/bundled.yaml исключены. Приложение, тесты и stories проверяются. Число рассчитано на этом наборе файлов. Его нельзя напрямую сравнивать с прежними 3,2%, которые включали сгенерированный код.
+
+Для E2E при занятом порте задайте оба значения, например FRONT_PORT=3117 PORT=3117. Конфигурация для development может использовать уже запущенный сервер. Убедитесь, что на выбранном порту работает этот проект.
 
 ## Общие метки Allure и дублирование
 
-`src/tests/allure-labels.ts` назначает layer, feature и severity через общие setup hooks обоих Vitest projects. Тест задаёт только свой сценарий через `await allure.story(...)`. При изменении общего helper проверьте фактические Allure JSON, а не только прохождение assertions. API browser test явно относится к API codegen.
+`src/tests/allure-labels.ts` назначает layer, feature и severity через общие setup hooks обоих проектов Vitest. Тест задаёт только свой сценарий через `await allure.story(...)`. При изменении общего helper проверьте содержимое Allure JSON. Успешного прохождения assertions для этого недостаточно. API browser test явно относится к API codegen.
 
-Повторяющиеся блоки меток удалены из 13 файлов. Не повышайте JSCPD threshold и не исключайте рукописные тесты или stories для обхода проверки. Generated output меняется через контракт/генератор и проверяется отдельным `api:gen:check`.
+Повторяющиеся блоки меток удалены из 13 файлов. Не повышайте порог JSCPD и не исключайте рукописные тесты или stories для обхода проверки. Сгенерированный код меняется через контракт или генератор и проверяется отдельно через `api:gen:check`.

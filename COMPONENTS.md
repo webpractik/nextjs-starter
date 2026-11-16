@@ -1,6 +1,6 @@
 # Карта компонентов
 
-Источник истины — `src/components/`. Перед добавлением UI проверьте эту карту и соседние stories.
+Источник истины — `src/components/`. Перед добавлением UI проверьте эту карту и stories в `stories/src/components/`.
 Обновляйте карту при добавлении, переносе или удалении компонента. Route-local UI находится в
 `app/.../_components/` и в эту карту не входит.
 
@@ -58,6 +58,9 @@
 | [providers/form-devtools-provider](src/components/providers/form-devtools-provider/) | Инструменты диагностики форм в development.             |
 | [utilities/error-boundary](src/components/utilities/error-boundary/)                 | Граница ошибок React.                                   |
 | [utilities/responsive](src/components/utilities/responsive.tsx)                      | `Desktop`, `Laptop`, `Mobile`, `Tablet` по media query. |
+
+`utilities/foresight-link` — `ForesightLink`, внутренняя навигация Next.js с предзагрузкой по
+намерению пользователя. [Настройка и использование](openwiki/ui/link-prefetching.md).
 
 Providers не содержат бизнес-сущностей. Для доменных providers используйте соответствующий
 модуль; правила размещения — в [архитектуре](openwiki/architecture/overview.md).

@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:06746bc2d191531afb3e0ae70d737101f0f94ffaa40f806b1fbc8aa93509aca4",
+  "claims": [
+    {
+      "id": "claim_5a51636fe45d44afb0f58e1261c6a62f",
+      "statement": "Текущая версия Next.js в проекте 16.4.6; Cache Components и Partial Prefetching включены в next.config.ts.",
+      "evidence": [
+        {
+          "resource": "repo://next.config.ts",
+          "version": "repo-file-v1:sha256:e2a14ed51741f10b34748290f05ecfe730dbc92cbd956a28c23a87a5579984e3"
+        },
+        {
+          "resource": "repo://package-lock.json",
+          "version": "repo-file-v1:sha256:e164ee6639e2ccdd0d084b80edd0d7bad0d7b390fc90a838bc2ca4482e237997"
+        },
+        {
+          "resource": "repo://package.json",
+          "version": "repo-file-v1:sha256:81b1b625cddfa7f91097b440e88ead198b4461610aa9aa72ab7e147d53350919"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.2",
+    "at": "2026-11-16T15:55:30.306Z"
+  }
+}

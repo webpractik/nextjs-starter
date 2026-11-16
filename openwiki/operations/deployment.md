@@ -6,7 +6,7 @@ tags: [nextjs, starter, operations]
 sources:
   - id: openwiki-source-bb1ebe868e35e9e500714501
     resource: repo://Dockerfile
-generated: { by: "codex", at: "2026-11-16T14:41:28.183Z" }
+generated: { by: "codex", at: "2026-11-16T15:55:30.306Z" }
 verified:
   - by: openwiki/0.7.2
     at: 2026-11-16T14:41:28.183Z
@@ -18,7 +18,7 @@ verified:
 > Источник истины: `next.config.ts`, `Dockerfile` и Route Handlers
 
 Next.js настроен с `output: 'standalone'` и рассчитан на Node.js 26.13.1+ в ветке 26.x.
-Production-сборка и запуск standalone runner в Docker проверены локально. Конфигурации GitHub Actions и GitLab CI удалены; автоматического deployment нет.
+Production-сборка и запуск standalone runner в Docker проверены локально. Конфигурации GitHub Actions и GitLab CI удалены. Автоматического развёртывания нет.
 
 ## Локальная production-проверка
 
@@ -37,17 +37,17 @@ curl --fail http://localhost:3000/api/ready
 curl --fail http://localhost:3000/api/metrics
 ```
 
-`npm run prod` использует `next start`, контейнер — минимальный `.next/standalone/server.js`.
-Это разные точки запуска одной сборки.
+`npm run prod` использует `next start`. Контейнер запускает минимальный `.next/standalone/server.js`.
+Это разные способы запуска одной сборки.
 
 ## Dockerfile
 
-`Dockerfile` содержит этап установки зависимостей через `npm ci`, builder Next.js и standalone
+`Dockerfile` устанавливает зависимости через `npm ci`, собирает Next.js и создаёт standalone
 runner. Runner копирует `.next/standalone`, `.next/static` и `public/`, работает от пользователя
 `nextjs` и слушает порт `3000`. `.dockerignore` исключает секреты, зависимости и локальные отчёты.
 
-Точные аргументы сборки задаёт `Dockerfile`. `NEXT_PUBLIC_*` фиксируются при сборке; обязательные
-серверные переменные передаются также при запуске контейнера. Список — в
+Аргументы сборки задаёт `Dockerfile`. `NEXT_PUBLIC_*` фиксируются при сборке. Обязательные
+серверные переменные нужны и при запуске контейнера. Их список приведён в
 [environment.md](environment.md). Финальный этап не наследует окружение builder.
 
 Успех локальной сборки Next.js не подтверждает сборку и запуск Docker-образа. Перед использованием
@@ -56,7 +56,7 @@ runner. Runner копирует `.next/standalone`, `.next/static` и `public/`,
 
 ## Локальная сборка Docker
 
-Сначала подготовьте `.env` по [справочнику окружения](environment.md). Следующая команда передаёт значения build arguments через окружение процесса, а токен Sentry только через BuildKit secret. Значения env не выводятся в терминал.
+Подготовьте `.env` по [справочнику окружения](environment.md). Команда ниже передаёт аргументы сборки через окружение процесса. Токен Sentry передаётся только через BuildKit secret. Значения переменных не выводятся в терминал.
 
 ```bash
 node --env-file=.env --input-type=module <<'JS'
@@ -90,27 +90,27 @@ FRONT_PORT=3118 PORT=3118 npm run test:e2e
 docker rm --force nextjs-starter-local
 ```
 
-E2E development configuration переиспользует уже работающий сервер. Дождитесь успешного health перед запуском тестов, чтобы они обращались к контейнеру. Если Docker не разрешает домены реестров пакетов, проверьте его DNS и сеть; не подменяйте успешной локальной сборкой проверку образа.
+Конфигурация E2E для development использует уже работающий сервер. Перед запуском тестов дождитесь успешного ответа health, чтобы тесты обращались к контейнеру. Если Docker не разрешает домены реестров пакетов, проверьте его DNS и сеть. Успешная локальная сборка не заменяет проверку образа.
 
 ## Автоматизация
 
-GitHub Actions, включая расписание OpenWiki, и GitLab CI удалены по решению проекта. Проверки выполняются локально через `npm run verify`, генерация проверяется отдельно через `npm run api:gen:check`. OpenWiki обновляется вручную; CI-файлы не следует восстанавливать автоматически.
+GitHub Actions, включая расписание OpenWiki, и GitLab CI удалены по решению проекта. Проверки запускаются локально через `npm run verify`. Генерацию отдельно проверяет `npm run api:gen:check`. OpenWiki обновляется вручную. Не восстанавливайте CI-файлы автоматически.
 
 ## Health, readiness и metrics
 
 | Endpoint       | Текущее поведение                             | Чего не гарантирует                      |
 | -------------- | --------------------------------------------- | ---------------------------------------- |
-| `/api/health`  | Всегда JSON `{ "message": "OK" }`, status 200 | Доступность backend, Sentry или storage  |
-| `/api/ready`   | Всегда JSON `{ "message": "OK" }`, status 200 | Готовность зависимостей и прогрев cache  |
-| `/api/metrics` | Возвращает текущий Prometheus registry        | Authentication и network-level isolation |
+| `/api/health`  | Всегда возвращает JSON `{ "message": "OK" }`, статус 200 | Доступность backend, Sentry или хранилища  |
+| `/api/ready`   | Всегда возвращает JSON `{ "message": "OK" }`, статус 200 | Готовность зависимостей и прогрев кеша  |
+| `/api/metrics` | Возвращает текущий Prometheus registry        | Аутентификацию и изоляцию на уровне сети |
 
-Используйте health для проверки жизнеспособности процесса. Readiness пока эквивалентна ей:
-не управляйте трафиком в расчёте на проверку зависимостей. Непубличные метрики закройте на ingress или в сети.
+Используйте health для проверки доступности процесса. Readiness пока проверяет то же самое.
+При управлении трафиком учитывайте, что readiness не проверяет зависимости. Непубличные метрики закройте на ingress или в сети.
 
 ## Reverse proxy и browser API
 
 В production приложение передаёт `X-Accel-Buffering: no` для отключения буферизации потоковых ответов прокси.
-Проверяйте ingress отдельно: он может переопределить заголовок, тайм-ауты и сжатие.
+Проверяйте ingress отдельно. Он может переопределить заголовок, тайм-ауты и сжатие.
 
 В production браузер обращается к `NEXT_PUBLIC_BACK_URL` напрямую. CSP
 `connect-src 'self' data: wss: ws:` не разрешает произвольные HTTPS-origin бэкенда и Sentry даже
@@ -119,12 +119,12 @@ GitHub Actions, включая расписание OpenWiki, и GitLab CI уд�
 
 ## Observability и privacy
 
-- Сервер регистрирует OTEL и Sentry; клиентский Sentry запускается только в production.
+- Сервер регистрирует OTEL и Sentry. Клиентский Sentry запускается только в production.
 - `tracesSampleRate` сейчас равен `1` на сервере и клиенте.
 - Клиентский Sentry явно задаёт `dataCollection`: cookies, user info, query parameters,
   HTTP headers/bodies, stack variables и контекст исходников, а также данные database, GenAI и
   GraphQL для интеграций, которые их собирают. Настройки находятся в `instrumentation-client.ts`.
-- Реестр Prometheus локален для процесса: реплики отдают разные снимки.
+- Каждый процесс имеет свой реестр Prometheus. Реплики отдают разные снимки.
 
 Перед production проверьте стоимость семплирования, сроки хранения, согласия, правила обработки
 персональных данных и доставку Sentry через CSP. Без проверки нельзя заявлять соответствие требованиям проекта.
@@ -150,4 +150,4 @@ GitHub Actions, включая расписание OpenWiki, и GitLab CI уд�
 
 ## Проверка 16 ноября 2026
 
-Образ `nextjs-starter:verified` успешно собран из Dockerfile и запущен на порту 3118. Главная страница, health, readiness и metrics вернули 200; пять Playwright E2E прошли против контейнера. Подтверждены Node.js 26.13.1, UID 1001 и отсутствие файла `/app/.env` в образе. Предыдущая DNS-ошибка установки tzdata при повторной проверке не воспроизвелась. Это локальная проверка; внешний backend, Sentry и production ingress отдельно не проверялись.
+Образ `nextjs-starter:verified` собран из Dockerfile и запущен на порту 3118. Главная страница, health, readiness и metrics вернули 200. Пять Playwright E2E прошли на контейнере. Проверка подтвердила Node.js 26.13.1, UID 1001 и отсутствие файла `/app/.env` в образе. Предыдущая DNS-ошибка установки tzdata при повторной проверке не воспроизвелась. Проверка была локальной. Внешний backend, Sentry и production ingress отдельно не проверялись.

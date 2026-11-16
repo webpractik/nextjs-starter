@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:01272e75eff2808b7624eb44ae54756f75816ff1b71fe61acb2322060b7dc040",
+  "claims": [
+    {
+      "id": "claim_b3883ab5121f4ac6b7be250f5664b141",
+      "statement": "Контракт требует начинать функциональность рядом с маршрутом и выносить бизнес-возможность в src/modules при использовании минимум двумя маршрутами.",
+      "evidence": [
+        {
+          "resource": "repo://ARCHITECTURE.md#L10-L30",
+          "version": "repo-lines-v1:sha256:fb8a550c7a37f9d7fbf99826308f39185050c43e92b936ab2cf0e8dcabd6348d:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyNzVhZWZhMzFjMWZmNWQzMjc4N2NkNGIwYzVmZjVjNTI5MTQ1MmE5Y2ZkODlkZDIwM2NiNjA3OWM5NWRjNzciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE2ODhiODdmYTE1ZTgxYzk5ZGYwMWYxNzcwNGM0ODFkYzY0MWNjZmVmMjBjYjY5ODRjYzU5MTFkNmVhOWQwY2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFiMGU0MjY5ZDI4ZjhlMjc4NjMwZjUwYTI1MDNjY2M5N2I5Y2RmZjBmOWYzNTIwZDEwMTIxM2VkOGVjMWUxZTYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImNlMjVlMTk4ZjcwOTUxNTNhOWQzZDU3NWY4NTIxNzYwYzgyY2Y4Mjg2NzY0OTdhZjVhNWE0Zjc4MDdhNzYyNWYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0fdbb78dc42e4cf7aa376a37a262dd45",
+      "statement": "Domain/application остаются независимыми от framework и SDK, IO-порты принадлежат сценарию и реализуются адаптерами, а простой экран может обращаться к SDK без use case.",
+      "evidence": [
+        {
+          "resource": "repo://ARCHITECTURE.md#L32-L76",
+          "version": "repo-lines-v1:sha256:d0de246124805d5fd3bdb1e18e823576d15868b639eb63ce5b124411c9ac23db:eyJzZWxlY3RlZExpbmVDb3VudCI6NDUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkYThmMzM4MTIyYzU2YTQ2ZWFmZTU5MTFlMDIzYTI1ZWYwNTAzZDQ0NDQxNzEyOTNiZmQ0NzNhZmZjZTNkNTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI5YmFmNDE5Mjg5ZGUwOGVjMTlmNGIxMmYzZjRmMGQxZDk0NzFlMWQ5MWUzZmZhZWU4NjM2MDA0MWVlYzdkYzAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM0MDYwYjI4ZWQ5ZWE3ZDExMDAzOTJhYzEyZDBhNWQ0M2MyM2VlNWE3NTVmMDAyYzFlYWJjOGI0YmI4NmIzZTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQzNDAwZWU0OWEzM2NkYzBkZDc1NTNiMWViMjhkYzkwM2I4YjJjNWMxMTYxNDM1MjlkMGU3ZDE4MjI3MzVmY2EifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_cf31ff5aec3c40e2a21258fec3f733c1",
+      "statement": "Серверная композиция передаёт клиенту сериализуемые данные; серверные адаптеры с секретами используют server-only, а Server Action является отдельным входом с проверкой защищённых операций.",
+      "evidence": [
+        {
+          "resource": "repo://ARCHITECTURE.md#L105-L131",
+          "version": "repo-lines-v1:sha256:bfee04dd70b9b50b95029608c6c309d4ca46d7dc600e44cae68e8755c26619a6:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA4NTY4ZjNkNWRiZDQ5OTY1MDg4MjU5MTFkNTg3OThiNjkzNDIxOWU5NDZjYzg5Y2E1OTU2N2JiMDY4Y2MxZjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJhZDQ1NzIxNzQ2YWZiM2E0M2JkNGQ2ZDljYTM1ODQxYWJmNzFlNDQ4MGQzYjc3YTk3YWZhYjQxOTI2ZWRiNWIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU3MWY1NzQzZWJkOTdjNDBjNDI1NDE1NGYwYmYxYTE4OTI2NWYyN2VkOWFlMDg2YTEyMDVlYjM4ODdmMWJlNTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVjNGUyNzU4MGZiODU5MGU3ZDNiMjg3MWI5ZTZjMTlkOTZkZDAyMDExMjA1OTlmZjU2ZmM4MzdlZDgyMmUxMzEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_04f1fb8d30ad40be8eb49feeaab17a07",
+      "statement": "Общий модуль предоставляет универсальный index и отдельные server/client входы при необходимости; взаимодействие модулей собирается без прямых импортов между ними.",
+      "evidence": [
+        {
+          "resource": "repo://ARCHITECTURE.md#L28-L30",
+          "version": "repo-lines-v1:sha256:9c73ad46fa21ac4c3766b6394f6823ac3a6bd9b1af7547cbb8af44276345381a:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYTVmMmVhODMyMTk2ZjVjMjRmNTdhZjhiNTA4Y2RkNTBlODE5YjQ1ZGFiY2Y4M2I4MGUwYzgyMjdmNjk3MGZmOCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTY4OGI4N2ZhMTVlODFjOTlkZjAxZjE3NzA0YzQ4MWRjNjQxY2NmZWYyMGNiNjk4NGNjNTkxMWQ2ZWE5ZDBjZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNTk5ODRhNzU0YzJiNzQ0NzgxYTZlOWI5N2VlM2ViNTBlZTNkNWM1MTdjYzk5YWE4ZDFjZmYzMzkxMTQ5M2JlOSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiY2UyNWUxOThmNzA5NTE1M2E5ZDNkNTc1Zjg1MjE3NjBjODJjZjgyODY3NjQ5N2FmNWE1YTRmNzgwN2E3NjI1ZiJ9"
+        },
+        {
+          "resource": "repo://ARCHITECTURE.md#L91-L103",
+          "version": "repo-lines-v1:sha256:7b3cff3c12409dc247b4dd4230df0faa58d3025d7aca45c9f25162451dd65ae2:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk3NTJkMDAzODYyMzA1M2QzMjNiZTgwYjk5NjFlYmRiZGE3MWZiNmZjMzI5ZTBjZTliZGJlOWYyYTkzZDM3NTMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEzNDVjOTY5ODU5MmUxNjUzYTkzMjM0M2NmNmMwYmZhMGU3NDgzNDZiMDNjMWVmZTA5NTY5OTk2ZjQ0Nzk2YzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYyNzI2NTY0YjQxOGU4YmRhNzMyODQ3YTY4OWI5YjQ4Njc2ZmFjMDQyNmU1NjkzZTk5ODhkZjg3Nzg2MWNhNTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxMzQ5ZTE0NGQ5ZDdjZmMwZDE5MTAzZjY2MjZkZWM3MWU4ZDkxOGQyNjdmZTRmNzExMGY4ZDVmMTFkM2I0MTkifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b4000351c78e4af09d8ef378fa2e18b0",
+      "statement": "Состояние формы, URL, Query и локального UI имеет разных владельцев; ошибки submit обрабатываются явно и кеши Query и Next инвалидируются независимо.",
+      "evidence": [
+        {
+          "resource": "repo://ARCHITECTURE.md#L133-L160",
+          "version": "repo-lines-v1:sha256:3747ba3182a2c68c90a3577547bc1455f7fc9d175470137971c34641f32eb421:eyJzZWxlY3RlZExpbmVDb3VudCI6MjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIxMTViMzJiODM0M2UwMDE3ZDA2MzY1OTU3MzYwZmNkN2YzNTI3ODJlZjFiMWI0NjBiMDE2MjJiOGYyODcxOGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIwNDIwODBmYjJmMGI2MDMyYzU4N2IyNTVkNTgxMGRhY2I2YzFjYWQzMzJhYWU5NmE0Y2I4OTBmYzBkMWI0ZmEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg5ZWFlODc2ZGVjOGY2MWNiZGJiYWVhMDMzMTRiOTNlNDNhNTQ5ODVlYWFmYTc0MmQxODgxNzcyZGI3YjU5M2YiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJkMGJiOGI4NzczZDQyOGU0MDZhMDRhMjUyMTdhYTE3YmE0NDQyNGI2MWNkODVlMzk3MzQxNTNkZTQ2OTJhMjgifQ"
+        },
+        {
+          "resource": "repo://ARCHITECTURE.md#L72-L76",
+          "version": "repo-lines-v1:sha256:7456a792d97402bdcc35fa2a948a63a9e0aa6cf5a62b1f5024597a4ec563adcd:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjk0OGZmNWE5ZmFiODViOWZhZGZlZjViY2NkOGExYTllZTI2YjM2NzEyN2NhNTUyYjQ1NDRlODIxZTVjN2I0MSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYjliYWY0MTkyODlkZTA4ZWMxOWY0YjEyZjNmNGYwZDFkOTQ3MWUxZDkxZTNmZmFlZTg2MzYwMDQxZWVjN2RjMCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYWQxYjkwMmQ1Y2Q2Mzk5NzI0NGI0YzhjMDQ3YjZkNGM4MzhhZTY1ZWNiOGUzOGMzNDRiMzczYTI0YThlYTNjZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDM0MDBlZTQ5YTMzY2RjMGRkNzU1M2IxZWIyOGRjOTAzYjhiMmM1YzExNjE0MzUyOWQwZTdkMTgyMjczNWZjYSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_f57cd4ca7c294a6a8a87acc31b5e581d",
+      "statement": "Тесты зеркалируют исходники в tests/unit и tests/component; stories разрешены только для src/components и зеркалируют их в stories/src/components. check:structure требует тесты компонентов src/components и app/**/_components, а stories только для src/components; компоненты будущих модулей пока не охватываются.",
+      "evidence": [
+        {
+          "resource": "repo://ARCHITECTURE.md#L162-L190",
+          "version": "repo-lines-v1:sha256:2df87d9aa958ac02d79d6689974242d3f0bebdeca868ddb3b4b9464f7e2d84b1:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OWU2NWVkNzU2MDhjOTRjY2VmOWRhZmU0ZTdhNDQ2ZjVlY2RmMTdlYTUwZDQ1YTVkZTQwZTkzMzk3YWI1NjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc0MWZlOTUxZDE5ODI2Mjk1Zjk2YTYyNDM3MzNlNzM2YzU0MzEwMTcyZmZiZDQxNTA0OGMwODEyNjBhNWIzMTAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFkNTY3OWQ0NWVmYTg2MjQxM2JjNmY3MzI0ZjAxOGQxMGQwZTNmNGFiNjkxOGExNjYwNjQ1MzMwYWMxMWNmMDYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNiMWMyMTEzNWFkYmUwYjE4ZjhjMjQxYWUyYWU5NGZjM2E4ZTY2YzM4MTU4ZGVjYzgzOTdlMDk4N2RiYzAwMTEifQ"
+        },
+        {
+          "resource": "repo://tools/check-structure.mjs#L37-L59",
+          "version": "repo-lines-v1:sha256:12dbd1e092462c261981259648894b1d717c99bb01ad4139162c7e8caae1475e:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMxZWRiNWM5ZDRhMmM3YTRlOTIxMGQ2MjhmZjBhYWFmZmI3YWM5YTNjNTdlY2NkYzk0MjBlYTc4MTUxY2NiYzEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNiYmIwNjExNzg2MmQ4MWQ5NjQ0ZGQ0MWU2YTI0YTllMTBmNzYyOWExODFkYWVmYjRiMTEwODAxNGFlOWI2MWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQyMTlkOTRhNDAwZDMwNjFhMjgzZWMyNTIyZjQwMDg0MmVmMGQ0YjE3Y2I1MDM5Mjg5NGFjNTQ0N2RiNTJjNDUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhiZTA0ZTZjNGUyY2Q4MTc0Zjc2MmE1NTI0M2RmOWI5M2I1ODViNzJhNmExY2ExMTdmMmE4YjA1MGI5NjE0ZGUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_07adcacc57194f9f877f2197dee988d2",
+      "statement": "Форма проекта использует useAppForm, нативный form, AppField/AppForm и Zod Standard Schema; интерактивность проверяется component test.",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md#L88-L98",
+          "version": "repo-lines-v1:sha256:92eb451217d45745260acc39bb32f8d03c5365fd3048b7e68ba460ec8e246731:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA2MDFhMzA0OGFmMDJhZTMyNWRlOWU0YTk1N2EyYTgyNDQ4ZTU0MmE4Mzk5MDkzMjcxN2ZhZmFiZTBkZTIxOTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFlY2FmYTFmNDQwNWNjMTAxMmFlNWNhYzk2ODk1NDVkODhkNmVlMGI4ZDdjMTcxZDJhMmI1M2E4MWMyM2E4NWEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFmNzJjNTYzYjVjODZiMjVhZWVhYWYyODEwM2FmZTcyYTA0NWQ0OTQwYTg0MDUxZjM2MzhlNGE0MDUxM2FlNjkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjkyZTNkZjM5ZGY2MzdlZGRkNmEwZDY1NzNjMmM2ODMwMjdjZTJmYWEzN2ZhZmFmZTJlYjMyZjA2NGUzNTc3NDIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_8c7233a7d8d849e4a5bcb1ac29ae839d",
+      "statement": "API transport направляет server запросы на BACK_INTERNAL_URL, development browser на NEXT_PUBLIC_BFF_PATH, production browser на NEXT_PUBLIC_BACK_URL.",
+      "evidence": [
+        {
+          "resource": "repo://src/api/client-config.ts#L33-L38",
+          "version": "repo-lines-v1:sha256:b89e551568b03df7efc6f1b86c48ed1328caadb7168896758b1530c4dca591c1:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZTM4OTUzYWNlODJhN2JjMjRjYTlkM2JhZmYyNDQ1NjAxMGMwYmM1OGY0YzNlYjg1ODZiOWZkNGE5N2YyZjYxOCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjVkYzQ5MzNmODk2MmE3NDVjNTAxMDdmMDA0MTc5ZDgzNTc5YzAwZjViZGJiMDFhOGQwYWU4M2NlZDViNjgwZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYWNlNWQ3OWNjMGIwODVlNTQ3MjA5NWNhYTI5NDdjMzQ5MWRkNTg1NzcwNGQ3ZTg5MWJlODBiYmI2NWFiODA2MCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_1f117e7524bf498186dc6c4da24f9a61",
+      "statement": "Для плоских чистых файлов нужны начальные маркеры @architecture domain/application; каталог слоя имеет приоритет. Скрипт не определяет бизнес-смысл непомеченных файлов, поэтому классификация требует ревью.",
+      "evidence": [
+        {
+          "resource": "repo://ARCHITECTURE.md#L210-L216",
+          "version": "repo-lines-v1:sha256:432cb0fcb9fc3b7b55bb2270b7e3aac568c115ab2fec3f05b4d11629f5e48c90:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYmJjODA4NmM1YTY4ZTBmZGI4NDMxZjRlNjZmOGQxZWNiMDA0MzEyMjcwZTNkMGJiZWJmNmJhN2Y5YmU5YmVjMSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjVmNDQ0OGFmN2JlMzY2MjEwYjI1NDM4ZjRkNjQ2NDNiZDRhODkxNTIzZDk2YmFjMzYzNjJmNjdiYmFjMGNmYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDc1OWNlMzljYjYyODk3MDEwN2U0NThmNTQ3Yjc1OTUwNzVkYjE2NTAxZTFkM2ZhODZhZjNiNjgxMGNjNTM3MiJ9"
+        },
+        {
+          "resource": "repo://tools/check-imports.mjs#L11-L13",
+          "version": "repo-lines-v1:sha256:ee1ea447b129db0cf59d95f8cbe21c395fd500b8213868e2d9ad0fd81c892a3e:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZWRiNGMxZmZlMzExZTE3YmJiM2U4ZWI2YTEzMDJmNzUyMzU2M2MwNjlkZWE1OGE1OWFjMWVkNzc2YjVhZjdkOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZGUwMDdhZDUzMTdhZjc5YTczOWFjMGY1OTliMzgyZTQ2MDEwMThiNWI1MWUyYTYyM2ZkYjVkYzg0ZTBjOWZhZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjBlOGFlNTc4MWNlZjM0MmNkYzdjNmVhMzEwNzg0NzA2ZDFiOWRhMzZiNjQyNDczMTQ1NjUxYTUyNDUwMzEyMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiN2M4OGQ3NjA0Y2JiOTNkZTdlNjk0ODFkZjZiMjBkZGUyYWZlY2FkYTRlMmRhYjI2N2NiMjVjNzQ0ZTQ1ZjlmZSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_e4d5a736a3ae402cbc62aaed1fab83d3",
+      "statement": "check:imports запрещает зависимости распознанных чистых слоёв от framework и SDK, зависимости между модулями и обход через локальные helpers, а verify:fast и pre-commit включают проверку вместе со структурой, форматированием, lint и TypeScript.",
+      "evidence": [
+        {
+          "resource": "repo://lefthook.yml#L4-L11",
+          "version": "repo-lines-v1:sha256:be57f622f122611a4f87b02a6afa9514234c61d9b6e4a4a126ae7294839ae0d3:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTY0YmY0N2E0M2MzMTczODEzZjY3N2Y3NGRmMjNkNzcyN2YxMzVjMjUxNTJjNzFkYzkyOThmYWFkZmJlMDQ1NyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTk0NDI5YjhlMjA2ZTc4MTZmNTEwMGJjMzUwMDRiN2JhMWUyNzdiNjMwNTVjOGIyNGNiNzVlNDFjNzM1MDI5OSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMDAyZTE5ZTIzNWNjOTRiMzgyOWFmN2JiZDc3ZmEzNzZmODgyNmM4YjY4ODNmMDZhYzg4MjEzM2Q2NzRjMzA3OCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTIyMTJiMzZiZTQzYWNhOTdmZDcyNjgwNWY3Yjc2Mzk1OTk3YjM3OTBhMTU4YWY3MTE1NDc5MWEzYTJkMWMyOSJ9"
+        },
+        {
+          "resource": "repo://package.json#L17-L37",
+          "version": "repo-lines-v1:sha256:e49dac0c9ce98292dcf622dd2a72742b57cc9315c826eb35234fce1ce1729992:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRiM2MyYzk2MjhjMjA3ZTU1YTFhNzdhZGQ3ZjY3YzE1ODUzZDAxMTQzZmJjODA2MjYyZmYxZWQ3MmI5OTYzZjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY0MzBkYjQ3MTc5MGMyYzZiMjE5NTAwM2Y3MWJhNGU4YTQ1YjBmOTFjNzc2MjA3ZjgwZWI0N2E4Y2VhODM3ODQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhiYmIzZmE3NjBjM2NlM2ZjYWM1NTA1NjdiYTBhNjY4ZDA1ZTU0YzMwMjQ5YjE0YWM5N2MwNmU4NThlZDg2OTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI4YjRjNWM0NjA3OTEyOTgxNzIwNjQyYzU3OGYwYThjODQzNGU4ODUwOTA3MmJhMmQyZDFkNTE5MjRhNzRlYWUifQ"
+        },
+        {
+          "resource": "repo://tools/check-imports.mjs#L242-L303",
+          "version": "repo-lines-v1:sha256:3f9bc6033aa01d2ccd8126999fc29d11d1e21f6050931ec75ff4bed3e002d3b6:eyJzZWxlY3RlZExpbmVDb3VudCI6NjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwYWNiMjk4NWYzNTkwOGJjZGIxMmI0MDAwZGZmMTU4NjE3MDJjNzgxMjAwOTVkMTExMGI4N2ZkMTY1ZjIyZTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJiZDRjYTJlZTMyYjBkMWJkYjllYTU2OGZhMzYzNjUwZmNmYmIyMjhlNGNhMGMyYjk2MTdkZGYzZTU1YmFiNGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJiZDdkMmJkM2Y5ZWI2OGFjZTYyNzQyYjE4NTA3ZTA3NzY4YTMzYjg1YjBkYWUyNmJiMzZhZjg0OTUwNDY1MTUifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.2",
+    "at": "2026-11-16T15:41:39.256Z"
+  }
+}

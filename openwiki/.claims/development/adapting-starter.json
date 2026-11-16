@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:b3bcde5e47359f4c7768fc056e0d332e517878ec8ced1c8144f9ef66caba3adc",
+  "claims": [
+    {
+      "id": "claim_16013487ee214433a1ef20bf41e0b042",
+      "statement": "Robots запрещает индексацию всего сайта, manifest и root metadata содержат стартовые названия, sitemap содержит один публичный URL.",
+      "evidence": [
+        {
+          "resource": "repo://app/layout.tsx",
+          "version": "repo-file-v1:sha256:887f39045797e1c8d5fa70a561a10b07e02e6eff7aa244d9a358a6b2b4b1ab22"
+        },
+        {
+          "resource": "repo://app/manifest.ts",
+          "version": "repo-file-v1:sha256:62e192bf020a066837a39d6b38b1905d9d3b3b06c1de53e2e65d8e52a7b49d7d"
+        },
+        {
+          "resource": "repo://app/robots.ts",
+          "version": "repo-file-v1:sha256:fa6f9d33f23cf92cfdb1b7d5e1c8f2be90d9561ff13b75382b0ba49ce1b6e4e0"
+        },
+        {
+          "resource": "repo://app/sitemap.ts",
+          "version": "repo-file-v1:sha256:b4300b02312d6f56df60888133eae084fdcee18da9764cc979570d39b23ab12c"
+        }
+      ]
+    },
+    {
+      "id": "claim_d30fa6195040410ab73326aa17841b1b",
+      "statement": "COMPONENTS.md описывает общие компоненты, а DESIGN.md фиксирует визуальный контракт; перед UI-изменениями AGENTS.md требует читать оба документа.",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md",
+          "version": "repo-file-v1:sha256:677fc49431378957bd081b4c53c57da558a97603c9d5e1aa77e0a5d27e15ee02"
+        },
+        {
+          "resource": "repo://COMPONENTS.md",
+          "version": "repo-file-v1:sha256:e2cf05104591b7a612939ead32be5b18f7903fc9c567de8526915477942a3f67"
+        },
+        {
+          "resource": "repo://DESIGN.md",
+          "version": "repo-file-v1:sha256:7b211036525926bcabe86735926cdf6a40b50c983e2886cdd3fed70fb5f517f5"
+        }
+      ]
+    },
+    {
+      "id": "claim_fab215c391544aa685119c10945dbe97",
+      "statement": "При адаптации архитектурные решения сверяются с ARCHITECTURE.md: сценарий начинается рядом с маршрутом, модуль выделяется при нескольких маршрутах, use case нужен при бизнес-логике.",
+      "evidence": [
+        {
+          "resource": "repo://ARCHITECTURE.md#L10-L76",
+          "version": "repo-lines-v1:sha256:722138368e0257d4cd30cbe107672f83cd1d507b720a390761b30e10ad18b2db:eyJzZWxlY3RlZExpbmVDb3VudCI6NjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyNzVhZWZhMzFjMWZmNWQzMjc4N2NkNGIwYzVmZjVjNTI5MTQ1MmE5Y2ZkODlkZDIwM2NiNjA3OWM5NWRjNzciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI5YmFmNDE5Mjg5ZGUwOGVjMTlmNGIxMmYzZjRmMGQxZDk0NzFlMWQ5MWUzZmZhZWU4NjM2MDA0MWVlYzdkYzAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFiMGU0MjY5ZDI4ZjhlMjc4NjMwZjUwYTI1MDNjY2M5N2I5Y2RmZjBmOWYzNTIwZDEwMTIxM2VkOGVjMWUxZTYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQzNDAwZWU0OWEzM2NkYzBkZDc1NTNiMWViMjhkYzkwM2I4YjJjNWMxMTYxNDM1MjlkMGU3ZDE4MjI3MzVmY2EifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_7ee9fbf62eb8425695c8d142b8b306fb",
+      "statement": "Stories и component tests размещаются в отдельных зеркальных деревьях stories и tests/component, их структуру проверяет check:structure.",
+      "evidence": [
+        {
+          "resource": "repo://ARCHITECTURE.md#L162-L192",
+          "version": "repo-lines-v1:sha256:349b71ad9e4cad2dc883ba89f6f9454b32850d8c8d99c5e59f4e22a3a5690e21:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OWU2NWVkNzU2MDhjOTRjY2VmOWRhZmU0ZTdhNDQ2ZjVlY2RmMTdlYTUwZDQ1YTVkZTQwZTkzMzk3YWI1NjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFkNTY3OWQ0NWVmYTg2MjQxM2JjNmY3MzI0ZjAxOGQxMGQwZTNmNGFiNjkxOGExNjYwNjQ1MzMwYWMxMWNmMDYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZlZDdjZDU4MTJhNzJlYjAxYzgxMWM1MDNlNTRjMTc3ZjI2ZmEzOTBlZmUyMTVkZjhhOTdjMjY2MGM0ZmIzMDYifQ"
+        },
+        {
+          "resource": "repo://package.json#L18-L36",
+          "version": "repo-lines-v1:sha256:333a83300a1b3c39edd6fcdfc9b86729b3b64d50c22b9ca2ed6dd6b582277e61:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA0OTExZDEzZGE0MGI1NjA4ZDkxYzRiY2EwYTBiNDM5NmMwYjIyNTMzNjk3MDk0MGY1MThlYWQ2NjFmZDEwY2EiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg1MzMxMWFiYmIwYTI1MDFiODljYTMxODkxOGMxM2Y4NmUwMjliNGNiNjA5NWY4NGZhOWU4NjU2ZWIwMGJjMzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhiYmIzZmE3NjBjM2NlM2ZjYWM1NTA1NjdiYTBhNjY4ZDA1ZTU0YzMwMjQ5YjE0YWM5N2MwNmU4NThlZDg2OTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhiMzFiNzFhYzNkMTA5YmM0MzBjNDA3MzBlZmYzNWMyZWQyMGZmNGU3MzljYzA3OWUyNWVlMTAwODE2NWVlNDQifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.2",
+    "at": "2026-11-16T15:52:45.490Z"
+  }
+}

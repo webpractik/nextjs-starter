@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:b902fec0cd9c03f2f586db1d462514945bceb85cebf99027cee0e10977b34a78",
+  "claims": [
+    {
+      "id": "claim_00b4ac9eba0248498206a2e270bac014",
+      "statement": "check:imports запускается после check:structure и до форматирования, lint и TypeScript в verify:fast; pre-commit Lefthook вызывает verify:fast.",
+      "evidence": [
+        {
+          "resource": "repo://lefthook.yml#L4-L11",
+          "version": "repo-lines-v1:sha256:be57f622f122611a4f87b02a6afa9514234c61d9b6e4a4a126ae7294839ae0d3:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTY0YmY0N2E0M2MzMTczODEzZjY3N2Y3NGRmMjNkNzcyN2YxMzVjMjUxNTJjNzFkYzkyOThmYWFkZmJlMDQ1NyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTk0NDI5YjhlMjA2ZTc4MTZmNTEwMGJjMzUwMDRiN2JhMWUyNzdiNjMwNTVjOGIyNGNiNzVlNDFjNzM1MDI5OSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMDAyZTE5ZTIzNWNjOTRiMzgyOWFmN2JiZDc3ZmEzNzZmODgyNmM4YjY4ODNmMDZhYzg4MjEzM2Q2NzRjMzA3OCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTIyMTJiMzZiZTQzYWNhOTdmZDcyNjgwNWY3Yjc2Mzk1OTk3YjM3OTBhMTU4YWY3MTE1NDc5MWEzYTJkMWMyOSJ9"
+        },
+        {
+          "resource": "repo://package.json#L17-L37",
+          "version": "repo-lines-v1:sha256:e49dac0c9ce98292dcf622dd2a72742b57cc9315c826eb35234fce1ce1729992:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRiM2MyYzk2MjhjMjA3ZTU1YTFhNzdhZGQ3ZjY3YzE1ODUzZDAxMTQzZmJjODA2MjYyZmYxZWQ3MmI5OTYzZjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY0MzBkYjQ3MTc5MGMyYzZiMjE5NTAwM2Y3MWJhNGU4YTQ1YjBmOTFjNzc2MjA3ZjgwZWI0N2E4Y2VhODM3ODQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhiYmIzZmE3NjBjM2NlM2ZjYWM1NTA1NjdiYTBhNjY4ZDA1ZTU0YzMwMjQ5YjE0YWM5N2MwNmU4NThlZDg2OTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI4YjRjNWM0NjA3OTEyOTgxNzIwNjQyYzU3OGYwYThjODQzNGU4ODUwOTA3MmJhMmQyZDFkNTE5MjRhNzRlYWUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_41b71d2a104a4a30ace4e6d98f5a9ece",
+      "statement": "Скрипт строит AST-граф JS/TS импортов начиная с app и src и следует по локальным зависимостям, включая imports типов, реэкспорты, dynamic import и require.",
+      "evidence": [
+        {
+          "resource": "repo://tools/check-imports.mjs#L153-L232",
+          "version": "repo-lines-v1:sha256:ed7e365e80d556cb57590948f3996316fc862fdbce8648b9e06379aa381bfa55:eyJzZWxlY3RlZExpbmVDb3VudCI6ODAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRhOWFmODM5ZTgwNzA4MDYwM2MwYTAxOTljNzI5MTI3NDllMTJmMTVmNmE4OTIwMzVlNjJmM2ViYzM1OWMwYjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQzODRmZDE1MGY1OGMzZTllMWI0MGM1ZWJiODk2NTkzNDFhNmFhZjg4NWYwZGUwZjcxMmY3MGZjYzY4ZWQyMmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRjNjdhZWNhNmJhNDJmZGIwZjE0YjM3N2QzZTdhMWNlMTRlZDhlNDcyNjcwMjJiZTQxYjA2MDZiMWFkNGUzNzUifQ"
+        },
+        {
+          "resource": "repo://tools/check-imports.mjs#L7-L41",
+          "version": "repo-lines-v1:sha256:b20db492389d8209c098fb0fe4f43217236cd317412e1b640256dc76420aef65:eyJzZWxlY3RlZExpbmVDb3VudCI6MzUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhkNjk4ZTliMTcwYjY5ZjVkYTcxNDBkZmMwY2M3NWUxZmI5MjYxODRlOGNmMmZiODEwM2U0ZDkxZjc0ZmJkMjMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM5NjgxMjM0YjBlZDQ2ZTRmZDBmNTU2N2Y5NWM1MWIwZjkyYjkzMThkYjY5ZGMyMzhlMWZmYjZmYzUxNmRlYzUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcwYzhlZWJkNDgxMDdlOTU1MTBjMWQxYWYxOWZkOGY4OTRkNjJjZGYwMmNlMzJlNmYwODczYjkzNGM5MWNlNDkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRmMjgxYmJlOTNlYTkxOWYwODhjOGYyMWRlNmJmNDA5MGJmOTc2YjUyNTkwYzA3NzA1ZmIzYzlmMjk5NDI2ODYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_14123ced74144c209ead359540d0d424",
+      "statement": "Локальные пути разрешаются по paths/baseUrl корневого JSON tsconfig и относительным ссылкам с extension/index fallback; вычисляемые, отсутствующие и выходящие вне проекта локальные пути приводят к ошибке.",
+      "evidence": [
+        {
+          "resource": "repo://tools/check-imports.mjs#L100-L185",
+          "version": "repo-lines-v1:sha256:11e3c60bc1d7b62abf751fe26c266fefdcf125b8e7928baa4ed621bfb56282d2:eyJzZWxlY3RlZExpbmVDb3VudCI6ODYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI2NmEyMWVlNTdhNDAyNTU5NjIyNjkxYjcyZmE2NDg5N2U5NmU0NWQ0ZTJmZmZjMDdmODQ5YmNkNDg1NWJiNzciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2YjA0NDkxNDY5NzIyZTgzNjNhOTRlNDA0NDUzOGUwMTNhMmEyMTdlMzZiMWU1NjhiYTYwYWNiN2I0YzhmMmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImRlZWNkMGI4M2ZhOWZkMmUxNTkyMjRhYWU0MGM5ZDcxZWIxNGQ1MDVhZGJmMGE3MTYwYzkyYzMxZDBkNmM4YTgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk4Zjg4ODU5M2IxMDA5YmIxNGViOWQ3Yzk4NWMwZDJkNzYyYjFiNTQ4OTM5N2YwODRiODE0NDA5OGYwNmRhYzMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_ab857a625c85472783830e92f7a77ff6",
+      "statement": "Проверка запрещает shared зависимости от app/modules, module зависимости от app/другого модуля, UI зависимости от API/env/app/modules; эти границы учитывают транзитивные локальные зависимости.",
+      "evidence": [
+        {
+          "resource": "repo://tools/check-imports.mjs#L255-L306",
+          "version": "repo-lines-v1:sha256:fb4da6389030844bb3ba3540d576ffc1e1da4ddc8e0bb276ad7c9b9a0e4dc465:eyJzZWxlY3RlZExpbmVDb3VudCI6NTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyNGIxYzZhNWVhMzY4YjNkMmQ5NTliODE3MmJhZjI5MjFmZGMwYTFmZTEzMGYxNjRkMDE2OGJlZWNiMzBiNTciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY1ZTJkNjAyMzgxNmY0NjY2NzIxMTExYzA5ZDJmZWM4ZjAzODZiZmJhNGUyYWM1ZWU1YmJkM2M4NDJjYmFmNWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjEwYjA3Njc4Y2RhMWNjM2IxNjUwZGRmZWYyOTJhOGE5NzA3ZmQ4YmVkM2ExMDA3MDdkOGM1MmJkZjRiYjMzZWYifQ"
+        },
+        {
+          "resource": "repo://tools/check-imports.mjs#L44-L59",
+          "version": "repo-lines-v1:sha256:3d510f203f62eb5e1c32065d50d1dd7eb8e2bf91dfa644e98b74ecd76a0c95c8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhhOTA5NGEzMjg3NGVlN2NjY2Q3ZGY4ZTdkZWJjNDI1YjU3MWU2OGM3NWNiMGI4NTg1MjFiNTQyNDA2NmFkYzUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYzYmIwOWQwY2NmNGVhNzBlMGMxMjYwYzI5NTA1Yjg1NTNjZWJmMGVlZTg3OGE2YjM1YTk4YmJkZmE5MDczMWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjllMDZkMWIwNGYxZWQ3YjFlNWY5M2QzNzJhZjk5YmU4Nzg4MDgyODAzMWFiZjE3ZTdlZDcyNjJmNTc5NzAyY2EifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a22b2f91d8b148ae9767f2ae52e35ea3",
+      "statement": "Проверка публичных входов допускает корневые index/server/client модулей, шесть API facets и index каталогов компонентов; чужой route-local UI и runtime импорты src/tests запрещены.",
+      "evidence": [
+        {
+          "resource": "repo://tools/check-imports.mjs#L61-L95",
+          "version": "repo-lines-v1:sha256:0703a3181a470564a320b12f40e2892fd797324f582744e2acd0d5840a5d3cc0:eyJzZWxlY3RlZExpbmVDb3VudCI6MzUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhlMDZlODk3ZTg3NmNkY2NiODdlZDY5YjJmMmY5ZGQwODA1ZjA2MmM5MGE4NjU3NmVjOWUzZTJlNjIwNGRhZmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE5N2I5OWM0ZTg4YjRkOTI3MmFhMGUyNWYwZWU4NzQ5NjM0MDhmYzNjNDA1MjdiMDhhZWRmZTE5ODc0NjI5ZWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImI2NmU0OTBjOTg1MWI0YTZlNjAzMjkxYmYwM2QwZWJkNDMyOTM2NDdiNjFjYTg0ZDk4YWUyNzhlNzNiNGY3NTQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_c5b624da9c164930a95c67c9ce296c15",
+      "statement": "Чистый слой определяется первым domain/application каталогом в пути либо начальным JSDoc @architecture маркером; каталог имеет приоритет, полнота разметки плоской бизнес-логики требует ревью.",
+      "evidence": [
+        {
+          "resource": "repo://ARCHITECTURE.md#L209-L216",
+          "version": "repo-lines-v1:sha256:05a56ac701f7bd096734c07e8ccc8cb2fbe2e947c853f509732f6d435010ab58:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTM5OTkzY2ZiZmQ3MWZiZmMwM2VhZTQ1MDYxYWZmOWNjZmI5MDg5ZWZjOGViZWU1OWRhYTQyNGYxMGFlMzZjMSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjVmNDQ0OGFmN2JlMzY2MjEwYjI1NDM4ZjRkNjQ2NDNiZDRhODkxNTIzZDk2YmFjMzYzNjJmNjdiYmFjMGNmYiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZDc0NjE0MzI4MzU4YzdiN2VmMjRhYjU5NDg5OGNkNzI0NmJjZTQxNjUxYmIyOGM4MWRhYzEwNjQ2MDY4NTlmMyJ9"
+        },
+        {
+          "resource": "repo://tools/check-imports.mjs#L11-L13",
+          "version": "repo-lines-v1:sha256:ee1ea447b129db0cf59d95f8cbe21c395fd500b8213868e2d9ad0fd81c892a3e:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZWRiNGMxZmZlMzExZTE3YmJiM2U4ZWI2YTEzMDJmNzUyMzU2M2MwNjlkZWE1OGE1OWFjMWVkNzc2YjVhZjdkOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZGUwMDdhZDUzMTdhZjc5YTczOWFjMGY1OTliMzgyZTQ2MDEwMThiNWI1MWUyYTYyM2ZkYjVkYzg0ZTBjOWZhZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjBlOGFlNTc4MWNlZjM0MmNkYzdjNmVhMzEwNzg0NzA2ZDFiOWRhMzZiNjQyNDczMTQ1NjUxYTUyNDUwMzEyMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiN2M4OGQ3NjA0Y2JiOTNkZTdlNjk0ODFkZjZiMjBkZGUyYWZlY2FkYTRlMmRhYjI2N2NiMjVjNzQ0ZTQ1ZjlmZSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_0fa23565e4c048e5b35bd3de9edda389",
+      "statement": "Для чистых слоёв запрещены заданные framework/Node импорты, инфраструктура src, adapters/_components и .server файлы; domain дополнительно не зависит от application.",
+      "evidence": [
+        {
+          "resource": "repo://tools/check-imports.mjs#L14-L16",
+          "version": "repo-lines-v1:sha256:7c88d7604cbb93de7e69481df6b20dde2afecada4e2dab267cb25c744e45f9fe:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzhmMzJjMmU0YzAwOTA0MzQ1YzY2OTE4M2NlYjZlOGMxZDdhNjRiMWJlMDUyMWM5ZmM2ZjI0MTk2OTZmMWQ5ZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZWJiZjc0ZTA2Y2FlNGQ0ZTRiZDUzNGJjNWEzMGNiMjVhMTFjMDhkNTA5MzFlZmJhYjk2ZmExZDZjNzQ2NzlmYSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZWUxZWE0NDdiMTI5ZGIwY2Y1OWQ5NWY4Y2JlMjFjMzk1ZmQ1MDBiODIxMzg2OGUyZDlhZDBmZDgxYzg5MmEzZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOWZkNWEwMmE5NTk5ZTZiNjg3NmU4NTExY2QxOGE3YTZlMDQwMTdlZjYwZDcwNTQ0NjYzOTIxODJkZTNmOTIxNCJ9"
+        },
+        {
+          "resource": "repo://tools/check-imports.mjs#L269-L287",
+          "version": "repo-lines-v1:sha256:8b4ddd17c1c38b2cb3015b08cc969e58e485cbd7a81f84de353e2fd5f82a38a7:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE5MDc1NjlhMTU0MGIyMWM4NmNmMzg4Y2ZjZTQ1NDBlZWMyZjY5Mjk2NTg1OGEzOGJiY2ZkNDUzYzg0YmQzNjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY3MTRjNGM2NWY0YTE5MGFhZDQwNjA4MTBiNWU1MTQ0M2U5MDA5Yzg2ODQwMTA0OWI1NTBmM2JlYTg1YjY0YWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImM3ODdiYzExYjAwYWVjOGZjMzdhZmU3MmI4ZWQ2NTQ2NTlmMmZmZmFmODQ0MDY4YzFkNjRmMzBiOTc3ZWY4M2YiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE5NDM3M2VmM2MxNzBiMDNlNGM5ZGI3NDNlNWQ3MDBhNzdhYWYwMGQ3M2JlZjEyZmIwNjI4MTM5ZGYyYzgyMGEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_e66143f2d74c45fa9a764c2657d2a9c3",
+      "statement": "src/tests и src/api/codegen разбираются и участвуют в графе, но не получают собственных архитектурных проверок; внешние npm-пакеты не обходятся.",
+      "evidence": [
+        {
+          "resource": "repo://tools/check-imports.mjs#L108-L120",
+          "version": "repo-lines-v1:sha256:2f541ec4e3caf8292aa450c03840124755ab63b60c6c886869a63807d105139b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVkNWVkZDZkNzAyZTY3ZTc5NDU5M2MzMmJlOGQ2MzQ0YWEwY2FkZDIwYTcyNTlmNWEwNjY2ZDVlMzBhZTBlMzYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1MjJjNDJjZDE5YzZkMDNkODA4YzQ1MjcyMDU1MjgyNWI3ZWExYzViNDkxYjIxODUxMWNhYzc0MTVjZjlkOWIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ4YTFmYTllOTZmN2Q3OWM4OWY0NzRlYjE4OWY1MDU1ZTdhMzczOGEzNDAzMjA0OGRiNDlkNDU5ZDUxYjg5ZjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE2Yjk5MTMzMDg0NWI1OTk3NjZjYTZmZjNkMmFkZjVmMDE2NGE5YTNiZDMwZmQ4MDMwM2RkZjFiYmU0NmY1MjQifQ"
+        },
+        {
+          "resource": "repo://tools/check-imports.mjs#L153-L240",
+          "version": "repo-lines-v1:sha256:9c698935e40e32275b2ff43f8c6b872794fe41bac23e54b90b19bafbc309d5f5:eyJzZWxlY3RlZExpbmVDb3VudCI6ODgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRhOWFmODM5ZTgwNzA4MDYwM2MwYTAxOTljNzI5MTI3NDllMTJmMTVmNmE4OTIwMzVlNjJmM2ViYzM1OWMwYjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2YjA0NDkxNDY5NzIyZTgzNjNhOTRlNDA0NDUzOGUwMTNhMmEyMTdlMzZiMWU1NjhiYTYwYWNiN2I0YzhmMmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQzODRmZDE1MGY1OGMzZTllMWI0MGM1ZWJiODk2NTkzNDFhNmFhZjg4NWYwZGUwZjcxMmY3MGZjYzY4ZWQyMmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA3ODA3Y2FkYjdjZTQzNWQ2NzBkOTdiNWQ5NzdiZDMwZGZlYWEwMmVkZTI4YjU1ZWVkNDM0NDUyNjRhZGU4NWYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_c4d7894e1e4b4b3d8edd13f3ba82a564",
+      "statement": "check:imports выдаёт диагностику прямых рёбер с файлом и строкой и транзитивных цепочек с исходным файлом; CLI завершается кодом 1 при ошибках.",
+      "evidence": [
+        {
+          "resource": "repo://tools/check-imports.mjs#L242-L251",
+          "version": "repo-lines-v1:sha256:3480fa38f959133f3a761fa5cafa32b7bba35d6c86d7eef7c2b03d0a4457f7f2:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwYWNiMjk4NWYzNTkwOGJjZGIxMmI0MDAwZGZmMTU4NjE3MDJjNzgxMjAwOTVkMTExMGI4N2ZkMTY1ZjIyZTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1MjJjNDJjZDE5YzZkMDNkODA4YzQ1MjcyMDU1MjgyNWI3ZWExYzViNDkxYjIxODUxMWNhYzc0MTVjZjlkOWIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJiZDRjYTJlZTMyYjBkMWJkYjllYTU2OGZhMzYzNjUwZmNmYmIyMjhlNGNhMGMyYjk2MTdkZGYzZTU1YmFiNGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY1ZTJkNjAyMzgxNmY0NjY2NzIxMTExYzA5ZDJmZWM4ZjAzODZiZmJhNGUyYWM1ZWU1YmJkM2M4NDJjYmFmNWYifQ"
+        },
+        {
+          "resource": "repo://tools/check-imports.mjs#L285-L318",
+          "version": "repo-lines-v1:sha256:14e89906b3733090dff3b6c77d1185690b04a46f5f1e2a40761023f89609ac3a:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjljYmU2YWJlOWQ2NWQ5NzNjYmEyMjlkNjRmOGQzZTEwNjA5YjUxNjFmZDk4MzczZTdlY2Y1NzcyNmQzMTllZjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNjN2YxODdiNGRlZWIwMjk5Y2M2MzgzN2M4MmNjMTZjNjA3MWEyZDYwMjhlOTI2YTY5OWJkYjc3MzhkYzc0MDkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_9472df4406b44859a6580572902e5903",
+      "statement": "Поведенческие тесты проверки создают временные файловые деревья и проверяют разрешённые и запрещённые зависимости, маркеры, транзитивные пути и ошибки разрешения.",
+      "evidence": [
+        {
+          "resource": "repo://tests/unit/tools/check-imports.unit.test.ts",
+          "version": "repo-file-v1:sha256:ab7db381ab3af13cb7b835fb9f92d991f1452afc528ea38df6c4bed12eaf25bd"
+        }
+      ]
+    },
+    {
+      "id": "claim_62cd59324d6c451bba59039e8baeeff8",
+      "statement": "Проверка зависимостей не анализирует выполнение функций, авторизацию, секреты, RSC-сериализацию и глобальные browser API; неотмеченная чистая логика требует ревью.",
+      "evidence": [
+        {
+          "resource": "repo://ARCHITECTURE.md#L209-L222",
+          "version": "repo-lines-v1:sha256:340f03cb9d1766b78c30d0b733cdb586d1d100e88720b46c239fae0a070b39ad:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY1ZjQ0NDhhZjdiZTM2NjIxMGIyNTQzOGY0ZDY0NjQzYmQ0YTg5MTUyM2Q5NmJhYzM2MzYyZjY3YmJhYzBjZmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImU1M2FjMjFlMmIzYzBkNmMzZDlmY2U1MDEyZTNhOGJkOGUzN2RmMzQ0MjIwZDRmN2FhYmRiMDcwYmI2ZmYzY2MifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.2",
+    "at": "2026-11-16T15:41:39.256Z"
+  }
+}

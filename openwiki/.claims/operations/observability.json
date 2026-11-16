@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:43e46e32c9395ac6b5f5dda9db507c769e96b6059c7190b8f84bd068b14290cd",
+  "pageVersion": "sha256:fc7738a32d1b243fd61fdb40fe97c44c8233cd213c318cd175b9f64cce253419",
   "claims": [
     {
       "id": "claim_b1d48394989a413f84a0a3673bb0f082",
@@ -47,10 +47,28 @@
           "version": "repo-file-v1:sha256:83504edc532a0b695e5d65b72661a38c3d581654fe33cbf2d483458355265bf3"
         }
       ]
+    },
+    {
+      "id": "claim_211a4f58c3bb4cdc8d5b5aa02bf9595f",
+      "statement": "Route и global error handlers отправляют captureException в Sentry, а production CSP connect-src ограничивает исходящие browser-соединения.",
+      "evidence": [
+        {
+          "resource": "repo://app/(public)/(home)/error.tsx",
+          "version": "repo-file-v1:sha256:2e4960aab45ff0afaeb55d0a03ceb19b103014134741f8cdf631b86c68a9d2e4"
+        },
+        {
+          "resource": "repo://app/global-error.tsx",
+          "version": "repo-file-v1:sha256:a0fd265043e31cac27095e858c859b28fd72f0fddf5c4b56614dcdf866ff2e94"
+        },
+        {
+          "resource": "repo://headers.ts",
+          "version": "repo-file-v1:sha256:8e48152fc6b69ca766e4d1eaf552ed61900c1d7824143e90ae9059992ff4079f"
+        }
+      ]
     }
   ],
   "verification": {
     "by": "openwiki/0.7.2",
-    "at": "2026-11-16T14:24:53.735Z"
+    "at": "2026-11-16T15:01:48.263Z"
   }
 }

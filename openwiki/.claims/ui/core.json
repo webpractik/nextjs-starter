@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:c69c6cec08985e2004dfd9aa1df31fa21946848b7618a4c620f3d958d85fcb76",
+  "pageVersion": "sha256:0f28779eff8501b7837cc868622f26bebeb70726a52f846a316ace22cc970fce",
   "claims": [
     {
       "id": "claim_8905bb0f7d31419bbfb88ff3da329206",
@@ -14,17 +14,91 @@
     },
     {
       "id": "claim_fa466d2cbcb942b0b50d4882fc7a24b3",
-      "statement": "Storybook использует nextjs-vite, a11y, autodocs и истории app/src.",
+      "statement": "Storybook использует nextjs-vite, addons a11y и docs и загружает stories/MDX из отдельного stories дерева.",
       "evidence": [
         {
-          "resource": "repo://.storybook/main.ts",
-          "version": "repo-file-v1:sha256:9207591b1e445a02e944781ab4fda7a76114c41ce65bc541852e5f6dda46a545"
+          "resource": "repo://.storybook/main.ts#L10-L24",
+          "version": "repo-lines-v1:sha256:3aa28e21f7845e7097dc4dfdb58d7165b285c90b603fe4624ba46147626c62bb:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg2MzU1YzkxN2MwOTNiMzY5NjhhMGE2YjllMmMyMWMyMThiMzQ4MmY2MzE2MjA4MzUyODY3NTM1MWE1OGNiNDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYwYWJlMTQyYWUzM2YyYTIwMzRkNmYxYTRlNzRjMDNhMWY5ZmEzYmIxMDY5ODdiNzUxYTJkNTM3NDlhMGQ5NDgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY1ZjZkZmQwZjNmMjQzMjk4M2M3YjdmMDliZjY1MjE0N2M4M2RhOTllZmU0MGI0NmUxZjYzMmQ0YzIyNDk5NGIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdhY2E4OTJlZGUzYWVlNzQ1ZTVmMTBkODg1ZGVhNWQ3YTYwNDk3YTVlMDRiZjEzN2UxNmM2N2VmZmI2Y2JkYjgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_e0620aceb4734ad190d25c83a0099b7a",
+      "statement": "Responsive wrappers имеют пересекающиеся min-width условия 320/768/1024/1280px с mobile=true и остальными false до определения media query.",
+      "evidence": [
+        {
+          "resource": "repo://src/components/utilities/responsive.tsx",
+          "version": "repo-file-v1:sha256:b518180b3e4f8f98469a7d73f09ac9384665cc629cd7e120950ecd9f16f8372f"
+        },
+        {
+          "resource": "repo://src/hooks/use-responsive.ts",
+          "version": "repo-file-v1:sha256:4a41543931c0e8bb9eba7ef9757f0aeb4d3c991f4294774dda445b77eeb3ccf2"
+        }
+      ]
+    },
+    {
+      "id": "claim_d85d8c21b548446e8fe72b95f1256331",
+      "statement": "Storybook preview добавляет только CSS и шрифт; root providers подключены отдельно в app/layout.tsx.",
+      "evidence": [
+        {
+          "resource": "repo://.storybook/preview.tsx",
+          "version": "repo-file-v1:sha256:4952eef487d79edc4c38c798a783c0c7d4e65c80caf50b3f2f13f7aa3366c992"
+        },
+        {
+          "resource": "repo://app/layout.tsx",
+          "version": "repo-file-v1:sha256:887f39045797e1c8d5fa70a561a10b07e02e6eff7aa244d9a358a6b2b4b1ab22"
+        }
+      ]
+    },
+    {
+      "id": "claim_1b94d4bf86d54014b2d68c162b0fa2d9",
+      "statement": "ErrorFallback показывает сообщение исключения, а Attachment представляет UI состояний без сетевого upload.",
+      "evidence": [
+        {
+          "resource": "repo://src/components/ui/attachment/attachment.tsx",
+          "version": "repo-file-v1:sha256:4683a91100e487b159e33fc670dcf62d112225d4c134419bae94521b7ef26151"
+        },
+        {
+          "resource": "repo://src/components/utilities/error-boundary/error-boundary.tsx",
+          "version": "repo-file-v1:sha256:6d041e0a90661865a6e2c988f349191a6070ac2a3a21bd6cf64cd25ff48f552f"
+        }
+      ]
+    },
+    {
+      "id": "claim_2e9e480edb9149c6b092ec350a7d170f",
+      "statement": "COMPONENTS.md описывает карту общих компонентов, DESIGN.md — визуальные токены и правила; AGENTS.md требует читать их перед UI-работой.",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md",
+          "version": "repo-file-v1:sha256:677fc49431378957bd081b4c53c57da558a97603c9d5e1aa77e0a5d27e15ee02"
+        },
+        {
+          "resource": "repo://COMPONENTS.md",
+          "version": "repo-file-v1:sha256:e2cf05104591b7a612939ead32be5b18f7903fc9c567de8526915477942a3f67"
+        },
+        {
+          "resource": "repo://DESIGN.md",
+          "version": "repo-file-v1:sha256:7b211036525926bcabe86735926cdf6a40b50c983e2886cdd3fed70fb5f517f5"
+        }
+      ]
+    },
+    {
+      "id": "claim_a469781b73954e24a5d14d1f913aee70",
+      "statement": "Истории и component tests зеркалируют пути исходников в stories и tests/component, а check:structure проверяет размещение и наличие файлов компонентов.",
+      "evidence": [
+        {
+          "resource": "repo://tools/check-structure.mjs",
+          "version": "repo-file-v1:sha256:8be2cd64864fe2258572e490ee4b559c5ef7b0b9af47dfc60e9d423db3b9cdbe"
+        },
+        {
+          "resource": "repo://vitest.config.ts#L126-L155",
+          "version": "repo-lines-v1:sha256:008b7f4cc09a952dc62002b7c1efb38f620a16f18c6eb4da1219605bbd7d8e90:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYxNzQ5MmE3Mjg2YjY1N2QyZTNjNWU1NGU0MjZiY2JjNzJjODRhZjA2MDlkNzJjMGNhMjZjOGE4ZWQxYmNlNzEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTdjZDI5ZTM4MmM4MzhmY2E1NWU1YTlmMzE2MWJiNzliZjA4MDI1ZTk0OTkyYzRhOTI2ZmUwNjRhYzI2YzIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjVkOTIzNTY0MWE3OGIzMGY3Y2FmMTQ2Yjk2NzFhMGNmMDhmYmM0ZjU0ZDdjZDY1ZDIwYWVjN2U1ODEyMWRkMDYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJhMTJiYTFmOGNjNTlkYjk5NzhjNmQxY2Y4NGI2NzM0YWQ3YmYzZWU5NjY5M2ZlZmNlODVmNGFhMWFlYzliNDgifQ"
         }
       ]
     }
   ],
   "verification": {
     "by": "openwiki/0.7.2",
-    "at": "2026-11-16T14:31:09.226Z"
+    "at": "2026-11-16T15:41:39.256Z"
   }
 }

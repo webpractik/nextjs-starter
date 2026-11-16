@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:09154619f8262fd5c52f2e387921a46aa8ffcf6622c9c34efc97d37a49d913a7",
+  "claims": [
+    {
+      "id": "claim_97167bc7fb234b51b7b016b83d6d282a",
+      "statement": "useAppForm регистрирует десять field components и SubmitButton; кнопка блокируется при isSubmitting и по умолчанию при отсутствии canSubmit.",
+      "evidence": [
+        {
+          "resource": "repo://src/components/ui/form/form.tsx",
+          "version": "repo-file-v1:sha256:5a162e4b6a7d8f4879203f570c2bd91e2f56a015cda4a6c63c7d7816b3485586"
+        },
+        {
+          "resource": "repo://src/components/ui/form/submit-button/submit-button.tsx",
+          "version": "repo-file-v1:sha256:b07df6bc4518caf973c75e7947d027cd8702089c742a4363045fca2a5ae4d096"
+        }
+      ]
+    },
+    {
+      "id": "claim_cdcc660410b54fa68e2cb9f7f6941c2b",
+      "statement": "DateField и PhoneField сохраняют форматированные строки; NumberField по умолчанию превращает очищенное значение в undefined.",
+      "evidence": [
+        {
+          "resource": "repo://src/components/ui/form/fields/date-field/date-field.tsx",
+          "version": "repo-file-v1:sha256:4511b5a926df550431fa39278ff948c2d49b889b54e55d8a605183cbc6e8c672"
+        },
+        {
+          "resource": "repo://src/components/ui/form/fields/number-field/number-field.tsx",
+          "version": "repo-file-v1:sha256:77ab5fc9de0d312f58c5bcdc784c3063d8bdf5668437698c5830fd3a48b9b6e4"
+        },
+        {
+          "resource": "repo://src/components/ui/form/fields/phone-field/phone-field.tsx",
+          "version": "repo-file-v1:sha256:aae548d40ab6ef47290b434d919cb6cd5d5106e79d248f7b30c90708593f6abd"
+        }
+      ]
+    },
+    {
+      "id": "claim_37e82703cf654b4aae0b8e471fb8218b",
+      "statement": "Stories формы размещены в stories/src/components/ui/form, браузерные тесты в tests/component/src/components/ui/form с зеркальными путями исходников.",
+      "evidence": [
+        {
+          "resource": "repo://stories/src/components/ui/form/form.stories.tsx#L1-L25",
+          "version": "repo-lines-v1:sha256:41437ee55a9f8bea64991e3ef24b09004dfd4cf70dcb490ea6b3a5532d24f333:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk3OGRlYTcxMjI0NGRlN2ZmMzk0N2M5NjNmYjJlZTFkMTNlMGM1NTRmNGM1NGYzMWI5MzdiYzU1NTNkNjIxYjMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhZmQzZWM5ZjIwMzg0M2IxNGJmOTk5NzFjYjNiOGMwMjRkZDM0YjExMjdmODQwYTBjZTgwNDA4NTAxNzNkNzgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk4M2IzZmU4ZTE0YTkxYTUxMGUzNzA1NWUwOTM0YjE4YTBiMDRiZDhiNTg0ZGUyZmQ2NDY1NWJiMDhjNjhjM2IifQ"
+        },
+        {
+          "resource": "repo://tests/component/src/components/ui/form/form.component.test.tsx#L1-L25",
+          "version": "repo-lines-v1:sha256:8d4fcee87e6d0a092e083bde93d2b46049efd323c347efe41fcc101d6dab21bf:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2ZGE3ZGExODAzZDRmODA3NjJjZTliNzc2NzVjMTI5NDk1Mjk5YTI4YmU4YjQ2MjUxZjc0NDE5NmFjYWJmYzUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNlZTRlNGMwZDlkMGY2NDQxNGU1YTczZjNlNWYzYjI1MzA3MmFmNDkyZTQzNzJlYWY5MGVlYjBhMDczN2M5YmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdlYWQ1ZTAyNGVlNTNiNTVjY2NhMzMwMjdkMGVkNzJlYjliOTBiYzAyZDBiMzE0MDM2OWVhYzIwZTRjZTZkMDUifQ"
+        },
+        {
+          "resource": "repo://vitest.config.ts#L138-L155",
+          "version": "repo-lines-v1:sha256:9909f4684374d2e3d3695c769bdedbf54809dc1028db1604669b78933c8fd6e5:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkxY2E3YWJiNzg3Mzc2NTY1ODQxNzRlNjcyMGIwYjk1MGU3NmU0ZDlkNjJlMjdhODJiYWNkY2I4NGViNTZkYTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTdjZDI5ZTM4MmM4MzhmY2E1NWU1YTlmMzE2MWJiNzliZjA4MDI1ZTk0OTkyYzRhOTI2ZmUwNjRhYzI2YzIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE5MTQ1NDI3OTg3NGU0NTJlMzRiYzY0ZjNlZmJjOGMxM2U0N2Y3OWVmNGMzMGI2ZDEzZDYxNzBkOGZkYTJhNTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJhMTJiYTFmOGNjNTlkYjk5NzhjNmQxY2Y4NGI2NzM0YWQ3YmYzZWU5NjY5M2ZlZmNlODVmNGFhMWFlYzliNDgifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.2",
+    "at": "2026-11-16T15:11:11.678Z"
+  }
+}

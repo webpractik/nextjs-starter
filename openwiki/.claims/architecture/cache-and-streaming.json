@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:dd71c2887c01be1af506e8a48736645aa52128fa58a15585b121d3afc8cf5e38",
+  "pageVersion": "sha256:7d9b6c17eb227941d858b34f6cce815cf5b64a735d9e9acc4e1acb196ea2fb26",
   "claims": [
     {
       "id": "claim_2e16e60c160d4172b4d3943e9a46e040",
@@ -8,7 +8,7 @@
       "evidence": [
         {
           "resource": "repo://next.config.ts",
-          "version": "repo-file-v1:sha256:2cafb95340d12f95aed673289d90ca3d6b0b6b49a2929b73ef8abd9a5acd040d"
+          "version": "repo-file-v1:sha256:e2a14ed51741f10b34748290f05ecfe730dbc92cbd956a28c23a87a5579984e3"
         }
       ]
     },
@@ -21,10 +21,38 @@
           "version": "repo-file-v1:sha256:4b4a9de7b04a41cd0f9d1f66a7212313926b106e73e7e3bfda9388a0d649670b"
         }
       ]
+    },
+    {
+      "id": "claim_ad3e293d29c74afa8dbee5cacacd7b22",
+      "statement": "Partial Prefetching включён вместе с Cache Components; generated Query factories не инвалидируют кеш после мутации автоматически.",
+      "evidence": [
+        {
+          "resource": "repo://next.config.ts",
+          "version": "repo-file-v1:sha256:e2a14ed51741f10b34748290f05ecfe730dbc92cbd956a28c23a87a5579984e3"
+        },
+        {
+          "resource": "repo://src/api/codegen/query.ts",
+          "version": "repo-file-v1:sha256:ee8d60fb47801ce7d3893ff9f74abd753907c35ac6ab4f72a15c53919619dcbc"
+        }
+      ]
+    },
+    {
+      "id": "claim_3a0c2662928e46b3ab632157bb62ec81",
+      "statement": "Стандартный apiFetch на сервере может читать next/headers для runtime mock mode и mock scenario; Config позволяет явно переопределить fetch.",
+      "evidence": [
+        {
+          "resource": "repo://src/api/client-config.ts#L151-L156",
+          "version": "repo-lines-v1:sha256:591732b9881818b3c89f5d9270ffa747cd4a5f1289a18753da6950a84a6b4f2f:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDNiNTdkOGZhYTMyNDdkYTNmYTFjNTEzMjEwMjZjOTk2NGM3MDM3MzVkNjZlNjdlMzYzN2Q1YTFhODQyYzk2YSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiODU4MGI3NjUxOGRhZTk3OWZhZWJkMDIzNjdhMjkyOTJhNTBkOTc2MDkyMjUxYTM4YTZjZTMwODgwYmE0MjgyNSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNTRlMmM3YjBjZmZlYjRjNTQ5MTg1MzFkYjUzM2JhMzIzZThlMzFiMjM4MGFlODViNjM2ZWZlODYxMjRmM2Y1MiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://src/api/client-config.ts#L44-L104",
+          "version": "repo-lines-v1:sha256:a753a6794ba211003e47b0ec400f124dfe839584daf37cc36ec03c57b15a109d:eyJzZWxlY3RlZExpbmVDb3VudCI6NjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ5NDdhMmU3OWQ0ZjA3MzVhMWEzNWM5N2UyOTE5NTdiNGU4Yjk2ZThhY2MyNDZiOGE1YjMyZTQ3OWZiMzhlZWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkzMmRhMTQ2ZWVmMWYwMzY1MGE4YWMwM2M2YjM5NmVmOThlMjg5ZGJkMmM4YWIwM2VkNzQ0NGIzMzcyZWRlYmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFiNGU5ODk1ZTRkN2FkOTRlM2IzN2Q0NGRlZjEwMjc5YzVlNWIxYjkxOWY2N2VkYWFjZTJiYTYzMWNhYjJkMGMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI3NDE5NzQyNGNhNTc1NzczYmE5OTZjY2RkNDM1MWMyM2UwODE0MDViZTI2MGRjNTdhOGZhYjNjYzlmMjljNjcifQ"
+        }
+      ]
     }
   ],
   "verification": {
     "by": "openwiki/0.7.2",
-    "at": "2026-11-16T14:24:53.735Z"
+    "at": "2026-11-16T15:55:30.306Z"
   }
 }
