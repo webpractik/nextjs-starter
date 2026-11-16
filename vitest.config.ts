@@ -100,6 +100,9 @@ export default defineConfig({
                     enabled: true,
                     include: [
                         '@sentry/nextjs',
+                        '@tanstack/react-query-next-experimental',
+                        'framer-motion',
+                        'react-use',
                         'class-variance-authority',
                         'clsx',
                         'lodash-es',
@@ -130,7 +133,7 @@ export default defineConfig({
                     name: 'unit',
                     exclude: testExclude,
                     environment: 'node',
-                    include: ['**/*.unit.test.{ts,tsx}', 'src/api/**/*.test.ts'],
+                    include: ['tests/unit/**/*.test.{ts,tsx}'],
                     setupFiles: ['./src/tests/setup-env.ts', './src/tests/setup-allure-unit.ts'],
                 },
             },
@@ -145,11 +148,7 @@ export default defineConfig({
                         instances: [{ browser: 'chromium' }],
                         provider: playwright(),
                     },
-                    include: [
-                        '**/*.component.test.{ts,tsx}',
-                        'app/**/*.test.tsx',
-                        'src/**/*.test.tsx',
-                    ],
+                    include: ['tests/component/**/*.test.{ts,tsx}'],
                     setupFiles: [
                         './src/tests/setup-env.ts',
                         './src/tests/setup-browser.ts',
@@ -174,6 +173,9 @@ export default defineConfig({
         exclude: ['undici'],
         include: [
             '@sentry/nextjs',
+            '@tanstack/react-query-next-experimental',
+            'framer-motion',
+            'react-use',
             'class-variance-authority',
             'clsx',
             'lodash-es',
