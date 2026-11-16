@@ -16,6 +16,7 @@ async function snapshot(directory: string): Promise<Record<string, string>> {
             }
         } else {
             result[entry.name] = createHash('sha256')
+                // oxlint-disable-next-line react-doctor/async-await-in-loop -- Sequential traversal bounds file IO and preserves snapshot key order.
                 .update(await readFile(filePath))
                 .digest('hex')
         }

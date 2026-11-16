@@ -132,9 +132,10 @@ function schemaType(root: Mapping, parameter: unknown): ContractSchemaType {
 
 function resolveParameters(root: Mapping, value: unknown) {
     return Array.isArray(value)
-        ? value
-              .map((parameter) => resolveLocalReference(root, parameter))
-              .filter((parameter) => isMapping(parameter))
+        ? value.flatMap((parameter) => {
+              const resolved = resolveLocalReference(root, parameter)
+              return isMapping(resolved) ? [resolved] : []
+          })
         : []
 }
 

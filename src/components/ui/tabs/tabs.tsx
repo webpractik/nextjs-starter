@@ -18,7 +18,7 @@ export function Tabs({
     `, className)} {...props} />
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
+// oxlint-disable-next-line react-refresh/only-export-components, react-doctor/only-export-components -- CVA variants are part of the public Tabs styling API.
 export const tabsListVariants = cva(`
     group/tabs-list inline-flex w-fit items-center justify-center rounded-lg p-[3px]
     text-muted-foreground

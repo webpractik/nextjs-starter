@@ -66,12 +66,13 @@ export async function generateKubbFacets(contract: ContractModel, outputDirector
             `export { ${name} as z${pascalCase(name.replace(/Schema$/, ''), { mergeAmbiguousCharacters: true })} } from './schemas'`,
     )
     const aliases = contract.operations.flatMap((operation) =>
-        operation.responses
-            .filter((response) => response.hasBody)
-            .map(
-                (response) =>
-                    `export { ${operation.operationId}Status${response.status}Schema as z${pascalCase(operation.operationId)}Response${response.status} } from './schemas'`,
-            ),
+        operation.responses.flatMap((response) =>
+            response.hasBody
+                ? [
+                      `export { ${operation.operationId}Status${response.status}Schema as z${pascalCase(operation.operationId)}Response${response.status} } from './schemas'`,
+                  ]
+                : [],
+        ),
     )
     await writeFile(
         path.join(outputDirectory, 'schema-facade.ts'),
@@ -211,6 +212,7 @@ async function generateQueryFactories(contract: ContractModel, outputDirectory: 
             throw new Error(`Missing Kubb operation type export: ${name}Options`)
         }
 
+        // oxlint-disable-next-line react-doctor/async-await-in-loop -- Sequential reads preserve deterministic generated output and bound file IO.
         const types = await readFile(path.join(outputDirectory, 'types', `${typeFile}.ts`), 'utf8')
         lines.push(
             `import type { ${name}Options, ${name}Responses } from './types'`,

@@ -27,8 +27,7 @@ export async function assertKubbContractParity(contract: ContractModel, bundlePa
         path: operation.path,
         tags: operation.tags ?? [],
         pathParameters: operation.parameters
-            .filter((parameter) => parameter.in === 'path')
-            .map((parameter) => parameter.name)
+            .flatMap((parameter) => (parameter.in === 'path' ? [parameter.name] : []))
             .sort(),
         responses: operation.responses.map((response) => {
             const status = Number(response.statusCode)
