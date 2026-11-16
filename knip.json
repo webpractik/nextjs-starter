@@ -1,34 +1,30 @@
 {
     "$schema": "https://unpkg.com/knip@6/schema.json",
     "tags": ["-lintignore"],
-    "ignore": [
-        "packages/api/**",
-        "instrumentation-client.js",
-        "vitest.config.ts",
-        "vitest.setup.ts"
+    "ignore": [],
+    "entry": [
+        "tools/prepare-standalone.mjs",
+        "tools/run-standalone-e2e.mjs",
+        "src/components/ui/**/index.{ts,tsx}!",
+        "src/api/{index,client,query,schemas,mocks,cache-tags}.ts!",
+        "src/api/{kubb.config,generators/run-post-generate,generators/check-generated}.ts",
+        "src/tests/fixtures/**/*.tsx",
+        "src/tests/setup-*.ts",
+        "src/tests/mocks/*.ts",
+        "src/**/*.test.{ts,tsx}",
+        "instrumentation*.ts",
+        "src/components/utilities/**/*.{ts,tsx}",
+        "src/hooks/*.ts",
+        "src/utils/*.ts",
+        "src/tests/mocks/*.tsx",
+        "src/constants/*.ts"
     ],
-    "workspaces": {
-        ".": {
-            "entry": ["tools/prepare-standalone.mjs", "tools/run-standalone-e2e.mjs"],
-            "ignoreDependencies": [
-                "@tanstack/react-devtools",
-                "@tanstack/react-form-devtools",
-                "shadcn"
-            ],
-            "vitest": {
-                "config": []
-            }
-        },
-        "packages/core": {
-            "ignoreDependencies": [
-                "@maskito/core",
-                "@maskito/kit",
-                "@maskito/phone",
-                "@maskito/react",
-                "@tanstack/react-form",
-                "libphonenumber-js"
-            ],
-            "ignoreFiles": ["form/**", "slider/**"]
-        }
-    }
+    "ignoreDependencies": ["cssnano"],
+    "vitest": {
+        "config": ["vitest.config.ts"]
+    },
+    "ignoreIssues": {
+        "src/api/codegen/**": ["exports", "types", "duplicates"]
+    },
+    "ignoreExportsUsedInFile": true
 }

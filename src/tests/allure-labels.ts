@@ -10,10 +10,10 @@ export type FrontendAllureLayer = (typeof frontendAllureLayers)[keyof typeof fro
 export const FRONTEND_ALLURE_FALLBACK_FEATURE = 'Frontend infrastructure'
 
 const featureByPath = [
-    { feature: 'API codegen', includes: ['/packages/api/'] },
+    { feature: 'API codegen', includes: ['/src/api/', '/src/tests/api-client.component.test.tsx'] },
     { feature: 'App routes', includes: ['/app/'] },
     { feature: 'Error handling', includes: ['/src/components/utilities/error-boundary/'] },
-    { feature: 'UI components', includes: ['/packages/core/'] },
+    { feature: 'UI components', includes: ['/src/components/ui/'] },
     { feature: 'Utilities', includes: ['/src/utils/'] },
     { feature: 'Test infrastructure', includes: ['/src/tests/'] },
 ] as const satisfies readonly {
@@ -43,4 +43,6 @@ export async function setFrontendAllureLabels(testPath: string, layer: FrontendA
     await label('Epic', 'nextjs-starter')
     await label('Feature', getFrontendAllureFeature(testPath))
     await label('layer', layer)
+    await label('feature', getFrontendAllureFeature(testPath))
+    await label('severity', 'normal')
 }

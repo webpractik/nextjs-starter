@@ -1,4 +1,4 @@
-import { Skeleton } from '@repo/core/skeleton'
+import { Skeleton } from '#/components/ui/skeleton'
 
 export default function RootLoading() {
     return (

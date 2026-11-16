@@ -1,12 +1,13 @@
-import { getPetById } from '@repo/api'
-import { createClient } from '@repo/api/client'
-import { fakePet } from '@repo/api/mocks'
-import { getPetByIdOptions } from '@repo/api/query'
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
 import * as allure from 'allure-js-commons'
 import { afterEach, expect, it, vi } from 'vitest'
 import { render } from 'vitest-browser-react'
 import { page } from 'vitest/browser'
+
+import { getPetById } from '#/api'
+import { createClient } from '#/api/client'
+import { fakePet } from '#/api/mocks'
+import { getPetByIdOptions } from '#/api/query'
 
 function PetConsumer({ client }: { client: ReturnType<typeof createClient> }) {
     const query = useQuery(getPetByIdOptions({ client, path: { petId: 'browser-pet' } }))
@@ -19,12 +20,7 @@ afterEach(async () => {
 })
 
 it('компонует сгенерированные Query options с настоящим React provider', async () => {
-    await allure.labels(
-        { name: 'layer', value: 'Component-front' },
-        { name: 'feature', value: 'API codegen' },
-        { name: 'story', value: 'Потребитель SDK в браузере' },
-        { name: 'severity', value: 'normal' },
-    )
+    await allure.story('Потребитель SDK в браузере')
     const pet = { ...fakePet(), name: 'Browser Pixel' }
     const client = createClient({ fetch: async () => Response.json(pet) })
     const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
@@ -38,12 +34,7 @@ it('компонует сгенерированные Query options с наст�
 })
 
 it('переключает cookie mock mode между запросами одного browser client', async () => {
-    await allure.labels(
-        { name: 'layer', value: 'Component-front' },
-        { name: 'feature', value: 'API codegen' },
-        { name: 'story', value: 'Runtime переключение generated mocks' },
-        { name: 'severity', value: 'normal' },
-    )
+    await allure.story('Runtime переключение generated mocks')
     const pet = { ...fakePet(), name: 'Network Pixel' }
     const fetch = vi
         .fn<typeof globalThis.fetch>()

@@ -11,6 +11,10 @@
         "**/.docker/**",
         "**/.idea/**",
         "**/report/**",
-        "**/*.svg"
+        "**/*.svg",
+        "**/openwiki/**",
+        "package-lock.json",
+        "src/api/codegen/**",
+        "src/api/bundled.yaml"
     ]
 }

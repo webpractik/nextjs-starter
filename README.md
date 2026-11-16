@@ -1,50 +1,51 @@
 # Next.js Starter
 
-Стартовый монорепозиторий на Next.js для production: общие компоненты, типизированный API-клиент,
+Стартовый проект на Next.js для production: общие компоненты, типизированный API-клиент,
 наблюдаемость и браузерные тесты.
 
 ## Быстрый старт
 
-Требования: Node.js 24.15.0 или новее в ветке 24.x и npm 11.x.
+Требования: Node.js 26.13.1 или новее в ветке 26.x и npm 11.x.
 
 ```bash
+npx create-next-app@latest my-app --example https://github.com/webpractik/nextjs-starter --use-npm
+cd my-app
 npm ci
 test -e .env || cp .env.example .env
 npx lefthook install
 npm run dev
 ```
 
-Откройте <http://nextjs-starter.127.0.0.1.nip.io:3000>. nip.io направляет имя на
-`127.0.0.1` без изменений в системном `hosts`.
+Откройте <http://localhost:3000>, как задано в `.env.example`.
 
 Существующий `.env` не перезаписывается и не дополняется: сверьте его с `.env.example`.
 Next.js проверяет переменные при загрузке конфига. Заменяя локальные заглушки, следуйте
-[справочнику переменных окружения](docs/environment.md).
+[справочнику переменных окружения](openwiki/operations/environment.md).
 
 ## Возможности
 
 - Next.js 16 App Router, React 19, TypeScript 7 и Tailwind CSS 4.
 - Cache Components включены; React Compiler работает только в production-сборках.
-- npm workspaces для `@repo/core` и `@repo/api`.
+- UI и API находятся в `src/components/ui` и `src/api`; зависимости устанавливаются из корня.
 - UI-примитивы в стиле Base UI/shadcn, безопасный вывод HTML и типизированная композиция
-  TanStack Form в `@repo/core`.
+  TanStack Form в `#/components/ui`.
 - Контракт OpenAPI 3.2, проверка Redocly и генерация Kubb 5: типы TypeScript, Fetch SDK,
   плоский SDK, схемы Zod, опции TanStack Query, фабрики Faker и теги кеша.
-  Публичные точки входа: `@repo/api`, `/client`, `/query`, `/schemas`, `/mocks` и
+  Публичные точки входа: `#/api`, `/client`, `/query`, `/schemas`, `/mocks` и
   `/cache-tags`.
-- Серверные моки работают без бэкенда на внутренних сгенерированных маршрутах;
-  [в браузере при разработке мешает BFF-префикс](docs/mock-mode.md#известное-ограничение-browser-development).
+- [Режим моков](openwiki/development/mock-mode.md) работает на сервере и в браузере без бэкенда;
+  транспорт удаляет префикс API перед сопоставлением сгенерированного маршрута.
 - Sentry, OpenTelemetry, логи Adze и метрики Prometheus.
 - Модульные и браузерные компонентные тесты Vitest, Playwright E2E и Storybook.
 - Oxfmt, Oxlint, Knip, JSCPD, Lefthook и Commitizen.
 
-Контракт Petstore в `packages/api/openapi/` демонстрирует кодогенерацию, без бэкенда и обработчиков
+Контракт Petstore в `src/api/openapi/` демонстрирует кодогенерацию, без бэкенда и обработчиков
 Next.js. Kubb использует TypeScript 7 проекта без compiler hook; ограничения поддержки
-OpenAPI 3.2 и проверки совместимости описаны в [API codegen](docs/api-codegen.md).
+OpenAPI 3.2 и проверки совместимости описаны в [API codegen](openwiki/development/api-codegen.md).
 
 ## Формы
 
-`@repo/core/form` экспортирует общую типизированную фабрику форм `useAppForm`. Она регистрирует
+`#/components/ui/form` экспортирует общую типизированную фабрику форм `useAppForm`. Она регистрирует
 поля text, textarea, number, date, phone, checkbox, switch, select, radio-group и slider вместе с
 `SubmitButton`.
 
@@ -54,8 +55,9 @@ Standard Schema и передаются напрямую, без адаптер�
 ```tsx
 'use client'
 
-import { useAppForm } from '@repo/core/form'
 import { z } from 'zod'
+
+import { useAppForm } from '#/components/ui/form'
 
 const projectSchema = z.object({ name: z.string().min(3) })
 
@@ -88,7 +90,7 @@ export function ProjectForm() {
 
 TanStack Form Devtools подключаются только при разработке, не в production и тестах. Импорты и
 работа с компонентами — в
-[справочнике `@repo/core`](docs/core-ui.md).
+[справочнике `#/components/ui`](openwiki/ui/core.md).
 
 ## Проверка
 
@@ -102,11 +104,7 @@ npm run verify      # полный локальный набор проверо�
 `verify` запускает `verify:fast`, Knip, JSCPD, все проекты Vitest, затем Playwright E2E.
 Перед коммитом Lefthook форматирует файлы в индексе Git и запускает `verify:fast`.
 
-GitLab CI проверяет воспроизводимость API codegen, затем разделяет `verify:fast` и Vitest на этапы, не запускает standalone Playwright E2E и не
-собирает Next.js для развёртывания. `.gitlab/deploy.yaml` закомментирован: публикации и
-развёртывания нет. Будущей задаче нужна собственная сборка или готовый неизменяемый артефакт — см.
-[правила тестирования](docs/testing-guidelines.md) и
-[руководство по развёртыванию](docs/deployment.md).
+GitHub Actions и GitLab CI не настроены. Проверки и сборка запускаются локально командами выше.
 
 ## Служебные endpoints
 
@@ -119,14 +117,15 @@ Health и readiness сейчас всегда возвращают `200`; readin
 
 ## Документация
 
-Начните с [индекса документации](docs/README.md):
+Начните с [индекса документации](openwiki/quickstart.md):
 
-- [Архитектура](docs/architecture.md)
-- [Переменные окружения](docs/environment.md)
-- [Генерация API-клиента](docs/api-codegen.md)
-- [BFF proxy](docs/bff-proxy.md)
-- [Режим моков](docs/mock-mode.md)
-- [Кеширование и потоковый рендеринг](docs/cache-and-streaming.md)
-- [Компоненты `@repo/core`](docs/core-ui.md)
-- [Правила тестирования](docs/testing-guidelines.md)
-- [Развёртывание](docs/deployment.md)
+- [Архитектура](openwiki/architecture/overview.md)
+- [Переменные окружения](openwiki/operations/environment.md)
+- [Генерация API-клиента](openwiki/development/api-codegen.md)
+- [BFF proxy](openwiki/architecture/bff-proxy.md)
+- [Режим моков](openwiki/development/mock-mode.md)
+- [Кеширование и потоковый рендеринг](openwiki/architecture/cache-and-streaming.md)
+- [Карта компонентов](COMPONENTS.md)
+- [UI-примитивы и формы](openwiki/ui/core.md)
+- [Правила тестирования](openwiki/testing/testing.md)
+- [Развёртывание](openwiki/operations/deployment.md)

@@ -1,7 +1,8 @@
 'use client'
 
-import { getPetByIdOptions } from '@repo/api/query'
 import { useQuery } from '@tanstack/react-query'
+
+import { getPetByIdOptions } from '#/api/query'
 
 export function BrowserPet() {
     const pet = useQuery(getPetByIdOptions({ path: { petId: 'browser' } }))

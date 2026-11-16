@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:dd71c2887c01be1af506e8a48736645aa52128fa58a15585b121d3afc8cf5e38",
+  "claims": [
+    {
+      "id": "claim_2e16e60c160d4172b4d3943e9a46e040",
+      "statement": "Cache Components включены; React Compiler включается только в production.",
+      "evidence": [
+        {
+          "resource": "repo://next.config.ts",
+          "version": "repo-file-v1:sha256:2cafb95340d12f95aed673289d90ca3d6b0b6b49a2929b73ef8abd9a5acd040d"
+        }
+      ]
+    },
+    {
+      "id": "claim_2935b49c3f684815a98cea4c79519d3b",
+      "statement": "QueryClient создаётся отдельно для серверных вызовов и переиспользуется в браузере; staleTime равен 60 секундам.",
+      "evidence": [
+        {
+          "resource": "repo://src/utils/get-query-client.ts",
+          "version": "repo-file-v1:sha256:4b4a9de7b04a41cd0f9d1f66a7212313926b106e73e7e3bfda9388a0d649670b"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.2",
+    "at": "2026-11-16T14:24:53.735Z"
+  }
+}

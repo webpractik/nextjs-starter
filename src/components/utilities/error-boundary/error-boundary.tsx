@@ -1,9 +1,9 @@
 import type { ErrorBoundaryProps } from '@sentry/nextjs'
 
-import { Button } from '@repo/core/button'
-import { Typography } from '@repo/core/typography'
 import { ErrorBoundary as SentryBoundary } from '@sentry/nextjs'
 
+import { Button } from '#/components/ui/button'
+import { Typography } from '#/components/ui/typography'
 import { cn } from '~/src/utils/cn'
 
 interface ErrorFallbackProps {

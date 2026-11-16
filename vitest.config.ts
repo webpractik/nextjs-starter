@@ -88,7 +88,7 @@ export default defineConfig({
                 'src/fonts/**',
                 'src/styles/**',
             ],
-            include: ['app/**/*.{ts,tsx}', 'packages/**/*.{ts,tsx}', 'src/**/*.{ts,tsx}'],
+            include: ['app/**/*.{ts,tsx}', 'src/**/*.{ts,tsx}'],
             provider: 'v8',
             reporter: ['text', 'html', 'lcov', 'json', 'json-summary', 'cobertura'],
             reportsDirectory: './coverage/vitest',
@@ -130,7 +130,7 @@ export default defineConfig({
                     name: 'unit',
                     exclude: testExclude,
                     environment: 'node',
-                    include: ['**/*.unit.test.{ts,tsx}', 'packages/**/*.test.ts'],
+                    include: ['**/*.unit.test.{ts,tsx}', 'src/api/**/*.test.ts'],
                     setupFiles: ['./src/tests/setup-env.ts', './src/tests/setup-allure-unit.ts'],
                 },
             },
@@ -138,7 +138,7 @@ export default defineConfig({
                 extends: true,
                 test: {
                     name: 'component',
-                    exclude: testExclude,
+                    exclude: [...testExclude, '**/*.unit.test.{ts,tsx}'],
                     browser: {
                         enabled: true,
                         headless: true,

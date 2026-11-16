@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:43e46e32c9395ac6b5f5dda9db507c769e96b6059c7190b8f84bd068b14290cd",
+  "claims": [
+    {
+      "id": "claim_b1d48394989a413f84a0a3673bb0f082",
+      "statement": "Сервер регистрирует OpenTelemetry с APP_NAME, а Sentry инициализирует в Node runtime; клиентский Sentry работает только в production.",
+      "evidence": [
+        {
+          "resource": "repo://instrumentation-client.ts",
+          "version": "repo-file-v1:sha256:9371804de6a3ed8eb4554e4a3d8c4494e2e624c4b3f4ca5e7e5a7691800cb3fa"
+        },
+        {
+          "resource": "repo://instrumentation.ts",
+          "version": "repo-file-v1:sha256:1d81f90d1266aed65738fdb6f5b301a9c6b2e06185a036f7d6e1215f53384feb"
+        }
+      ]
+    },
+    {
+      "id": "claim_9e40529fa9224b3ca182fe99a0940659",
+      "statement": "Health и readiness возвращают статический OK, метрики отдают общий локальный registry Prometheus.",
+      "evidence": [
+        {
+          "resource": "repo://app/api/health/route.ts",
+          "version": "repo-file-v1:sha256:7958660199146d15ba4da4969e41ce349536ad537040b9dfd295e857ed642b6e"
+        },
+        {
+          "resource": "repo://app/api/metrics/route.ts",
+          "version": "repo-file-v1:sha256:88d1005759ffd83cd2781d64a269ee02103d33a8b39ed1aeb5c789079daf4f58"
+        },
+        {
+          "resource": "repo://app/api/ready/route.ts",
+          "version": "repo-file-v1:sha256:7958660199146d15ba4da4969e41ce349536ad537040b9dfd295e857ed642b6e"
+        },
+        {
+          "resource": "repo://src/observability/metrics.ts",
+          "version": "repo-file-v1:sha256:ba4c7a94a0955dc26794ab06f2af33e1379b098b98e4cf751edfff3238ddb685"
+        }
+      ]
+    },
+    {
+      "id": "claim_78595a9dc6c54e91b1a9141d05013b10",
+      "statement": "Request logging измеряет длительность собственного middleware, а не полного HTTP-запроса.",
+      "evidence": [
+        {
+          "resource": "repo://src/proxy/request-logging.ts",
+          "version": "repo-file-v1:sha256:83504edc532a0b695e5d65b72661a38c3d581654fe33cbf2d483458355265bf3"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.2",
+    "at": "2026-11-16T14:24:53.735Z"
+  }
+}

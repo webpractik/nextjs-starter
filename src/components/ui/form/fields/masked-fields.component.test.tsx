@@ -1,0 +1,332 @@
+import type { FocusEvent } from 'react'
+
+import { useForm } from '@tanstack/react-form'
+import { expect, it, vi } from 'vitest'
+import { render } from 'vitest-browser-react'
+import { userEvent } from 'vitest/browser'
+
+import { DateField, PhoneField } from '.'
+import { fieldContext } from '../form-context'
+
+const configuredDateOptions = {
+    locale: 'en-US',
+    max: new Date(2030, 11, 31),
+    min: new Date(2020, 0, 1),
+}
+
+function DateFieldsDemo({
+    onRequiredDateBlur,
+}: {
+    onRequiredDateBlur: (_event: FocusEvent<HTMLInputElement>) => void
+}) {
+    const form = useForm({
+        defaultValues: {
+            configuredDate: '',
+            disabledDate: '01.01.2020',
+            pastedDate: '',
+            requiredDate: '',
+            typedDate: '',
+        },
+    })
+
+    return (
+        <>
+            <form.Field name="typedDate">
+                {(field) => (
+                    <fieldContext.Provider value={field}>
+                        <DateField label="Typed date" />
+                    </fieldContext.Provider>
+                )}
+            </form.Field>
+
+            <form.Field name="pastedDate">
+                {(field) => (
+                    <fieldContext.Provider value={field}>
+                        <DateField label="Pasted date" />
+                    </fieldContext.Provider>
+                )}
+            </form.Field>
+
+            <form.Field name="configuredDate">
+                {(field) => (
+                    <fieldContext.Provider value={field}>
+                        <DateField dateOptions={configuredDateOptions} label="Configured date" />
+                    </fieldContext.Provider>
+                )}
+            </form.Field>
+
+            <form.Field
+                name="requiredDate"
+                validators={{
+                    onBlur: ({ value }) =>
+                        value === '31.12.2026' ? undefined : 'Enter a complete date',
+                }}
+            >
+                {(field) => (
+                    <fieldContext.Provider value={field}>
+                        <DateField
+                            description="Use eight digits."
+                            label="Required date"
+                            onBlur={onRequiredDateBlur}
+                        />
+                    </fieldContext.Provider>
+                )}
+            </form.Field>
+
+            <form.Field name="disabledDate">
+                {(field) => (
+                    <fieldContext.Provider value={field}>
+                        <DateField label="Disabled date" disabled />
+                    </fieldContext.Provider>
+                )}
+            </form.Field>
+
+            <button type="button" onClick={() => form.setFieldValue('typedDate', '15.01.2027')}>
+                Set external date
+            </button>
+
+            <input aria-label="Date clipboard source" defaultValue="01022027" />
+
+            <form.Subscribe selector={(state) => state.values}>
+                {(values) => (
+                    <>
+                        <output aria-label="Typed date value">{values.typedDate}</output>
+                        <output aria-label="Pasted date value">{values.pastedDate}</output>
+                    </>
+                )}
+            </form.Subscribe>
+        </>
+    )
+}
+
+it('форматирует введённую дату и отражает внешнее обновление управляемого значения', async () => {
+    const screen = await render(<DateFieldsDemo onRequiredDateBlur={() => undefined} />)
+    const typedDate = screen.getByRole('textbox', { name: 'Typed date' })
+
+    await userEvent.type(typedDate, '31122026')
+    await expect.element(typedDate).toHaveValue('31.12.2026')
+    await expect
+        .element(screen.getByRole('status', { name: 'Typed date value' }))
+        .toHaveTextContent('31.12.2026')
+
+    await screen.getByRole('button', { name: 'Set external date' }).click()
+    await expect.element(typedDate).toHaveValue('15.01.2027')
+})
+
+it('форматирует вставленные восемь цифр и сохраняет маску в состоянии формы', async () => {
+    const screen = await render(<DateFieldsDemo onRequiredDateBlur={() => undefined} />)
+    const pastedDate = screen.getByRole('textbox', { name: 'Pasted date' })
+    const clipboardSource = screen.getByRole('textbox', { name: 'Date clipboard source' })
+
+    const clipboardInput = clipboardSource.element()
+
+    if (!(clipboardInput instanceof HTMLInputElement)) {
+        throw new TypeError('Источник содержимого буфера обмена не является input')
+    }
+
+    clipboardInput.select()
+    await userEvent.copy()
+    await pastedDate.click()
+    await userEvent.paste()
+
+    await expect.element(pastedDate).toHaveValue('01.02.2027')
+    await expect
+        .element(screen.getByRole('status', { name: 'Pasted date value' }))
+        .toHaveTextContent('01.02.2027')
+})
+
+it('форматирует дату по заданной локали и ограничивает её допустимым диапазоном', async () => {
+    const screen = await render(<DateFieldsDemo onRequiredDateBlur={() => undefined} />)
+    const configuredDate = screen.getByRole('textbox', { name: 'Configured date' })
+
+    await userEvent.type(configuredDate, '12312019')
+    await expect.element(configuredDate).toHaveValue('01/01/2020')
+    await configuredDate.clear()
+    await userEvent.type(configuredDate, '12312031')
+    await expect.element(configuredDate).toHaveValue('12/31/2030')
+})
+
+it('после потери фокуса помечает поле даты и связывает с ним сообщение об ошибке', async () => {
+    let touchedDuringBlur: string | null = null
+    const onRequiredDateBlur = vi.fn((event: FocusEvent<HTMLInputElement>) => {
+        touchedDuringBlur =
+            event.currentTarget.closest('[data-slot="field"]')?.getAttribute('data-touched') ?? null
+    })
+    const screen = await render(<DateFieldsDemo onRequiredDateBlur={onRequiredDateBlur} />)
+    const requiredDate = screen.getByRole('textbox', { name: 'Required date' })
+
+    await requiredDate.click()
+    await userEvent.tab()
+
+    expect(onRequiredDateBlur).toHaveBeenCalledTimes(1)
+    expect(touchedDuringBlur).toBe('false')
+
+    const requiredField = requiredDate.element().closest('[data-slot="field"]')
+    await expect.poll(() => requiredField?.getAttribute('data-touched')).toBe('true')
+
+    const description = screen.getByText('Use eight digits.')
+    const error = screen.getByRole('alert')
+    const describedBy = requiredDate.element().getAttribute('aria-describedby')
+
+    await expect.element(error).toHaveTextContent('Enter a complete date')
+    await expect.element(requiredDate).toHaveAttribute('aria-invalid', 'true')
+    expect(describedBy).toContain(description.element().id)
+    expect(describedBy).toContain(error.element().id)
+})
+
+it('делает отключённое поле даты недоступным для ввода и сохраняет числовую клавиатуру', async () => {
+    const screen = await render(<DateFieldsDemo onRequiredDateBlur={() => undefined} />)
+    const disabledDate = screen.getByRole('textbox', { name: 'Disabled date' })
+
+    await expect.element(disabledDate).toBeDisabled()
+    await expect.element(disabledDate).toHaveAttribute('inputmode', 'numeric')
+    expect(disabledDate.element().closest('[data-slot="field"]')).toHaveAttribute(
+        'data-disabled',
+        'true',
+    )
+})
+
+const nationalUsPhoneOptions = {
+    countryIsoCode: 'US',
+    format: 'NATIONAL',
+    strict: true,
+} as const
+
+function PhoneFieldsDemo({
+    onRequiredPhoneBlur,
+}: {
+    onRequiredPhoneBlur: (_event: FocusEvent<HTMLInputElement>) => void
+}) {
+    const form = useForm({
+        defaultValues: {
+            disabledPhone: '+7 999 123-45-67',
+            requiredPhone: '',
+            russianPhone: '+7 ',
+            usPhone: '',
+        },
+    })
+
+    return (
+        <>
+            <form.Field name="russianPhone">
+                {(field) => (
+                    <fieldContext.Provider value={field}>
+                        <PhoneField label="Russian phone" />
+                    </fieldContext.Provider>
+                )}
+            </form.Field>
+
+            <form.Field name="usPhone">
+                {(field) => (
+                    <fieldContext.Provider value={field}>
+                        <PhoneField
+                            label="US national phone"
+                            phoneOptions={nationalUsPhoneOptions}
+                        />
+                    </fieldContext.Provider>
+                )}
+            </form.Field>
+
+            <form.Field
+                name="requiredPhone"
+                validators={{
+                    onBlur: ({ value }) =>
+                        value === '+7 999 123-45-67' ? undefined : 'Enter a complete phone',
+                }}
+            >
+                {(field) => (
+                    <fieldContext.Provider value={field}>
+                        <PhoneField
+                            description="Include all ten national digits."
+                            label="Required phone"
+                            onBlur={onRequiredPhoneBlur}
+                        />
+                    </fieldContext.Provider>
+                )}
+            </form.Field>
+
+            <form.Field name="disabledPhone">
+                {(field) => (
+                    <fieldContext.Provider value={field}>
+                        <PhoneField label="Disabled phone" disabled />
+                    </fieldContext.Provider>
+                )}
+            </form.Field>
+
+            <button
+                type="button"
+                onClick={() => form.setFieldValue('russianPhone', '+7 912 345-67-89')}
+            >
+                Set external phone
+            </button>
+
+            <form.Subscribe selector={(state) => state.values.russianPhone}>
+                {(russianPhone) => <output aria-label="Russian phone value">{russianPhone}</output>}
+            </form.Subscribe>
+        </>
+    )
+}
+
+it('форматирует российский номер и отражает внешнее обновление управляемого значения', async () => {
+    const screen = await render(<PhoneFieldsDemo onRequiredPhoneBlur={() => undefined} />)
+    const russianPhone = screen.getByRole('textbox', { name: 'Russian phone' })
+
+    await userEvent.type(russianPhone, '9991234567')
+    await expect.element(russianPhone).toHaveValue('+7 999 123-45-67')
+    await expect
+        .element(screen.getByRole('status', { name: 'Russian phone value' }))
+        .toHaveTextContent('+7 999 123-45-67')
+
+    await screen.getByRole('button', { name: 'Set external phone' }).click()
+    await expect.element(russianPhone).toHaveValue('+7 912 345-67-89')
+    await expect.element(russianPhone).toHaveAttribute('type', 'tel')
+    await expect.element(russianPhone).toHaveAttribute('inputmode', 'tel')
+    await expect.element(russianPhone).toHaveAttribute('autocomplete', 'tel')
+})
+
+it('форматирует номер по альтернативной конфигурации США', async () => {
+    const screen = await render(<PhoneFieldsDemo onRequiredPhoneBlur={() => undefined} />)
+    const usPhone = screen.getByRole('textbox', { name: 'US national phone' })
+
+    await userEvent.type(usPhone, '2025550123')
+    await expect.element(usPhone).toHaveValue('(202) 555-0123')
+})
+
+it('после потери фокуса помечает поле телефона и связывает с ним сообщение об ошибке', async () => {
+    let touchedDuringBlur: string | null = null
+    const onRequiredPhoneBlur = vi.fn((event: FocusEvent<HTMLInputElement>) => {
+        touchedDuringBlur =
+            event.currentTarget.closest('[data-slot="field"]')?.getAttribute('data-touched') ?? null
+    })
+    const screen = await render(<PhoneFieldsDemo onRequiredPhoneBlur={onRequiredPhoneBlur} />)
+    const requiredPhone = screen.getByRole('textbox', { name: 'Required phone' })
+
+    await requiredPhone.click()
+    await userEvent.tab()
+
+    expect(onRequiredPhoneBlur).toHaveBeenCalledTimes(1)
+    expect(touchedDuringBlur).toBe('false')
+
+    const requiredField = requiredPhone.element().closest('[data-slot="field"]')
+    await expect.poll(() => requiredField?.getAttribute('data-touched')).toBe('true')
+
+    const description = screen.getByText('Include all ten national digits.')
+    const error = screen.getByRole('alert')
+    const describedBy = requiredPhone.element().getAttribute('aria-describedby')
+
+    await expect.element(error).toHaveTextContent('Enter a complete phone')
+    await expect.element(requiredPhone).toHaveAttribute('aria-invalid', 'true')
+    expect(describedBy).toContain(description.element().id)
+    expect(describedBy).toContain(error.element().id)
+})
+
+it('делает отключённое поле телефона недоступным для ввода', async () => {
+    const screen = await render(<PhoneFieldsDemo onRequiredPhoneBlur={() => undefined} />)
+    const disabledPhone = screen.getByRole('textbox', { name: 'Disabled phone' })
+
+    await expect.element(disabledPhone).toBeDisabled()
+    expect(disabledPhone.element().closest('[data-slot="field"]')).toHaveAttribute(
+        'data-disabled',
+        'true',
+    )
+})

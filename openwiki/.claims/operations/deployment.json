@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:1fbaa48b7f17b263a9fdb4a4f18c6bfe9c33ce34c6607495154392459cf3e564",
+  "claims": [
+    {
+      "id": "claim_95a5cc34d1ee42a788fa86831ca6862e",
+      "statement": "Dockerfile устанавливает зависимости npm ci, собирает standalone Next.js и запускает runner от пользователя nextjs; SENTRY_AUTH_TOKEN передаётся builder через BuildKit secret.",
+      "evidence": [
+        {
+          "resource": "repo://Dockerfile",
+          "version": "repo-file-v1:sha256:50bc29cb9363dcb3f2c3f3ec4d12597e3fb7439dd70495bb99d8d9fcb7b81954"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.2",
+    "at": "2026-11-16T14:41:28.183Z"
+  }
+}

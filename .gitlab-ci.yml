@@ -1,7 +1,0 @@
-stages:
-    - codequality
-    - test
-    - deploy
-include:
-    - .gitlab/verify.yaml
-    - .gitlab/deploy.yaml

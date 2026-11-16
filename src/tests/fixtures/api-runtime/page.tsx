@@ -1,8 +1,9 @@
-import { getPetById } from '@repo/api'
-import { pets } from '@repo/api/cache-tags'
-import { zPet } from '@repo/api/schemas'
 import { connection } from 'next/server'
 import { Suspense } from 'react'
+
+import { getPetById } from '#/api'
+import { pets } from '#/api/cache-tags'
+import { zPet } from '#/api/schemas'
 
 import { BrowserPet } from './client'
 

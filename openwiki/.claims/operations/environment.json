@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:1f230f87d914684e505115868d1b55fba0fb4dcb38ba44cdc0cee051b07e27de",
+  "claims": [
+    {
+      "id": "claim_ab4f47854df444cbb340ab2154603e3b",
+      "statement": "Env разделён на серверную и browser-visible схемы; NEXT_PUBLIC_* явно перечислены в runtimeEnv клиента.",
+      "evidence": [
+        {
+          "resource": "repo://src/env/client.ts",
+          "version": "repo-file-v1:sha256:286c6a10d7e607342eecc7f2e682a1950bff2d50c0e986951616752266bcaaba"
+        },
+        {
+          "resource": "repo://src/env/server.ts",
+          "version": "repo-file-v1:sha256:127198c2338a37da4bfab0167b3612bc0ac66fe822ee8b9d4904952effdae79f"
+        }
+      ]
+    },
+    {
+      "id": "claim_f94afdaa77684e9995c3e4505d056e49",
+      "statement": "Next config импортирует валидированные env до сборки и использует BACK_INTERNAL_URL и NEXT_PUBLIC_BFF_PATH для development rewrite.",
+      "evidence": [
+        {
+          "resource": "repo://next.config.ts",
+          "version": "repo-file-v1:sha256:2cafb95340d12f95aed673289d90ca3d6b0b6b49a2929b73ef8abd9a5acd040d"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.2",
+    "at": "2026-11-16T14:24:53.735Z"
+  }
+}

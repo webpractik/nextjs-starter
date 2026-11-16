@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:cbc90bf07310bdd99ed99af8a51e185d490ac7a95b9fc7e88145e5ee69153170",
+  "claims": [
+    {
+      "id": "claim_a54b3e147c454552a690c384c07d992b",
+      "statement": "Runtime mocks перехватывают общий Fetch transport и нормализуют basePath перед сопоставлением generated маршрутов.",
+      "evidence": [
+        {
+          "resource": "repo://src/api/client-config.ts",
+          "version": "repo-file-v1:sha256:041d8247d261d484660f67b6dab3c61b125fa9c1a3165951191496301a441141"
+        }
+      ]
+    },
+    {
+      "id": "claim_ea6f2ee5217849168ace04a435848df5",
+      "statement": "Сценарий default содержит пустой список переопределений; mock routes сценария проверяются раньше generated маршрутов.",
+      "evidence": [
+        {
+          "resource": "repo://src/api/mock-client.ts",
+          "version": "repo-file-v1:sha256:ba0eff0d04d1aff543e7717def6a56953f3900df4142defd2d3623573ed76f57"
+        },
+        {
+          "resource": "repo://src/api/mock-scenarios.ts",
+          "version": "repo-file-v1:sha256:6501cf3e153c138b4a73299ffb31464ebcef7698f10ec12084dc7b9bccad2cea"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.2",
+    "at": "2026-11-16T14:24:53.735Z"
+  }
+}

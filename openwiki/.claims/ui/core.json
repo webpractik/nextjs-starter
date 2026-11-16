@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:c69c6cec08985e2004dfd9aa1df31fa21946848b7618a4c620f3d958d85fcb76",
+  "claims": [
+    {
+      "id": "claim_8905bb0f7d31419bbfb88ff3da329206",
+      "statement": "Общая фабрика форм регистрирует десять типов полей и SubmitButton через TanStack Form createFormHook.",
+      "evidence": [
+        {
+          "resource": "repo://src/components/ui/form/form.tsx",
+          "version": "repo-file-v1:sha256:5a162e4b6a7d8f4879203f570c2bd91e2f56a015cda4a6c63c7d7816b3485586"
+        }
+      ]
+    },
+    {
+      "id": "claim_fa466d2cbcb942b0b50d4882fc7a24b3",
+      "statement": "Storybook использует nextjs-vite, a11y, autodocs и истории app/src.",
+      "evidence": [
+        {
+          "resource": "repo://.storybook/main.ts",
+          "version": "repo-file-v1:sha256:9207591b1e445a02e944781ab4fda7a76114c41ce65bc541852e5f6dda46a545"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.2",
+    "at": "2026-11-16T14:31:09.226Z"
+  }
+}

@@ -1,7 +1,8 @@
 'use client'
 
-import { Typography } from '@repo/core/typography'
 import { motion } from 'framer-motion'
+
+import { Typography } from '#/components/ui/typography'
 
 const initialState = { filter: 'blur(10px)', opacity: 0, y: 40 }
 

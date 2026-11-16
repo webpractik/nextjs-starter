@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:c9c4c1cf6e1344565dab309a02e11dfa30ef2b3486d70c4c36a4ebdcb48c0298",
+  "claims": [
+    {
+      "id": "claim_1098f724ef1a4970b788649fd1bbeff3",
+      "statement": "Pipeline проверяет и объединяет OpenAPI, запускает Kubb и проектную постобработку, дважды форматирует generated output и проверяет типы.",
+      "evidence": [
+        {
+          "resource": "repo://package.json",
+          "version": "repo-file-v1:sha256:376995b6d4aa1cbde81ce9232c4fa13fb84d23e7576d5e6048567137cba44e33"
+        },
+        {
+          "resource": "repo://src/api/generators/post-generate.ts",
+          "version": "repo-file-v1:sha256:124daaa34ca033384268fcc4b11b71632c37bc66b0d68dfade40cee6c6304b5b"
+        }
+      ]
+    },
+    {
+      "id": "claim_49fafe5ef0034eadbef57dd64db9968f",
+      "statement": "SDK валидирует успешные JSON-ответы и ошибки соответствующего статуса, поддерживает data/error результат и throwOnError.",
+      "evidence": [
+        {
+          "resource": "repo://src/api/client.ts",
+          "version": "repo-file-v1:sha256:97489656d6b5c3f855d2cb97af4c6e2f6760a960c38b677c886678904fda0332"
+        }
+      ]
+    },
+    {
+      "id": "claim_1717b13719924119bc2e93e6947df57b",
+      "statement": "Схема UpdatePet отклоняет пустой объект согласно minProperties: 1.",
+      "evidence": [
+        {
+          "resource": "repo://src/api/openapi/components/schemas/update-pet.yaml",
+          "version": "repo-file-v1:sha256:9e76f587cb1a02abb1712327e75af1bb36f83ec6355d84be62e88e37152ee9ee"
+        },
+        {
+          "resource": "repo://src/api/schemas.test.ts",
+          "version": "repo-file-v1:sha256:e03540a30db414f51c429b69cb592f24bca56b59b9e5432fa034aefc0ae30b6d"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.2",
+    "at": "2026-11-16T14:41:28.183Z"
+  }
+}

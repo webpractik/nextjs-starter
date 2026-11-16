@@ -2,348 +2,166 @@
 
 ## Область действия и источники истины
 
-- Этот файл действует для всего репозитория. Если в подпапке появится более локальный
-  `AGENTS.md`, его правила имеют приоритет для файлов внутри этой подпапки.
-- Перед изменениями прочитайте конфиги и документацию области задачи. Исполняемый конфиг и
-  фактический код приоритетнее `README.md` и описательных документов, если они расходятся.
-- Не исправляйте попутно чужие или уже существующие изменения рабочего дерева. Ограничивайте diff
-  задачей пользователя.
-- Идентификаторы и код пишутся на английском. В документации, комментариях и пользовательском
-  тексте сохраняйте язык окружающего файла; основная проектная документация сейчас на русском.
+- Правила действуют для всего репозитория; ближайший вложенный `AGENTS.md` имеет приоритет.
+- Перед изменениями прочитайте код и конфиги области задачи. Они приоритетнее описательной
+  документации. Не считайте прошлые результаты проверок доказательством текущей работоспособности.
+- Начните с `git status --short`. Сохраняйте чужие изменения; diff ограничивайте задачей.
+- Идентификаторы пишите на английском. Документацию, комментарии и пользовательский текст
+  оформляйте на языке окружающего файла; основная документация русская.
 
-## Критическое текущее состояние
+## Навигация
 
-### Пакетный менеджер
-
-- Единственный пакетный менеджер — npm под Node.js 24. Не добавляйте Bun, pnpm или Yarn команды.
-- `bun.lock` и `bunfig.toml` удалены при миграции; не восстанавливайте их.
-- `package-lock.json` обязателен для воспроизводимых `npm ci` в Docker и GitLab CI. Обновляйте его
-  вместе с `package.json` и workspace manifests.
-- Docker, GitLab CI, Lefthook и `@repo/api` используют npm. Не добавляйте отдельный способ
-  установки или запуска для одного из этих контуров.
-- `.npmrc` включает `save-exact`, `engine-strict` и `legacy-peer-deps`; не меняйте эти установки без
-  отдельного решения.
-
-### Зафиксированные ограничения
-
-- В `next.config.ts` включён `cacheComponents: true`. Директива `'use cache: private'` при этом
-  остаётся экспериментальной возможностью Next.js и не должна становиться production default без
-  отдельной оценки.
-- React Compiler включается только в production через `reactCompiler: isProd`, а не во всех
-  режимах.
-- Канонический контракт использует OpenAPI 3.2. Redocly lint и bundle передают контракт Kubb без
-  понижения и скрытой 3.1-копии. Встроенная Kubb validation выключена из-за ограничения валидатора
-  версиями 2.0/3.0/3.1; текущий поднабор проверяют AST parity, полный `gen`, API tests и root TS7.
-  Новые конструкции OpenAPI 3.2 требуют отдельного доказательства генерации и runtime.
-- Kubb 5.5.6 использует plugin-ts, plugin-zod, plugin-client и plugin-faker. Query factories и
-  публичные facets создаёт project post-generator. Прямого TypeScript 6 workspace и compiler hook
-  нет; конфиг и output проверяются корневым TypeScript 7.0.2.
-- Контейнерный контур задан в `Dockerfile`, `.dockerignore`, `compose*.yaml` и `Makefile`: dev
-  использует target `development`, production — non-root standalone runner, а builder получает
-  `SENTRY_AUTH_TOKEN` через BuildKit secret. Конфигурационного блокера больше нет; development
-  smoke подтвердил startup, health checks и маршрутизацию к двум репликам. Hot update после
-  изменения исходника, production image и production startup ещё не проверены, поэтому не
-  объявляйте контур production-ready. Базовый Compose пока также передаёт `SENTRY_AUTH_TOKEN` в
-  runtime environment; подробности — в `docs/deployment.md`.
-
-## Проект и runtime
-
-- Это ESM-монорепозиторий на npm workspaces: Next.js 16 App Router, React 19, TypeScript 7,
-  Tailwind CSS 4.
-- Корневое приложение собирается в Next.js standalone output и рассчитано на Node.js 24.
-- Основные инфраструктурные библиотеки: TanStack Query, Zod, nuqs, Sentry, OpenTelemetry, Adze и
-  Prometheus `prom-client`.
-- UI-примитивы основаны на Base UI и shadcn-подходе; не подменяйте их Radix-компонентами без
-  явного требования.
-- Для прямых dependencies сохраняйте exact versions согласно `.npmrc`; диапазоны оставляйте там,
-  где они выражают контракт `peerDependencies`.
-
-## Карта репозитория
-
-- `app/` — Next.js routing layer: страницы, layouts, route handlers, metadata, loading/error states
-  и локальные компоненты маршрутов.
-- `src/modules/` — доменная логика, общая для нескольких маршрутов. Директория создаётся по мере
-  появления реальных модулей, а не заранее.
-- `src/components/` — переиспользуемые составные UI-компоненты и инфраструктурные providers.
-- `src/constants/`, `src/hooks/`, `src/types/`, `src/utils/` — shared-слой без привязки к отдельному
-  бизнес-модулю. Новые shared-каталоги создавайте только вместе с реальным кодом.
-- `src/env/` — типизированные и валидируемые переменные окружения.
-- `src/mock-mode/` — выбор generated API mocks и сценария во время выполнения.
-- `src/proxy/` и корневой `proxy.ts` — pipeline Next.js proxy/BFF и служебные request headers.
-- `src/observability/` и `instrumentation*.ts` — логирование, метрики, Sentry и OTEL.
+- [Быстрый старт](openwiki/quickstart.md) — установка и запуск.
+- [Архитектура](openwiki/architecture/overview.md) — слои, импорты и размещение кода.
+- [Карта компонентов](COMPONENTS.md) — UI, формы, providers и utilities. Проверьте её перед
+  добавлением компонента; обновляйте при изменении структуры `src/components/`.
+- [Дизайн интерфейса](DESIGN.md) — токены и правила оформления в формате
+  [google-labs-code/design.md](https://github.com/google-labs-code/design.md). Перед созданием,
+  изменением или ревью UI прочитайте его вместе с картой компонентов.
+- `app/` — маршруты, layouts, metadata, loading/error и route handlers.
+- `src/api/` — OpenAPI, Redocly/Kubb, transport, generated SDK и публичные facets.
+- `src/components/ui/` — UI-примитивы Base UI и типизированные формы.
+- `src/components/providers/` — инфраструктурные providers без бизнес-сущностей.
+- `src/env/` — типизированные переменные; `src/mock-mode/` — runtime mocks.
+- `src/proxy/`, `proxy.ts` — proxy/BFF; `src/observability/`, `instrumentation*.ts` — telemetry.
 - `src/tests/` — общая тестовая инфраструктура и Playwright E2E.
-- `packages/core/` (`@repo/core`) — дизайн-система и UI-примитивы.
-- `packages/api/` (`@repo/api`) — OpenAPI-контракт, Redocly/Kubb pipeline и публичные facets для
-  SDK, client, Query, Zod, Faker, mocks и cache tags.
-- `docs/README.md` — индекс документации и её статусов.
-- `docs/architecture.md` — подробная модель слоёв и размещения кода.
-- `docs/bff-proxy.md` — выбор API base URL в server/dev/prod.
-- `docs/api-codegen.md` — правила OpenAPI и генерации клиента.
-- `docs/cache-and-streaming.md` — действующие правила Cache Components и streaming.
-- `docs/environment.md`, `docs/deployment.md`, `docs/mock-mode.md`,
-  `docs/testing-guidelines.md` — профильные operational references.
 
-## Архитектурные границы
+## Runtime и зависимости
 
-Зависимости направлены сверху вниз:
+- Это ESM-приложение с единым `package.json`: Next.js App Router, React, TypeScript и Tailwind.
+- Используйте только npm под Node.js 26.13.1+ в ветке 26.x и npm 11.x. Версии согласуйте с
+  `package.json`, `.node-version` и Dockerfile; не добавляйте workspace manifests или другие lockfiles.
+- Прямые dependencies фиксируются exact versions. Сохраняйте `save-exact`, `engine-strict` и
+  `legacy-peer-deps` в `.npmrc`; обновляйте `package-lock.json` вместе с манифестом.
+- Установленные библиотеки и существующие helpers предпочтительнее новой зависимости.
+- Проектные skills, OpenSpec и каталог tasks удалены. Не восстанавливайте их без запроса.
 
-| Слой           | Разрешённые зависимости                      |
-| -------------- | -------------------------------------------- |
-| `app/`         | `src/modules/`, shared `src/*`, `packages/*` |
-| `src/modules/` | shared `src/*`, `packages/*`                 |
-| shared `src/*` | `packages/*`                                 |
-| `packages/*`   | только другие `packages/*`                   |
+## Архитектура и импорты
 
-- `packages/api/client-config.ts` — известное исключение: файл импортирует root-level `src/env`,
-  `src/constants` и `src/mock-mode`. Не повторяйте и не расширяйте это направление зависимостей;
-  план развязки описан в `docs/architecture.md`.
-- Модуль в `src/modules/<name>` не импортирует другой модуль напрямую. Взаимодействие организуйте
-  через композицию в route/layout, shared event bus или dependency injection/provider.
-- Эти границы пока не полностью контролируются Oxlint. Проверяйте их вручную при review.
-- Бизнес-логика одного маршрута остаётся рядом с ним в `app/.../_components/`. Модуль создаётся,
-  когда логика действительно нужна минимум двум маршрутам.
-- Общий код начинайте в самой узкой области и поднимайте только после появления второго
-  потребителя: компонент → маршрут → модуль → shared.
-- `index.ts` модуля или компонента — его публичный API. Не импортируйте внутренние файлы через
-  deep import вне этой области без причины.
-- Не создавайте пустые `types.ts`, `variants.ts`, `hooks/` или `utils/` «на будущее».
+- Зависимости направлены от `app/` к `src/modules/` и общему `src/*`. Общий код не импортирует
+  маршруты и доменные модули. UI-примитивы не зависят от API, env и бизнес-сущностей.
+- `src/modules/` создаётся только для логики минимум двух маршрутов. Модули не импортируют друг
+  друга; взаимодействие организуется композицией route/layout или dependency injection.
+- Начинайте в узкой области: компонент → маршрут → модуль → shared. Route-local UI хранится в
+  единственной `app/.../_components/`; локальные schemas/constants/utils — рядом с маршрутом.
+- Не создавайте пустые каталоги или файлы «на будущее». Компоненты и каталоги — kebab-case,
+  React-экспорты — PascalCase.
+- Алиасы: `~/*` — корень, `@/*` — `app/`, `#/*` — `src/`. UI импортируется через
+  `#/components/ui/<component>`, API — через `#/api` и публичные facets.
+- `index.ts`/`index.tsx` определяет публичный API. Не используйте generated deep imports и
+  внутренние файлы компонентов вне их области.
+- Type-only импорты отделяйте через `import type`. Не подавляйте ошибки через `any`,
+  `@ts-ignore` или широкие assertions. Для object shapes используйте `interface`; unions,
+  mapped/conditional types остаются `type`. Вместо runtime `enum` используйте unions или `as const`.
 
-## Server/Client границы React
+## React, UI и формы
 
-- Базовый принцип: Server Components по умолчанию, Client Components только на интерактивных
-  листьях.
-- Добавляйте `'use client'` только при state/effects/event handlers/browser API или client-only
-  библиотеке. Не расширяйте client boundary на страницу или layout без необходимости.
-- `packages/core/` содержит интерактивные client-примитивы; React Query hooks и providers также
-  client-only.
-- Fetch-клиенты, типы и Zod-схемы `@repo/api` должны оставаться universal, если конкретный API не
-  требует server-only контекста.
-- `src/env/server.ts` — server-only. Никогда не импортируйте его в Client Component.
-- Для явно ограниченных файлов используйте суффиксы `.server.ts` и `.client.ts`; universal-файлы
-  оставляйте без суффикса.
+- При изменении общих токенов или визуальных вариантов обновляйте `DESIGN.md` по исходникам
+  `src/styles/globals.css`, `src/fonts/` и `src/components/ui/`. Проверяйте документ командой
+  `npx --yes --package=@google/design.md@0.4.0 designmd lint DESIGN.md`.
+- Server Components по умолчанию; `'use client'` только для интерактивных листьев с state,
+  effects, browser API или client-only библиотекой. Не поднимайте boundary без необходимости.
+- `src/env/server.ts` — server-only. Не передавайте секреты клиенту. SDK, типы и Zod сохраняйте
+  universal; для явно ограниченных файлов используйте `.server.ts`/`.client.ts`.
+- Переиспользуйте UI из карты компонентов. Base UI оборачивайте тонко, сохраняя accessibility
+  semantics и props. Не заменяйте Base UI на Radix без требования.
+- Варианты оформляйте через CVA, объединяйте classes существующим `cn`. Отдельный `variants.ts`
+  нужен только при нетривиальных вариантах.
+- Формы создавайте через `useAppForm` из `#/components/ui/form`: нативный `<form>`,
+  `event.preventDefault()`, `void form.handleSubmit()`, поля через `form.AppField`, компоненты
+  уровня формы внутри `form.AppForm`. Zod передаётся напрямую через Standard Schema.
+- Для reusable UI добавляйте соседние stories; интерактивность проверяйте browser component test.
+  Сохраняйте клавиатурную навигацию, фокус, accessible names и состояния disabled/invalid.
 
-## Размещение и именование компонентов
+## Next.js, env и BFF
 
-- Route-local компоненты размещайте в единственной private-директории сегмента
-  `app/.../_components/`. Общие для сегмента schemas/constants/utils размещайте рядом с route.
-- Переиспользуемые UI-примитивы — `packages/core`; составные shared-компоненты —
-  `src/components`; доменные компоненты — `src/modules/<module>`.
-- Файлы и директории компонентов называются kebab-case, React-экспорты — PascalCase.
-- Типовая папка компонента может содержать реализацию, `*.test.tsx`, `*.stories.tsx`, `variants.ts`,
-  `types.ts`, локальные `hooks/`, `utils/` и `index.ts`, но только если эти файлы нужны.
-- Инфраструктурные providers без знания бизнес-сущностей находятся в
-  `src/components/providers`; providers с доменными типами принадлежат соответствующему модулю.
+- App Router и typed routes; Pages Router не добавляйте. Сохраняйте `output: 'standalone'`.
+- `cacheComponents: true`; React Compiler включается только в production. Перед изменением cache
+  directives сверяйтесь с актуальными Next.js docs. `use cache: private` остаётся экспериментом.
+- Перед запуском проверьте `.env` по `.env.example`: конфиг валидирует env до компиляции.
+- Новые server env добавляйте в `src/env/server.ts` и `.env.example`; browser env — в
+  `src/env/client.ts` с `NEXT_PUBLIC_`. Используйте `serverEnvironment`/`clientEnvironment`.
+- Не коммитьте `.env` и не выводите полный env, credentials, cookies или authorization headers.
+- `src/api/client-config.ts`: server использует `BACK_INTERNAL_URL`; browser development —
+  относительный `NEXT_PUBLIC_BFF_PATH`; production browser — `NEXT_PUBLIC_BACK_URL`.
+- Сохраняйте `x-url` в proxy chain: runtime mock mode определяет по нему текущий маршрут.
+- Не ослабляйте CSP/HSTS ради локального workaround. Глобальные providers добавляйте только при
+  глобальном scope; root layout использует `lang="ru"`.
 
-## Импорты и TypeScript
+## API и генерация
 
-- Используйте алиасы: `~/*` для корня, `@/*` для `app/`, `#/*` для `src/`.
-- Пакеты импортируются через `@repo/core` и `@repo/api`, а не через
-  `~/packages/...` или длинные относительные пути.
-- Отделяйте type-only imports через `import type`; это требуется `verbatimModuleSyntax` и
-  линтером.
-- TypeScript работает в строгом режиме с `noUncheckedIndexedAccess`, `noImplicitReturns`,
-  `noUnusedLocals`, `noUnusedParameters` и `erasableSyntaxOnly`.
-- Не заглушайте ошибки `any`, `@ts-ignore` или широкими type assertions. Сначала уточните модель
-  данных и сузьте тип.
-- Из-за `erasableSyntaxOnly` предпочитайте unions и `as const`-объекты конструкциям TypeScript,
-  которые генерируют runtime-код, например `enum`.
-- Для object shapes используйте `interface`, когда правило линтера не требует иного; `type`
-  оставляйте для unions, mapped/conditional types и generated code.
+- Источник истины — `src/api/openapi/openapi.yaml` и его `$ref`-файлы, OpenAPI 3.2.0.
+- Каждая операция имеет уникальный `operationId`, `summary` и корректные `tags`: они участвуют
+  в query keys, mock metadata и cache helpers.
+- Pipeline: Redocly lint/bundle → Kubb → AST parity/post-generation → Oxfmt → root TypeScript.
+  Не понижайте контракт до скрытой копии 3.1. Новые конструкции 3.2 требуют проверки генерации
+  и runtime; встроенная Kubb validation отключена из-за ограничения версий валидатора.
+- `src/api/codegen/` вручную не редактируется. Меняйте контракт/генератор, затем выполняйте
+  `npm run api:gen` и API tests. `bundled.yaml` — игнорируемый промежуточный файл.
+- Публичные facets: `#/api`, `/client`, `/query`, `/schemas`, `/mocks`, `/cache-tags`.
+- SDK принимает `path`/`query`/`body`, возвращает `data`/`error`/`response`; `throwOnError: true`
+  бросает parsed typed error. Успешный ответ проверяется Zod; `204` даёт `data: undefined`.
+- Не дублируйте generated schemas и fixtures. Используйте Faker factories и mock client в tests
+  и Storybook. Query options компонуйте с TanStack Query hooks.
 
-## Форматирование и lint
+## Форматирование и наблюдаемость
 
-- Oxlint использует корпоративный `@webpractik/oxlint-config` через `oxlint.config.ts`.
-  Общие правила не копируются в проект. Type-aware проверки включены через `oxlint-tsgolint`.
-- Единственный formatter — Oxfmt: 4 пробела, single quotes, без semicolon, ширина 100.
-- Oxfmt сортирует импорты, scripts в `package.json` и Tailwind-классы в `cva`/`cn`. Не боритесь с
-  его результатом ручной перестановкой.
-- Форматируйте только изменённые файлы через `npx oxfmt <paths>`; `npm run fmt` форматирует весь
-  репозиторий и может затронуть чужую работу.
-- Oxlint запрещает неизвестные, конфликтующие и дублирующиеся Tailwind classes, проверяет a11y,
-  React/RSC, Next.js, import order и неиспользуемый код.
-- `console.log` запрещён. Для приложения используйте `#/observability/logger`; `console.warn` и
-  `console.error` разрешены только там, где logger неприменим.
-- Для вариантов компонентов используйте CVA, а для объединения classes — существующий `cn`.
-- Не отключайте lint-правила на весь файл. Если локальное отключение неизбежно, делайте его узким
-  и объясняйте конкретную причину.
+- Oxfmt — единственный formatter: 4 пробела, single quotes, без semicolon, ширина 100.
+  Форматируйте только изменённые файлы через `npx oxfmt <paths>`.
+- Oxlint наследует `@webpractik/oxlint-config`; не копируйте корпоративные правила и не отключайте
+  lint на весь файл. Узкое отключение требует конкретного объяснения.
+- Application logs — через `#/observability/logger`. `console.log` запрещён; `console.warn/error`
+  допустимы только там, где logger неприменим.
+- Prometheus использует общий registry `src/observability/metrics`; endpoints — `/api/metrics`,
+  `/api/health`, `/api/ready`. Health/readiness не доказывают доступность внешних зависимостей.
 
-## Next.js и конфигурация приложения
+## Проверки и готовность
 
-- Используется App Router и typed routes. Не добавляйте Pages Router.
-- `next.config.ts` импортирует валидированные env и создаёт BFF rewrite; build/dev могут падать до
-  компиляции при отсутствующих переменных. Для локального запуска сначала создайте `.env` из
-  `.env.example`.
-- Cache Components включены через `cacheComponents: true`. Перед использованием `use cache`,
-  `cacheLife`, `cacheTag`, `updateTag` или `revalidateTag` сверяйтесь с
-  `docs/cache-and-streaming.md` и актуальной документацией Next.js.
-- `output: 'standalone'` необходим текущей контейнерной схеме; не выключайте его без изменения
-  deploy pipeline.
-- Static image imports отключены, SVG разрешены через image config. Учитывайте это при выборе
-  между `next/image`, URL и импортом asset.
-- Security headers и `X-Accel-Buffering: no` включаются вне development. Не ослабляйте CSP/HSTS
-  попутно ради локального workaround.
-- Root layout имеет `lang="ru"`, Nuqs adapter, Query provider и Toaster. Новые глобальные providers
-  добавляйте только при действительно глобальном scope.
+- Для bug fix сначала добавьте минимальный regression test и подтвердите падение до исправления.
+- Vitest unit работает в Node и выбирает `*.unit.test.ts(x)` и `src/api/**/*.test.ts`.
+  Component project работает в реальном Chromium через `vitest-browser-react`; выбирает
+  `*.component.test.ts(x)`, `app/**/*.test.tsx`, `src/**/*.test.tsx`.
+- Обычный `src/**/*.test.ts` вне API не запускается. Не используйте jsdom assumptions и
+  самодельные mocks там, где уже есть fixtures/aliases в `src/tests/`.
+- После изменений запускайте formatter check и узкие tests. Для TS/React обязательны
+  `npm run tsc` и `npm run lint`; для route/config/env/proxy — `npm run build`.
+- UI проверяйте component tests; реальное browser behavior — Playwright или browser smoke.
+- E2E по умолчанию запускают dev server. Для production отдельно выполните свежий build,
+  затем `PLAYWRIGHT_SERVER_MODE=standalone npm run test:e2e`. `FRONT_PORT` отличается от `PORT`.
+- Для Docker проверяйте image build и startup; локальная Next.js сборка не доказывает готовность
+  образа. Проверяйте production build и E2E отдельным запуском.
+- Основные команды: `npm ci`, `npm run dev`, `npm run build`, `npm run prod`;
+  `npm run verify:fast`, `npm run test`, `npm run test:e2e`, `npm run knip`, `npm run jscpd`;
+  `npm run storybook`, `npm run build-storybook`;
+  `npm run api:gen`, `npm run api:gen:check`, `npm run api:test`, `npm run api:lint:openapi`.
+- Перед завершением перечитайте diff, проверьте отсутствие секретов, временных артефактов и
+  случайных lockfile-изменений. Обновите документацию при изменении поведения или контрактов.
+- Сообщите точные выполненные проверки и оставшиеся блокеры. Не объявляйте весь проект исправным
+  по результатам узкой проверки.
 
-## Переменные окружения и BFF
+<!-- BEGIN:nextjs-agent-rules -->
 
-- Новую server env переменную добавляйте в `src/env/server.ts` и `.env.example`.
-- Новую browser-visible переменную добавляйте в `src/env/client.ts`, `.env.example` и используйте
-  префикс `NEXT_PUBLIC_`.
-- В приложении потребляйте env через `serverEnvironment`/`clientEnvironment`. Прямой
-  `process.env` оставляйте только для framework bootstrap и уже существующих build/runtime checks.
-- Никогда не переносите server secrets в client schema и не коммитьте `.env`.
-- Выбор base URL в `packages/api/client-config.ts`:
-    - server всегда использует `BACK_INTERNAL_URL`;
-    - browser в development использует относительный `NEXT_PUBLIC_BFF_PATH` и Next rewrite;
-    - browser в production использует `NEXT_PUBLIC_BACK_URL` напрямую.
-- `NEXT_PUBLIC_BFF_PATH` и `BACK_INTERNAL_URL` обязательны для rewrite. Не хардкодьте `/bff-api`
-  вне env/config.
-- Корневой proxy добавляет request header `x-url`; runtime mock mode использует его для определения
-  текущего route. Сохраняйте это поведение при изменении proxy chain.
+## This is NOT the Next.js you know
 
-## API и кодогенерация
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
 
-- Исходник истины — `packages/api/openapi/openapi.yaml` и его `$ref`-файлы в `paths/` и
-  `components/`; каноническая версия контракта — OpenAPI 3.2.0.
-- Каждая операция должна иметь уникальный `operationId`, обязательный `summary` и корректный
-  `tags`; tags входят в query keys, mock metadata и generated cache helpers.
-- Порядок pipeline: Redocly bundle → `bundled.yaml` → Kubb → AST parity и post-generation helpers → Oxfmt →
-  root `tsc`, включающий generated output.
-- `bundled.yaml` — игнорируемый промежуточный артефакт. `openapi/` и `codegen/` коммитятся.
-- `packages/api/codegen/`, включая types, SDK, client, Query options, Zod, Faker, cache tags и mock
-  routes, вручную не редактируется. Kubb запускается с `output.clean: true`, поэтому ручные
-  изменения будут удалены.
-- После изменения OpenAPI выполните `npm --workspace @repo/api run gen` и связанные tests.
-- Публичные импорты идут только через `@repo/api`, `/client`, `/query`, `/schemas`, `/mocks` и
-  `/cache-tags`; generated deep paths и внутренние aliases вроде `Pet2` не являются контрактом.
-- SDK принимает `path`/`query`/`body` и по умолчанию возвращает discriminated result
-  `data`/`error`/`response`; `throwOnError: true` бросает parsed typed error. Успешные ответы
-  проверяются generated Zod-схемами, а `204` возвращает `data: undefined`.
-- `findPetsByStatusInfiniteOptions` преобразует numeric `pageParam` в `query.offset`, сохраняя
-  остальные filters и limit; Query options компонуйте с `useQuery`/`useMutation`/`useInfiniteQuery`.
-- Generated Zod-схемы экспортируются через `@repo/api/schemas`; не копируйте их в `src/schemas`.
-- Для тестов и Storybook используйте generated Faker factories и mock client, а не вручную
-  дублированные API fixtures, если нужная фабрика уже существует.
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
-## UI и Storybook
+<!-- END:nextjs-agent-rules -->
 
-- Сначала переиспользуйте `@repo/core`; новый примитив добавляйте туда только если он не содержит
-  бизнес-логики.
-- Примитивы Base UI оборачивайте тонко, сохраняйте accessibility semantics и прокидывайте props.
-- Варианты держите в отдельном `variants.ts`, когда они нетривиальны; объединяйте className через
-  `cn` и CVA.
-- Для reusable UI добавляйте Storybook stories рядом с компонентом. Storybook использует
-  `@storybook/nextjs-vite`, autodocs и a11y addon.
-- Интерактивное поведение проверяйте browser component test, а визуальные состояния — stories;
-  одно не заменяет другое.
-- Формы создавайте через `useAppForm` из `@repo/core/form`: нативный `<form>`,
-  `event.preventDefault()`, `void form.handleSubmit()`, поля через `form.AppField`, form-компоненты
-  внутри `form.AppForm`. Zod-схемы передаются напрямую в TanStack validators через Standard Schema.
+<!-- OPENWIKI:START -->
 
-## Тестирование
+## OpenWiki
 
-- `npm run test` запускает оба Vitest project и все reporters.
-- Unit project использует Node environment и подбирает `*.unit.test.ts(x)`, а также
-  `packages/**/*.test.ts`.
-- Component project использует реальный headless Chromium через `@vitest/browser-playwright` и
-  подбирает `*.component.test.ts(x)`, `app/**/*.test.tsx`, `src/**/*.test.tsx`.
-- Обычный `src/**/*.test.ts` без `.unit.` не попадает ни в один project. Выбирайте имя файла
-  намеренно.
-- Component tests пишутся через `vitest-browser-react`, не через jsdom assumptions. Next
-  navigation/image/script заменяются тестовыми aliases из `src/tests/mocks`; Base UI Toast
-  проверяется реальным browser-компонентом без отдельного mock alias.
-- Vitest загружает разрешённые env values сначала из process, затем из корневого `.env`; не
-  дублируйте env setup в каждом test file.
-- Playwright E2E лежат в `src/tests/e2e` и выполняются в Chromium. По умолчанию config поднимает
-  `npm run dev`; `PLAYWRIGHT_SERVER_MODE=standalone` или `CI=true` переключает его на уже собранный
-  `npm run prod`. Перед standalone E2E отдельно выполните свежий `npm run build`.
-- Текущий GitLab pipeline запускает Vitest, но не Playwright E2E и не production build.
-- Playwright использует `FRONT_PORT` с default `3000`; это отдельная переменная от server `PORT`.
-- При исправлении bug сначала добавьте или обновите минимальный regression test, затем проверьте,
-  что он воспроизводит проблему и проходит с исправлением.
+This repository has a generated `openwiki/` evidence index. It is optional just-in-time context, not required startup reading.
 
-## Наблюдаемость
+- Do not enumerate, preload, or search wikis at task start. Use retrieval when the user asks for it, when unfamiliar architecture or dependency behavior materially affects the task, or when source inspection leaves an important uncertainty. Stop once the question is grounded.
+- When those conditions apply and OpenWiki retrieval tools are available, use `openwiki_search` for just-in-time context and `openwiki_read` for the relevant complete sections. If search returns `workspace_required`, ask which listed workspace to use and retry with its ID.
+- Use `openwiki_list_workspaces` or `openwiki_list_wikis` when workspace membership itself needs to be discovered.
+- If the retrieval tools are unavailable, read `openwiki/quickstart.md` and follow its links to the relevant pages.
+- Treat source code and tests as authoritative. A brief's unknowns and review items are verification gaps, not automatic requirements.
+- Prefer the narrowest quiet validation that proves the changed behavior. Preserve complete failure output.
 
-- Для application logs используйте Adze logger из `#/observability/logger`, а не новый logging
-  abstraction.
-- Server instrumentation регистрирует Vercel OTEL и Sentry в Node runtime; client Sentry
-  инициализируется только в production.
-- Не логируйте credentials, cookies, authorization headers, персональные данные или полный env.
-- Prometheus использует общий registry из `src/observability/metrics`; endpoint — `/api/metrics`.
-  Health и readiness endpoints — `/api/health` и `/api/ready`.
+OpenWiki is refreshed manually. GitHub Actions and GitLab CI are intentionally absent; do not recreate their workflows without an explicit request.
 
-## Основные команды
-
-```bash
-# Установка и запуск
-npm ci
-npm run dev
-npm run build
-npm run prod
-
-# Качество
-npm run tsc
-npm run lint
-npm run lint-fix
-npm run fmt:check
-npm run knip
-npm run jscpd
-npm run verify:fast
-npm run verify
-
-# Тесты
-npm run test
-npm run test:unit
-npm run test:component
-npm run test:coverage
-npm run test:e2e
-PLAYWRIGHT_SERVER_MODE=standalone npm run test:e2e
-npx vitest run src/mock-mode/runtime.unit.test.ts --project unit
-npx vitest run src/components/utilities/error-boundary/error-boundary.test.tsx --project component
-npx playwright test src/tests/e2e/example.spec.ts
-
-# Storybook
-npm run storybook
-npm run build-storybook
-
-# Workspace-команды
-npm --workspace @repo/api run test
-npm --workspace @repo/api run gen
-npm --workspace @repo/api run bundle
-npm --workspace @repo/api run lint:openapi
-
-# Docker Compose
-make compose-config-dev
-make compose-config-prod
-make compose-dev
-make compose-prod
-```
-
-## Рабочий процесс и проверка
-
-1. Зафиксируйте исходное состояние через `git status --short` и определите существующие чужие
-   изменения.
-2. Прочитайте ближайший код, tests и профильную документацию до изменения интерфейса или
-   архитектуры.
-3. Делайте минимальный связный diff; не форматируйте и не рефакторьте соседний код без причины.
-4. Для generated code меняйте источник/генератор, затем регенерируйте; не патчите output.
-5. Запустите formatter check и самые узкие релевантные tests.
-6. Для TypeScript/React изменений дополнительно запустите `npm run tsc` и `npm run lint`.
-7. Для route, Next.js config, env или proxy изменений выполните `npm run build`, если окружение
-   позволяет. Для Docker/Compose дополнительно проверьте соответствующий `make compose-config-*`,
-   image build и smoke test изменённого режима.
-8. Для UI проверьте component tests и, когда меняется реальное browser behavior, Playwright или
-   ручной browser smoke test.
-9. Перед завершением перечитайте diff, сообщите точные выполненные проверки и отдельно перечислите
-   непроверенные риски или известные блокеры.
-
-## Критерии готовности
-
-- Изменение соответствует границам слоёв и не создаёт новый cross-module import.
-- Нет ручных изменений generated API output.
-- Нет случайных изменений lockfiles, артефактов tests, `.env` или соседних файлов.
-- Изменённые файлы отформатированы; релевантные lint, types и tests проходят свежим запуском.
-- Поведение, публичный API, env contract или архитектурное решение отражены в соответствующей
-  документации.
-- Итоговое сообщение не утверждает, что весь проект исправен, если был проверен только узкий scope.
+<!-- OPENWIKI:END -->

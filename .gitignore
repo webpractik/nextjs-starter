@@ -15,10 +15,8 @@ swagger.yaml
 /openapi.yaml
 docs.html
 dependency-graph.svg
-packages/*/node_modules
 storybook.log
 report
-docs/superpowers
 .remember
 .vitest-attachments
 .vitest

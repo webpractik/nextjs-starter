@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:4f55a9c06410aec6eded6f15fee2fc728b71bb4604286a40771f6e0f69ba9bca",
+  "claims": [
+    {
+      "id": "claim_1f68b26247c846e8be994820b73c382e",
+      "statement": "Проект требует Node.js ^26.13.1 и npm 11.x; разработка запускается next dev --turbo из одного корневого manifest.",
+      "evidence": [
+        {
+          "resource": "repo://package.json",
+          "version": "repo-file-v1:sha256:376995b6d4aa1cbde81ce9232c4fa13fb84d23e7576d5e6048567137cba44e33"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.2",
+    "at": "2026-11-16T14:30:17.316Z"
+  }
+}

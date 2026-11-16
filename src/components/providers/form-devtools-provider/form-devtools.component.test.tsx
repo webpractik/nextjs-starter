@@ -1,6 +1,7 @@
-import { useAppForm } from '@repo/core/form'
 import { expect, it } from 'vitest'
 import { render } from 'vitest-browser-react'
+
+import { useAppForm } from '#/components/ui/form'
 
 import { FormDevtools } from './form-devtools'
 

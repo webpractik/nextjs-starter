@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:debfe08d360be7295e0ed1749baa7413adf6ce4b7cef1e27d0f446042ebbc973",
+  "claims": [
+    {
+      "id": "claim_634c4a9ae16f431e9759fc20221b1d3c",
+      "statement": "Сервер использует BACK_INTERNAL_URL, браузер в development использует NEXT_PUBLIC_BFF_PATH, а в production NEXT_PUBLIC_BACK_URL.",
+      "evidence": [
+        {
+          "resource": "repo://next.config.ts",
+          "version": "repo-file-v1:sha256:2cafb95340d12f95aed673289d90ca3d6b0b6b49a2929b73ef8abd9a5acd040d"
+        },
+        {
+          "resource": "repo://src/api/client-config.ts",
+          "version": "repo-file-v1:sha256:041d8247d261d484660f67b6dab3c61b125fa9c1a3165951191496301a441141"
+        }
+      ]
+    },
+    {
+      "id": "claim_41a9416a376143ffa2bc5c8e83ac9ec3",
+      "statement": "Proxy передаёт request header x-url для выбора режима моков; обычный Response прерывает цепочку.",
+      "evidence": [
+        {
+          "resource": "repo://src/proxy/chain.ts",
+          "version": "repo-file-v1:sha256:bbd051e285eed07f27877b7758024906be0fac294d6e9453909ef783d8af38d0"
+        },
+        {
+          "resource": "repo://src/proxy/inject-headers.ts",
+          "version": "repo-file-v1:sha256:f1af44838cbf92b0a802f1e25799f878f524aad8aa50b6c96a2ae1865ef2cd74"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.2",
+    "at": "2026-11-16T14:24:53.735Z"
+  }
+}

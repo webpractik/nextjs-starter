@@ -1,6 +1,6 @@
 {
     "$schema": "./node_modules/oxfmt/configuration_schema.json",
-    "ignorePatterns": ["**/.agents", "**/.claude"],
+    "ignorePatterns": ["openwiki/**"],
     "singleQuote": true,
     "useTabs": false,
     "printWidth": 100,
@@ -19,7 +19,6 @@
         "groups": [
             "type-import",
             ["type-parent", "type-sibling", "type-index", "type-internal"],
-
             "value-builtin",
             "value-external",
             "value-internal",

@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 
-import { Toaster } from '@repo/core/toast'
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 import { FormDevtoolsProvider } from '#/components/providers/form-devtools-provider'
 import { QueryProvider } from '#/components/providers/query-provider'
+import { Toaster } from '#/components/ui/toast'
 import { geistSans } from '#/fonts/geist'
 import { cn } from '#/utils/cn'
 

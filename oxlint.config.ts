@@ -22,9 +22,9 @@ export default defineOxlintConfig({
         'build',
         '.kuber',
         'styles',
-        'docs',
-        'packages/api/bundled.yaml',
-        'packages/api/codegen',
+        'openwiki',
+        'src/api/bundled.yaml',
+        'src/api/codegen',
     ],
     // Корпоративный preset не включает проверку определений Server Components.
     jsPlugins: ['eslint-plugin-react-rsc'],
@@ -57,12 +57,12 @@ export default defineOxlintConfig({
             {
                 patterns: [
                     {
-                        group: ['~/packages/core/*'],
-                        message: 'Please use import from @repo/core instead',
+                        group: ['~/src/components/ui/*'],
+                        message: 'Please use import from #/components/ui instead',
                     },
                     {
-                        group: ['~/packages/api/*'],
-                        message: 'Please use import from @repo/api instead',
+                        group: ['~/src/api/*'],
+                        message: 'Please use import from #/api instead',
                     },
                 ],
             },

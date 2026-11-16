@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:98eb86f6893ebae4f00e2ee5a95bf281ba14dc22b2746f6380a5d253c01b9392",
+  "claims": [
+    {
+      "id": "claim_b1c7bdbf0a30492690cb55a05f802748",
+      "statement": "Vitest разделён на Node unit project и browser Chromium component project; unit-файлы исключены из component project.",
+      "evidence": [
+        {
+          "resource": "repo://vitest.config.ts",
+          "version": "repo-file-v1:sha256:179e6e755beb5f2abe7a4967dfa8ad8db6ddd10a845265c47b63a31c478d133f"
+        }
+      ]
+    },
+    {
+      "id": "claim_ccc548fac4384267b9b50e8ab323f0c3",
+      "statement": "Playwright поднимает npm run dev или npm run prod по PLAYWRIGHT_SERVER_MODE/CI; fresh production build выполняется отдельно.",
+      "evidence": [
+        {
+          "resource": "repo://package.json",
+          "version": "repo-file-v1:sha256:376995b6d4aa1cbde81ce9232c4fa13fb84d23e7576d5e6048567137cba44e33"
+        },
+        {
+          "resource": "repo://playwright.config.ts",
+          "version": "repo-file-v1:sha256:af1994533efc5d4ece994ae3f8e7b3271e7e2b2a59f4281cb7813adc86d103b0"
+        }
+      ]
+    },
+    {
+      "id": "claim_f04524745b614e649755c85ee942d6fd",
+      "statement": "JSCPD использует порог 2 и исключает package-lock.json, src/api/codegen/** и src/api/bundled.yaml как машинные артефакты; рукописные тесты и stories не исключены.",
+      "evidence": [
+        {
+          "resource": "repo://.jscpd.json",
+          "version": "repo-file-v1:sha256:db8e68d11e795fb93a11a5577725d57c994d158aed92c38fc1518310265dc1cf"
+        }
+      ]
+    },
+    {
+      "id": "claim_b4faa7a572dd481c85bbf3a9702ec129",
+      "statement": "Общие Allure setup hooks назначают layer, feature и severity, а тесты задают индивидуальные story.",
+      "evidence": [
+        {
+          "resource": "repo://src/api/schemas.test.ts",
+          "version": "repo-file-v1:sha256:e03540a30db414f51c429b69cb592f24bca56b59b9e5432fa034aefc0ae30b6d"
+        },
+        {
+          "resource": "repo://src/tests/allure-labels.ts",
+          "version": "repo-file-v1:sha256:a8774fce7abf26ee9efbad8c8e61b3937d6034f19e42bd2b8f02345c22b47172"
+        },
+        {
+          "resource": "repo://src/tests/setup-allure-component.ts",
+          "version": "repo-file-v1:sha256:ab349cc7f1ed978691fd065cf52889e223191fbb54f2c0e92e97c1784d4e7bea"
+        },
+        {
+          "resource": "repo://src/tests/setup-allure-unit.ts",
+          "version": "repo-file-v1:sha256:592fd480c38e6d72e958d2e2a7fd229a76f227fa1223114d97659b9cf47ed237"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.2",
+    "at": "2026-11-16T14:41:28.183Z"
+  }
+}
